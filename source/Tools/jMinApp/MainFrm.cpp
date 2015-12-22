@@ -585,6 +585,7 @@ bool	CMainFrame::InitializeJet3D()
 	}	//	if (m_hWnd...
 
 
+	return true;
 }
 
 

@@ -399,7 +399,7 @@ static jeBoolean AmbObj_ReadSoundNames(jeVFile *FileBase, int *FileCount)
 		jeVFile_Properties Properties;
 		jeVFile_FinderGetProperties(Finder,&Properties);
 
-		strlwr(Properties.Name);
+		_strlwr(Properties.Name);
 
 		if (Util_StrDupManagePtr(&NameList[(*FileCount)++], Properties.Name, 32) == JE_FALSE)
 			{
