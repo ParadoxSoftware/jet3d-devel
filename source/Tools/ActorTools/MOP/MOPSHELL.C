@@ -313,7 +313,7 @@ ReturnCode MopShell_DoMake(MopShell_Options* options,MkUtil_Printf Printf)
 		{
 			Printf("ERROR: Could not open destination motion file '%s'.\n", options->DestinationMotionFile);
 			MkUtil_AdjustReturnCode(&retValue, RETURN_ERROR);
-			unlink(options->DestinationMotionFile);
+			_unlink(options->DestinationMotionFile);
 			return retValue;
 		} 
 	
@@ -326,7 +326,7 @@ ReturnCode MopShell_DoMake(MopShell_Options* options,MkUtil_Printf Printf)
 	if (ok == JE_FALSE)
 		{
 			Printf("ERROR: Failed to write destination motion file '%s'.\n", options->DestinationMotionFile);
-			unlink(options->DestinationMotionFile);
+			_unlink(options->DestinationMotionFile);
 			MkUtil_AdjustReturnCode(&retValue, RETURN_ERROR);
 			return retValue;
 		}

@@ -126,7 +126,7 @@ ApjBodyFormat AProject_GetBodyFormatFromFilename (const char *Name)
 	{
 		for (x = 0; x <= ApjBody_Act; ++x)
 		{
-			if (stricmp (BodyExtensions[x], Ext) == 0)
+			if (_stricmp (BodyExtensions[x], Ext) == 0)
 			{
 				return x+1;
 			}
@@ -146,7 +146,7 @@ ApjMotionFormat AProject_GetMotionFormatFromFilename (const char *Filename)
 	{
 		for (x = 0; x < ApjMotion_TypeCount; ++x)
 		{
-			if (stricmp (MotionExtensions[x], Ext) == 0)
+			if (_stricmp (MotionExtensions[x], Ext) == 0)
 			{
 				return x+1;
 			}
@@ -1239,7 +1239,7 @@ int AProject_GetMaterialIndex (const AProject *pProject, const char *MaterialNam
 	for (Item = 0; Item < pProject->Materials.Count; ++Item)
 	{
 		ApjMaterialEntry *pEntry = Array_ItemPtr (pProject->Materials.Items, Item);
-		if (stricmp (pEntry->Name, MaterialName) == 0)
+		if (_stricmp (pEntry->Name, MaterialName) == 0)
 		{
 			return Item;
 		}

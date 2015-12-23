@@ -725,7 +725,7 @@ BOOL CJweApp::GetDriverAndMode(jeEngine* pEngine, jeDriver **ppDriver, jeDriver_
 		int	count;
 		for( count = 0; count < __argc; count++ )
 		{
-			if ( stricmp( __argv[count], "-videosettings" ) == 0 )
+			if ( _stricmp( __argv[count], "-videosettings" ) == 0 )
 			{
 				DisplayVideoSettingsDialog = JE_TRUE;
 			}

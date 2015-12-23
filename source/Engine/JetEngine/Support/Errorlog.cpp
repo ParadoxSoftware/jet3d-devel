@@ -116,7 +116,7 @@ JETAPI void JETCC jeErrorLog_AddExplicit(jeErrorLog_ErrorClassType Error,
 	
 	{
 		char Number[20];
-		itoa(LineNumber,Number,10);
+		_itoa(LineNumber,Number,10);
 		strncat(SDst,Number,MAX_USER_NAME_LEN);
 	}
 	
@@ -165,7 +165,7 @@ JETAPI void JETCC jeErrorLog_AddExplicit(jeErrorLog_ErrorClassType Error,
 		else
 			{
 				char Number[50];
-				itoa(LastError,Number,10);
+				_itoa(LastError,Number,10);
 				strncat(SDst," LastError=",MAX_USER_NAME_LEN);
 				strncat(SDst,Number,MAX_USER_NAME_LEN);
 			}
@@ -239,6 +239,6 @@ JETAPI jeBoolean JETCC jeErrorLog_Report(int history, jeErrorLog_ErrorClassType 
 JETAPI const char * JETCC jeErrorLog_IntToString(int Number)
 {
 	static char String[50];
-	itoa(Number,String,10);
+	_itoa(Number,String,10);
 	return String;
 }

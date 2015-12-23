@@ -182,7 +182,7 @@ ReturnCode MkActor_DoMake(MkActor_Options* options,MkUtil_Printf Printf)
 	if(VF == NULL)
 	{
 		Printf("ERROR: Could not create '%s' actor file\n", options->ActorFile);
-		unlink(options->ActorFile);
+		_unlink(options->ActorFile);
 		BAILOUT;
 	}
 	else
@@ -190,7 +190,7 @@ ReturnCode MkActor_DoMake(MkActor_Options* options,MkUtil_Printf Printf)
 		if(jeActor_DefWriteToFile(pActorDef, VF) == JE_FALSE)
 		{
 			Printf("ERROR: Actor file '%s' was not written correctly\n", options->ActorFile);
-			unlink(options->ActorFile);			
+			_unlink(options->ActorFile);			
 			BAILOUT;
 		}
 		else
@@ -198,7 +198,7 @@ ReturnCode MkActor_DoMake(MkActor_Options* options,MkUtil_Printf Printf)
 			if (jeVFile_Close(VF) == JE_FALSE)
 				{
 					Printf("ERROR: Actor file '%s' was not written correctly\n", options->ActorFile);
-					unlink(options->ActorFile);			
+					_unlink(options->ActorFile);			
 					BAILOUT;
 				}
 			else

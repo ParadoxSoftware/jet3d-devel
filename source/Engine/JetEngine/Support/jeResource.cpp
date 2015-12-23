@@ -33,7 +33,7 @@
 #include "Engine.h"
 
 #ifdef BUILD_BE
-#define stricmp strcasecmp
+#define _stricmp strcasecmp
 #endif
 
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -292,7 +292,7 @@ static jeChain_Link * jeResource_GetNode(
 		assert( Resource != NULL );
 
 		// get compare value
-		Compare = stricmp( Name, Resource->Name );
+		Compare = _stricmp( Name, Resource->Name );
 
 		// if we have found it then return it
         if ( Compare == 0 && (Type==0 || (Type > 0 && Type == Resource->Type)))
@@ -356,13 +356,13 @@ JETAPI jeBoolean JETCC jeResource_Add(
 		assert( CurResource != NULL );
 
 		// data should not already exist
-        if (stricmp( Name, CurResource->Name ) == 0 && Type == CurResource->Type) {
+        if (_stricmp( Name, CurResource->Name ) == 0 && Type == CurResource->Type) {
             CurResource->RefCount++;
             return JE_TRUE; // resource is present, don't add it a second time
         }
 
 		// if we just passed our spot then break out
-		if ( stricmp( Name, CurResource->Name ) < 0 )
+		if ( _stricmp( Name, CurResource->Name ) < 0 )
 		{
 			break;
 		}

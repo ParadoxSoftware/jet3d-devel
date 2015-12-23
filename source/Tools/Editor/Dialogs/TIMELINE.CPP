@@ -4022,7 +4022,7 @@ void CTimeLine::SetEventProperties()
 		{
 		if (strlen(text) >= 256)
 			{
-			// if greater than 256 then fall back to deallocate and strdup'ing
+			// if greater than 256 then fall back to deallocate and _strdup'ing
 			if (cp->KeyData[cp->KeysSelected[0]].String)
 				{
 				jeRam_Free(cp->KeyData[cp->KeysSelected[0]].String);

@@ -29,8 +29,8 @@
 #include <Resources.h>
 #include <stdlib.h> // rand
 #include <stdio.h>
-#define stricmp strcasecmp
-#define itoa( number, string, radix) sprintf(string, "%i" , number )
+#define _stricmp strcasecmp
+#define _itoa( number, string, radix) sprintf(string, "%i" , number )
 #endif
 
 #include <assert.h>
@@ -915,7 +915,7 @@ static BitmapList * Util_CreateBitmapList(
 				Bmps->SizesListSize = i;
 				break;
 			}
-			itoa( Bmps->NumericSizes[i], Buf, 10 );
+			_itoa( Bmps->NumericSizes[i], Buf, 10 );
 			Bmps->StringSizes[i] = Util_StrDup( Buf );
 		}
 	}
@@ -1078,7 +1078,7 @@ void Util_SetArtSize(
 		// get bitmap slot
 		if ( ( Object->BitmapName != NULL ) && ( BitmapSlot == -1 ) )
 		{
-			if ( stricmp( Object->BitmapName, Bitmaps->Name[i] ) == 0 )
+			if ( _stricmp( Object->BitmapName, Bitmaps->Name[i] ) == 0 )
 			{
 				BitmapSlot = i;
 			}
@@ -1087,7 +1087,7 @@ void Util_SetArtSize(
 		// get alpha slot
 		if ( ( Object->AlphaName != NULL ) && ( AlphaSlot == -1 ) )
 		{
-			if ( stricmp( Object->AlphaName, Bitmaps->Name[i] ) == 0 )
+			if ( _stricmp( Object->AlphaName, Bitmaps->Name[i] ) == 0 )
 			{
 				AlphaSlot = i;
 			}
@@ -2891,7 +2891,7 @@ jeBoolean JETCC SetProperty(
 			Object->CurWidth = -1;
 			for ( i = 0; i < Bitmaps->Total; i++ )
 			{
-				if ( stricmp( Bitmaps->StringSizes[i], pData->String ) == 0 )
+				if ( _stricmp( Bitmaps->StringSizes[i], pData->String ) == 0 )
 				{
 					Object->CurWidth = i;
 					break;
@@ -2977,14 +2977,14 @@ jeBoolean JETCC SetProperty(
 			}
 
 			// do nothing further if no main bitmap is provided
-			if ( stricmp( Object->BitmapName, NoSelection ) == 0 )
+			if ( _stricmp( Object->BitmapName, NoSelection ) == 0 )
 			{
 				break;
 			}
 
 			// build art name
 			Size = strlen( Object->BitmapName ) + 1;
-			if ( stricmp( Object->AlphaName, NoSelection ) != 0 )
+			if ( _stricmp( Object->AlphaName, NoSelection ) != 0 )
 			{
 				Size += strlen( Object->AlphaName );
 			}
@@ -2995,7 +2995,7 @@ jeBoolean JETCC SetProperty(
 				break;
 			}
 			strcpy( Object->ArtName, Object->BitmapName );
-			if ( stricmp( Object->AlphaName, NoSelection ) != 0 )
+			if ( _stricmp( Object->AlphaName, NoSelection ) != 0 )
 			{
 				strcat( Object->ArtName, Object->AlphaName );
 			}
@@ -3019,7 +3019,7 @@ jeBoolean JETCC SetProperty(
 				}
 
 				// create new art
-				if ( stricmp( Object->AlphaName, NoSelection ) != 0 )
+				if ( _stricmp( Object->AlphaName, NoSelection ) != 0 )
 				{
 					artbmp = Util_CreateBitmapFromFileName( FileDir, Object->BitmapName, Object->AlphaName );
 				}

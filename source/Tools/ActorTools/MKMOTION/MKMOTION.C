@@ -821,7 +821,7 @@ ReturnCode MkMotion_DoMake(MkMotion_Options* options,MkUtil_Printf Printf)
 	{
 		Printf("ERROR: Could not create '%s' motion file\n", options->MotionFile);
 		MkUtil_AdjustReturnCode(&retValue, RETURN_ERROR);
-		unlink(options->MotionFile);
+		_unlink(options->MotionFile);
 		goto DoMake_Cleanup;
 	}
 	else
@@ -831,7 +831,7 @@ ReturnCode MkMotion_DoMake(MkMotion_Options* options,MkUtil_Printf Printf)
 			jeVFile_Close(VF);  VF = NULL;
 			Printf("ERROR: Motion file '%s' was not written correctly\n", options->MotionFile);
 			MkUtil_AdjustReturnCode(&retValue, RETURN_ERROR);
-			unlink(options->MotionFile);
+			_unlink(options->MotionFile);
 		}
 		else
 		{
@@ -839,7 +839,7 @@ ReturnCode MkMotion_DoMake(MkMotion_Options* options,MkUtil_Printf Printf)
 				{
 					Printf("ERROR: Motion file '%s' was not written correctly\n", options->MotionFile);
 					MkUtil_AdjustReturnCode(&retValue, RETURN_ERROR);
-					unlink(options->MotionFile);
+					_unlink(options->MotionFile);
 				}
 			VF = NULL;
 			Printf("SUCCESS: Motion file '%s' written successfully\n", options->MotionFile);

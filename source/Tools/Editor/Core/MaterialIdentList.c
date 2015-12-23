@@ -60,7 +60,7 @@ MaterialIdent*		MaterialIdentList_FindByName( MaterialIdentList * pList, const c
 
 	pResult = List_GetFirst(pList, &it);
 	while (pResult) {
-		if (stricmp(pResult->MaterialName, Name) == 0) {
+		if (_stricmp(pResult->MaterialName, Name) == 0) {
 			break;
 		}
 		pResult = List_GetNext(pList, &it);

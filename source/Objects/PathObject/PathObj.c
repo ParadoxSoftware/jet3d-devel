@@ -34,7 +34,7 @@
 #include <sys/param.h>
 #define min(a,b) (((a)<(b))?(a):(b))
 #define max(a,b) (((a)>(b))?(a):(b))
-#define stricmp strcasecmp
+#define _stricmp strcasecmp
 #endif
 
 #include <string.h>
@@ -735,7 +735,7 @@ static jeObject * PathObject_FindObjectFromName(jeWorld *World, char *NameToFind
 
 		if (!Name) continue;
 
-		if (stricmp(NameToFind, Name) == 0)
+		if (_stricmp(NameToFind, Name) == 0)
 			return (CurrObject);
 	}
 
@@ -1020,7 +1020,7 @@ static jeBoolean PathObject_BuildObjectNameList(PathObj *pPathObj, int TimeLineN
 		if (TypeName)
 		{
 			// don't look at PathObjects
-			if ( stricmp(TypeName, "PathObject") == 0)
+			if ( _stricmp(TypeName, "PathObject") == 0)
 			{
 				continue;
 			}

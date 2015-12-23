@@ -534,7 +534,7 @@ static BitmapList * Util_CreateBitmapList(
 				Bmps->SizesListSize = i;
 				break;
 			}
-			sprintf(Buf, "%i" , Bmps->NumericSizes[i]); //itoa( Bmps->NumericSizes[i], Buf, 10 );
+			sprintf(Buf, "%i" , Bmps->NumericSizes[i]); //_itoa( Bmps->NumericSizes[i], Buf, 10 );
 			Bmps->StringSizes[i] = Util_StrDup( Buf );
 		}
 	}

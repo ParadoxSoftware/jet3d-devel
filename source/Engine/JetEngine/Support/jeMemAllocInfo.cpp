@@ -184,7 +184,7 @@ JETAPI void JETCC jeMemAllocInfo_FileReport(const char *FName, const char *DumpF
 	TotalPointers=0;TotalMem=0;
 	while (InfoChain!=NULL)
 	{
-		if (!stricmp(FName, InfoChain->AllocFileName))
+		if (!_stricmp(FName, InfoChain->AllocFileName))
 		{
 			jeMemAllocInfo_InfoReport_(fp, InfoChain, FreedMemoryReport, &CurPtr, &CurMem);
 			TotalPointers+=CurPtr;
@@ -688,7 +688,7 @@ static void JETCC jeMemAllocInfo_UpdateBreakPoints(jeMemAllocInfoChain *InfoChai
 	while (BreakPoint!=NULL)
 	{
 		NextBreakPoint=BreakPoint->Next;
-		if (!stricmp(InfoChain->AllocFileName, BreakPoint->AllocFileName) &&
+		if (!_stricmp(InfoChain->AllocFileName, BreakPoint->AllocFileName) &&
 			(BreakPoint->AllocLineNr==0 || BreakPoint->AllocLineNr==InfoChain->AllocLineNr))
 		{
 			if (BreakPoint->CallNr==0)
@@ -842,7 +842,7 @@ static void JETCC jeMemAllocInfo_UpdateFileFlags(jeMemAllocInfoChain *InfoChain)
 	while (FileChain!=NULL)
 	{
 		NextFile=FileChain->Next;
-		if (!stricmp(InfoChain->AllocFileName, FileChain->FileName))
+		if (!_stricmp(InfoChain->AllocFileName, FileChain->FileName))
 		{
 			if (FileChain->Flags&jMAI_INCLUDE)
 				InfoChain->IsActive=JE_TRUE;
@@ -887,7 +887,7 @@ static void JETCC jeMemAllocInfo_Report(jeBoolean FreedMemoryReport)
 	while(InfoPtr->Data!=NULL)
 	{
 		InfoChain=InfoPtr->Data;
-		if(LastFName!=NULL && stricmp(LastFName, InfoChain->AllocFileName))
+		if(LastFName!=NULL && _stricmp(LastFName, InfoChain->AllocFileName))
 		{
 			if (WasActive==JE_FALSE)
 				jMAI_RPT1(fp, "%s was excluded!\n\n", LastFName);

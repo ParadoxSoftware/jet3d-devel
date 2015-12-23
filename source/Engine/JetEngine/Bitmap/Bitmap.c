@@ -97,7 +97,7 @@ see {} for notes/long-term-todos
 #include	"ThreadQueue.h"
 
 #ifdef BUILD_BE
-#define strnicmp strncasecmp
+#define _strnicmp strncasecmp
 #endif
 
 #ifdef DO_TIMER
@@ -4248,7 +4248,7 @@ JETAPI jeBitmap * JETCC jeBitmap_CreateFromFileName(const jeVFile *BaseFS,const 
 	}
 	else
 	{
-		if ( strnicmp(Name,"http:",5) == 0 || strnicmp(Name,"ftp:",4) == 0 || strnicmp(Name,"www.",4) == 0 )
+		if ( _strnicmp(Name,"http:",5) == 0 || _strnicmp(Name,"ftp:",4) == 0 || _strnicmp(Name,"www.",4) == 0 )
 		{
 		jeVFile * inet;
 			inet = jeVFile_OpenNewSystem(NULL,JE_VFILE_TYPE_INTERNET,NULL,NULL,JE_VFILE_OPEN_READONLY|JE_VFILE_OPEN_DIRECTORY);
@@ -4319,7 +4319,7 @@ JETAPI jeBitmap * JETCC jeBitmap_CreateFromFileName2(const jeVFile *BaseFS,const
 	}
 	else
 	{
-		if ( strnicmp(Name,"http:",5) == 0 || strnicmp(Name,"ftp:",4) == 0 || strnicmp(Name,"www.",4) == 0 )
+		if ( _strnicmp(Name,"http:",5) == 0 || _strnicmp(Name,"ftp:",4) == 0 || _strnicmp(Name,"www.",4) == 0 )
 		{
 		jeVFile * inet;
 			inet = jeVFile_OpenNewSystem(NULL,JE_VFILE_TYPE_INTERNET,NULL,NULL,JE_VFILE_OPEN_READONLY|JE_VFILE_OPEN_DIRECTORY);

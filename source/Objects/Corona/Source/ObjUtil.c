@@ -662,7 +662,7 @@ BitmapList * ObjUtil_CreateBitmapList(
 				Bmps->SizesListSize = i;
 				break;
 			}
-			itoa( Bmps->NumericSizes[i], Buf, 10 );
+			_itoa( Bmps->NumericSizes[i], Buf, 10 );
 			Bmps->StringSizes[i] = ObjUtil_StrDup( Buf );
 		}
 	}
@@ -738,7 +738,7 @@ static char * ObjUtil_TextureGroupGetStringFromList(
 	for ( i = 0; i < AvailableArt->Total; i++ )
 	{
 		assert( AvailableArt->Name[i] != NULL );
-		if ( stricmp( AvailableArt->Name[i], CompareString ) == 0 )
+		if ( _stricmp( AvailableArt->Name[i], CompareString ) == 0 )
 		{
 			return AvailableArt->Name[i];
 		}
@@ -784,7 +784,7 @@ void ObjUtil_TextureGroupSetSize(
 	// locate new active size
 	for ( i = 0; i < AvailableArt->SizesListSize; i++ )
 	{
-		if ( stricmp( AvailableArt->StringSizes[i], ChosenSizeName ) == 0 )
+		if ( _stricmp( AvailableArt->StringSizes[i], ChosenSizeName ) == 0 )
 		{
 
 			// do nothing if same size was chosen
@@ -885,7 +885,7 @@ jeBoolean ObjUtil_TextureGroupSetArt(
 	assert( *SaveAlphaName != NULL );
 
 	// do nothing further if there is no main bitmap
-	if ( stricmp( *SaveBitmapName, NoSelection ) == 0 )
+	if ( _stricmp( *SaveBitmapName, NoSelection ) == 0 )
 	{
 		return JE_TRUE;
 	}
@@ -898,7 +898,7 @@ jeBoolean ObjUtil_TextureGroupSetArt(
 
 		// determine length of full art name
 		Size = strlen( *SaveBitmapName ) + 1;
-		if ( stricmp( *SaveAlphaName, NoSelection ) != 0 )
+		if ( _stricmp( *SaveAlphaName, NoSelection ) != 0 )
 		{
 			Size += strlen( *SaveAlphaName );
 		}
@@ -911,7 +911,7 @@ jeBoolean ObjUtil_TextureGroupSetArt(
 			goto ERROR_ObjUtil_TextureGroupSetArt;
 		}
 		strcpy( *SaveArtName, *SaveBitmapName );
-		if ( stricmp( *SaveAlphaName, NoSelection ) != 0 )
+		if ( _stricmp( *SaveAlphaName, NoSelection ) != 0 )
 		{
 			strcat( *SaveArtName, *SaveAlphaName );
 		}
@@ -936,7 +936,7 @@ jeBoolean ObjUtil_TextureGroupSetArt(
 		}
 
 		// create new art
-		if ( stricmp( *SaveAlphaName, NoSelection ) != 0 )
+		if ( _stricmp( *SaveAlphaName, NoSelection ) != 0 )
 		{
 			*SaveArt = ObjUtil_CreateBitmapFromFileName( FileDir, *SaveBitmapName, *SaveAlphaName );
 		}

@@ -282,7 +282,7 @@ void CProperties::OnPropAdd()
 	else if (cText.Compare("Number")==0)
 		{
 		  GetDlgItem( IDC_PROP_VALUE  )->GetWindowText(cText);
-		  pListCtrl->SetItemText( X, 1, itoa(atoi(cText),TempString,10));
+		  pListCtrl->SetItemText( X, 1, _itoa(atoi(cText),TempString,10));
 		}
 	else if (cText.Compare("String")==0)
 		{
@@ -519,7 +519,7 @@ jeBoolean CProperties::Properties_WriteToFile( /*Level * pLevel,*/ jeVFile * pF,
 
 	if (iUserDataEntries>0)
 		{
-		if (WriteVariable_String ("KEYN",itoa(iUserDataEntries,cUserDataEntries,10),pF,pPtrMgr)==JE_FALSE)
+		if (WriteVariable_String ("KEYN",_itoa(iUserDataEntries,cUserDataEntries,10),pF,pPtrMgr)==JE_FALSE)
 			return JE_FALSE;
 		for (int X=0;X<iUserDataEntries;X++)
 			{	

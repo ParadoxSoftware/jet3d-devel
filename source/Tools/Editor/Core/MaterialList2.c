@@ -92,7 +92,7 @@ MaterialDirectory * MaterialList_GetDirectory(
 	assert( CurDirectory != NULL );
 
 	// if we have found if then return its pointer
-	if ( strnicmp( CurDirectory->PathName, DirectoryName, strlen( DirectoryName ) ) == 0 )
+	if ( _strnicmp( CurDirectory->PathName, DirectoryName, strlen( DirectoryName ) ) == 0 )
 	{
 		return CurDirectory;
 	}

@@ -899,7 +899,7 @@ jeBoolean CGroups_LoadTextureCB( MaterialIdent *pMatIdent, void *lParam)
 	jeMaterial_Array* pMatArray = jeWorld_GetMaterialArray(Level_GetjeWorld(pLevel));
 
     while (pMaterial = jeMaterial_ArrayGetNextMaterial(pMatArray, pMaterial)) {
-        if (stricmp(jeMaterial_GetName(pMaterial), pMatIdent->MaterialName) == 0) {
+        if (_stricmp(jeMaterial_GetName(pMaterial), pMatIdent->MaterialName) == 0) {
             pMatIdent->WorldMatIdx = matIdx;
             break;
         }

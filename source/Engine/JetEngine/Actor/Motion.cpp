@@ -26,7 +26,7 @@
 */
  
 #include <assert.h>
-#include <string.h>		// strcmp, strnicmp
+#include <string.h>		// strcmp, _strnicmp
 
 #include "BaseType.h"
 #include "Ram.h"

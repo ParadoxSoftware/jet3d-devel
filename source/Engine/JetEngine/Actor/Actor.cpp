@@ -2434,7 +2434,7 @@ JETAPI void JETCC jeActor_AddCollisionBone(jeActor *Actor, const char* BoneName)
 			jeCollisionBone		*Bone;
 
 			Bone=JE_RAM_ALLOCATE_STRUCT(jeCollisionBone);
-			Bone->BoneName=strdup(BoneName);
+			Bone->BoneName=_strdup(BoneName);
 			jeActor_GetBoneIndex(Actor, BoneName, &(Bone->BoneIndex) );
 			*(Bone->CurrExtBox=JE_RAM_ALLOCATE_STRUCT(jeExtBox))=BExtBox;
 			*(Bone->PrevExtBox=JE_RAM_ALLOCATE_STRUCT(jeExtBox))=BExtBox;

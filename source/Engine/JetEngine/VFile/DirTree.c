@@ -49,7 +49,7 @@ Jan/Feb 99 : cbloom :
 #define _MAX_DRIVE  3
 #define _MAX_DIR    256 /* max. length of path component */
 
-#define stricmp strcasecmp
+#define _stricmp strcasecmp
 void FastSplitPath(register char* path, char* drive, char* dir, char* fname, char * ext);
 #define _splitpath FastSplitPath        
 #endif
@@ -553,7 +553,7 @@ DirTree *DirTree_FindExact(const DirTree *Tree, const char *Path)
 	Siblings = Tree->Children;
 	while	(Siblings)
 	{
-		if	(!stricmp(Siblings->Name, Buff))
+		if	(!_stricmp(Siblings->Name, Buff))
 		{
 			if	(!*Path)
 				return Siblings;
@@ -589,7 +589,7 @@ DirTree *DirTree_FindPartial(
 	Siblings = Tree->Children;
 	while	(Siblings)
 	{
-		if	(!stricmp(Siblings->Name, Buff))
+		if	(!_stricmp(Siblings->Name, Buff))
 		{
 			*LeftOvers = Path;
 			if	(!*Path)

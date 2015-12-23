@@ -158,7 +158,7 @@ BOOL D3DMain_InitD3D(HWND hWnd, const char *DriverName, int32 Width, int32 Heigh
 	
 	GetSystemTime(&Time);
 		
-	//unlink(D3DMAIN_LOG_FILENAME);
+	//_unlink(D3DMAIN_LOG_FILENAME);
 
 	D3DMain_Log("=================================================================\n");
 	D3DMain_Log(" D3DInfo v%i.%i\n", DRV_VERSION_MAJOR, DRV_VERSION_MINOR);
@@ -2435,7 +2435,7 @@ BOOL DRIVERCC EnumSubDrivers2(DRV_ENUM_DRV_CB *Cb, void *Context)
 	int32				i;
 	D3DMain_DDEnumInfo	Info;
 
-	unlink(D3DMAIN_LOG_FILENAME);
+	_unlink(D3DMAIN_LOG_FILENAME);
 	
 	Info.Drivers = Drivers;
 	Info.NumDrivers = 0;

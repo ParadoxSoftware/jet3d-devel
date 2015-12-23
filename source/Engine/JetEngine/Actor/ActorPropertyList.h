@@ -1,7 +1,7 @@
 #include <float.h>
 
 #ifdef BUILD_BE
-#define stricmp strcasecmp
+#define _stricmp strcasecmp
 #define HINSTANCE image_id
 #endif
 
@@ -1050,7 +1050,7 @@ jeBoolean JETCC SetProperty(
 			Object->ActorDefName = Util_StrDup( pData->String );
 
 			// do nothing more if no selection is made
-			if ( stricmp( pData->String, NoSelection ) == 0 )
+			if ( _stricmp( pData->String, NoSelection ) == 0 )
 			{
 				break;
 			}
@@ -1208,7 +1208,7 @@ jeBoolean JETCC SetProperty(
 			Object->MotionName = Util_StrDup( pData->String );
 
 			// do nothing more if no selection is made...
-			if ( stricmp( pData->String, NoSelection ) == 0 )
+			if ( _stricmp( pData->String, NoSelection ) == 0 )
 			{
 				Object->Motion = NULL;
 				jeActor_ClearPose( Actor, &( Actor->Xf ) );
@@ -1243,7 +1243,7 @@ jeBoolean JETCC SetProperty(
 			Object->LightReferenceBoneName = Util_StrDup( pData->String );
 
 			// do nothing more if no selection is made
-			if ( stricmp( pData->String, NoSelection ) == 0 )
+			if ( _stricmp( pData->String, NoSelection ) == 0 )
 			{
 				break;
 			}
@@ -1282,7 +1282,7 @@ jeBoolean JETCC SetProperty(
 			Object->MaterialCurrent = 0;
 			for ( i = 0; i < Object->MaterialListSize; i++ )
 			{
-				if ( stricmp( pData->String, Object->MaterialList[i] ) == 0 )
+				if ( _stricmp( pData->String, Object->MaterialList[i] ) == 0 )
 				{
 					Object->MaterialCurrent = i;
 				}
@@ -1316,7 +1316,7 @@ jeBoolean JETCC SetProperty(
 			// determine which overide bitmap was picked
 			for ( i = 0; i < Bitmaps->Total; i++ )
 			{
-				if ( stricmp( Bitmaps->Name[i], pData->String ) == 0 )
+				if ( _stricmp( Bitmaps->Name[i], pData->String ) == 0 )
 				{
 
 					// locals
@@ -1340,7 +1340,7 @@ jeBoolean JETCC SetProperty(
 					Object->MaterialOverideList[Object->MaterialCurrent] = Bitmaps->Name[i];
 
 					// get default material if no overide was selected...
-					if ( stricmp( Object->MaterialOverideList[Object->MaterialCurrent],  NoSelection ) == 0 )
+					if ( _stricmp( Object->MaterialOverideList[Object->MaterialCurrent],  NoSelection ) == 0 )
 					{
 
 						// locals
@@ -1429,7 +1429,7 @@ jeBoolean JETCC SetProperty(
 						// overide mapper choice if required
 						for ( MapperIndex = 0; MapperIndex < MaterialMapperTableSize; MapperIndex++ )
 						{
-							if ( stricmp( Object->MaterialMapperList[Object->MaterialCurrent], MaterialMapperTable[MapperIndex].Name ) == 0 )
+							if ( _stricmp( Object->MaterialMapperList[Object->MaterialCurrent], MaterialMapperTable[MapperIndex].Name ) == 0 )
 							{
 								if ( MaterialMapperTable[MapperIndex].Mapper != NULL )
 								{
@@ -1499,7 +1499,7 @@ jeBoolean JETCC SetProperty(
 				// determine which mapper was picked
 				for ( MapperIndex = 0; MapperIndex < MaterialMapperTableSize; MapperIndex++ )
 				{
-					if ( stricmp( MaterialMapperTable[MapperIndex].Name, pData->String ) == 0 )
+					if ( _stricmp( MaterialMapperTable[MapperIndex].Name, pData->String ) == 0 )
 					{
 						if ( Object->MaterialOverideBitmap[Object->MaterialCurrent] != NULL )
 						{
@@ -1538,7 +1538,7 @@ jeBoolean JETCC SetProperty(
 
 		// if bone name is noselection string then null it
 		LightBone = Object->LightReferenceBoneName;
-		if ( stricmp( Object->LightReferenceBoneName, NoSelection ) == 0 )
+		if ( _stricmp( Object->LightReferenceBoneName, NoSelection ) == 0 )
 		{
 			Object->LightReferenceBoneName = NULL;
 		}

@@ -137,7 +137,7 @@ static void jeParticle_Destroy(
 ////////////////////////////////////////////////////////////////////////////////////////
 static void jeParticle_Unlink(
 	jeParticle_System	*ps,		// particle system in which particle exists
-	jeParticle			*ptcl )		// particle to unlink
+	jeParticle			*ptcl )		// particle to _unlink
 {
 
 	// make list adjustments

@@ -170,7 +170,7 @@ jeObject * jeWorld_FindObjectFromName(jeWorld *World, char *NameToFind)
 
 		if (!Name) continue;
 
-		if (stricmp(NameToFind, Name) == 0)
+		if (_stricmp(NameToFind, Name) == 0)
 			return (CurrObject);
 		}
 
@@ -427,7 +427,7 @@ static jeBoolean jeWorld_AddDefaultObjects(jeWorld *World)
 		return JE_FALSE;
 
 	// [MLB-ICE]
-	//MirrorObject->Name = strdup("Mirror1");
+	//MirrorObject->Name = _strdup("Mirror1");
 	MirrorObject->Name = Util_StrDup("Mirror1");
 
 	if (!jeWorld_AddObject(World, MirrorObject))
@@ -2994,7 +2994,7 @@ JETAPI jeBoolean JETCC jeWorld_CanCollide(const jeWorld *World, const char* Type
 		char		*Data;		
 	
 		Data = (char*)jeChain_LinkGetLinkData(Link);
-		if(stricmp(Data,Type) == 0)
+		if(_stricmp(Data,Type) == 0)
 			return JE_FALSE;
 	}
 
@@ -3018,7 +3018,7 @@ JETAPI jeBoolean	JETCC jeWorld_EnableCollision(jeWorld *World, const char* Type)
 		char		*Data;		
 	
 		Data = (char*)jeChain_LinkGetLinkData(Link);
-		if(stricmp(Data,Type) == 0)
+		if(_stricmp(Data,Type) == 0)
 		{
 			jeRam_Free(Data);
 			return jeChain_RemoveLink(World->CollisionObjectTypes, Link);			
@@ -3061,7 +3061,7 @@ JETAPI jeBoolean JETCC jeWorld_DisableCollision(jeWorld *World, const char *Type
 	{		
 		jeChain_Link *Link;		
 
-		Parse = strdup(Include);
+		Parse = _strdup(Include);
 		token = strtok(Parse,seps);
 	
 		for (Link = jeChain_GetFirstLink(World->CollisionObjectTypes); Link; Link = jeChain_LinkGetNext(Link))
@@ -3083,7 +3083,7 @@ JETAPI jeBoolean JETCC jeWorld_DisableCollision(jeWorld *World, const char *Type
 	}
 	if(Exclude != NULL)
 	{	
-		Parse = strdup(Exclude);
+		Parse = _strdup(Exclude);
 		token = strtok(Parse,seps);
 		while(token != NULL)
 		{
@@ -3126,7 +3126,7 @@ JETAPI char * JETCC jeWorld_GetNextCollisionExclusion(const jeWorld *World, cons
 		char *LinkName;
 			
 		LinkName = (char *)jeChain_LinkGetLinkData( Link );		
-		if(LinkName && stricmp(Start,LinkName)==0)
+		if(LinkName && _stricmp(Start,LinkName)==0)
 		{
 			if(jeChain_LinkGetNext(Link) == NULL) return NULL;			
 

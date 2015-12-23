@@ -90,7 +90,7 @@ while(num)
   }
 *str = 0;
 
-strrev(strbase);
+_strrev(strbase);
 }
 
 void strrep(char *str,char fm,char to)
@@ -103,7 +103,7 @@ while( *str )
 }
 
 #ifndef IN_COMPILER
-int stricmp(const char *str,const char *vs)
+int _stricmp(const char *str,const char *vs)
 {
 
 while( toupper(*str) == toupper(*vs) )
@@ -204,7 +204,7 @@ while(*str)
 return(strbase);
 }
 
-char * strrev(char *str)
+char * _strrev(char *str)
 {
 register char *endstr,swapper;
 char *strbase =str;

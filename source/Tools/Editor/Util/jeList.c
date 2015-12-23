@@ -262,7 +262,7 @@ jeBoolean List_Remove
 		DestroyFcn (pli->Data);
 	}
 
-	// Now unlink it
+	// Now _unlink it
 
 	if (pList->Head == pli)
 	{
@@ -632,7 +632,7 @@ static jeBoolean ParseCommand
 			break;
 
 		case 'a' :
-			sarg = strdup (&InputLine[2]);
+			sarg = _strdup (&InputLine[2]);
 			if (sarg == NULL)
 			{
 				puts ("Error: no argument for append");
@@ -653,7 +653,7 @@ static jeBoolean ParseCommand
 			break;
 
 		case 'p' :
-			sarg = strdup (&InputLine[2]);
+			sarg = _strdup (&InputLine[2]);
 			if (sarg == NULL)
 			{
 				puts ("Error: no argument for prepend");
@@ -674,7 +674,7 @@ static jeBoolean ParseCommand
 			break;
 
 		case 's' :
-			sarg = strdup (&InputLine[2]);
+			sarg = _strdup (&InputLine[2]);
 			if (sarg == NULL)
 			{
 				puts ("Error:  no argument for search");
@@ -698,7 +698,7 @@ static jeBoolean ParseCommand
 			break;
 
 		case 'ib' :
-			sarg = strdup (&InputLine[3]);
+			sarg = _strdup (&InputLine[3]);
 			if (sarg == NULL)
 			{
 				puts ("Error:  no argument for insert before.");
@@ -719,7 +719,7 @@ static jeBoolean ParseCommand
 			break;
 
 		case 'ia' :
-			sarg = strdup (&InputLine[3]);
+			sarg = _strdup (&InputLine[3]);
 			if (sarg == NULL)
 			{
 				puts ("Error:  no argument for insert after.");

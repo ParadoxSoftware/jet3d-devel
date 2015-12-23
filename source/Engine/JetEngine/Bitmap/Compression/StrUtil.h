@@ -59,14 +59,14 @@ void strins(char *to,const char *fm);
 void strrep(char *str,char fm,char to);
 
 #ifndef IN_COMPILER
-#ifndef stricmp
-int stricmp(const char *str,const char *vs);
+#ifndef _stricmp
+int _stricmp(const char *str,const char *vs);
 #endif
 #ifndef strupr
 char *strupr(char *str);
 #endif
-#ifndef strrev
-char *strrev(char *str);
+#ifndef _strrev
+char *_strrev(char *str);
 #endif
 #endif
 

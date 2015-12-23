@@ -29,7 +29,7 @@
 #include "jeWorld.h"
 
 #ifdef BUILD_BE
-#define stricmp strcasecmp
+#define _stricmp strcasecmp
 #define _MAX_FNAME 512
 #endif
 
@@ -165,22 +165,22 @@ void Trigger_ParseEvent(jeWorld *World, TriggerContext ContextType, void *Contex
 			//Trigger_PathTime(World, Arg[1], (float)atof(Arg[2]));
 			break;
 		case EFCT:
-			if (stricmp(Arg[1], "ambient") == 0)
+			if (_stricmp(Arg[1], "ambient") == 0)
 				{
 				//Trigger_EffectAmbient(World, ContextType, ContextData, Arg[3], Arg[2]);
 				}
 			else
-			if (stricmp(Arg[1], "spout1") == 0)
+			if (_stricmp(Arg[1], "spout1") == 0)
 				{
 				//Trigger_EffectSpout1(World, ContextType, ContextData, Arg[3], Arg[2]);
 				}
 			else
-			if (stricmp(Arg[1], "morph") == 0)
+			if (_stricmp(Arg[1], "morph") == 0)
 				{
 				//Trigger_EffectMorph(World, ContextType, ContextData, Arg[3], Arg[2]);
 				}
 			else
-			if (stricmp(Arg[1], "ink") == 0)
+			if (_stricmp(Arg[1], "ink") == 0)
 				{
 				//if (ContextType == TRIGGER_FROM_OBJECT)
 				//	ContextType = TRIGGER_FROM_OBJECT_XFORM;

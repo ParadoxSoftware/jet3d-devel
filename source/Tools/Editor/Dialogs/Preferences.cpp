@@ -428,7 +428,7 @@ int CPreferences::LoadSettings()
 	if (Settings_GetView_PreviewView()==2)  ((CButton*)GetDlgItem( GRID_VIEW_VIEW3))->SetCheck(0x01);
 	if (Settings_GetView_PreviewView()==3)  ((CButton*)GetDlgItem( GRID_VIEW_VIEW4))->SetCheck(0x01);
 
-	((CComboBox*)GetDlgItem( GRID_VIEW_VIEWSNUM))->SelectString(-1,itoa(Settings_GetView_Nums(),sPrefsString,10));
+	((CComboBox*)GetDlgItem( GRID_VIEW_VIEWSNUM))->SelectString(-1,_itoa(Settings_GetView_Nums(),sPrefsString,10));
 
 
 
@@ -499,7 +499,7 @@ int CPreferences::LoadSettings()
 	((CButton*)GetDlgItem(IDC_GLOBAL_BACKUPONSAVE))->SetCheck(Settings_GetGlobal_BackupFile());
  	((CButton*)GetDlgItem(IDC_GLOBAL_SAVETHUMBERNAIL))->SetCheck(Settings_GetGlobal_Thumbnail());
 
-	GetDlgItem(IDC_GLOBAL_UNDONUM)->SetWindowText(itoa(Settings_GetGlobal_UndoBuffer(),sPrefsString,10));
+	GetDlgItem(IDC_GLOBAL_UNDONUM)->SetWindowText(_itoa(Settings_GetGlobal_UndoBuffer(),sPrefsString,10));
 
 	// BEGIN - Disable auto save option - paradoxnj 8/11/2005
 	((CButton*)GetDlgItem(IDC_GLOBAL_AUTOBACKUP))->SetCheck(Settings_GetAutosaveDisabled());

@@ -147,7 +147,7 @@ jeBoolean Make_IsTargetOutOfDate( const char *TargetFileName,
 	if (Make_CleanFlag != JE_FALSE)				
 		{									
 			
-			if (unlink(TargetFileName)!=0)
+			if (_unlink(TargetFileName)!=0)
 				{
 					Printf("Error: Unable to clean '%s'\n",TargetFileName);
 					return JE_FALSE;
@@ -1634,7 +1634,7 @@ jeBoolean Make_Actor(AProject *Prj, AOptions *Options, MkUtil_Printf Printf)
 					}
 			}
 						
-		unlink(TargetName);		// don't want backup files
+		_unlink(TargetName);		// don't want backup files
 
 		RVal = MkActor_DoMake(Options,Printf);
 		MkActor_OptionsDestroy(&Options);
@@ -1686,7 +1686,7 @@ Options;		// remove unused parameter warning
 	if (Handle != -1)
 		{
 			_findclose(Handle);
-			if (unlink(TargetName) != 0)
+			if (_unlink(TargetName) != 0)
 				{
 					Printf("Error: Can't delete '%s'\n",TargetName);
 					return JE_FALSE;
@@ -1718,7 +1718,7 @@ Options;		// remove unused parameter warning
 					if (TargetData.name[0]!='.')
 						if (FilePath_AppendName(ObjDir,TargetData.name,DeleteName)!=JE_FALSE)
 							{
-								unlink(DeleteName);
+								_unlink(DeleteName);
 							}
 				}
 			while (_findnext( Handle, &TargetData) == 0);

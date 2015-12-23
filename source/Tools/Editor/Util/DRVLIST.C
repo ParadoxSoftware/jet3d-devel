@@ -140,7 +140,7 @@ static DriverInfo * Drvlist_Build(
 			}
 			/*if ( !( ModeFilter & DRVLIST_SOFTWARE ) )
 			{
-				if ( strnicmp( DriverName, "Software", 8 ) == 0 )
+				if ( _strnicmp( DriverName, "Software", 8 ) == 0 )
 				{
 					ValidMode = JE_FALSE;
 				}
@@ -148,7 +148,7 @@ static DriverInfo * Drvlist_Build(
 
 			if ( !( ModeFilter & DRVLIST_HARDWARE ) )
 			{
-				if ( strnicmp( DriverName, "Direct3D 9 Driver", 8 ) != 0 )
+				if ( _strnicmp( DriverName, "Direct3D 9 Driver", 8 ) != 0 )
 				{
 					ValidMode = JE_FALSE;
 				}
@@ -281,7 +281,7 @@ static	BOOL	CALLBACK	DlgProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lPar
 					sprintf( CurBuff, "%s %s", CurDriverName, CurModeName );
 
 					// if its the currently active one then make it the default selection
-					if ( stricmp( buff, CurBuff ) == 0 )
+					if ( _stricmp( buff, CurBuff ) == 0 )
 					{
 						DefaultMode = Count;
 					}

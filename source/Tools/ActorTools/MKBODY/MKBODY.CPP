@@ -1817,7 +1817,7 @@ jeBoolean	MkBody_Material(MkBody_Options *options, const char *line, jeBody *pBo
 			jeBitmap_Info Info;
 
 			char BmpFileName[_MAX_PATH];
-			if (stricmp(name+strlen(name)-4,".BMP") != 0)
+			if (_stricmp(name+strlen(name)-4,".BMP") != 0)
 				{
 					Printf("ERROR: Material %d does not reference a BMP.  '%s' \n",i,ptext);
 					return JE_FALSE;
@@ -2798,7 +2798,7 @@ ReturnCode MkBody_DoMake(MkBody_Options* options,MkUtil_Printf PrintfCallback)
 		if(VF == NULL)
 		{
 			Printf("ERROR: Could not open output file '%s'\n", options->BodyFile);
-			unlink(options->BodyFile);
+			_unlink(options->BodyFile);
 			MkUtil_AdjustReturnCode(&retValue, RETURN_ERROR);
 		}
 		else
@@ -2806,7 +2806,7 @@ ReturnCode MkBody_DoMake(MkBody_Options* options,MkUtil_Printf PrintfCallback)
 			if(jeBody_WriteToFile(pBody, VF) == JE_FALSE)
 			{
 				Printf("ERROR: Body file '%s' was not written correctly\n", options->BodyFile);
-				unlink(options->BodyFile);
+				_unlink(options->BodyFile);
 				MkUtil_AdjustReturnCode(&retValue, RETURN_ERROR);
 			}
 			else
@@ -2814,7 +2814,7 @@ ReturnCode MkBody_DoMake(MkBody_Options* options,MkUtil_Printf PrintfCallback)
 				if (jeVFile_Close(VF) == JE_FALSE)
 					{
 						Printf("ERROR: Body file '%s' was not written correctly\n", options->BodyFile);
-						unlink(options->BodyFile);
+						_unlink(options->BodyFile);
 						MkUtil_AdjustReturnCode(&retValue, RETURN_ERROR);
 					}
 				else

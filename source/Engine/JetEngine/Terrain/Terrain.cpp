@@ -119,8 +119,8 @@ CODE STUFF :
 #endif
 
 #ifdef BUILD_BE
-#define stricmp strcasecmp
-#define strnicmp strncasecmp
+#define _stricmp strcasecmp
+#define _strnicmp strncasecmp
 #endif
 
 /*}{******************************************************/
@@ -2447,7 +2447,7 @@ jeBoolean	JETCC jeTerrain_SetProperty(void * T, int32 FieldID, PROPERTY_FIELD_TY
 
 		case TERRAIN_PROPERTY_LIGHTING_LIST:
 			
-			#define strmatch(str,vs)	( strnicmp(str,vs,strlen(vs)) == 0 )
+			#define strmatch(str,vs)	( _strnicmp(str,vs,strlen(vs)) == 0 )
 
 			if ( strmatch(pData->String,"Full") )
 			{
