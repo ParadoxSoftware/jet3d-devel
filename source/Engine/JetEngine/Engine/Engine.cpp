@@ -1112,7 +1112,7 @@ JETAPI jeBoolean JETCC jeEngine_DrawBitmap(const jeEngine *Engine,
 
 JETAPI jeTexture *JETCC jeEngine_CreateTextureFromFile(const jeEngine *Engine, jeVFile *File)
 {
-	jeBitmap* pBmp;
+	jeBitmap* pBmp = NULL;
 
 	if (Engine->DriverInfo.RDriver->THandle_CreateFromFile) {
 		return Engine->DriverInfo.RDriver->THandle_CreateFromFile(File);

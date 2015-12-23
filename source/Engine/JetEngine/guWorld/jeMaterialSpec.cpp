@@ -804,8 +804,8 @@ JETAPI jeBoolean JETCC jeMaterialSpec_AddLayerFromBitmap(jeMaterialSpec* MatSpec
     // To avoid problem, add a ref on the bitmap
     jeBitmap_CreateRef(pBitmap);
     if (layerIndex == 0) {
-        MatSpec->Width = jeBitmap_Width(pBitmap);
-        MatSpec->Height = jeBitmap_Height(pBitmap);
+        MatSpec->Width = (uint16)jeBitmap_Width(pBitmap);
+        MatSpec->Height = (uint16)jeBitmap_Height(pBitmap);
     }
 
 	jeXForm3d_SetIdentity(&MatSpec->pLayers[layerIndex]->XForm);

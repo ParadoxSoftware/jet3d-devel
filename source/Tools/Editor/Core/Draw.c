@@ -447,6 +447,7 @@ void Draw_OrthoName( Ortho * pOrtho, HDC hDC )
 	int					nOldMode ;
 
 	pszViewName = Ortho_GetName( pOrtho ) ;
+
 	nOldMode = SetBkMode( hDC, TRANSPARENT ) ;
 	TextOut( hDC, 4, 4, pszViewName, strlen( pszViewName ) ) ;
 	SetBkMode( hDC, nOldMode ) ;

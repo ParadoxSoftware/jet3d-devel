@@ -3664,8 +3664,9 @@ static jeBoolean jeBSP_CreateVertexBuffer(jeBSP* Tree)
 	jeIndexPoly			*pPoly;
 	jeVertArray_Index	*pIdxVerts;
 
-	jeVertex* pVertexData;
-	uint16* pIndexData;
+	jeVertex* pVertexData = NULL;
+	uint16* pIndexData = NULL;
+
 	const jeVec3d			*pVert;
 
 	// Matertial Data
