@@ -205,6 +205,11 @@ public:
 	virtual uint32					AddRef() = 0;
 	virtual uint32					Release() = 0;
 };
+
+#define JE_SAFE_DELETE(x)			{ if (x) delete x; x = NULL; }
+#define JE_SAFE_DELETE_ARRAY(x)		{ if (x) delete []x; x = NULL; }
+#define JE_SAFE_RELEASE(x)			{ if (x) (x)->Release(); x = NULL; }
+
 #endif
 
 #ifdef __cplusplus

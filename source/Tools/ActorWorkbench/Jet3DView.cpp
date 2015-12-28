@@ -68,6 +68,9 @@ void CJet3DView::OnDraw(CDC* pDC)
 	CDocument* pDoc = GetDocument();
 	if (m_bInitialized)
 	{
+		if (!jeEngine_IsValid(m_pEngine))
+			return;
+
 		// TODO: add draw code here
 		if (!jeEngine_BeginFrame(m_pEngine, m_pCamera, JE_TRUE))
 			return;

@@ -184,13 +184,13 @@ JETAPI void JETCC jeErrorLog_AddExplicit(jeErrorLog_ErrorClassType Error,
 		OutputDebugString(SDst);
 		OutputDebugString("\r\n");
 #ifdef USE_STDIO_LOG
-		errorlog = fopen(FILENAME, "at");
+		/*errorlog = fopen(FILENAME, "at");
 		if (!errorlog)
 			errorlog = fopen(FILENAME, "wt");
 
 		fprintf(errorlog, "%s\n", SDst);
 		fflush(errorlog);
-		fclose(errorlog);
+		fclose(errorlog);*/
 //#endif
 	}
 #endif

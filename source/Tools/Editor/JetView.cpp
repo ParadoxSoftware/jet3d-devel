@@ -1086,6 +1086,9 @@ void FullscreenProcess(
 			}
 		}
 		// render world
+		if (!jeEngine_IsValid(Engine))
+			return;
+
 		jeEngine_BeginFrame( Engine, FSCamera, JE_TRUE);
 		Result = jeWorld_Render( World, FSCamera, NULL);
 		//	by trilobite jan. 2011

@@ -27,6 +27,7 @@
 #include "List.h"
 #include "Camera._h"
 
+#include "debug_new.h"
 
 #ifndef max
 #define max(AA,BB)  (  ((AA)>(BB)) ?(AA):(BB)  )
@@ -42,11 +43,12 @@
 //=====================================================================================
 JETAPI jeCamera *JETCC jeCamera_Create(jeFloat FovRadians, const jeRect *Rect)
 {
-	jeCamera *Camera;
+	jeCamera *Camera = NULL;
 
 	assert( Rect != NULL );
 
-	Camera = JE_RAM_ALLOCATE_STRUCT_CLEAR(jeCamera);
+	//Camera = JE_RAM_ALLOCATE_STRUCT_CLEAR(jeCamera);
+	Camera = new jeCamera;
 
 	if (Camera == NULL)
 	{
@@ -74,20 +76,22 @@ JETAPI void JETCC jeCamera_Destroy(jeCamera **pCamera)
 	assert( pCamera  != NULL );
 	if ( *pCamera )
 	{
-	jeCamera * Camera;
+		jeCamera * Camera = NULL;
 		Camera = *pCamera;
 
 		if ( Camera->XFormStack )
 		{
-		jeXForm3d * pXF;
+			jeXForm3d * pXF;
 			while( pXF = (jeXForm3d *)Stack_Pop(Camera->XFormStack) )
 			{
-				jeRam_Free(pXF);
+				//jeRam_Free(pXF);
+				JE_SAFE_DELETE(pXF);
 			}
 			Stack_Destroy(Camera->XFormStack);
 		}
 
-		jeRam_Free(Camera);
+		//jeRam_Free(Camera);
+		JE_SAFE_DELETE(Camera);
 	}
 	*pCamera = NULL;
 }
@@ -111,7 +115,8 @@ jeXForm3d * pXF;
 		if ( ! (Camera->XFormStack = Stack_Create()) )
 			return JE_FALSE;
 
-	pXF = (jeXForm3d *)jeRam_Allocate(sizeof(jeXForm3d)*2);
+	//pXF = (jeXForm3d *)jeRam_Allocate(sizeof(jeXForm3d)*2);
+	pXF = new jeXForm3d;
 	if ( ! pXF )
 		return JE_FALSE;
 	pXF[0] = Camera->TransposeXForm;
@@ -126,7 +131,7 @@ return JE_TRUE;
 //=====================================================================================
 JETAPI jeBoolean JETCC jeCamera_PopXForm( jeCamera *Camera)
 {
-jeXForm3d * pXF;
+	jeXForm3d * pXF = NULL;
 	assert( Camera );
 
 	if ( ! Camera->XFormStack )
@@ -138,12 +143,13 @@ jeXForm3d * pXF;
 
 	Camera->TransposeXForm = pXF[0];
 	Camera->XForm = pXF[1];
-	jeRam_Free(pXF);
-
+	//jeRam_Free(pXF);
+	JE_SAFE_DELETE(pXF);
+	
 	Camera->Pov = Camera->TransposeXForm.Translation;
 
 	List_Stop();
-return JE_TRUE;
+	return JE_TRUE;
 }
 
 //========================================================================================

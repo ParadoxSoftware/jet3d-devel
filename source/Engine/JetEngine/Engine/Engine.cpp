@@ -61,6 +61,7 @@
 #include "jeVersion.h" // Incarnadine
 
 #include "jeBSP.h"
+#include "debug_new.h"
 
 #ifdef _DEBUG
 	#define DEBUG_OUTPUT_LEVEL		0
@@ -114,18 +115,20 @@ extern int32 NumSubdividedFaces;
 //=====================================================================================
 JETAPI jeEngine * JETCC jeEngine_Create(HWND hWnd, const char *AppName, const char *DriverDirectory)
 {
-	jeEngine	*Engine;
-	int32		i,Length;
+	jeEngine	*Engine = NULL;
+	int32		i = 0, Length = 0;
 
 	assert(AppName);
 	assert(hWnd);
 
 	// Attempt to create a new engine object
-	Engine = (jeEngine *)jeRam_AllocateClear(sizeof(jeEngine));
+	//Engine = (jeEngine *)jeRam_AllocateClear(sizeof(jeEngine));
+	Engine = new jeEngine;
+	memset(Engine, 0, sizeof(jeEngine));
 
 	if (!Engine)
 	{
-		jeErrorLog_Add(JE_ERR_OUT_OF_MEMORY, NULL);
+		//jeErrorLog_Add(JE_ERR_OUT_OF_MEMORY, NULL);
 		goto ExitWithError;
 	}
 
@@ -134,26 +137,39 @@ JETAPI jeEngine * JETCC jeEngine_Create(HWND hWnd, const char *AppName, const ch
 	Engine->MySelf1 = Engine;
 	Engine->MySelf2 = Engine;
 	
+	Engine->EngineLog = new jet3d::jeFileLogger("Jet3D", ".\\", jet3d::jeLogger::LogInfo | jet3d::jeLogger::LogWarn | jet3d::jeLogger::LogError | jet3d::jeLogger::LogFatal);
+	Engine->EngineLog->logMessage(jet3d::jeLogger::LogInfo, "Jet3D initialization...");
+
 	if (!List_Start())
 	{
-		jeErrorLog_Add(JE_ERR_OUT_OF_MEMORY, NULL);
+		//jeErrorLog_Add(JE_ERR_OUT_OF_MEMORY, NULL);
+		Engine->EngineLog->logMessage(jet3d::jeLogger::LogError, "Out of memory!!");
 		goto ExitWithError;
-	}	
-
-	if	(DriverDirectory)
-	{
-		Length = strlen(DriverDirectory) + 1;
-		Engine->DriverDirectory = (char *)jeRam_Allocate(Length);
-
-		if (!Engine->DriverDirectory)
-			goto ExitWithError;
-
-		memcpy(Engine->DriverDirectory, DriverDirectory, Length);
 	}
+	else
+		Engine->EngineLog->logMessage(jet3d::jeLogger::LogInfo, "List initialized");
+
+	if (DriverDirectory)
+	{
+		//Length = strlen(DriverDirectory) + 1;
+		//Engine->DriverDirectory = (char *)jeRam_Allocate(Length);
+
+		//if (!Engine->DriverDirectory)
+		//	goto ExitWithError;
+
+		//memcpy(Engine->DriverDirectory, DriverDirectory, Length);
+		Engine->DriverDirectory = DriverDirectory;
+	}
+	else
+		Engine->DriverDirectory = ".";
 	
+	Engine->EngineLog->logMessage(jet3d::jeLogger::LogInfo, std::string("DriverDirectory = ") + Engine->DriverDirectory);
+
 	Engine->hWnd = hWnd;
-	strcpy(Engine->AppName, AppName);
-	
+
+	//strcpy(Engine->AppName, AppName);
+	Engine->AppName = AppName;
+
 	// Build the wavetable
 	for (i = 0; i < 20; i++)
 		Engine->WaveTable[i] = (int16)(((i * 65)%200) + 50);
@@ -161,15 +177,30 @@ JETAPI jeEngine * JETCC jeEngine_Create(HWND hWnd, const char *AppName, const ch
 	// Be flexible if they didn't want us to load any driver DLLs
 	if	(DriverDirectory)
 	{
-		if (! Engine_EnumSubDrivers(&Engine->DriverInfo, DriverDirectory))
+		if (!Engine_EnumSubDrivers(&Engine->DriverInfo, DriverDirectory))
+		{
+			Engine->EngineLog->logMessage(jet3d::jeLogger::LogError, "Could not enumerate drivers!!");
 			goto ExitWithError;
+		}
+		else
+			Engine->EngineLog->logMessage(jet3d::jeLogger::LogInfo, "Drivers enumerated");
 	}
 
 	if (!jeEngine_BitmapListInit(Engine))
+	{
+		Engine->EngineLog->logMessage(jet3d::jeLogger::LogError, "Could not initialize bitmap list!!");
 		goto ExitWithError;
+	}
+	else
+		Engine->EngineLog->logMessage(jet3d::jeLogger::LogInfo, "BitmapList initialized");
 
 	if (!jeEngine_InitFonts(Engine))				// Must be after BitmapList
+	{
+		Engine->EngineLog->logMessage(jet3d::jeLogger::LogError, "Could not initialize fonts!!");
 		goto ExitWithError;
+	}
+	else
+		Engine->EngineLog->logMessage(jet3d::jeLogger::LogInfo, "Fonts initialized");
 
 	Engine->DisplayFrameRateCounter = JE_TRUE;	// Default to showing the FPS counter
 
@@ -181,8 +212,13 @@ JETAPI jeEngine * JETCC jeEngine_Create(HWND hWnd, const char *AppName, const ch
 
 	Engine->CurrentGamma = 3.0f;
 
-	if (!jeCPU_GetInfo() )
+	if (!jeCPU_GetInfo())
+	{
+		Engine->EngineLog->logMessage(jet3d::jeLogger::LogError, "Could not get CPU info!!");
 		goto ExitWithError;
+	}
+	else
+		Engine->EngineLog->logMessage(jet3d::jeLogger::LogError, "CPU info retreived");
 
 	Engine->ChangeDriverCBChain = jeChain_Create();
 
@@ -199,8 +235,8 @@ JETAPI jeEngine * JETCC jeEngine_Create(HWND hWnd, const char *AppName, const ch
 		// END - FIX - Engine not cleaning up everything on error - paradoxnj
 		if (Engine)
 		{
-			if (Engine->DriverDirectory)
-				jeRam_Free(Engine->DriverDirectory);
+			//if (Engine->DriverDirectory)
+			//	jeRam_Free(Engine->DriverDirectory);
 
 			// BEGIN - FIX - Engine not cleaning up everything on error - paradoxnj
 			if (Engine->ChangeDriverCBChain != NULL)
@@ -211,7 +247,8 @@ JETAPI jeEngine * JETCC jeEngine_Create(HWND hWnd, const char *AppName, const ch
 			List_Stop();
 			// END - FIX - Engine not cleaning up everything on error - paradoxnj
 
-			jeRam_Free(Engine);
+			//jeRam_Free(Engine);
+			JE_SAFE_DELETE(Engine);
 		}
 
 		return NULL;
@@ -237,8 +274,22 @@ JETAPI jeBoolean JETCC jeEngine_CreateRef(jeEngine *Engine)
 JETAPI void	JETCC jeEngine_Destroy(jeEngine **pEngine)
 {
 	assert( pEngine );
-	jeEngine_Free(*pEngine);
-	*pEngine = NULL;
+	char buff[1024];
+
+	(*pEngine)->RefCount--;
+	sprintf(buff, "Engine Reference Count = %d", (*pEngine)->RefCount);
+	(*pEngine)->EngineLog->logMessage(jet3d::jeLogger::LogInfo, buff);
+
+	if ((*pEngine)->RefCount <= 0)
+	{
+		if ((*pEngine)->RefCount < 0)
+			(*pEngine)->RefCount = 0;
+
+		jeEngine_Free(*pEngine);
+		*pEngine = NULL;
+
+		check_leaks();
+	}
 }
 
 JETAPI void JETCC jeEngine_Free(jeEngine *Engine)
@@ -246,31 +297,41 @@ JETAPI void JETCC jeEngine_Free(jeEngine *Engine)
 	jeBoolean		Ret;
 
 	assert(jeEngine_IsValid(Engine));
-	assert( Engine->RefCount > 0);
+	assert( Engine->RefCount == 0);
 
-	Engine->RefCount--;
+	//Engine->RefCount--;
 
 	if (Engine->RefCount > 0)
+	{
+		Engine->EngineLog->logMessage(jet3d::jeLogger::LogWarn, "RefCount is greater than 0!!");
 		return;
+	}
 
 	Ret = jeEngine_ShutdownFonts(Engine);
 	assert(Ret == JE_TRUE);
+	Engine->EngineLog->logMessage(jet3d::jeLogger::LogInfo, "Fonts shutdown");
 
 	Ret = jeEngine_ShutdownDriver(Engine);
 	assert(Ret == JE_TRUE);
+	Engine->EngineLog->logMessage(jet3d::jeLogger::LogInfo, "Driver shutdown");
 
 	Ret = jeEngine_BitmapListShutdown(Engine);
 	assert(Ret == JE_TRUE);
+	Engine->EngineLog->logMessage(jet3d::jeLogger::LogInfo, "BitmapList shutdown");
 
-	if (Engine->DriverDirectory)
-		jeRam_Free(Engine->DriverDirectory);
+	//if (Engine->DriverDirectory)
+	//	jeRam_Free(Engine->DriverDirectory);
 
 	if (Engine->ChangeDriverCBChain)
 		jeChain_Destroy(&Engine->ChangeDriverCBChain);
 
 	List_Stop();
+	Engine->EngineLog->logMessage(jet3d::jeLogger::LogInfo, "List stopped");
 
-	jeRam_Free(Engine);
+	JE_SAFE_DELETE(Engine->EngineLog);
+
+	//jeRam_Free(Engine);
+	JE_SAFE_DELETE(Engine);
 }
 
 //=====================================================================================
@@ -280,15 +341,35 @@ JETAPI jeBoolean JETCC jeEngine_IsValid(const jeEngine *E)
 {
 	if (!E) 
 		return JE_FALSE;
-	if (E->MySelf1 != E) 
+
+	if (E->MySelf1 != E)
+	{
+		E->EngineLog->logMessage(jet3d::jeLogger::LogError, "Engine pointer 1 is not valid!!");
 		return JE_FALSE;
-	if (E->MySelf2 != E) 
+	}
+
+	if (E->MySelf2 != E)
+	{
+		E->EngineLog->logMessage(jet3d::jeLogger::LogError, "Engine pointer 2 is not valid!!");
 		return JE_FALSE;
+	}
+
 	if (E->RefCount < 0)
+	{
+		char buff[32];
+
+		sprintf(buff, "Engine Ref:  %d", E->RefCount);
+		E->EngineLog->logMessage(jet3d::jeLogger::LogInfo, buff);
+		E->EngineLog->logMessage(jet3d::jeLogger::LogError, "Engine reference count is less than or equal to 0!!");
 		return JE_FALSE;
+	}
+
 	//if (!IsWindowHandleValid(E->hWnd)) 
-	if (!E->hWnd) 
+	if (!E->hWnd)
+	{
+		E->EngineLog->logMessage(jet3d::jeLogger::LogError, "Engine window handle is invalid!!");
 		return JE_FALSE;
+	}
 
 	return JE_TRUE;
 }
@@ -1779,8 +1860,8 @@ static jeBoolean Engine_InitDriver(	jeEngine		*Engine,
 
 	if (!Driver->HookProc)
 	{
-		assert(Engine->DriverDirectory);
-		DrvInfo->DriverHandle = (int32)jeEngine_LoadLibrary(Driver->FileName, Engine->DriverDirectory);
+		assert(!Engine->DriverDirectory.empty());
+		DrvInfo->DriverHandle = (int32)jeEngine_LoadLibrary(Driver->FileName, Engine->DriverDirectory.c_str());
 	
 		if (!DrvInfo->DriverHandle)
 		{
@@ -1818,7 +1899,7 @@ static jeBoolean Engine_InitDriver(	jeEngine		*Engine,
 		goto Failure;
 	}
 
-	strcpy(DLLDriverHook.AppName, Engine->AppName);
+	strcpy(DLLDriverHook.AppName, Engine->AppName.c_str());
 
 	//
 	//	Setup what driver they want

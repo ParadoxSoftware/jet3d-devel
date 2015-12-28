@@ -59,7 +59,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>.\;..\..\..\include;..\..\Tools\Editor;World;Engine;Particle;Engine\Drivers;Actor;Pool;BSP;Math;Entities;Support;Physics;VFile;Bitmap;Bitmap\Compression;guWorld;Mp3Mgr;..\External\VorbisSDK\include;..\External\EAXSDK\include;..\External\DXSDK_81\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.\;..\..\..\include;..\..\Tools\Editor;World;Engine;Particle;Engine\Drivers;Actor;Pool;BSP;Math;Entities;Support;Physics;VFile;Bitmap;Bitmap\Compression;guWorld;Mp3Mgr;..\External\VorbisSDK\include;..\External\EAXSDK\include;..\External\DXSDK_81\include;..\External\nvwa;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_CRT_SECURE_NO_DEPRECATE;_CRT_SECURE_NO_WARNINGS;_DEBUG;WIN32;_WINDOWS;_USRDLL;JETENGINE_EXPORTS;JET_VERSION_2;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -152,6 +152,10 @@
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\External\nvwa\bool_array.cpp" />
+    <ClCompile Include="..\External\nvwa\debug_new.cpp" />
+    <ClCompile Include="..\External\nvwa\mem_pool_base.cpp" />
+    <ClCompile Include="..\External\nvwa\static_mem_pool.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="List.c" />
     <ClCompile Include="Object.cpp" />
@@ -323,6 +327,21 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\include\Camera.h" />
+    <ClInclude Include="..\..\..\include\jeFileLogger.h" />
+    <ClInclude Include="..\..\..\include\jeLogger.h" />
+    <ClInclude Include="..\External\nvwa\bool_array.h" />
+    <ClInclude Include="..\External\nvwa\class_level_lock.h" />
+    <ClInclude Include="..\External\nvwa\cont_ptr_utils.h" />
+    <ClInclude Include="..\External\nvwa\debug_new.h" />
+    <ClInclude Include="..\External\nvwa\fast_mutex.h" />
+    <ClInclude Include="..\External\nvwa\fc_queue.h" />
+    <ClInclude Include="..\External\nvwa\fixed_mem_pool.h" />
+    <ClInclude Include="..\External\nvwa\mem_pool_base.h" />
+    <ClInclude Include="..\External\nvwa\object_level_lock.h" />
+    <ClInclude Include="..\External\nvwa\pctimer.h" />
+    <ClInclude Include="..\External\nvwa\set_assign.h" />
+    <ClInclude Include="..\External\nvwa\static_assert.h" />
+    <ClInclude Include="..\External\nvwa\static_mem_pool.h" />
     <ClInclude Include="CSNetMgr.h" />
     <ClInclude Include="..\..\..\include\jeTypes.h" />
     <ClInclude Include="..\..\..\include\jeVersion.h" />

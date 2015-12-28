@@ -204,7 +204,8 @@ void CJ3DView::OnDestroy()
 		// Shutting down the driver and then freeing the engine
 		//jeEngine_ShutdownDriver(m_pEngine);
 
-		jeEngine_Free(m_pEngine);
+		//jeEngine_Free(m_pEngine);
+		jeEngine_Destroy(&m_pEngine);
 		m_pEngine = NULL;
 		m_bEngineEnabled = JE_FALSE;
 	}

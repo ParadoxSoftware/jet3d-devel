@@ -323,7 +323,8 @@ void jeBSP_Destroy(jeBSP **BSPTree)
 	{
 		assert((*BSPTree)->ChangeDriverCB);
 		jeEngine_DestroyChangeDriverCB((*BSPTree)->Engine, &(*BSPTree)->ChangeDriverCB);
-		jeEngine_Free((*BSPTree)->Engine);
+		//jeEngine_Free((*BSPTree)->Engine);
+		jeEngine_Destroy(&(*BSPTree)->Engine);
 		(*BSPTree)->Engine = NULL;
 	}
 	else
@@ -1435,7 +1436,8 @@ jeBoolean jeBSP_SetEngine(jeBSP *Tree, jeEngine *Engine)
 	{
 		assert(Tree->ChangeDriverCB);
 		jeEngine_DestroyChangeDriverCB(Tree->Engine, &Tree->ChangeDriverCB);
-		jeEngine_Free(Tree->Engine);
+		//jeEngine_Free(Tree->Engine);
+		jeEngine_Destroy(&Tree->Engine);
 		Tree->Engine = NULL;
 	}
 	else

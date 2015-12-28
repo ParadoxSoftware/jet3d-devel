@@ -22,12 +22,14 @@
 #define JE_ENGINE_PRIVATE_H
 
 #include <stdlib.h>
+#include <string>
 
 #include "Engine.h"
 #include "Bitmap.h"
 #include "BitmapList.h"
 #include "Dcommon.h"
 #include "jeChain.h"
+#include "jeFileLogger.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -138,6 +140,8 @@ struct jeEngine
 
 	jeEngine			* MySelf1;
 
+	jet3d::jeFileLogger	*EngineLog;
+
 	//	System info
 	Engine_DriverInfo	DriverInfo;			// Info about current driver (this should be enumed)
 	jeChain				*ChangeDriverCBChain;
@@ -149,7 +153,8 @@ struct jeEngine
 	Engine_FontInfo		FontInfo;
 	HWND				hWnd;
 
-	char				AppName[200];
+	//char				AppName[200];
+	std::string			AppName;
 
 	//	Global LUT's
 	int16				WaveTable[20];		// Global Wave table (for wavy effects, pumping, etc)
@@ -162,7 +167,8 @@ struct jeEngine
 
 	jeBoolean			DisplayFrameRateCounter; // Whether or not to display the FPS string
 
-	char				*DriverDirectory;	// Path to load driver DLLs from
+	//char				*DriverDirectory;	// Path to load driver DLLs from
+	std::string			DriverDirectory;
 
 	BitmapList			*AttachedBitmaps;
 
