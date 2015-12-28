@@ -276,6 +276,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "jMinAppClassic7", "source\T
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Jet3DClassic7", "source\Engine\JetEngine\Jet3D_2013.vcxproj", "{DA9C671F-1998-42EC-8D3C-F14AE13AD4AD}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "JetEditor", "source\Tools\JetEditor\JetEditor.vcxproj", "{0E20717E-0F09-4AA9-ABB0-3FC8BE4F0799}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -561,6 +563,20 @@ Global
 		{DA9C671F-1998-42EC-8D3C-F14AE13AD4AD}.Release|Win32.Build.0 = Release|Win32
 		{DA9C671F-1998-42EC-8D3C-F14AE13AD4AD}.Template|Win32.ActiveCfg = Release|Win32
 		{DA9C671F-1998-42EC-8D3C-F14AE13AD4AD}.Template|Win32.Build.0 = Release|Win32
+		{0E20717E-0F09-4AA9-ABB0-3FC8BE4F0799}.Debug|Win32.ActiveCfg = Debug|Win32
+		{0E20717E-0F09-4AA9-ABB0-3FC8BE4F0799}.Debug|Win32.Build.0 = Debug|Win32
+		{0E20717E-0F09-4AA9-ABB0-3FC8BE4F0799}.KEY Hybrid|Win32.ActiveCfg = Release|Win32
+		{0E20717E-0F09-4AA9-ABB0-3FC8BE4F0799}.KEY Hybrid|Win32.Build.0 = Release|Win32
+		{0E20717E-0F09-4AA9-ABB0-3FC8BE4F0799}.KEY Release|Win32.ActiveCfg = Release|Win32
+		{0E20717E-0F09-4AA9-ABB0-3FC8BE4F0799}.KEY Release|Win32.Build.0 = Release|Win32
+		{0E20717E-0F09-4AA9-ABB0-3FC8BE4F0799}.NFO Hybrid|Win32.ActiveCfg = Release|Win32
+		{0E20717E-0F09-4AA9-ABB0-3FC8BE4F0799}.NFO Hybrid|Win32.Build.0 = Release|Win32
+		{0E20717E-0F09-4AA9-ABB0-3FC8BE4F0799}.NFO Release|Win32.ActiveCfg = Release|Win32
+		{0E20717E-0F09-4AA9-ABB0-3FC8BE4F0799}.NFO Release|Win32.Build.0 = Release|Win32
+		{0E20717E-0F09-4AA9-ABB0-3FC8BE4F0799}.Release|Win32.ActiveCfg = Release|Win32
+		{0E20717E-0F09-4AA9-ABB0-3FC8BE4F0799}.Release|Win32.Build.0 = Release|Win32
+		{0E20717E-0F09-4AA9-ABB0-3FC8BE4F0799}.Template|Win32.ActiveCfg = Release|Win32
+		{0E20717E-0F09-4AA9-ABB0-3FC8BE4F0799}.Template|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

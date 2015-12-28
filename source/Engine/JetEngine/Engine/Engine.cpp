@@ -62,6 +62,7 @@
 
 #include "jeBSP.h"
 #include "debug_new.h"
+#include "jeFileLogger.h"
 
 #ifdef _DEBUG
 	#define DEBUG_OUTPUT_LEVEL		0

@@ -690,9 +690,6 @@ BOOL CJweDoc::Render( class CJ3DView * pJ3DView )
 	pEngine = pView->GetEngine();
 	ASSERT(pEngine != NULL);
 
-	if (!jeEngine_IsValid(pEngine))
-		return TRUE;
-
 	pCamera = pView->GetCamera();
 	if(pCamera == NULL)
 	{
