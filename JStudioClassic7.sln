@@ -1,5 +1,5 @@
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "jDesignerClassic7", "source\Tools\Editor\jwe.vcxproj", "{C9D22404-B2F5-4775-B35D-264E0D8AE53E}"
 	ProjectSection(ProjectDependencies) = postProject
 		{DA9C671F-1998-42EC-8D3C-F14AE13AD4AD} = {DA9C671F-1998-42EC-8D3C-F14AE13AD4AD}

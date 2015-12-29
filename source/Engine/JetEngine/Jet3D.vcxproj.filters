@@ -55,6 +55,9 @@
     <Filter Include="Interface Headers">
       <UniqueIdentifier>{cce62a3b-ea6e-4655-99a4-0858857728a9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="nvwa">
+      <UniqueIdentifier>{244f96b1-3e09-4b59-afa4-14aebf4f60a7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp">
@@ -561,6 +564,21 @@
     <ClCompile Include="VideoMgr\VideoMgr.cpp">
       <Filter>Source Files\VideoMgr</Filter>
     </ClCompile>
+    <ClCompile Include="..\External\nvwa\bool_array.cpp">
+      <Filter>nvwa</Filter>
+    </ClCompile>
+    <ClCompile Include="..\External\nvwa\debug_new.cpp">
+      <Filter>nvwa</Filter>
+    </ClCompile>
+    <ClCompile Include="..\External\nvwa\mem_pool_base.cpp">
+      <Filter>nvwa</Filter>
+    </ClCompile>
+    <ClCompile Include="..\External\nvwa\static_mem_pool.cpp">
+      <Filter>nvwa</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\jeImage.cpp">
+      <Filter>Source Files\Engine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\include\Camera.h">
@@ -1027,6 +1045,48 @@
     </ClInclude>
     <ClInclude Include="..\..\..\include\jeEngine.h">
       <Filter>Interface Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\External\nvwa\bool_array.h">
+      <Filter>nvwa</Filter>
+    </ClInclude>
+    <ClInclude Include="..\External\nvwa\class_level_lock.h">
+      <Filter>nvwa</Filter>
+    </ClInclude>
+    <ClInclude Include="..\External\nvwa\cont_ptr_utils.h">
+      <Filter>nvwa</Filter>
+    </ClInclude>
+    <ClInclude Include="..\External\nvwa\debug_new.h">
+      <Filter>nvwa</Filter>
+    </ClInclude>
+    <ClInclude Include="..\External\nvwa\fast_mutex.h">
+      <Filter>nvwa</Filter>
+    </ClInclude>
+    <ClInclude Include="..\External\nvwa\fc_queue.h">
+      <Filter>nvwa</Filter>
+    </ClInclude>
+    <ClInclude Include="..\External\nvwa\fixed_mem_pool.h">
+      <Filter>nvwa</Filter>
+    </ClInclude>
+    <ClInclude Include="..\External\nvwa\mem_pool_base.h">
+      <Filter>nvwa</Filter>
+    </ClInclude>
+    <ClInclude Include="..\External\nvwa\object_level_lock.h">
+      <Filter>nvwa</Filter>
+    </ClInclude>
+    <ClInclude Include="..\External\nvwa\pctimer.h">
+      <Filter>nvwa</Filter>
+    </ClInclude>
+    <ClInclude Include="..\External\nvwa\set_assign.h">
+      <Filter>nvwa</Filter>
+    </ClInclude>
+    <ClInclude Include="..\External\nvwa\static_assert.h">
+      <Filter>nvwa</Filter>
+    </ClInclude>
+    <ClInclude Include="..\External\nvwa\static_mem_pool.h">
+      <Filter>nvwa</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\jeImage.h">
+      <Filter>Source Files\Engine</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
