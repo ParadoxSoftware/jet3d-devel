@@ -9,8 +9,7 @@ JetEditorMainFrame::JetEditorMainFrame(wxWindow *parent, wxWindowID id, const wx
 	: wxFrame(parent, id, title, pos, size, style)
 {
 	m_AUIManager.SetManagedWindow(this);
-	this->ShowFullScreen(true);
-
+	
 	wxMenuBar *pMenuBar = new wxMenuBar;
 
 	wxMenu *pFileMenu = new wxMenu;
@@ -18,11 +17,12 @@ JetEditorMainFrame::JetEditorMainFrame(wxWindow *parent, wxWindowID id, const wx
 
 	pMenuBar->Append(pFileMenu, _("&File"));
 	SetMenuBar(pMenuBar);
+	this->Maximize();
 }
 
 JetEditorMainFrame::~JetEditorMainFrame()
 {
-
+	m_AUIManager.UnInit();
 }
 
 void JetEditorMainFrame::OnExit(wxCommandEvent& WXUNUSED(event))
