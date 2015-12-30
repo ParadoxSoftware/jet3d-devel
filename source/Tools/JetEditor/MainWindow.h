@@ -13,6 +13,10 @@ public:
 
 protected:
 	wxAuiManager m_AUIManager;
+	wxAuiNotebook *m_pLevelNB;
+
+private:
+	wxAuiNotebook *CreateLevelDataView();
 
 	wxDECLARE_EVENT_TABLE();
 };
