@@ -85,6 +85,7 @@ note : quads marked as ACTIVE_LEAF will be rendered
 
 #define ERROR_MAX		(2048)	//sets the accuracy and radix size
 
+#include <Windows.h>
 #include <assert.h>
 #include <stdlib.h>
 #include <string.h>	// for memset
@@ -370,95 +371,10 @@ Link * Quad_GetEdgeNeighborQuads(const Quad *pQuad,ENodeEdge edge,int *pNumQuads
 Quad * QuadTree_GetQuadAtXY(const QuadTree *QT,jeFloat X,jeFloat Y);
 
 /*}{************ Vec3d Inlines **********/
-#ifdef WIN32
 #define VEC_INLINE_CC __stdcall
-#endif
-
-#ifdef BUILD_BE
-#define VEC_INLINE_CC
-#endif
 
 #include "Vec3d.h"
 
-/*#if (defined(JETDLLVERSION) || defined(NDEBUG) || defined(BUILD_BE))
-//{ **************************** DLL ****************************
-// must use defines, not inline funcs!
-
-#define jeVec3d_AddScaled(V1,V2,Scale,V1PlusV2Scaled)		\
-do{ (V1PlusV2Scaled)->X = (V1)->X + (V2)->X*(Scale);		\
-	(V1PlusV2Scaled)->Y = (V1)->Y + (V2)->Y*(Scale);		\
-	(V1PlusV2Scaled)->Z = (V1)->Z + (V2)->Z*(Scale); } while(0)
-
-#define jeVec3d_Add(V1,V2,V1PlusV2)		\
-do{ (V1PlusV2)->X = (V1)->X + (V2)->X;		\
-	(V1PlusV2)->Y = (V1)->Y + (V2)->Y;		\
-	(V1PlusV2)->Z = (V1)->Z + (V2)->Z; } while(0)
-
-#define jeVec3d_Subtract(V1,V2,V1MinusV2)	\
-do{	(V1MinusV2)->X = (V1)->X - (V2)->X;			\
-	(V1MinusV2)->Y = (V1)->Y - (V2)->Y;			\
-	(V1MinusV2)->Z = (V1)->Z - (V2)->Z; } while(0)
-
-#define jeVec3d_DotProduct(V1,V2)	\
-	((V1)->X*(V2)->X + (V1)->Y*(V2)->Y + (V1)->Z*(V2)->Z)
-
-#define jeVec3d_LengthSquared(V1)	\
-	((V1)->X*(V1)->X + (V1)->Y*(V1)->Y + (V1)->Z*(V1)->Z )
-
-#define jeVec3d_DistanceBetweenSquared(V1,V2)     \
-	( ((V1)->X - (V2)->X) * ((V1)->X - (V2)->X) + \
-	  ((V1)->Y - (V2)->Y) * ((V1)->Y - (V2)->Y) + \
-	  ((V1)->Z - (V2)->Z) * ((V1)->Z - (V2)->Z) )
-
-#else	//}{ ****************************
-
-
-
-static __inline void VEC_INLINE_CC jeVec3d_AddScaled(const jeVec3d *V1, const jeVec3d *V2, jeFloat Scale, jeVec3d *V1PlusV2Scaled)
-{
-	V1PlusV2Scaled->X = V1->X + V2->X*Scale;
-	V1PlusV2Scaled->Y = V1->Y + V2->Y*Scale;
-	V1PlusV2Scaled->Z = V1->Z + V2->Z*Scale;
-}
-
-static __inline void VEC_INLINE_CC jeVec3d_Add(const jeVec3d *V1, const jeVec3d *V2, jeVec3d *V1PlusV2)
-{
-	V1PlusV2->X = V1->X + V2->X;
-	V1PlusV2->Y = V1->Y + V2->Y;
-	V1PlusV2->Z = V1->Z + V2->Z;
-}
-
-static __inline void VEC_INLINE_CC jeVec3d_Subtract(const jeVec3d *V1, const jeVec3d *V2, jeVec3d *V1MinusV2)
-{
-	V1MinusV2->X = V1->X - V2->X;
-	V1MinusV2->Y = V1->Y - V2->Y;
-	V1MinusV2->Z = V1->Z - V2->Z;
-}
-
-static __inline jeFloat VEC_INLINE_CC jeVec3d_DotProduct(const jeVec3d *V1, const jeVec3d *V2)
-{
-	return (V1->X*V2->X + V1->Y*V2->Y + V1->Z*V2->Z);
-}
-
-static __inline jeFloat VEC_INLINE_CC jeVec3d_LengthSquared(const jeVec3d *V1)
-{
-	return ( (V1)->X * (V1)->X + (V1)->Y * (V1)->Y + (V1)->Z * (V1)->Z );
-}
-
-static __inline jeFloat VEC_INLINE_CC jeVec3d_DistanceBetweenSquared(const jeVec3d *V1, const jeVec3d *V2)
-{
-float d,x;
-	x = (V1->X - V2->X);
-	d = x*x;
-	x = (V1->Y - V2->Y);
-	d+= x*x;
-	x = (V1->Z - V2->Z);
-	d+= x*x;
-return d;
-}
-
-#endif	//} ****************************
-*/
 #define jeVec3d_AddTo(onto,val)			\
 	do { (onto)->X += (val)->X; (onto)->Y += (val)->Y; (onto)->Z += (val)->Z; } while(0)
 

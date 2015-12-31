@@ -31,6 +31,12 @@
 	
 */
 
+#ifdef WIN32
+#pragma warning ( disable : 4115 )
+#include <windows.h>
+#pragma warning ( default : 4115 )
+#endif
+
 #include <assert.h>
 #include <string.h>  // _stricmp()
 #include <malloc.h> // free
@@ -46,16 +52,6 @@
 #include "Log.h"
 
 #include "Actor._h"
-
-#ifdef WIN32
-#pragma warning ( disable : 4115 )
-#include <windows.h>
-#pragma warning ( default : 4115 )
-#endif
-
-#ifdef BUILD_BE
-#define _stricmp strcasecmp
-#endif
 
 #define ACTOR_MOTIONS_MAX 0x0FFFF		// really arbitrary. just for sanity checking
 #define ACTOR_CUES_MAX    0x0FFFF		// arbitrary. 

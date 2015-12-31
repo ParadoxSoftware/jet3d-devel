@@ -31,13 +31,14 @@
 #include "Array.h"
 #include "Ram.h"
 #include "Engine.h"
+#include "Engine._h"
 
 #include "jeGArray.h"
 
 #include "jeResource.h"
 
 #include "log.h"
-#include "jeTexture.h"
+//#include "jeTexture.h"
 
 //========================================================================================
 //========================================================================================
@@ -293,7 +294,8 @@ JETAPI jeMaterialSpec* JETCC jeMaterialSpec_CreateFromFile(jeVFile *VFile, jeEng
 			MaterialSpec->Height = (uint16) jeBitmap_Height((jeBitmap*)pLayer->pTexture);
 		} else {
 			jeTexture_Info texInfo;
-			jeTexture_GetInfo(MaterialSpec->pEngine, pLayer->pTexture, 0, &texInfo);
+			//jeTexture_GetInfo(MaterialSpec->pEngine, pLayer->pTexture, 0, &texInfo);
+			MaterialSpec->pEngine->DriverInfo.RDriver->THandle_GetInfo(pLayer->pTexture, 0, &texInfo);
 			MaterialSpec->Width = (uint16) texInfo.Width;
 			MaterialSpec->Height = (uint16) texInfo.Height;
 		}
@@ -718,7 +720,8 @@ JETAPI uint32 JETCC jeMaterialSpec_Height(const jeMaterialSpec* MatSpec)
 			((jeMaterialSpec*)MatSpec)->Height = (uint16) jeBitmap_Height((jeBitmap*)pLayer->pTexture);
 		} else {
 			jeTexture_Info texInfo;
-			jeTexture_GetInfo(MatSpec->pEngine, pLayer->pTexture, 0, &texInfo);
+			//jeTexture_GetInfo(MatSpec->pEngine, pLayer->pTexture, 0, &texInfo);
+			MatSpec->pEngine->DriverInfo.RDriver->THandle_GetInfo(pLayer->pTexture, 0, &texInfo);
 			((jeMaterialSpec*)MatSpec)->Width = (uint16) texInfo.Width;
 			((jeMaterialSpec*)MatSpec)->Height = (uint16) texInfo.Height;
 		}
@@ -740,7 +743,8 @@ JETAPI uint32 JETCC jeMaterialSpec_Width(const jeMaterialSpec* MatSpec)
 			((jeMaterialSpec*)MatSpec)->Height = (uint16) jeBitmap_Height((jeBitmap*)pLayer->pTexture);
 		} else {
 			jeTexture_Info texInfo;
-			jeTexture_GetInfo(MatSpec->pEngine, pLayer->pTexture, 0, &texInfo);
+			//jeTexture_GetInfo(MatSpec->pEngine, pLayer->pTexture, 0, &texInfo);
+			MatSpec->pEngine->DriverInfo.RDriver->THandle_GetInfo(pLayer->pTexture, 0, &texInfo);
 			((jeMaterialSpec*)MatSpec)->Width = (uint16) texInfo.Width;
 			((jeMaterialSpec*)MatSpec)->Height = (uint16) texInfo.Height;
 		}
@@ -758,8 +762,8 @@ JETAPI jeBoolean JETCC jeMaterialSpec_AddLayerFromFile(jeMaterialSpec* MatSpec, 
 
 	MatSpec->pLayers[layerIndex] = JE_RAM_ALLOCATE_STRUCT(jeMaterialSpec_Layer);
 	if ((bmp = jeBitmap_CreateFromFile(File)) == NULL) {
-		MatSpec->pLayers[layerIndex]->pTexture = jeTexture_CreateFromFile(MatSpec->pEngine, File);
-		MatSpec->pLayers[layerIndex]->Kind = JE_RESOURCE_TEXTURE;
+		//MatSpec->pLayers[layerIndex]->pTexture = jeTexture_CreateFromFile(MatSpec->pEngine, File);
+		//MatSpec->pLayers[layerIndex]->Kind = JE_RESOURCE_TEXTURE;
 	} else {
 		MatSpec->pLayers[layerIndex]->pTexture = (jeTexture*) bmp;
         jeBitmap_SetColorKey(bmp, UseColorKey, ColorKey, JE_TRUE);

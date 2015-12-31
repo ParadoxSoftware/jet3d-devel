@@ -48,10 +48,6 @@
 #include	"Timer.h"
 #endif
 
-#ifdef BUILD_BE
-#define DONT_USE_ASM 1
-#endif
-
 #define DONT_USE_ASM
 
 /*}{*********************************************************************/

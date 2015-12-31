@@ -26,14 +26,7 @@
 #include "jeWorld.h"
 #include "jePtrMgr.h"
 
-#ifdef WIN32
 void Init_Class( HINSTANCE hInstance );
-#endif
-
-#ifdef BUILD_BE
-void Init_Class( image_id hInstance );
-#endif
-
 void * JETCC CreateInstance(void);
 void * JETCC DuplicateInstance(void * Instance);
 void  JETCC CreateRef(void * Instance);
@@ -60,14 +53,7 @@ int	JETCC GetXFormModFlags( const void * Instace );
 jeBoolean JETCC GetChildren(const void * Instance,jeObject * Children,int MaxNumChildren);
 jeBoolean JETCC AddChild(void * Instance,const jeObject * Child);
 jeBoolean JETCC RemoveChild(void * Instance,const jeObject * Child);
-#ifdef WIN32
 jeBoolean JETCC EditDialog (void * Instance,HWND Parent);
-#endif
-
-#ifdef BUILD_BE
-jeBoolean JETCC EditDialog (void * Instance, class G3DView* Parent );
-#endif
-
 jeBoolean JETCC SendMsg(void * Instance, int32 Msg, void * Data);
 jeBoolean JETCC PortalFrame( void * Instance, jeFloat Time);
 // Icestorm

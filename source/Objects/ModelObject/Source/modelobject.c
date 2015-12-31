@@ -18,13 +18,7 @@
 /*  Copyright (C) 1996-1999 Eclipse Entertainment, L.L.C. All Rights Reserved           */
 /*                                                                                      */
 /****************************************************************************************/
-#ifdef WIN32
-#include "windows.h"
-#endif
-
-#ifdef BUILD_BE
-#include <OS.h>
-#endif
+#include <windows.h>
 
 #include <memory.h>
 #include <assert.h>
@@ -45,14 +39,7 @@
 #include "Errorlog.h"
 
 char *NameList[3];
-#ifdef WIN32
 HINSTANCE ghInstance;
-#endif
-
-#ifdef BUILD_BE
-#include <Resources.h>
-image_id ghInstance;
-#endif
 
 #define MODELOBJECT_VERSION 1
 
@@ -77,10 +64,6 @@ enum {
 	MODEL_VISABLE_FACES_ID,
 	MODEL_STATS_END_ID
 };
-
-
-
-#ifdef WIN32
 
 ////////////////////////////////////////////////////////////////////////////////////////
 //
@@ -124,61 +107,6 @@ static char * Util_LoadLibraryString(
 
 } // Util_LoadLibraryString()
 
-#endif
-
-#ifdef BUILD_BE
-
-static char *Util_LoadLibraryString(image_id libhinst, int32 resid)
-{
-	BResources resourcefile;
-	int result;
-	char *rcbuffer;
- 	image_info info;
-	size_t outSize;
-	
-	// locals
-	#define		MAX_STRING_SIZE	255
-	static char	stringbuffer[MAX_STRING_SIZE];
-
-
-	assert(libhinst > 0);
-	assert(resid);
-
-///	hResources = (image_id)hStringResources ;
-	
-	if(get_image_info(libhinst,&info) != B_OK)
-		return NULL;
-		
-	BFile* resFile = new BFile(info.name , B_READ_ONLY);
-	
-	resourcefile.SetTo(resFile,false);
-
-	char* loadedString = (char *)resourcefile.FindResource((int)'DATA', 		/*** DEPRECATED ***/
-								  resid, 
-								  &outSize);
-	
-	//
-	//	Note that if we did't allocate space and copy the string, then we
-	//	would be limited to having one string loaded at a time. Or we would
-	//	setup some kind of revolving buffer.  Either of these options is
-	//	risky and could eventually cause a problem elsewhere... 	 LF
-	//
- 
-	// Allocate memory for the string
-	rcbuffer = (char*)jeRam_Allocate(strlen(loadedString) + 1);
-	strcpy(rcbuffer, loadedString);
- 
-#ifndef NDEBUG
-	memset(stringbuffer, 0xFF, MAX_STRING_SIZE + 1);
-#endif
- 
-	// return the allocated string
-	return (rcbuffer);
-}//Util_LoadLibraryString
-
-#endif
-
-#ifdef WIN32
 int Util_GetAppPath(
 	char	*Buf,		// where to store path name
 	int		BufSize )	// size of buf
@@ -209,7 +137,6 @@ int Util_GetAppPath(
 	return Count;
 
 } // Util_GetAppPath()
-#endif
 
 static jeBoolean BrushExtBox( jeXForm3d * pModelXF, jeBrush * pBrush, jeExtBox * pExtBox )
 {
@@ -252,12 +179,7 @@ static jeBoolean BrushExtBox( jeXForm3d * pModelXF, jeBrush * pBrush, jeExtBox *
 }// BrushExtBox
 
 
-#ifdef WIN32
 void Init_Class( HINSTANCE hInstance )
-#endif
-#ifdef BUILD_BE
-void Init_Class( image_id hInstance )
-#endif
 {
 	ghInstance = hInstance;
 }
@@ -799,12 +721,7 @@ jeBoolean JETCC RemoveChild(void * Instance,const jeObject * Child)
 	return jeModel_RemoveObject(pModelInstance->pModel,(jeObject*) Child);
 }
 
-#ifdef WIN32
 jeBoolean JETCC EditDialog (void * Instance,HWND Parent)
-#endif
-#ifdef BUILD_BE
-jeBoolean JETCC EditDialog (void * Instance, class G3DView *Parent)
-#endif
 {
 	return( JE_TRUE );
 }

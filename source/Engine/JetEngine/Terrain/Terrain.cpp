@@ -118,11 +118,6 @@ CODE STUFF :
 #define max(a,b) (((a)>(b))?(a):(b))
 #endif
 
-#ifdef BUILD_BE
-#define _stricmp strcasecmp
-#define _strnicmp strncasecmp
-#endif
-
 /*}{******************************************************/
 //	Protos & Macros
 

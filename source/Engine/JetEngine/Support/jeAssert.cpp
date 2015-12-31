@@ -96,16 +96,9 @@ static int in_assert_cnt = 0; // a semaphore
 	else
 		sprintf(assertbuf," assert string longer than %d characters!\n",MAX_ASSERT_STRING_LENGTH);
 
-#ifdef WIN32
     nCode = MessageBox(NULL,assertbuf,
         "Jet3D Exception",
         MB_ABORTRETRYIGNORE|MB_ICONHAND|MB_SETFOREGROUND|MB_SYSTEMMODAL);
-#endif
-
-#ifdef BUILD_BE
-	BAlert* pAlert = new BAlert("Jet3d Exception" , assertbuf, "Abort" , "Retry", "Ignore");
-	nCode = pAlert->Go();
-#endif
 
     if (nCode == IDIGNORE)
 	{
@@ -136,14 +129,8 @@ static int in_assert_cnt = 0; // a semaphore
 	// minimal code from here out so that the debugger can easily step back
 	//	to the asserting line of code :
 
-#ifdef WIN32
     if (nCode == IDRETRY)
         __asm { int 3 };
-#endif
-#ifdef BUILD_BE
-	if (nCode == IDRETRY)
-		__asm__ ("int $3");
-#endif
 
 	in_assert_cnt --;
 }

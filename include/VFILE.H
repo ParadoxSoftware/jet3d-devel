@@ -77,12 +77,6 @@ JETAPI void JETCC jeVFile_TimeToWin32FileTime(const jeVFile_Time *, LPFILETIME W
 	// operations on.  We do not provide date/time operations natively.
 #endif
 
-#ifdef BUILD_BE
-#ifdef _SUPPORT_DEFS_H
-JETAPI void JETCC jeVFile_TimeToTime_TFileTime(const jeVFile_Time *Time, bigtime_t* fileTime);
-#endif
-#endif
-
 JETAPI jeVFile_Finder * JETCC jeVFile_CreateFinder(
 	jeVFile *		FileSystem,
 	const char *	FileSpec);
@@ -258,14 +252,8 @@ JETAPI jeBoolean JETCC jeVFile_IsValid(const jeVFile * File);
 
 #ifdef _DEBUG
 // to avoid including windows:
-#ifdef WIN32
 _declspec(dllimport) void __stdcall OutputDebugStringA(const char * lpOutputString);
 #define OutputDebugString OutputDebugStringA
-#endif
-
-#ifdef BUILD_BE
-#define OutputDebugString// DEBUGGER
-#endif
 
 #define DebugShowOpenCount() do { char str[1024]; sprintf(str,"vfiles : %d\n",jeVFile_OpenCount()); OutputDebugString(str); } while(0)
 

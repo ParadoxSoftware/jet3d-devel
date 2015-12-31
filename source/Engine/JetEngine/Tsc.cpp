@@ -92,7 +92,6 @@ double time,hz,per;
 
 void readTSC(uint32 *tsc)
 {
-#ifdef WIN32
 	__asm 
 	{
 		//_emit 0x0F
@@ -102,21 +101,6 @@ void readTSC(uint32 *tsc)
 		mov DWORD PTR [EBX + 0],EDX
 		mov DWORD PTR [EBX + 4],EAX
 	}
-#endif
-#ifdef BUILD_BE
-	__asm__ __volatile__
-	(
-	"
-		push %%ebx 
-		rdtsc
-		mov %0, %%ebx
-		mov %%edx, (%%ebx)
-		mov %%eax, 4(%%ebx)
-		pop %%ebx 
-	"
-	: : "m" (tsc) : "%ebx" , "%eax", "%edx" );
-#endif
-
 }
 
 double timeTSC(void)

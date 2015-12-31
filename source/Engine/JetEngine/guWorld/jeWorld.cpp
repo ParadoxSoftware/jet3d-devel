@@ -27,6 +27,7 @@
 /*      Copyright (c) 1999, Eclipse Entertainment; All rights reserved.                 */
 /*                                                                                      */
 /****************************************************************************************/
+#include <Windows.h>
 #include <stdio.h>
 #include <memory.h>		// memset
 #include <assert.h>

@@ -174,7 +174,7 @@ typedef struct
 
 #define RDRIVER_PF_MAJOR_MASK				((1<<RDRIVER_PF_OPTIONAL_SHIFT)-1)
 
-typedef struct
+typedef struct jeRDriver_PixelFormat
 {
 	jePixelFormat	PixelFormat;
 	uint32			Flags;				
@@ -192,7 +192,7 @@ typedef enum
 } jeRDriver_Rop;
 
 // BEGIN - jeTexture implementation - paradoxnj 5/12/2005
-typedef struct
+typedef struct jeTexture_Info
 {
 	int32					Width;
 	int32					Height;

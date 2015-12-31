@@ -19,25 +19,10 @@
 /*  Copyright (C) 1996-1999 Eclipse Entertainment, L.L.C. All Rights Reserved           */
 /*                                                                                      */
 /****************************************************************************************/
-
-#ifdef WIN32
 #include <windows.h>
 #pragma warning (disable:4201)
 #include <mmsystem.h> //timeGetTime
 #pragma warning (default:4201)
-#endif // WIN32
-
-#ifdef BUILD_BE
-#include <OS.h>
-#include <image.h>
-#include <Debug.h>
-#include <stdio.h>
-#define OutputDebugString(a) printf(a) //DEBUGGER
-#define FreeLibrary unload_add_on
-#define HINSTANCE image_id
-
-#define Sleep(a) snooze(a * 1000)
-#endif
 
 #include <string.h>
 #include <stdlib.h> // _MAX_PATH
@@ -2555,13 +2540,7 @@ static jeBoolean Engine_EnumModesCB(int32 ModeId, char *Name, int32 Width, int32
 static jeBoolean Engine_EnumSubDrivers(Engine_DriverInfo *DriverInfo, const char *DriverDirectory)
 {
 	DRV_Hook	*		DriverHook;
-#ifdef WIN32
 	HINSTANCE			Handle;
-#endif
-#ifdef BUILD_BE
-	image_id			Handle;
-#endif
-
 	DRV_Driver	*		RDriver;
 	jeVFile *			DosDir;
 	jeVFile_Finder *	Finder;
@@ -2725,14 +2704,7 @@ JETAPI jeBoolean JETCC jeEngine_RegisterObject(HINSTANCE DllHandle)
 
 	assert( DllHandle );
 
-#ifdef WIN32	
 	RegisterDef = (jeBoolean (*)(float MajorVersion, float MinorVersion))GetProcAddress( DllHandle, "Object_RegisterDef" );
-#endif
-
-#ifdef BUILD_BE
-		get_image_symbol(DllHandle, "Object_RegisterDef", B_SYMBOL_TYPE_TEXT, (void **)&RegisterDef);			
-#endif
-
 	return( (*RegisterDef)( JET_MAJOR_VERSION, JET_MINOR_VERSION) );
 }
 
@@ -2790,13 +2762,7 @@ JETAPI jeBoolean JETCC jeEngine_RegisterObjects(char * DllPath)
 				strcat( FullName, Properties.Name );
 
 				// load up the dll
-#ifdef WIN32
 				DllHandle = LoadLibrary( FullName );
-#endif
-#ifdef BUILD_BE
-				DllHandle = load_add_on( FullName );
-#endif
-
 				if ( DllHandle == NULL )
 				{
 					jeErrorLog_AddString( JE_ERR_FILEIO_READ, "InitObjects: Unable to load object dll.", Properties.Name );

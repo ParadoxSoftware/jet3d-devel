@@ -59,7 +59,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>.\;..\..\..\include;..\..\Tools\Editor;World;Engine;Particle;Engine\Drivers;Actor;Pool;BSP;Math;Entities;Support;Physics;VFile;Bitmap;Bitmap\Compression;guWorld;Mp3Mgr;..\External\VorbisSDK\include;..\External\EAXSDK\include;..\External\DXSDK_81\include;..\External\nvwa;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.\;..\..\..\include;..\..\Tools\Editor;World;Engine;Particle;Engine\Drivers;Actor;Pool;BSP;Math;Entities;Support;Physics;VFile;Bitmap;Bitmap\Compression;guWorld;Mp3Mgr;..\External\VorbisSDK\include;..\External\EAXSDK\include;..\External\DXSDK_81\include;..\External\nvwa;..\External\FreeImage\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_CRT_SECURE_NO_DEPRECATE;_CRT_SECURE_NO_WARNINGS;_DEBUG;WIN32;_WINDOWS;_USRDLL;JETENGINE_EXPORTS;JET_VERSION_2;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -76,9 +76,9 @@
     </ClCompile>
     <Link>
       <AdditionalOptions>/MACHINE:I386 %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalDependencies>amstrmid.lib;oldnames.lib;urlmon.lib;winmm.lib;quartz.lib;dxguid.lib;ddraw.lib;vorbis_static_d.lib;vorbisfile_static_d.lib;ogg_static_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>amstrmid.lib;oldnames.lib;urlmon.lib;winmm.lib;quartz.lib;dxguid.lib;ddraw.lib;vorbis_static_d.lib;vorbisfile_static_d.lib;ogg_static_d.lib;FreeImage.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SuppressStartupBanner>true</SuppressStartupBanner>
-      <AdditionalLibraryDirectories>..\..\..\lib;..\External\VorbisSDK\lib;..\External\EAXSDK\lib;..\External\DXSDK_81\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\..\..\lib;..\External\VorbisSDK\lib;..\External\EAXSDK\lib;..\External\DXSDK_81\lib;..\External\FreeImage\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <GenerateMapFile>true</GenerateMapFile>
@@ -157,6 +157,7 @@
     <ClCompile Include="..\External\nvwa\mem_pool_base.cpp" />
     <ClCompile Include="..\External\nvwa\static_mem_pool.cpp" />
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="Engine\jeImage.cpp" />
     <ClCompile Include="List.c" />
     <ClCompile Include="Object.cpp" />
     <ClCompile Include="OGGStream.cpp" />
@@ -249,7 +250,6 @@
     <ClCompile Include="Engine\Engine.cpp" />
     <ClCompile Include="Engine\FontBmp.cpp" />
     <ClCompile Include="Engine\jePolyMgr.cpp" />
-    <ClCompile Include="Engine\jeTexture.cpp" />
     <ClCompile Include="Engine\splash_bmp.cpp" />
     <ClCompile Include="Engine\Drivers\D3DDrv\d3d_DDMemMgr.cpp" />
     <ClCompile Include="Engine\Drivers\D3DDrv\d3d_err.cpp" />
@@ -328,6 +328,7 @@
   <ItemGroup>
     <ClInclude Include="..\..\..\include\Camera.h" />
     <ClInclude Include="..\..\..\include\jeFileLogger.h" />
+    <ClInclude Include="..\..\..\include\jeImage.h" />
     <ClInclude Include="..\..\..\include\jeLogger.h" />
     <ClInclude Include="..\External\nvwa\bool_array.h" />
     <ClInclude Include="..\External\nvwa\class_level_lock.h" />
@@ -418,7 +419,6 @@
     <ClInclude Include="Engine\BitmapList.h" />
     <ClInclude Include="..\..\..\include\ENGINE.H" />
     <ClInclude Include="Engine\jePolyMgr.h" />
-    <ClInclude Include="..\..\..\include\jeTexture.h" />
     <ClInclude Include="Engine\Drivers\Dcommon.h" />
     <ClInclude Include="Engine\Drivers\D3DDrv\d3d_DDMemMgr.h" />
     <ClInclude Include="Engine\Drivers\D3DDrv\D3d_err.h" />
@@ -523,6 +523,7 @@
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)%(Filename).obj;%(Outputs)</Outputs>
     </CustomBuild>
     <None Include="Bsp\jeBSP._h" />
+    <None Include="ClassDiagram.cd" />
     <None Include="Engine\engine._h" />
     <None Include="guWorld\jeMaterial._h" />
     <None Include="guWorld\jeModel._h" />

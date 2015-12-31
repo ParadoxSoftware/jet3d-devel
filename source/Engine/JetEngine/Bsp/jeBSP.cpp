@@ -18,17 +18,11 @@
 /*  Copyright (C) 1996-1999 Eclipse Entertainment, L.L.C. All Rights Reserved           */
 /*                                                                                      */
 /****************************************************************************************/
+#include <windows.h>
+
 #include <stdio.h>
 #include <assert.h>
 
-#ifdef WIN32
-#include <windows.h>
-#endif
-
-#ifdef BUILD_BE
-#define min(a,b) (((a)<(b))?(a):(b))
-#endif
- 
 // Private dependents
 #include "jeBSP._h"
 #include "Ram.h"
@@ -1452,8 +1446,8 @@ jeBoolean jeBSP_SetEngine(jeBSP *Tree, jeEngine *Engine)
 	{
 		Tree->ChangeDriverCB = jeEngine_CreateChangeDriverCB(Engine, ShutdownDriverCB, StartupDriverCB, Tree);
 
-		if (!Tree->ChangeDriverCB)
-			return JE_FALSE;
+		//if (!Tree->ChangeDriverCB)
+		//	return JE_FALSE;
 
 		jeEngine_CreateRef(Engine);
 		jeEngine_SetRenderMode(Engine, Tree->RenderMode);

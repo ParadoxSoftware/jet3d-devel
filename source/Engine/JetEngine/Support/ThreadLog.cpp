@@ -18,11 +18,9 @@
 /*  Copyright (C) 1996-1999 Eclipse Entertainment, L.L.C. All Rights Reserved           */
 /*                                                                                      */
 /****************************************************************************************/
-#ifdef WIN32
 #define	WIN32_LEAN_AND_MEAN
 #include	<windows.h>
 #include	<mmsystem.h>
-#endif
 
 #include 	<string.h>
 #include	<stdio.h>
@@ -31,14 +29,6 @@
 #include	<stdlib.h>
 
 #include	"VFile.h"	// Oy!
-
-#ifdef BUILD_BE
-#include <OS.h>
-area_id logEntriesArea;
-#define DWORD long // not really a dword..
-#define GetCurrentThreadId() find_thread(NULL)
-#define timeGetTime real_time_clock
-#endif
 
 #pragma message("ThreadLog includes vfile!")
 
@@ -65,15 +55,10 @@ jeBoolean ThreadLog_Initialize(void)
 	if ( LogEntries )
 		return JE_TRUE;
 
-#ifdef WIN32
 	// <> this is a memory leak
 	LogEntries = (ThreadLog_Entry*)VirtualAlloc(NULL, MAXENTRIES * sizeof(ThreadLog_Entry), MEM_COMMIT, PAGE_READWRITE);
 	if	(!LogEntries)
 		return JE_FALSE;
-#endif
-#ifdef BUILD_BE
-	logEntriesArea = create_area("LogEntries Area" , (void **)&LogEntries , B_ANY_ADDRESS, MAXENTRIES * sizeof(ThreadLog_Entry), B_NO_LOCK , B_READ_AREA | B_WRITE_AREA );
-#endif
 	
 	CurrentEntry = LogEntries;
 

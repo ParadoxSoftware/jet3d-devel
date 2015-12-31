@@ -22,16 +22,6 @@
 
 //#define DO_REPORT
 
-#ifdef BUILD_BE // Memory debugging functionality only available under Win32
-#ifndef NDEBUG
-
-#define BEOS_REDEFINE_NDEBUG
-#define NDEBUG
-#undef DEBUG
-
-#endif
-#endif
-
 #include <memory.h>
 #include <malloc.h>
 #include <assert.h>

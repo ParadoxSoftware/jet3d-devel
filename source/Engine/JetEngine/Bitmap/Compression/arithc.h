@@ -39,13 +39,7 @@ typedef struct {
 	uint32 overflow_bytes;	// encoder only
 } arithInfo;
 
-#ifdef WIN32
 #define ARITHCC	__fastcall
-#endif
-
-#ifdef BUILD_BE
-#define ARITHCC
-#endif
 
 #define safeProbMax probMaxSafe
 

@@ -18,35 +18,9 @@
 /*  Copyright (C) 1996-1999 Eclipse Entertainment, L.L.C. All Rights Reserved           */
 /*                                                                                      */
 /****************************************************************************************/
-#ifdef WIN32
 #pragma warning ( disable : 4115 )
 #include <windows.h>
 #pragma warning ( default : 4115 )
-#endif
-
-
-#ifdef BUILD_BE
-
-#include <image.h>
-// Here we emulate a DllMain by calling it as soon as it is loaded.
-#define DLL_PROCESS_ATTACH 1
-#define DLL_THREAD_ATTACH 2 // the two thread ones are never called under be..
-#define DLL_THREAD_DETACH 3
-#define DLL_PROCESS_DETACH 4
-
-#define WINAPI __declspec(dllexport)
-#define DWORD long
-#define PVOID void*
-
-#ifdef __cplusplus
-extern "C" {
-#endif
-int WINAPI DllMain(image_id	hInstance,DWORD		fdwReason, PVOID		pvReserved );
-#ifdef __cplusplus
-}
-#endif
-
-#endif
 
 #include "jeTypes.h"
 #include "CamObject.h"
@@ -92,13 +66,7 @@ jeObjectDef ObjectDef = {
 };
 
 int WINAPI DllMain(
-#ifdef WIN32
 	HINSTANCE	hInstance,
-#endif
-#ifdef BUILD_BE
-	image_id 	hInstance,
-#endif
-
 	DWORD		fdwReason,
 	PVOID		pvReserved )
 {

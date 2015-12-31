@@ -24,11 +24,6 @@
 #include "Utility.h"
 #include "Cpu.h"
 
-#ifdef BUILD_BE
-#include <inttypes.h>
-#define __int64 uint64_t
-#endif
-
 #pragma warning(disable : 4244)	// int -> uint8 conversions abound
 
 #pragma warning(disable : 4799)	// I know we've got no emms; it's done in wavelet.c
@@ -316,13 +311,7 @@ uint8 * bline;
 
 /*}{******* MMX YUV -> BGR blitters ***********/
 
-#ifdef BUILD_BE // neccesary due to integer overflow on the various systems..
-static const __int64 Const_V_16 = 2789617077 * 256 * 256;//0x0000A6462DB50000;
-#endif
-#ifdef WIN32
 static const __int64 Const_V_16 = 0x0000A6462DB50000;
-#endif
-
 static const __int64 Const_U_16 = 0x00000000E9FA7168;
 
 void YUVi_to_BGRb_lines_mmx(int w,int h,int **Ylines,int **Ulines,int **Vlines,uint8 * BGRptr,int BGRstride)
@@ -347,8 +336,6 @@ int yz;
 		cachetouch_r(line3,w>>3);
 		cachetouch_w(bline,(w*3)>>5);
 			
-
-#ifdef WIN32
 		__asm
 		{
 		mov ecx,w
@@ -498,160 +485,6 @@ int yz;
 			mov			[edi+2],al
 			//}
 		}
-#endif
-
-#ifdef BUILD_BE
-		__asm__ __volatile__ ("
-		movl %0, %%ecx 				// %0 = w ; mov ecx,w
-		subl $1, %%ecx				// sub ecx,1
-		movl %1, %%edi				// %1 = bline ; mov edi,bline
-
-		movq %5, %%mm3 //Const_V_16, %%mm3				// %2 = Const_V_16, i think we could use the name cause its global but.. movq mm3,Const_V_16
-		movq %6, %%mm4 // Const_U_16, %%mm4				// %3 = const_U_15, same as above ; movq mm4,Const_U_16
-
-		More:		
-
-			///**
-			//*
-			//*	ecx is width
-			//*	edi is BGRptr
-			//*
-			//*	eax is (V<<2)-509
-			//*	ebx is (U<<2)-509
-			//*	edx is Y
-			//*
-			//*	the multiply coefficients are in 14 bits, then we rshr 16 via mulhw
-			//*
-			//*	mm0 is four V int16's, multiplied by their coefficients (mm3)
-			//*	mm1 is four U int16's, multiplied by their coefficients (mm4)
-			//*	mm2 is four Y int16's
-			//*
-			//*	XRGB = mm0 + mm1 + mm2
-			//*
-			//*	we're taking about 45 clocks
-			//*	my manual count indicates we could take about 37 if we were perfect
-			//*/
-
-			///*
-			//*
-			//* MMX optimization notes:
-			//*	1. there is only one MMX pack/unpack unit
-			//*	2. there is only one MMX multiply unit
-			//*	3. MMX instructions that use memory or integers use port 0 only
-			//*	4. all MMX instructions are 1 clock except multiply, which is 3
-			//*/
-
-			movl		%2, %%eax			// %2 = line 3 ;mov			eax,line3	// V
-			movl		(%%eax), %%eax 		//mov			eax,[eax]	// eax = v; hard stall on eax, inevitable
-			addl		$4, %2				// %2 = line 3 add			line3,4		// no stall on line3
-
-			shll		$2, %%eax			//shl			eax,2		// V<<=2
-			
-			movl		%3, %%ebx			// %3 = line2 mov			ebx,line2	// U
-
-			subl		$509, %%eax			// sub			eax,509		// do ((V<<2)-510) instead of ((V-127)<<2)
-
-			movl		(%%ebx), %%ebx		// mov			ebx,[ebx]	// ebx = u
-			addl		$4, %3			// %3 = line2 ;add			line2,4
-
-			movd		%%eax, %%mm0		//;movd		mm0,eax		// mm0 = [0][v]
-			
-			shll		$2, %%ebx			// shl			ebx,2
-
-			punpckldq %%mm0, %%mm0			//;punpckldq	mm0,mm0		// mm0 = [v][v]
-			
-			subl 	$509, %%ebx				//sub			ebx,509
-
-			packssdw	%%mm0, %%mm0 		//;packssdw	mm0,mm0		// mm0 = [v][v][v][v]
-			
-			movd	%%ebx, %%mm1			//;movd		mm1,ebx		// mm1 = [0][u]
-
-			movl	%4, %%edx			//%4 = line1;mov			edx,line1	// Y
-
-			pmulhw		%%mm0, %%mm3		// reverse? pmulhw		mm0,mm3		// keep only high words; same as multiplying in 32 bits and doing >>16
-			
-			// put some non-dependent stuff after the multiply:
-
-			movl	(%%edx), %%edx			//;mov			edx,[edx]	// edx = y			
-
-			punpckldq	%%mm1,%%mm1			//;punpckldq	mm1,mm1		// mm1 = [u][u]
-
-			movd	%%edx, %%mm2			//;movd		mm2,edx		// mm2 = [0][y]
-
-			packssdw		%%mm1,%%mm1		//;packssdw	mm1,mm1		// mm1 = [u][u][u][u]			
-
-			// these two packs cannot pair!
-
-			punpckldq	%%mm2,%%mm2			//;punpckldq	mm2,mm2		// mm2 = [y][y]
-			
-			pmulhw	%%mm4, %%mm1			// reverse?	pmulhw		mm1,mm4
-
-			// put some stuff after the multiply:
-
-			addl $4, %4						// ;add			line1,4
-			packssdw	%%mm2, %%mm2		// ;packssdw	mm2,mm2		// mm2 = [y][y][y][y]
-
-			// now XRGB = mm0 + mm1 + mm2
-
-			paddsw	%%mm1, %%mm0		// ?reverse? paddsw		mm0,mm1
-
-			paddsw	%%mm2, %%mm0		// ;paddsw		mm0,mm2		// hard stall on mm0, inevitable ; no stall on mm2
-
-			// convert the four int16s to eight bytes; also do a clamp(0,255) for free!
-
-			packuswb %%mm0, %%mm0 		//; packuswb	mm0,mm0		// hard stall on mm0, inevitable
-
-			movd %%mm0, (%%edi)			//; movd		[edi],mm0	// hard stall on mm0, then unaligned write! bad!
-			addl $3, %%edi				//;add			edi,3		// no stall on edi
-
-		dec %%ecx	//;dec ecx
-		jnz More
-
-			//{		one last one that doesn't write 4->3
-			movl %2, %%eax				//;mov eax,line3			// V
-			movl (%%eax), %%eax			//;mov eax,[eax]
-			addl $4, %2					//;add line3,4
-
-			shl		$2, %%eax			//;shl			eax,2
-			subl		$509, %%eax		//;sub			eax,509
-			movd %%eax, %%mm0		//;movd		mm0,eax		// mm0 = [0][x]
-			punpckldq %%mm0, %%mm0  //;punpckldq	mm0,mm0		// mm0 = [x][x]
-			packssdw	%%mm0, %%mm0  //;packssdw	mm0,mm0		// mm0 = [x][x][x][x]
-			pmulhw	%%mm3, %%mm0	//;pmulhw		mm0,mm3
-			
-			movl %3, %%ebx			//;mov ebx,line2			// U
-			movl (%%ebx), %%ebx		//;mov ebx,[ebx]
-			addl $4, %3				//;add line2,4
-
-			shll $2, %%ebx			//;shl			ebx,2
-			subl $509, %%ebx		//;sub			ebx,509
-			movd %%ebx, %%mm1		//;movd		mm1,ebx		// mm0 = [0][x]
-			punpckldq %%mm1, %%mm1	//;punpckldq	mm1,mm1		// mm0 = [x][x]
-			packssdw %%mm1, %%mm1	//;packssdw	mm1,mm1		// mm0 = [x][x][x][x]
-			pmulhw %%mm4, %%mm1		//;pmulhw		mm1,mm4
-
-			movl %4, %%edx			//;mov edx,line1			// Y
-			movl (%%edx), %%edx		//;mov edx,[edx]
-			addl $4, %4             //;add line1,4
-
-			movd %%edx, %%mm2		//;movd		mm2,edx		// mm0 = [0][x]
-			punpckldq	%%mm2,%%mm2	//;punpckldq	mm2,mm2		// mm0 = [x][x]
-			packssdw %%mm2, %%mm2	//;packssdw	mm2,mm2		// mm0 = [x][x][x][x]
-
-			paddsw %%mm1, %%mm0		//;paddsw		mm0,mm1
-			paddsw %%mm2, %%mm0		//;paddsw		mm0,mm2
-
-			packuswb %%mm0, %%mm0	//;packuswb	mm0,mm0
-
-			movd %%eax, %%mm0		//;movd		eax,mm0		// eax is XRGB
-			mov (%%edi), %%ax		//;mov			[edi],ax
-			shr $16, %%eax			//;shr			eax,16
-			mov %%al, 2(%%edi)		//;mov			[edi+2],al
-			" : // outputs
-			  : "m" (w), "m" (bline), "m" (line3), "m" (line2), "m" (line1), "m" (Const_V_16), "m" (Const_U_16)// inputs
-			  : "%edi", "%edx", "%eax", "%ebx", "%ecx" );// clobbered
-#endif
-
 	}
 
 	//__asm { emms }	
@@ -668,7 +501,6 @@ void YUVi_to_BGRb_line_mmx2(int *line1,int *line2,int *line3,uint8 * bline,int l
 	cachetouch_r(line3,len>>3);
 	cachetouch_w(bline,(len*3)>>5);
 	
-#ifdef WIN32
 	__asm
 	{
 	
@@ -740,81 +572,6 @@ void YUVi_to_BGRb_line_mmx2(int *line1,int *line2,int *line3,uint8 * bline,int l
 
 	//emms
 	}
-#endif
-
-#ifdef BUILD_BE
-	__asm__ __volatile__ ( "
-		
-	movl %0, %%ecx		//;%0 = len   ;mov ecx,len
-	movl %1, %%edi		//;%1 = bline ;mov edi,bline
-
-	movq Const_V_16, %%mm3		//%2 = Const_V_16;movq mm3,Const_V_16
-	movq Const_U_16, %%mm4		//%3 = Const_U_16;movq mm4,Const_U_16
-
-	YUVi_to_BGRb_line_mmx2_More:		
-
-		movl	%2,%%eax 			// ;%4 = line3  //mov			eax,line3			// V
-		movl	(%%eax), %%eax		//;mov			eax,[eax]			// hard stall on eax, inevitable
-		addl	$4, %2				//;add			line3,4				// no stall on line3
-
-		shll	$2, %%eax			//;shl			eax,2
-		
-		movl	%3, %%ebx			//;3 = line2	mov			ebx,line2			// U
-
-		subl	$510, %%eax			//;sub			eax,510
-
-		movl (%%ebx), %%ebx			//;mov			ebx,[ebx]
-		addl	$4, %3				//;add			line2,4
-
-		movd %%eax, %%mm0			//;movd		mm0,eax		// mm0 = [0][x]
-		
-		shll $2, %%ebx				//;shl			ebx,2
-
-		punpckldq	%%mm0, %%mm0	//;punpckldq	mm0,mm0		// mm0 = [x][x]
-		
-		subl $510,%%ebx				//;sub			ebx,510
-
-		packssdw	%%mm0, %%mm0	//;packssdw	mm0,mm0		// mm0 = [x][x][x][x]
-		
-		movd %%ebx, %%mm1			//;movd		mm1,ebx		// mm0 = [0][x]
-
-		pmulhw %%mm3, %%mm0			//;pmulhw		mm0,mm3
-		movl %4, %%edx				// ;%4 = line 1mov			edx,line1			// Y
-		
-		punpckldq	%%mm1, %%mm1	//;punpckldq	mm1,mm1		// mm0 = [x][x]
-
-		movl (%%edx), %%edx			//;mov			edx,[edx]
-
-		packssdw	%%mm1, %%mm1	//;packssdw	mm1,mm1		// mm0 = [x][x][x][x]
-				
-		movd	%%edx, %%mm2		//;movd		mm2,edx		// mm0 = [0][x]
-
-		addl $6, %3					//;add			line1,4
-
-		punpckldq	%%mm2,%%mm2		//;punpckldq	mm2,mm2		// mm0 = [x][x]
-		
-		pmulhw %%mm4, %%mm1			//; (?reverse?) pmulhw		mm1,mm4
-
-		packssdw %%mm2, %%mm2		//; packssdw	mm2,mm2		// mm0 = [x][x][x][x]
-
-		paddsw %%mm1, %%mm0			// ?reverse? paddsw		mm0,mm1
-
-		paddsw %%mm2, %%mm0			// ?reverse? paddsw		mm0,mm2		// hard stall on mm0, inevitable ; no stall on mm2
-
-		packuswb %%mm0, %%mm0		// packuswb	mm0,mm0		// hard stall on mm0, inevitable
-
-		movd (%%edi), %%mm0         // ;movd		[edi],mm0	// unaligned write! bad!
-		addl $3, %%edi				// ;add			edi,3		// no stall on edi
-
-	decl %%ecx		//;dec ecx
-	jnz YUVi_to_BGRb_line_mmx2_More
-
-	movl %%edi, %1			// ;mov bline,edi" 
-	:	// outputs
-	: "m" (len), "m" (bline), "m" (line3) , "m" (line2), "m" (line1)
-	: "%ebx" , "%eax" , "%edi" , "%ecx" , "%edx" );
-#endif
-
 
 	{
 	int y,u,v,r,g,b;	
@@ -844,8 +601,7 @@ void YUVi_to_XRGB_line_mmx(int *line1,int *line2,int *line3,uint8 * bline,int le
 	cachetouch_r(line2,len>>3);
 	cachetouch_r(line3,len>>3);
 	cachetouch_w(bline,len>>3);
-		
-#ifdef WIN32
+
 	__asm
 	{
 	
@@ -915,81 +671,6 @@ void YUVi_to_XRGB_line_mmx(int *line1,int *line2,int *line3,uint8 * bline,int le
 
 	//emms
 	}
-#endif
-
-#ifdef BUILD_BE
-	__asm__ __volatile__ ("
-	
-	movl %0, %%ecx	// %0 = len ;mov ecx,len
-	movl %1, %%edi	// %1 = bline ; mov edi,bline
-
-	movq Const_V_16, %%mm3	//;movq mm3,Const_V_16
-	movq Const_U_16, %%mm4	//;movq mm4,Const_U_16
-
-	YUVi_to_XRGB_line_mmx_More:		
-
-		movl %2, %%eax		// %2 = line3	//mov			eax,line3			// V
-		movl (%%eax), %%eax		//;mov			eax,[eax]			// hard stall on eax, inevitable
-		addl $4, %2		//;add			line3,4				// no stall on line3
-
-		shll $2, %%eax		//shl			eax,2
-		
-		movl %3, %%ebx	// %3 = line2	mov			ebx,line2			// U
-
-		subl $510, %%eax	//;sub			eax,510
-
-		movl (%%ebx), %%ebx		//;mov			ebx,[ebx]
-		addl $4, %3				//;add			line2,4
-
-		movd %%eax, %%mm0		//;movd		mm0,eax		// mm0 = [0][x]
-		
-		shll $2, %%ebx			//; shl			ebx,2
-
-		punpckldq %%mm0, %%mm0	//;punpckldq	mm0,mm0		// mm0 = [x][x]
-		
-		subl $510, %%ebx		//;sub			ebx,510
-
-		packssdw %%mm0, %%mm0	//;packssdw	mm0,mm0		// mm0 = [x][x][x][x]
-		
-		movd %%ebx, %%mm1		//;movd		mm1,ebx		// mm0 = [0][x]
-
-		pmulhw %%mm3, %%mm0		//?reverse? pmulhw		mm0,mm3
-		movl %4 , %%edx			// %4 = line1	mov			edx,line1			// Y
-		
-		punpckldq %%mm1, %%mm1	//; punpckldq	mm1,mm1		// mm0 = [x][x]
-
-		movl (%%edx), %%edx		//; mov			edx,[edx]
-
-		packssdw %%mm1, %%mm1	//;packssdw	mm1,mm1		// mm0 = [x][x][x][x]
-				
-		movd %%edx, %%mm2		//; movd		mm2,edx		// mm0 = [0][x]
-
-		addl $4, %4				// add			line1,4
-
-		punpckldq %%mm2, %%mm2	//; punpckldq	mm2,mm2		// mm0 = [x][x]
-		
-		pmulhw %%mm4, %%mm1		// ?reverse? 	pmulhw		mm1,mm4
-
-		packssdw %%mm2, %%mm2	// packssdw	mm2,mm2		// mm0 = [x][x][x][x]
-
-		paddsw %%mm1, %%mm0		// ?reverse? paddsw		mm0,mm1
-
-		paddsw %%mm2, %%mm0		// ?reverse? paddsw		mm0,mm2		// hard stall on mm0, inevitable ; no stall on mm2
-
-		packuswb %%mm0, %%mm0	// packuswb	mm0,mm0		// hard stall on mm0, inevitable
-
-		movd %%mm0, (%%edi)		//;movd		[edi],mm0
-		addl $4, %%edi			//;add			edi,4		// no stall on edi
-
-	decl %%ecx		//dec ecx
-	jnz YUVi_to_XRGB_line_mmx_More
-	" 
-	: // outputs
-	: "g" (len), "g" (bline) , "g" (line3), "g" (line2) , "g" (line1)
-	: "%ecx" , "%edi", "%eax", "%ebx", "%edx");
-	
-#endif // BUILD_BE
-
 }
 
 /*}{******* CPU setup ***********/

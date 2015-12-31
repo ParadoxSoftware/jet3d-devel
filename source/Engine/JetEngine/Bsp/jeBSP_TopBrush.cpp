@@ -27,6 +27,7 @@
 // The jeBSP_Brushes are then partitioned up, and the tree is born...
 //		-John Pollard
 
+#include <Windows.h>
 #include <assert.h>
 #include <stdio.h>
 #include <memory.h>		// memset

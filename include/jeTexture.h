@@ -23,6 +23,9 @@
 #ifndef JE_TEXTURE_H
 #define JE_TEXTURE_H
 
+#define WIN32_LEAN_AND_MEAN
+#include <Windows.h>
+
 #include "BaseType.h"
 #include "DCommon.h"
 #include "VFile.h"
@@ -32,6 +35,9 @@ extern "C" {
 #endif
 
 typedef struct jeEngine						jeEngine;
+typedef struct jeTexture					jeTexture;
+//typedef struct jeTexture_Info				jeTexture_Info;
+//typedef struct jeRDriver_PixelFormat		jeRDriver_PixelFormat;
 
 /*!
 	@fn jeTexture *jeTexture_Create(jeEngine *Engine, int32 Width, int32 Height, int32 MipLevels, jeRDriver_PixelFormat *Format)

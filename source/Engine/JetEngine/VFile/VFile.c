@@ -43,14 +43,7 @@
 #include	"VFile.h"
 #include	"VFile._h"
 
-#ifdef WIN32
 #include	"fsdos.h"
-#endif
-
-#ifdef BUILD_BE
-#include <OS.h>
-#include 	"FSBeos.h"
-#endif
 
 #include	"FSMemory.h"
 #include	"FSVFS.h"
@@ -95,12 +88,7 @@ typedef struct	jeVFile_Finder
 {
 	const jeVFile_SystemAPIs *	APIs;
 	void *						Data;
-#ifdef WIN32
-        CRITICAL_SECTION                        CriticalSection;
-#endif // WIN32
-#ifdef BUILD_BE
-        sem_id                                  CriticalSection;
-#endif // BUILD_BE  
+    CRITICAL_SECTION                        CriticalSection;
 }	jeVFile_Finder;
 
 /*}{ ******* Statics *******/
@@ -123,17 +111,9 @@ static void		JETCC	jeVFile_Free(jeVFile * File);
 static jeBoolean jeVFile_PathIsSane(const char * Path);
 static jeBoolean JETCC CheckOpenFlags(unsigned int OpenModeFlags);
 
-#ifdef WIN32
 #define LOCK_CRITICALSECTION(a) EnterCriticalSection(a);
 #define UNLOCK_CRITICALSECTION(a) LeaveCriticalSection(a);
 #define DELETE_CRITICALSECTION(a) DeleteCriticalSection(a);
-#endif
-
-#ifdef BUILD_BE
-#define LOCK_CRITICALSECTION(a) acquire_sem(*a); // passes a pointer, so convert
-#define UNLOCK_CRITICALSECTION(a) release_sem(*a);
-#define DELETE_CRITICALSECTION(a) delete_sem(*a);
-#endif
 
 /*}{ ******* File System Functions *******/
 
@@ -162,19 +142,10 @@ static	jeBoolean jeVFile_Enter(void)
 		return JE_TRUE;
 	}
 
-#ifdef WIN32
 	if	(jeVFile_RegisterFileSystemInternal(FSDos_GetAPIs(), &Type) == JE_FALSE)
 		return JE_FALSE;
 	if	(Type != JE_VFILE_TYPE_DOS)
 		return JE_FALSE;
-#endif
-
-#ifdef BUILD_BE
-	if	(jeVFile_RegisterFileSystemInternal(FSBeOS_GetAPIs(), &Type) == JE_FALSE)
-		return JE_FALSE;
-	if	(Type != JE_VFILE_TYPE_DOS)
-		return JE_FALSE;
-#endif
 
 	if	(jeVFile_RegisterFileSystemInternal(FSMemory_GetAPIs(), &Type) == JE_FALSE)
 		return JE_FALSE;
@@ -216,12 +187,7 @@ static void jeVFile_Leave(void)
 	if ( jeVFile_RefCount == 0 )
 	{
 		assert(RegisteredAPIs);
-		#ifdef WIN32 // hack....
 		jeRam_Free((void *)RegisteredAPIs);
-		#endif
-		#ifdef BUILD_BE
-		jeRam_Free(RegisteredAPIs);
-		#endif
 		
 		RegisteredAPIs = NULL;
 	}
@@ -1113,14 +1079,8 @@ JETAPI jeVFile_Finder * JETCC jeVFile_CreateFinder(
 
 	Finder->APIs = FileSystem->APIs;
        
-    #ifdef WIN32
     InitializeCriticalSection(&Finder->CriticalSection);
-    #endif
-        
-    #ifdef BUILD_BE
-    Finder->CriticalSection = create_sem(1,NULL);
-    #endif
-        
+    
 	return Finder;
 }
 
@@ -1165,20 +1125,10 @@ JETAPI jeBoolean JETCC jeVFile_FinderGetProperties(const jeVFile_Finder *Finder,
 	return Result;
 }
 
-#ifdef WIN32
 JETAPI void JETCC jeVFile_TimeToWin32FileTime(const jeVFile_Time *Time, LPFILETIME Win32FileTime)
 {
         *Win32FileTime = *(LPFILETIME)Time;
 }
-#endif
-
-#ifdef BUILD_BE
-JETAPI void JETCC jeVFile_TimeToTime_TFileTime(const jeVFile_Time *Time, bigtime_t* fileTime)
-{
-        // not sure how we do this yet..
-        memcpy(fileTime,Time,sizeof(int64));
-}
-#endif
 
 static	jeBoolean	JETCC	CheckOpenFlags(unsigned int OpenModeFlags)
 {

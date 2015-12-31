@@ -620,12 +620,7 @@ int	JETCC GetXFormModFlags( const void * Instance )
 	return( JE_OBJECT_XFORM_TRANSLATE | JE_OBJECT_XFORM_ROTATE);
 }
 
-#ifdef WIN32
 jeBoolean JETCC EditDialog (void * Instance,HWND Parent)
-#endif
-#ifdef BUILD_BE
-jeBoolean JETCC EditDialog (void * Instance,class G3DView* Parent)
-#endif
 {
 	return( JE_TRUE );
 }

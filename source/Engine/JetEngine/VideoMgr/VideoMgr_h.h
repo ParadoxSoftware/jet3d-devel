@@ -3,8 +3,6 @@
 #ifndef VideoMgrH_H
 #define VideoMgrH_H
 
-#include "jet.h"
-#include "VideoMgr.h"
 #include <windows.h>
 #include <string.h>
 #include <evcode.h>
@@ -12,9 +10,12 @@
 #include <strmif.h>
 #include <control.h>
 #include <uuids.h>
+#include <direct.h>	
+
+#include "jet.h"
+#include "VideoMgr.h"
 #include "Ram.h"
 #include "Errorlog.h"
-#include <direct.h>	
 
 //nclude "Mp3Mgr.h"
 

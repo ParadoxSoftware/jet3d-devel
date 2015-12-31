@@ -107,7 +107,6 @@ jeFloat jeVec2d_Length(const jeVec2d *V1)
 {	
 float Len;
 
-#ifdef WIN32
 	__asm
 	{
 		mov		eax,V1
@@ -123,28 +122,6 @@ float Len;
 		fsqrt
         fstp    [Len]
 	}
-#endif
-#ifdef BUILD_BE
-	__asm__ __volatile__ ("
-		movl %1, %%eax //; %%eax, %1  ;$1, %%eax
-		fldl 0(%%eax) //[%%eax] ;// st(0) = vec->X
-		fmull 0(%%eax) // [%%eax] ;// st(0) = vecX ^2
-		
-		fldl		4(%%eax) //[%%eax+4]
-		fmull	4(%%eax) // [%%eax+4]
-							//;// now st(0),st(1) are Y^2,X^2
-	    fxch    %%st(1)     // ; // ST(0) mul is still in progress, so let's add
-							//;//	ST(1) and ST(2)
-        faddp   %%st(1),%%st(0) 
-		fsqrt
-        fstp    %0 //;[Len]
-        "
-        : "=m" (Len)// outputs
-        : "g" (V1)
-        : "%eax" , "%st(1)"// registers
-        );
-#endif
-
 return Len;
 }
 //Vec2d_Length

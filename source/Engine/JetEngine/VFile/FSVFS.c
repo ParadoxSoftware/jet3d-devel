@@ -33,15 +33,6 @@
 #include "windows.h"
 #endif
 
-#ifdef BUILD_BE
-// These should be put under a new OS/Storage.h header file...
-#include <StorageDefs.h>
-#define _MAX_PATH MAXPATHLEN
-#define min(a,b) (((a)<(b))?(a):(b))
-void FastSplitPath(register char* path, char* drive, char* dir, char* fname, char* ext); // Function in DirTree.c
-#define _splitpath FastSplitPath
-#endif
-
 //	"VF00"
 #define	VFSFILEHEADER_SIGNATURE	0x30304656
 

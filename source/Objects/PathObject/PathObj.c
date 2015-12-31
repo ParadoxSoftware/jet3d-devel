@@ -20,22 +20,12 @@
 /****************************************************************************************/
 
 //#include "forcelib.h"
-#ifdef WIN32
 #include <windows.h>
-#endif
 
 #include <memory.h>
 #include <assert.h>
 #include <math.h>
 #include <stdlib.h>
-
-#ifdef BUILD_BE
-#include <image.h>
-#include <sys/param.h>
-#define min(a,b) (((a)<(b))?(a):(b))
-#define max(a,b) (((a)>(b))?(a):(b))
-#define _stricmp strcasecmp
-#endif
 
 #include <string.h>
 #include <float.h>
@@ -60,13 +50,7 @@
 
 typedef struct PathObj PathObj;
 
-#ifdef WIN32
 static HINSTANCE hInstance;
-#endif
-
-#ifdef BUILD_BE
-static image_id hInstance;
-#endif
 
 static jeObject * PathObject_FindObjectFromName(jeWorld *World, char *NameToFind);
 static jeBoolean PathObject_GetPropertyDataIdFromName(jeWorld *World, jeObject *Obj, char *NameToFind, int32 *PropDataId);
@@ -1070,12 +1054,7 @@ void Destroy_Class( void )
 {
 }
 
-#ifdef WIN32
 void Init_Class( HINSTANCE hInst)
-#endif
-#ifdef BUILD_BE
-void Init_Class( image_id hInst)
-#endif
 {
 	//ParentWnd = hWnd;
 	hInstance = hInst;
@@ -2572,12 +2551,7 @@ jeBoolean JETCC RemoveChild(void * Instance,const jeObject * Child)
 	return( JE_TRUE );
 }
 
-#ifdef WIN32
 jeBoolean JETCC EditDialog (void * Instance,HWND Parent)
-#endif
-#ifdef BUILD_BE
-jeBoolean JETCC EditDialog (void * Instance, class G3DView * Parent )
-#endif
 {
 	return( JE_TRUE );
 }

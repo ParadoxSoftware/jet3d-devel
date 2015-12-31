@@ -96,10 +96,6 @@ see {} for notes/long-term-todos
 
 #include	"ThreadQueue.h"
 
-#ifdef BUILD_BE
-#define _strnicmp strncasecmp
-#endif
-
 #ifdef DO_TIMER
 #include	"Timer.h"
 #endif

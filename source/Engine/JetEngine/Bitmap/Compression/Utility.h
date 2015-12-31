@@ -113,14 +113,7 @@ extern void (*cachetouch_w)	(const void * data,int num32s);
 extern void (*fastmemclear32s)	(void *data,int num32s);
 extern void (*fastmemcpy32s)	(char * to,const char *from,int num32s);
 
-#ifdef WIN32
 extern void (__fastcall *copy32)(char * to,const char *from);
-#endif
-
-#ifdef BUILD_BE
-extern void (*copy32)(char * to, const char *from);
-#endif
-
 extern void (*copy32_8)(char * to,const char **froms);
 
 void fastmemclear	(char *data,int len);

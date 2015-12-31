@@ -210,14 +210,7 @@ JETAPI jeObject		*JETCC jeObject_GetParent( const jeObject *Object );
 JETAPI jeBoolean	JETCC jeObject_AddChild	(jeObject * Object,   jeObject * Child);
 JETAPI jeBoolean	JETCC jeObject_RemoveChild(jeObject * Object, jeObject * Child);
 
-#ifdef WIN32
 JETAPI jeBoolean	JETCC jeObject_EditDialog (jeObject * Object,HWND Parent);
-#endif
-
-#ifdef BUILD_BE
-JETAPI jeBoolean	JETCC jeObject_EditDialog (jeObject * Object,class G3DView * Parent);
-#endif
-
 JETAPI jeBoolean	JETCC jeObject_SendMessage (jeObject * Object,int32 Msg, void * Data);
 
 JETAPI jeBoolean	JETCC jeObject_Frame (jeObject * Object,float TimeDelta );

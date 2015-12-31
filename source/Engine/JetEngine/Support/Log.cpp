@@ -18,14 +18,7 @@
 /*  Copyright (C) 1996-1999 Eclipse Entertainment, L.L.C. All Rights Reserved           */
 /*                                                                                      */
 /****************************************************************************************/
-#ifdef WIN32
 #include <windows.h>
-#endif
-
-#ifdef BUILD_BE
-#include <Debug.h>
-#define OutputDebugString DEBUGGER
-#endif
 
 #include <stdlib.h>
 #include <stdio.h>

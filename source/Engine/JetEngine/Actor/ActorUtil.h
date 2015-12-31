@@ -1011,57 +1011,6 @@ static char ** Util_BuildFileList(
 //	Util_LoadLibraryString()
 //
 ////////////////////////////////////////////////////////////////////////////////////////
-
-#ifdef BUILD_BE
-
-#include <Resources.h>
-#include <image.h>
-
-static char *Util_LoadLibraryString(image_id libhinst, int32 resid)
-{
-	BResources resourcefile;
-	int result;
-	char *rcbuffer;
- 	image_info info;
-	size_t outSize;
-	
-	assert(libhinst > 0);
-	assert(resid);
-
-///	hResources = (image_id)hStringResources ;
-	
-	if(get_image_info(libhinst,&info) != B_OK)
-		return NULL;
-		
-	BFile* resFile = new BFile(info.name , B_READ_ONLY);
-	
-	resourcefile.SetTo(resFile,false);
-
-	char* loadedString = (char *)resourcefile.FindResource('DATA', resid, &outSize);
-	
-	//
-	//	Note that if we did't allocate space and copy the string, then we
-	//	would be limited to having one string loaded at a time. Or we would
-	//	setup some kind of revolving buffer.  Either of these options is
-	//	risky and could eventually cause a problem elsewhere... 	 LF
-	//
- 
-	// Allocate memory for the string
-	rcbuffer = (char *)malloc(strlen(loadedString) + 1); //(char*)jeRam_Allocate(strlen(loadedString) + 1);
-	strcpy(rcbuffer, loadedString);
- 
-//#ifndef NDEBUG
-//	memset(stringbuffer, 0xFF, UTIL_MAX_RESOURCE_LENGTH + 1);
-//#endif
- 
-	// return the allocated string
-	return (rcbuffer);
-}//Util_LoadLibraryString
-
-#endif
-
-#ifdef WIN32
-
 static char * Util_LoadLibraryString(
 	HINSTANCE		hInstance,
 	unsigned int	ID )
@@ -1098,5 +1047,3 @@ static char * Util_LoadLibraryString(
 	return NewString;
 
 } // Util_LoadLibraryString()
-
-#endif

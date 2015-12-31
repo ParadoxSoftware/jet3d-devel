@@ -28,11 +28,6 @@
 #include "Trigger.h"
 #include "jeWorld.h"
 
-#ifdef BUILD_BE
-#define _stricmp strcasecmp
-#define _MAX_FNAME 512
-#endif
-
 #define MAX_EVENT_ARGS 6
 
 struct TriggerData

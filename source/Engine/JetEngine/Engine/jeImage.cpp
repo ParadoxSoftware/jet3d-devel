@@ -23,7 +23,6 @@
 #include <assert.h>
 #include "jeImage.h"
 #include "FreeImage.h"
-#include "DCommon.h"
 #include "debug_new.h"
 
 static unsigned free_image_read(void *buffer, unsigned size, unsigned count, fi_handle handle)

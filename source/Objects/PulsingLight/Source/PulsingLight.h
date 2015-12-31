@@ -30,13 +30,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////
 //	Prototypes
 ////////////////////////////////////////////////////////////////////////////////////////
-#ifdef WIN32
 void		Init_Class( HINSTANCE hInstance );
-#endif
-
-#ifdef BUILD_BE
-void		Init_Class( image_id hInstance );
-#endif
 
 void		DeInit_Class( void );
 void *		JETCC CreateInstance( void );
@@ -72,13 +66,7 @@ jeBoolean	JETCC GetChildren( const void *Instance, jeObject *Children, int MaxNu
 jeBoolean	JETCC AddChild( void * Instance, const jeObject *Child );
 jeBoolean	JETCC RemoveChild( void *Instance, const jeObject *Child );
 
-#ifdef WIN32
 jeBoolean	JETCC EditDialog( void *Instance,HWND Parent );
-#endif
-
-#ifdef BUILD_BE
-jeBoolean	JETCC EditDialog( void *Instance,class G3DView* Parent );
-#endif
 
 jeBoolean	JETCC Frame( void *Instance, float TimeDelta );
 jeBoolean	JETCC SendAMessage( void *Instance, int32 Msg, void *Data );

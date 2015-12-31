@@ -18,20 +18,9 @@
 /*  Copyright (C) 1996-1999 Eclipse Entertainment, L.L.C. All Rights Reserved           */
 /*                                                                                      */
 /****************************************************************************************/
-#ifdef WIN32
 #pragma warning ( disable : 4115 )
 #include <windows.h>
 #pragma warning ( default : 4115 )
-#endif
-
-#ifdef BUILD_BE
-#include <image.h>
-#include <Resources.h>
-#include <stdlib.h> // rand
-#include <stdio.h>
-#define _stricmp strcasecmp
-#define _itoa( number, string, radix) sprintf(string, "%i" , number )
-#endif
 
 #include <assert.h>
 #include <string.h>
@@ -153,13 +142,7 @@ typedef struct BitmapList
 ////////////////////////////////////////////////////////////////////////////////////////
 //	Globals
 ////////////////////////////////////////////////////////////////////////////////////////
-#ifdef WIN32
 static HINSTANCE		hClassInstance = NULL;
-#endif
-
-#ifdef BUILD_BE
-static image_id			hClassInstance = NULL;
-#endif
 
 static BitmapList		*Bitmaps, CurBitmaps;
 static int				*BitmapWidth, *BitmapHeight;
@@ -950,10 +933,6 @@ static BitmapList * Util_CreateBitmapList(
 
 } // Util_CreateBitmapList()
 
-
-
-#ifdef WIN32
-
 ////////////////////////////////////////////////////////////////////////////////////////
 //
 //	Util_LoadLibraryString()
@@ -995,61 +974,6 @@ static char * Util_LoadLibraryString(
 	return NewString;
 
 } // Util_LoadLibraryString()
-
-#endif
-
-#ifdef BUILD_BE
-
-static char *Util_LoadLibraryString(image_id libhinst, int32 resid)
-{
-	BResources resourcefile;
-	int result;
-	char *rcbuffer;
- 	image_info info;
-	size_t outSize;
-	
-	// locals
-	#define		MAX_STRING_SIZE	255
-	static char	stringbuffer[MAX_STRING_SIZE];
-
-
-	assert(libhinst > 0);
-	assert(resid);
-
-///	hResources = (image_id)hStringResources ;
-	
-	if(get_image_info(libhinst,&info) != B_OK)
-		return NULL;
-		
-	BFile* resFile = new BFile(info.name , B_READ_ONLY);
-	
-	resourcefile.SetTo(resFile,false);
-
-	char* loadedString = (char *)resourcefile.FindResource((int)'DATA', 		/*** DEPRECATED ***/
-								  resid, 
-								  &outSize);
-	
-	//
-	//	Note that if we did't allocate space and copy the string, then we
-	//	would be limited to having one string loaded at a time. Or we would
-	//	setup some kind of revolving buffer.  Either of these options is
-	//	risky and could eventually cause a problem elsewhere... 	 LF
-	//
- 
-	// Allocate memory for the string
-	rcbuffer = (char*)jeRam_Allocate(strlen(loadedString) + 1);
-	strcpy(rcbuffer, loadedString);
- 
-#ifndef NDEBUG
-	memset(stringbuffer, 0xFF, MAX_STRING_SIZE + 1);
-#endif
- 
-	// return the allocated string
-	return (rcbuffer);
-}//Util_LoadLibraryString
-
-#endif
-
 
 ////////////////////////////////////////////////////////////////////////////////////////
 //
@@ -1158,12 +1082,7 @@ static float Util_Frand(
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 void Init_Class(
-#ifdef WIN32
 	HINSTANCE	hInstance )	// dll instance handle
-#endif
-#ifdef BUILD_BE
-	image_id 	hInstance ) // dll instance handle
-#endif
 {
 
 	// ensure valid data
@@ -3223,12 +3142,7 @@ jeBoolean JETCC RemoveChild(
 ///////////////////////////////////////////////////////////////////////////////////////
 jeBoolean JETCC EditDialog(
 	void	*Instance,
-#ifdef WIN32
 	HWND	Parent )
-#endif
-#ifdef BUILD_BE
-	class G3DView *Parent )
-#endif
 {
 
 	// all done

@@ -33,13 +33,7 @@ extern "C" {
 
 void Destroy_Class( void );
 
-#ifdef WIN32
 void Init_Class( HINSTANCE hInstance);
-#endif
-
-#ifdef BUILD_BE
-void Init_Class( image_id hInstance );
-#endif
 
 void * JETCC CreateInstance( void );
 void  JETCC CreateRef(void * Instance);
@@ -68,13 +62,7 @@ jeBoolean JETCC GetChildren(const void * Instance,jeObject * Children,int MaxNum
 jeBoolean JETCC AddChild(void * Instance,const jeObject * Child);
 jeBoolean JETCC RemoveChild(void * Instance,const jeObject * Child);
 
-#ifdef WIN32
 jeBoolean JETCC EditDialog (void * Instance,HWND Parent);
-#endif
-
-#ifdef BUILD_BE
-jeBoolean JETCC EditDialog (void * Instance, class G3DView * Parent );
-#endif
 
 jeBoolean JETCC MessageFunction (void *Instance,int32 Msg, void * Data);
 jeBoolean	JETCC UpdateTimeDelta(void * Instance, float TimeDelta );

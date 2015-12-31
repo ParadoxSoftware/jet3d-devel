@@ -32,10 +32,7 @@ rounding in.  We need to make sure this is accurate enough
 
 *******/
 
-#ifdef WIN32
 #include <windows.h>
-#endif
-
 #include <stdlib.h>
 #include <assert.h>
 
@@ -44,15 +41,6 @@ rounding in.  We need to make sure this is accurate enough
 #include "Cpu.h"
 #include "Log.h"
 #include "ThreadLog.h"
-
-#ifdef BUILD_BE
-	#include <OS.h>
-	#include <string.h> // strncmp	
-	#define __int64 int64
-	#define min(a,b) (((a)<(b))?(a):(b))
-	#define max(a,b) (((a)>(b))?(a):(b))        
-	#define timeGetTime() (.001 * real_time_clock_usecs() )
-#endif
 
 #define MHZ_MILLIS	(50)	// 0.05 seconds seems accurate enough
 
@@ -81,7 +69,6 @@ static uint32	GetCPUIDEAX(uint32 funcNum)
 {
 	uint32	retval;
 
-#ifdef WIN32
 	__try
 	{
 		_asm
@@ -94,19 +81,6 @@ static uint32	GetCPUIDEAX(uint32 funcNum)
 	{
       retval = 0;
 	}
-#endif
-
-#ifdef BUILD_BE
-	__asm__ __volatile__ ("
-	push %%ebx //; appears to fix the crashes
-	movl %1, %%eax
-	CPUID
-	movl %%eax, %0
-	pop %%ebx"
-	  : "=m" (retval)
-	  : "g" (funcNum)
-	  : "memory" , "%eax" , "%ebx" , "%ebx");
-#endif
 
 	return	retval;
 }
@@ -115,7 +89,6 @@ static uint32 GetCPUIDEBX(uint32 funcNum)
 {
    uint32 retval;
    
-#ifdef WIN32
    __try
    {
       _asm
@@ -128,28 +101,14 @@ static uint32 GetCPUIDEBX(uint32 funcNum)
    {
       retval = 0;
    }
-#endif
    
-#ifdef BUILD_BE
-   __asm__ __volatile__ ("
-      push %%ebx //; appears to fix the crashes
-      movl %1, %%eax
-      CPUID
-      movl %%ebx, %0
-      pop %%ebx"
-      : "=m" (retval)
-      : "g" (funcNum)
-      : "memory" , "%eax" , "%ebx" , "%ebx");
-#endif
-   
-   return	retval;
+	return retval;
 }
 
 static uint32	GetCPUIDEDX(uint32 funcNum)
 {
 	uint32	retval;
 
-#ifdef WIN32
 	__try
 	{
 		_asm
@@ -162,19 +121,6 @@ static uint32	GetCPUIDEDX(uint32 funcNum)
 	{
 		retval	=0;
 	}
-#endif
-
-#ifdef BUILD_BE
-	__asm__ ("
-	pushl %%ebx // these appear to fix the segfaults.
-	movl %1, %%eax
-	CPUID
-	movl %%edx, %0
-	popl %%ebx"
-	  : "=m" (retval)
-	  : "m" (funcNum)
-	  : "memory" , "%eax" , "%ebx" , "%edx");
-#endif
 
 	return	retval;
 }
@@ -182,7 +128,7 @@ static uint32	GetCPUIDEDX(uint32 funcNum)
 static uint32	GetCPUIDString(uint32 funcNum, char *szId)
 {
 	uint32	retval;
-#ifdef WIN32
+
 	__try
 	{
 		_asm
@@ -199,24 +145,6 @@ static uint32	GetCPUIDString(uint32 funcNum, char *szId)
 	{
 		retval	=0;
 	}
-#endif
-
-#ifdef BUILD_BE
-		__asm__ __volatile__ ("
-			pushl %%ebx // these appear to fix the segfaults..
-			movl %2, %%eax
-			CPUID
-			movl %%eax, %0
-			movl  %1, %%eax
-			movl %%ebx, (%%eax)
-			movl %%edx, 4(%%eax)
-			movl %%ecx, 8(%%eax)
-			popl %%ebx
-			"
-			: "=m" (retval)
-			:  "m" (szId) , "m" (funcNum)
-			: "%eax", "%ebx", "%ecx", "%edx", "memory" );
-#endif
 
 	return	retval;
 }
@@ -225,7 +153,6 @@ static void	GetCPUIDStringAMD(uint32 funcNum, char *szId)
 {
 	uint32	retval;
 	
-#ifdef WIN32
 	__try
 	{
 		_asm
@@ -244,26 +171,8 @@ static void	GetCPUIDStringAMD(uint32 funcNum, char *szId)
 	{
 		retval	=0;
 	}
-#endif
 
    printf("AMDSTRING\n\n\n\n\n");
-#ifdef BUILD_BE
-   __asm__ __volatile ("
-			mov %2, %%eax
-			CPUID
-			mov %%eax, %0
-			mov %1, %%eax
-			movl %%ebx, 4(%%eax)
-			movl %%ecx, 8(%%eax)
-			mov %0, %%ebx
-			movl %%edx, 12(%%eax)
-			movl %%ebx, (%%eax)
-			"
-			: "=m" (retval) , "=m" (szId)
-			: "g" (funcNum)
-			: "%eax" , "%ebx", "%ecx" , "%edx");
-#endif
-
 }
 
 // For out of order processors, the cpuid does serliaization
@@ -272,7 +181,6 @@ static __int64	GetRDTSC(void)
 {
 	__int64	clock;
 
-#ifdef WIN32
 	_asm
 	{
 		push	ebx
@@ -287,33 +195,6 @@ static __int64	GetRDTSC(void)
 		pop		ecx
 		pop		ebx
 	}
-#endif
-
-#ifdef BUILD_BE
-#if 0
-	__asm__  __volatile__ ("
-		push %%ebx
-		push %%ecx
-		xor %%eax, %%eax
-		CPUID
-		RDTSC
-//; shouldn't be neccesary,		movl %%eax, (%0)
-//;		movl %%edx, 4(%0)
-		xor %%eax, %%eax
-		CPUID
-		pop %%ecx
-		pop %%ebx
-		": "=A" (clock) // This works? ( CJP )
- 		 : // inputs.
-		 : "%eax" , "%edx" , "memory");
-#else
-	__asm__  __volatile__ ("
-		.byte 0x0f; .byte 0x31
-		": "=A" (clock)
-		 : 
-		 ); // These are understood?? "%eax", "%edx"); 
-#endif // if 0
-#endif
 
 	return	clock;
 }
@@ -374,13 +255,7 @@ static uint32	GetMHZ(void)
 
 static __int64 StartClock;
 
-#ifdef WIN32
 static uint32 StartTime;
-#endif
-
-#ifdef BUILD_BE
-static int64 StartTime;
-#endif
 
 static void StartGetMHZ(void)
 {
@@ -391,12 +266,7 @@ static void StartGetMHZ(void)
 static uint32	GetMHZ(void)
 {
 	__int64		ElapClock;
-#ifdef WIN32
 	uint32		ElapTime, MHZ;
-#endif
-#ifdef BUILD_BE
-	int64 ElapTime, MHZ;
-#endif
 	
 	do {
 		ElapTime = timeGetTime() - StartTime;
@@ -617,16 +487,10 @@ void jeCPU_FloatControl_Push(void)
 {
 	uint16 control;
 	assert(ControlStackI < STACK_SIZE);
-#ifdef WIN32
 	__asm
 	{
 		FNSTCW control
 	}
-#endif
-#ifdef BUILD_BE
-	__asm__ __volatile__ ("
-		FNSTCW %0" : "=m" (control));
-#endif
 
 	ControlStack[ControlStackI] = control;
 	ControlStackI ++;
@@ -640,19 +504,10 @@ void jeCPU_FloatControl_Pop(void)
 	ControlStackI --;
 	control = ControlStack[ControlStackI];
 	
-#ifdef WIN32
 	__asm
 	{	
 		FLDCW control
 	}
-#endif
-	
-#ifdef BUILD_BE
-	__asm__ __volatile__ 
-	("
-	FLDCW %0 " 
-	: : "m" (control));
-#endif
 	
 }
 
@@ -660,124 +515,69 @@ void jeCPU_FloatControl_RoundDown(void)
 {
 	uint16 control;
 
-#ifdef WIN32
 	__asm
 	{
 		FNSTCW control
 	}
-#endif
-
-#ifdef BUILD_BE
-	__asm__ __volatile__ ("
-	FNSTCW %0 " : "=m" (control));
-#endif
 
 	control &= ~(3<<10);
 	control |=  (1<<10);
 
-#ifdef WIN32
 	__asm
 	{	
 		FLDCW control
 	}
-#endif
-
-#ifdef BUILD_BE
-	__asm__ __volatile__ ("
-	FLDCW %0 " : : "m" (control));
-#endif
 }
 
 void jeCPU_FloatControl_RoundNearest(void)
 {
 	uint16 control;
-#ifdef WIN32
 	__asm
 	{
 		FNSTCW control
 	}
-#endif
-#ifdef BUILD_BE
-	__asm__ __volatile__ ("
-	FNSTCW %0 " : "=m" (control));
-#endif
 
 	control &= ~(3<<10);
 	control |=  (1<<10);
 
-#ifdef WIN32
 	__asm
 	{	
 		FLDCW control
 	}
-#endif
-
-#ifdef BUILD_BE
-	__asm__ __volatile__ ("
-		FLDCW %0 " : : "m" (control));
-#endif
 }
 
 void jeCPU_FloatControl_SinglePrecision(void)
 {
 	uint16 control;
 
-#ifdef WIN32
 	__asm
 	{
 		FNSTCW control
 	}
-#endif
-
-#ifdef BUILD_BE
-	__asm__ __volatile__ ("
-		FNSTCW %0 " : "=m" (control));
-#endif
 
 	control &= ~(3<<8);
 
-#ifdef WIN32
 	__asm
 	{	
 		FLDCW control
 	}
-#endif
-
-#ifdef BUILD_BE
-	__asm__ __volatile__ ("
-		FLDCW %0 " : : "m" (control));
-#endif
 }
 
 void jeCPU_FloatControl_DoublePrecision(void)
 {
 	uint16 control;
-#ifdef WIN32
 	__asm
 	{
 		FNSTCW control
 	}
-#endif
 
-#ifdef BUILD_BE
-	__asm__ __volatile__ ("
-		FNSTCW %0 " : "=m" (control));
-#endif
-	
 	control &= ~(3<<8);
 	control |=  (1<<8);
 
-#ifdef WIN32
 	__asm
 	{	
 		FLDCW control
 	}
-#endif
-
-#ifdef BUILD_BE
-	__asm__ __volatile__ ("
-		FLDCW %0 " : : "m" (control));
-#endif
 }
 
 /*}{**** Functions : MMX related stuff *********************/
@@ -801,12 +601,7 @@ void jeCPU_LeaveMMX(void)
 	{
 		if ( jeCPU_Features & JE_CPU_HAS_MMX )
 		{
-#ifdef WIN32
 			__asm { emms }
-#endif
-#ifdef BUILD_BE
-			__asm__ __volatile__ ("emms");
-#endif
 		}
 		jeCPU_FloatControl_Pop();
 		jeCPU_InMMX = JE_FALSE;

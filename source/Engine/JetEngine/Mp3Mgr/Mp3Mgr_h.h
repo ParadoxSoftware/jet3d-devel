@@ -5,8 +5,6 @@
 #define Mp3MgrH_H
 
 //includes
-#include "jet.h"
-#include "Mp3Mgr.h"
 #include <windows.h>
 #include <string.h>
 #include <evcode.h>
@@ -14,9 +12,12 @@
 #include <strmif.h>
 #include <control.h>
 #include <uuids.h>
+#include <direct.h>	
+
+#include "jet.h"
+#include "Mp3Mgr.h"
 #include "Ram.h"
 #include "Errorlog.h"
-#include <direct.h>	
 
 
 #ifdef __cplusplus

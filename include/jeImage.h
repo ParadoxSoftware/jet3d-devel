@@ -31,6 +31,7 @@ extern "C" {
 #endif
 
 typedef struct jeImage						jeImage;
+typedef struct jeTexture					jeTexture;
 
 JETAPI jeImage * JETCC jeImage_Create(int32 Width, int32 Height, int32 BPP);
 JETAPI jeImage * JETCC jeImage_CreateFromFile(jeVFile *File);

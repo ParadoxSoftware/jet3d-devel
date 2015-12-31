@@ -72,6 +72,7 @@ TClip_Rasterize      : 0.006183 : 1.$ %
 //  Fast Triangle Clipping
 /*}{***********************/
 
+#include <Windows.h>
 #include <assert.h>
 #include <string.h>
 

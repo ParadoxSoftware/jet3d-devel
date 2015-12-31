@@ -27,13 +27,7 @@
 extern "C" {
 #endif
 
-#ifdef WIN32
 #define LISTCALL	__fastcall
-#endif
-
-#ifdef BUILD_BE // Fastcall not supported under BeOS
-#define LISTCALL
-#endif
 
 
 /*******************************************/
