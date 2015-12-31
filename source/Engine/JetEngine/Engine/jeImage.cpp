@@ -106,6 +106,8 @@ JETAPI jeImage * JETCC jeImage_Create(int32 Width, int32 Height, int32 BPP)
 		return NULL;
 	}
 
+	pImg->pDriverTexture = NULL;
+
 	return pImg;
 }
 
@@ -160,31 +162,45 @@ JETAPI void JETCC jeImage_Destroy(jeImage **pImage)
 	JE_SAFE_DELETE((*pImage));
 }
 
-JETAPI int32 JETCC jeImage_GetWidth(jeImage *pImage)
+JETAPI int32 JETCC jeImage_GetWidth(const jeImage *pImage)
 {
 	assert(pImage);
 
 	return (int32)FreeImage_GetWidth(pImage->Bmp);
 }
 
-JETAPI int32 JETCC jeImage_GetHeight(jeImage *pImage)
+JETAPI int32 JETCC jeImage_GetHeight(const jeImage *pImage)
 {
 	assert(pImage);
 
 	return (int32)FreeImage_GetHeight(pImage->Bmp);
 }
 
-JETAPI int32 JETCC jeImage_GetBPP(jeImage *pImage)
+JETAPI int32 JETCC jeImage_GetBPP(const jeImage *pImage)
 {
 	assert(pImage);
 
 	return (int32)FreeImage_GetBPP(pImage->Bmp);
 }
 
-JETAPI uint8 *jeImage_GetBits(jeImage *pImage)
+JETAPI uint8 * JETCC jeImage_GetBits(const jeImage *pImage)
 {
 	assert(pImage);
 	assert(pImage->Bmp);
 
 	return (uint8*)FreeImage_GetBits(pImage->Bmp);
+}
+
+JETAPI void JETCC jeImage_SetTextureHandle(jeImage *Image, jeTexture *Texture)
+{
+	assert(Image);
+	
+	Image->pDriverTexture = Texture;
+}
+
+JETAPI jeTexture * JETCC jeImage_GetTextureHandle(const jeImage *Image)
+{
+	assert(Image);
+
+	return Image->pDriverTexture;
 }

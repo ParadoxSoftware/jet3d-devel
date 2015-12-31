@@ -23,6 +23,7 @@
 
 #include <stdlib.h>
 #include <string>
+#include <list>
 
 #include "Engine.h"
 #include "Bitmap.h"
@@ -133,6 +134,9 @@ typedef struct
 
 typedef struct BitmapList BitmapList;
 
+typedef std::list<jeImage*> ImageList;
+typedef ImageList::iterator	ImageListItr;
+
 // System globals initialized by module it belongs to...
 struct jeEngine
 {
@@ -182,6 +186,9 @@ struct jeEngine
 	jeBoolean			SplashDisplayed;	// Have we already done the splash screen?
 
 	int32				RenderMode;
+
+	// jeImage to replace jeBitmap
+	ImageList			AttachedImages;
 
 	jeEngine			* MySelf2;
 };

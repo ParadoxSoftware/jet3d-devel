@@ -1119,6 +1119,7 @@
     <None Include="Support\jeMemAllocInfo._h">
       <Filter>Source Files\Support</Filter>
     </None>
+    <None Include="Camera._h" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuildStep Include="Terrain\terrain._h">

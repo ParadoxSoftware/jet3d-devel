@@ -36,10 +36,13 @@ JETAPI jeImage * JETCC jeImage_Create(int32 Width, int32 Height, int32 BPP);
 JETAPI jeImage * JETCC jeImage_CreateFromFile(jeVFile *File);
 JETAPI void JETCC jeImage_Destroy(jeImage **pImage);
 
-JETAPI int32 JETCC jeImage_GetWidth(jeImage *pImage);
-JETAPI int32 JETCC jeImage_GetHeight(jeImage *pImage);
-JETAPI int32 JETCC jeImage_GetBPP(jeImage *pImage);
-JETAPI uint8 * JETCC jeImage_GetBits(jeImage *pImage);
+JETAPI int32 JETCC jeImage_GetWidth(const jeImage *pImage);
+JETAPI int32 JETCC jeImage_GetHeight(const jeImage *pImage);
+JETAPI int32 JETCC jeImage_GetBPP(const jeImage *pImage);
+JETAPI uint8 * JETCC jeImage_GetBits(const jeImage *pImage);
+
+JETAPI void JETCC jeImage_SetTextureHandle(jeImage *Image, jeTexture *Texture);
+JETAPI jeTexture * JETCC jeImage_GetTextureHandle(const jeImage *Image);
 
 #ifdef __cplusplus
 }

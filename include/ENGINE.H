@@ -29,6 +29,7 @@
 #include "Bitmap.h"
 #include "Camera.h"
 #include "VFile.h"
+#include "jeImage.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -280,6 +281,18 @@ JETAPI jeBoolean JETCC jeEngine_SetMatrix(jeEngine *Engine, uint32 Type, jeXForm
 JETAPI jeBoolean JETCC jeEngine_GetMatrix(jeEngine *Engine, uint32 Type, jeXForm3d *Matrix);
 JETAPI jeBoolean JETCC jeEngine_SetCamera(jeEngine *Engine, jeCamera *Camera);
 // END - Hardware T&L - paradoxnj 6/8/2005
+
+// jeImage to replace jeBitmap
+JETAPI jeBoolean JETCC jeEngine_AddImage(jeEngine *Engine, jeImage *Image);
+JETAPI jeBoolean JETCC jeEngine_RemoveImage(jeEngine *Engine, jeImage *Image);
+
+JETAPI jeBoolean JETCC jeEngine_DrawImage(const jeEngine *Engine,
+	const jeImage *Bitmap,	// should have been a TYPE_2D
+	const jeRect * Source, uint32 x, uint32 y);
+
+JETAPI jeBoolean JETCC jeEngine_DrawImage3D(const jeEngine *Engine,
+	const jeImage *Bitmap, // should have been a TYPE_3D
+	const jeRect * pRect, uint32 x, uint32 y);
 
 #ifdef __cplusplus
 }

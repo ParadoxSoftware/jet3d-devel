@@ -219,7 +219,11 @@ JETAPI jeEngine * JETCC jeEngine_Create(HWND hWnd, const char *AppName, const ch
 		goto ExitWithError;
 	}
 	else
-		Engine->EngineLog->logMessage(jet3d::jeLogger::LogError, "CPU info retreived");
+		Engine->EngineLog->logMessage(jet3d::jeLogger::LogInfo, "CPU info retreived");
+
+	// jeImage to replace jeBitmap
+	Engine->AttachedImages.clear();
+	Engine->EngineLog->logMessage(jet3d::jeLogger::LogInfo, "Image list initialized");
 
 	Engine->ChangeDriverCBChain = jeChain_Create();
 
@@ -315,6 +319,14 @@ JETAPI void JETCC jeEngine_Free(jeEngine *Engine)
 	Ret = jeEngine_ShutdownDriver(Engine);
 	assert(Ret == JE_TRUE);
 	Engine->EngineLog->logMessage(jet3d::jeLogger::LogInfo, "Driver shutdown");
+
+	ImageListItr i = Engine->AttachedImages.begin();
+	while (i != Engine->AttachedImages.end())
+	{
+		jeEngine_RemoveImage(Engine, (*i));
+		i++;
+	}
+	Engine->EngineLog->logMessage(jet3d::jeLogger::LogInfo, "ImageList shutdown");
 
 	Ret = jeEngine_BitmapListShutdown(Engine);
 	assert(Ret == JE_TRUE);
@@ -1054,6 +1066,198 @@ JETAPI jeBoolean JETCC jeEngine_RemoveBitmap(jeEngine *Engine, jeBitmap *Bitmap)
 	return JE_TRUE;
 }
 
+JETAPI jeBoolean JETCC jeEngine_AddImage(jeEngine *Engine, jeImage *Image)
+{
+	assert(Engine);
+	assert(Image);
+
+	ImageListItr i = Engine->AttachedImages.begin();
+	while (i != Engine->AttachedImages.end())
+	{
+		if ((*i) == Image)
+		{
+			Engine->EngineLog->logMessage(jet3d::jeLogger::LogInfo, "Image already added");
+			return JE_FALSE;
+		}
+	}
+
+	jeRDriver_PixelFormat PFormat;
+	PFormat.PixelFormat = JE_PIXELFORMAT_32BIT_ARGB;
+	PFormat.Flags = 0;
+
+	jeTexture *pTex = Engine->DriverInfo.RDriver->THandle_Create(jeImage_GetWidth(Image), jeImage_GetHeight(Image), 1, &PFormat);
+	
+	uint8 *texdata = NULL;
+	int32 size = jeImage_GetWidth(Image) * jeImage_GetHeight(Image) * jeImage_GetBPP(Image);
+
+	Engine->DriverInfo.RDriver->THandle_Lock(pTex, 0, (void**)texdata);
+	memcpy(texdata, jeImage_GetBits(Image), size);
+	Engine->DriverInfo.RDriver->THandle_UnLock(pTex, 0);
+
+	jeImage_SetTextureHandle(Image, pTex);
+
+	Engine->AttachedImages.push_back(Image);
+	return JE_TRUE;
+}
+
+JETAPI jeBoolean JETCC jeEngine_RemoveImage(jeEngine *Engine, jeImage *Image)
+{
+	assert(Engine);
+	assert(Image);
+
+	ImageListItr i = Engine->AttachedImages.begin();
+	while (i != Engine->AttachedImages.end())
+	{
+		if ((*i) == Image)
+		{
+			Engine->DriverInfo.RDriver->THandle_Destroy(jeImage_GetTextureHandle(Image));
+			jeImage_SetTextureHandle(Image, NULL);
+			Engine->AttachedImages.erase(i);
+			return JE_TRUE;
+		}
+
+		i++;
+	}
+
+	return JE_FALSE;
+}
+
+//================================================================================
+//	jeEngine_DrawBitmap
+//================================================================================
+JETAPI jeBoolean JETCC jeEngine_DrawImage(const jeEngine *Engine,
+	const jeImage *Image,
+	const jeRect * Source, uint32 x, uint32 y)
+{
+	jeTexture			*TH;
+	jeBoolean			Ret;
+	
+	//#pragma message("make jeRect the same as RECT, or don't use RECT!?")
+	// The drivers once did not include Jet3D .h's
+	// (D3D uses RECT so thats why the drivers adopted RECT's...)
+	#pragma message("Engine : Make the drivers use jeRect, JP")
+
+	assert( jeEngine_IsValid(Engine) );
+	assert(Engine->FrameState == FrameState_Begin);
+	assert(Image);
+	
+	assert(Engine->AttachedImages.size() > 0);
+	
+	TH = jeImage_GetTextureHandle(Image);
+	assert(TH);
+
+	//Ret = Engine->DriverInfo.RDriver->Drawdecal(TH,(RECT *)Source,x,y);
+
+	if (Source)		// Source CAN be NULL!!!
+	{
+		RECT rect;
+
+		rect.left = Source->Left;
+		rect.top = Source->Top;
+		rect.right = Source->Right;
+		rect.bottom = Source->Bottom;
+
+		Ret = Engine->DriverInfo.RDriver->DrawDecal(TH, &rect, x,y);
+	}
+	else
+		Ret = Engine->DriverInfo.RDriver->DrawDecal(TH, NULL, x,y);
+
+	if ( ! Ret )
+	{
+		Engine->EngineLog->logMessage(jet3d::jeLogger::LogError, "jeEngine_DrawImage:  DrawDecal failed!!");
+		//jeErrorLog_AddString(-1,"jeEngine_DrawImage : DrawDecal failed", NULL);	
+	}
+
+	return Ret;
+}
+
+//================================================================================
+//	jeEngine_DrawBitmap3D
+//================================================================================
+JETAPI jeBoolean JETCC jeEngine_DrawImage3D(const jeEngine *Engine,
+	const jeImage *Image, const jeRect * pRect, uint32 x, uint32 y)
+{
+	jeTexture			*TH = NULL;
+	jeBoolean			Ret;
+	float				w,h;
+	float				u1,v1,u2,v2;
+	jeTLVertex			Points[4];
+	jeRect				Rect;
+	jeRDriver_Layer		Layer;
+
+	assert( jeEngine_IsValid(Engine) );
+	assert(Engine->FrameState == FrameState_Begin);
+	assert(Image);
+	
+	assert(Engine->AttachedImages.size() > 0);
+	
+	w = (float)jeImage_GetWidth(Image);
+	h = (float)jeImage_GetHeight(Image);
+
+	assert( w <= 256.0f );
+	assert( h <= 256.0f );
+
+	w = 1.0f/w; h = 1.0f/h;
+
+	TH = jeImage_GetTextureHandle(Image);
+	assert(TH);
+
+	if ( pRect )
+	{
+		Rect = *pRect;
+		Rect.Right ++;
+		Rect.Bottom ++;
+	}
+	else
+	{
+		Rect.Left = Rect.Top = 0;
+		Rect.Right = jeImage_GetWidth(Image);
+		Rect.Bottom = jeImage_GetHeight(Image);
+	}
+
+	u1 = Rect.Left * w;
+	u2 = Rect.Right* w;
+	v1 = Rect.Top  * h;
+	v2 = Rect.Bottom*h;
+
+	assert( u1 >= 0.0f && u1 <= 1.0f );
+	assert( u2 >= 0.0f && u2 <= 1.0f );
+	assert( v1 >= 0.0f && v1 <= 1.0f );
+	assert( v2 >= 0.0f && v2 <= 1.0f );
+	assert( u2 >= u1 && v2 >= v1 );
+
+	w = (float)(Rect.Right - Rect.Left);
+	h = (float)(Rect.Bottom - Rect.Top);
+
+	Points[0].x = (float)x;
+	Points[0].y = (float)y;
+	Points[0].z = 1.0f;
+	Points[0].u = u1;
+	Points[0].v = v1;
+	Points[0].r = Points[0].g = Points[0].b = Points[0].a = 255.0f;
+
+	Points[3] = Points[2] = Points[1] = Points[0];
+
+	Points[2].u = Points[1].u = u2;
+	Points[1].x += w;
+	Points[2].x += w;
+
+	Points[3].v = Points[2].v = v2;
+	Points[2].y += h;
+	Points[3].y += h;
+
+	Layer.THandle = TH;
+
+	Ret = Engine->DriverInfo.RDriver->RenderMiscTexturePoly((jeTLVertex *)Points, 4, &Layer, 1, JE_RENDER_FLAG_CLAMP_UV);
+
+	if ( ! Ret )
+	{
+		Engine->EngineLog->logMessage(jet3d::jeLogger::LogError, "jeEngine_DrawImage3D:  Render failed!!");
+		//jeErrorLog_AddString(-1,"jeEngine_DrawImage3D : Render failed", NULL);	
+	}
+
+	return Ret;
+}
 
 /*}{**** SECTION : Render/Draw  *********************/
 
