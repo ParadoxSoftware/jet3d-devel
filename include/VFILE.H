@@ -25,6 +25,8 @@
 #ifndef	VFILE_H
 #define	VFILE_H
 
+//#define WIN32_LEAN_AND_MEAN
+//#include	<Windows.h>
 #include	"BaseType.h"
 
 #ifdef __cplusplus
@@ -252,8 +254,8 @@ JETAPI jeBoolean JETCC jeVFile_IsValid(const jeVFile * File);
 
 #ifdef _DEBUG
 // to avoid including windows:
-_declspec(dllimport) void __stdcall OutputDebugStringA(const char * lpOutputString);
-#define OutputDebugString OutputDebugStringA
+//_declspec(dllimport) void __stdcall OutputDebugStringA(const char * lpOutputString);
+//#define OutputDebugString OutputDebugStringA
 
 #define DebugShowOpenCount() do { char str[1024]; sprintf(str,"vfiles : %d\n",jeVFile_OpenCount()); OutputDebugString(str); } while(0)
 

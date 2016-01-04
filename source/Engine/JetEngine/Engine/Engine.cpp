@@ -24,6 +24,8 @@
 #include <mmsystem.h> //timeGetTime
 #pragma warning (default:4201)
 
+#include "debug_new.h"
+
 #include <string.h>
 #include <stdlib.h> // _MAX_PATH
 
@@ -46,7 +48,6 @@
 #include "jeVersion.h" // Incarnadine
 
 #include "jeBSP.h"
-#include "debug_new.h"
 #include "jeFileLogger.h"
 
 #ifdef _DEBUG
@@ -207,7 +208,7 @@ JETAPI jeEngine * JETCC jeEngine_Create(HWND hWnd, const char *AppName, const ch
 		Engine->EngineLog->logMessage(jet3d::jeLogger::LogInfo, "CPU info retreived");
 
 	// jeImage to replace jeBitmap
-	Engine->AttachedImages.clear();
+	//Engine->AttachedImages.clear();
 	Engine->EngineLog->logMessage(jet3d::jeLogger::LogInfo, "Image list initialized");
 
 	Engine->ChangeDriverCBChain = jeChain_Create();

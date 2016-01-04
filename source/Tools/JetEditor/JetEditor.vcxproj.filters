@@ -3,8 +3,17 @@
   <ItemGroup>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MainWindow.cpp" />
+    <ClCompile Include="Ortho.cpp" />
+    <ClCompile Include="Rect.cpp" />
+    <ClCompile Include="Util.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MainWindow.h" />
+    <ClInclude Include="Ortho.h" />
+    <ClInclude Include="defs.h" />
+    <ClInclude Include="Rect.h" />
+    <ClInclude Include="Point.h" />
+    <ClInclude Include="units.h" />
+    <ClInclude Include="Util.h" />
   </ItemGroup>
 </Project>
