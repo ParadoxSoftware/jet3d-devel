@@ -1088,6 +1088,12 @@
     <ClInclude Include="..\..\..\include\jeImage.h">
       <Filter>Source Files\Engine</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\include\jeVFile.h">
+      <Filter>Interface Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\jeResourceManager.h">
+      <Filter>Interface Headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="jet.rc">

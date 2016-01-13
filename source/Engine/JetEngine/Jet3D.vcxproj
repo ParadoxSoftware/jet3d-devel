@@ -329,6 +329,8 @@
   <ItemGroup>
     <ClInclude Include="..\..\..\include\Camera.h" />
     <ClInclude Include="..\..\..\include\jeImage.h" />
+    <ClInclude Include="..\..\..\include\jeResourceManager.h" />
+    <ClInclude Include="..\..\..\include\jeVFile.h" />
     <ClInclude Include="..\External\nvwa\bool_array.h" />
     <ClInclude Include="..\External\nvwa\class_level_lock.h" />
     <ClInclude Include="..\External\nvwa\cont_ptr_utils.h" />
