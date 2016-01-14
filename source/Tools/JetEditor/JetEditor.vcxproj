@@ -91,6 +91,7 @@
     <ClInclude Include="defs.h" />
     <ClInclude Include="MainWindow.h" />
     <ClInclude Include="Ortho.h" />
+    <ClInclude Include="OrthoViewControl.h" />
     <ClInclude Include="Point.h" />
     <ClInclude Include="Rect.h" />
     <ClInclude Include="units.h" />

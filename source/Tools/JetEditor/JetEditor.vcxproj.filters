@@ -15,5 +15,6 @@
     <ClInclude Include="Point.h" />
     <ClInclude Include="units.h" />
     <ClInclude Include="Util.h" />
+    <ClInclude Include="OrthoViewControl.h" />
   </ItemGroup>
 </Project>
