@@ -5,9 +5,9 @@
 #include "D3D9Log.h"
 
 #ifdef _DEBUG
-#pragma comment(lib, "Jet3Dd.lib")
+#pragma comment(lib, "Jet3DClassic7d.lib")
 #else
-#pragma comment(lib, "Jet3D.lib")
+#pragma comment(lib, "Jet3DClassic7d.lib")
 #endif
 
 jeRDriver_PixelFormat							PixelFormat[10];

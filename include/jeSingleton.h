@@ -18,6 +18,7 @@
 */
 #pragma once
 
+#include <assert.h>
 #include "BaseType.h"
 
 namespace Jet3D {

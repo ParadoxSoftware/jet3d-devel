@@ -11,7 +11,7 @@
 
 #include "Direct3D9Driver.h"
 #include "D3D9TextureMgr.h"
-//#include "VertexCacheManager.h"
+#include "RenderStateManager.h"
 
 typedef struct PolyVert
 {
@@ -48,6 +48,11 @@ typedef struct StaticBuffer
 	uint32						Flags;
 } StaticBuffer;
 
+typedef std::vector<PolyCacheEntry>			CacheVector;
+
+static const uint32 FILTER_TYPE_BILINEAR = 0;
+static const uint32 FILTER_TYPE_ANISOTROPIC = 1;
+
 class PolyCache
 {
 public:
@@ -55,7 +60,10 @@ public:
 	virtual ~PolyCache();
 
 private:
-	std::vector<PolyCacheEntry>				m_Cache;
+	CacheVector								m_WorldCache;
+	CacheVector								m_MiscCache;
+	CacheVector								m_GouraudCache;
+	CacheVector								m_StencilCache;
 
 	int32									m_NumVerts;
 	IDirect3DVertexBuffer9					*m_pVB;
@@ -63,6 +71,14 @@ private:
 	std::vector<StaticBuffer>				m_StaticBuffers;
 
 	IDirect3DDevice9						*m_pDevice;
+
+	jeTexture								*m_TextureStages[MAX_LAYERS];
+	jeBoolean								m_bOldAlphaEnable;
+	D3DBLEND								m_OldSFunc, m_OldDFunc;
+	jeBoolean								m_bOldTexWrap[MAX_LAYERS];
+	uint32									m_OldFilterType;
+
+	RenderStateManager						*m_pRS;
 
 public:
 	jeBoolean					Initialize(IDirect3DDevice9 *pDevice);
@@ -77,9 +93,17 @@ public:
 	jeBoolean					AddWorldPoly(jeTLVertex *Pnts, int32 NumPoints, jeRDriver_Layer *Layers, int32 NumLayers, void *LMapCBContext, uint32 Flags);
 
 	jeBoolean					Flush();
+	jeBoolean					FlushWorldCache();
+	jeBoolean					FlushMiscCache();
+	jeBoolean					FlushGouraudCache();
+	jeBoolean					FlushStencilCache();
 
 private:
 	void						EnableAlpha(jeBoolean Enable);
+	jeBoolean					SetTexture(int32 Stage, jeTexture *Texture);
+	void						SetBlendFunc(D3DBLEND SFunc, D3DBLEND DFunc);
+	void						SetTexWrap(int32 Stage, jeBoolean bWrap);
+	void						SetFilterType(uint32 FilterType);
 };
 
 #endif

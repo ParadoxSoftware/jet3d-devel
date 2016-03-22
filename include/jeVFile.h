@@ -79,7 +79,7 @@ public:
 	virtual IVFileDirectory *openDirectory(const std::string &strDirName) = 0;
 };
 
-class IVFileManager : public jeUnknown
+class IVFileManager : virtual public jeUnknown
 {
 protected:
 	virtual ~IVFileManager(){}

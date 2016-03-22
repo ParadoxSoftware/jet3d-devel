@@ -59,7 +59,7 @@ public:
 	virtual bool initialize() = 0;
 	virtual bool shutdown() = 0;
 
-	virtual jeResource *create(IVFile *pFile, const std::string &strName) = 0;
+	virtual jeResource *create(IVFile *pFile, const std::string &strName) = 0; 
 };
 
 } // namespace jet3d

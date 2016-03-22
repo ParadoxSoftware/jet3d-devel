@@ -4,25 +4,30 @@
 #include "PolyCache.h"
 #include "D3D9Log.h"
 
+__inline DWORD FtoDW( FLOAT f ) { return *((DWORD*)&f); }
+
 struct TextureSortFunctor
 {
 	bool operator ()(PolyCacheEntry &e1, PolyCacheEntry &e2)
 	{
-		if (e1.NumLayers != e2.NumLayers)
-			return false;
+		if (e1.Layers[0] == NULL || e2.Layers[0] == NULL)
+			return (e1.Layers[0] != NULL);
 
-		if (e1.Layers[0]->id == e2.Layers[0]->id)
+		if (e1.Layers[0]->id >= e2.Layers[0]->id)
 		{
-			if (e1.NumLayers > 1)
+			if (e1.Layers[0] == e2.Layers[0])
 			{
-				if (e1.Layers[1]->id == e2.Layers[1]->id)
-					return true;
+				if (e1.NumLayers != e2.NumLayers)
+					return e1.NumLayers < e2.NumLayers;
+
+				if (e1.NumLayers > 1)
+					return (e1.Layers[1]->id < e2.Layers[1]->id);
 			}
-			else
-				return true;
+
+			return false;
 		}
 
-		return false;
+		return true;
 	}
 };
 
@@ -30,7 +35,7 @@ struct TextureSortFunctor
 //	Log2
 //	Return the log of a size
 //=====================================================================================
-static uint32 Log2(uint32 P2)
+/*static uint32 Log2(uint32 P2)
 {
 	uint32		p = 0;
 	int32		i = 0;
@@ -39,6 +44,19 @@ static uint32 Log2(uint32 P2)
 		p++;
 
 	return (p-1);
+}*/
+
+static int Log2(uint32 n) {
+
+  int pos = 0;
+
+  if (n >= 1<<16) { n >>= 16; pos += 16; }
+  if (n >= 1<< 8) { n >>=  8; pos +=  8; }
+  if (n >= 1<< 4) { n >>=  4; pos +=  4; }
+  if (n >= 1<< 2) { n >>=  2; pos +=  2; }
+  if (n >= 1<< 1) {           pos +=  1; }
+
+  return ((n == 0) ? (-1) : pos);
 }
 
 //=====================================================================================
@@ -160,7 +178,7 @@ static jeBoolean PrepPolyVerts(jeTLVertex *Pnts, int32 NumPoints, jeRDriver_Laye
 		ShiftU2 = (float)-LMapLayer->ShiftU + 8.0f;
 		ShiftV2 = (float)-LMapLayer->ShiftV + 8.0f;
 		
-		InvScale2 = 1.0f/(float)((1<<LMapLayer->THandle->Log)<<4);
+		InvScale2 = 1.0f/(float)((1<<LMapLayer->THandle->Log)<<3);
 	}
 
 	pVerts = &Pnts[0];
@@ -198,10 +216,15 @@ PolyCache::PolyCache()
 {
 	m_pVB = NULL;
 	m_pDevice = NULL;
-	m_Cache.clear();
 	m_NumVerts = 0;
 
 	m_StaticBuffers.clear();
+	m_WorldCache.clear();
+	m_MiscCache.clear();
+	m_GouraudCache.clear();
+	m_StencilCache.clear();
+
+	m_pRS = NULL;
 }
 
 PolyCache::~PolyCache()
@@ -229,6 +252,21 @@ jeBoolean PolyCache::Initialize(IDirect3DDevice9 *pDevice)
 	}
 
 	m_NumVerts = 0;
+	for (int i = 0; i < MAX_LAYERS; i++)
+	{
+		m_TextureStages[i] = NULL;
+		m_bOldTexWrap[i] = JE_FALSE;
+	}
+
+	m_bOldAlphaEnable = JE_FALSE;
+	m_OldSFunc = m_OldDFunc = D3DBLEND_ONE;
+
+	m_WorldCache.clear();
+	m_MiscCache.clear();
+	m_GouraudCache.clear();
+	m_StencilCache.clear();
+
+	m_pRS = new RenderStateManager(pDevice);
 
 	return JE_TRUE;
 }
@@ -256,7 +294,11 @@ void PolyCache::Shutdown()
 	SAFE_RELEASE(m_pDevice);
 
 	m_NumVerts = 0;
-	m_Cache.clear();
+
+	m_WorldCache.clear();
+	m_MiscCache.clear();
+	m_GouraudCache.clear();
+	m_StencilCache.clear();
 }
 
 jeBoolean PolyCache::AddMiscTexturePoly(jeTLVertex *Pnts, int32 NumPoints, jeRDriver_Layer *Layers, int32 NumLayers, uint32 Flags)
@@ -264,18 +306,24 @@ jeBoolean PolyCache::AddMiscTexturePoly(jeTLVertex *Pnts, int32 NumPoints, jeRDr
 	HRESULT							hres;
 	PolyVert						*verts = NULL, *data = NULL;
 	PolyCacheEntry					*p = NULL;
+	DWORD							dwAlpha = 0;
 
 	if (LOG_LEVEL > 1)
 		D3D9Log::GetPtr()->Printf("Function Call:  PolyCache::AddMiscTexturePoly()");
 	else
 		REPORT("Function Call:  PolyCache::AddMiscTexturePoly()");
 
-	m_Cache.resize(m_Cache.size() + 1);
-	p = &m_Cache[m_Cache.size() - 1];
+	m_MiscCache.resize(m_MiscCache.size() + 1);
+	p = &m_MiscCache[m_MiscCache.size() - 1];
 
 	memset(p, 0, sizeof(PolyCacheEntry));
 
 	p->StartVertex = m_NumVerts;
+
+	if (Flags & JE_RENDER_FLAG_ALPHA)
+		dwAlpha = FtoDW(Pnts->a);
+	else
+		dwAlpha = 255;
 
 	verts = new PolyVert[NumPoints];
 	if (!verts)
@@ -301,7 +349,7 @@ jeBoolean PolyCache::AddMiscTexturePoly(jeTLVertex *Pnts, int32 NumPoints, jeRDr
 		verts[i].lu = Pnts[i].pad1;
 		verts[i].lv = Pnts[i].pad2;
 
-		verts[i].diffuse = D3DCOLOR_ARGB((DWORD)Pnts[i].a, (DWORD)Pnts[i].r, (DWORD)Pnts[i].g, (DWORD)Pnts[i].b);
+		verts[i].diffuse = D3DCOLOR_ARGB(dwAlpha, (DWORD)Pnts[i].r, (DWORD)Pnts[i].g, (DWORD)Pnts[i].b);
 	}
 
 	if (m_NumVerts == 0)
@@ -348,18 +396,24 @@ jeBoolean PolyCache::AddGouraudPoly(jeTLVertex *Pnts, int32 NumPoints, uint32 Fl
 	HRESULT							hres;
 	PolyVert						*verts = NULL, *data = NULL;
 	PolyCacheEntry					*p = NULL;
+	DWORD							dwAlpha = 0;
 
 	if (LOG_LEVEL > 1)
 		D3D9Log::GetPtr()->Printf("Function Call:  PolyCache::AddGouraudPoly()");
 	else
 		REPORT("Function Call:  PolyCache::AddGouraudPoly()");
 
-	m_Cache.resize(m_Cache.size() + 1);
-	p = &m_Cache[m_Cache.size() - 1];
+	m_GouraudCache.resize(m_GouraudCache.size() + 1);
+	p = &m_GouraudCache[m_GouraudCache.size() - 1];
 
 	memset(p, 0, sizeof(PolyCacheEntry));
 
 	p->StartVertex = m_NumVerts;
+
+	if (Flags & JE_RENDER_FLAG_ALPHA)
+		dwAlpha = FtoDW(Pnts->a);
+	else
+		dwAlpha = 255;
 
 	verts = new PolyVert[NumPoints];
 	if (!verts)
@@ -385,7 +439,7 @@ jeBoolean PolyCache::AddGouraudPoly(jeTLVertex *Pnts, int32 NumPoints, uint32 Fl
 		verts[i].lu = 0.0f;
 		verts[i].lv = 0.0f;
 
-		verts[i].diffuse = D3DCOLOR_ARGB((DWORD)Pnts[i].a, (DWORD)Pnts[i].r, (DWORD)Pnts[i].g, (DWORD)Pnts[i].b);
+		verts[i].diffuse = D3DCOLOR_ARGB(dwAlpha, (DWORD)Pnts[i].r, (DWORD)Pnts[i].g, (DWORD)Pnts[i].b);
 	}
 
 	if (m_NumVerts == 0)
@@ -428,14 +482,15 @@ jeBoolean PolyCache::AddWorldPoly(jeTLVertex *Pnts, int32 NumPoints, jeRDriver_L
 	PolyCacheEntry					*p = NULL;
 	PolyVert						*verts = NULL, *data = NULL;
 	jeRDriver_LMapCBInfo			LMapInfo;
+	DWORD							dwAlpha = 0;
 
 	if (LOG_LEVEL > 1)
 		D3D9Log::GetPtr()->Printf("Function Call:  PolyCache::AddWorldPoly()");
 	else
 		REPORT("Function Call:  PolyCache::AddWorldPoly()");
 
-	m_Cache.resize(m_Cache.size() + 1);
-	p = &m_Cache[m_Cache.size() - 1];
+	m_WorldCache.resize(m_WorldCache.size() + 1);
+	p = &m_WorldCache[m_WorldCache.size() - 1];
 
 	memset(p, 0, sizeof(PolyCacheEntry));
 
@@ -459,6 +514,11 @@ jeBoolean PolyCache::AddWorldPoly(jeTLVertex *Pnts, int32 NumPoints, jeRDriver_L
 	{
 		PrepPolyVerts(Pnts, NumPoints, Layers, NumLayers, NULL);
 	}
+
+	if (Flags & JE_RENDER_FLAG_ALPHA)
+		dwAlpha = FtoDW(Pnts->a);
+	else
+		dwAlpha = 255;
 
 	verts = new PolyVert[NumPoints];
 	if (!verts)
@@ -484,7 +544,7 @@ jeBoolean PolyCache::AddWorldPoly(jeTLVertex *Pnts, int32 NumPoints, jeRDriver_L
 		verts[j].lu = Pnts[j].pad1;
 		verts[j].lv = Pnts[j].pad2;
 
-		verts[j].diffuse = D3DCOLOR_ARGB((DWORD)Pnts[j].a, (DWORD)Pnts[j].r, (DWORD)Pnts[j].g, (DWORD)Pnts[j].b);
+		verts[j].diffuse = D3DCOLOR_ARGB(dwAlpha, (DWORD)Pnts[j].r, (DWORD)Pnts[j].g, (DWORD)Pnts[j].b);
 	}
 
 	if (m_NumVerts == 0)
@@ -523,150 +583,237 @@ jeBoolean PolyCache::AddWorldPoly(jeTLVertex *Pnts, int32 NumPoints, jeRDriver_L
 	return JE_TRUE;
 }
 
-jeBoolean PolyCache::Flush()
+jeBoolean PolyCache::FlushWorldCache()
 {
-	HRESULT							hres;
-	int32							previd = -1;
+	HRESULT hres = S_OK;
+	int32 previd = -1;
+	D3DMATERIAL9 mat;
 
-	if (LOG_LEVEL > 1)
-		D3D9Log::GetPtr()->Printf("Function Call:  PolyCache::Flush()");
-	else
-		REPORT("Function Call:  PolyCache::Flush()");
+	mat.Diffuse.r = 1.0f;
+	mat.Diffuse.g = 1.0f;
+	mat.Diffuse.b = 1.0f;
+	mat.Diffuse.a = 1.0f;
 
-	std::sort(m_Cache.begin(), m_Cache.end(), TextureSortFunctor());
+	mat.Ambient = mat.Diffuse;
 
-	m_pDevice->SetFVF(J3D_FVF);
-	m_pDevice->SetStreamSource(0, m_pVB, 0, sizeof(PolyVert));
+	m_pDevice->SetMaterial(&mat);
 
-	for (size_t i = 0; i < m_Cache.size(); i++)
+	for (size_t i = 0; i < m_WorldCache.size(); i++)
 	{
-		if (m_Cache[i].NumLayers > 0)
+		PolyCacheEntry *p = &m_WorldCache[i];
+
+		if (p->NumLayers == 0 && previd != -1)
 		{
-			if (m_Cache[i].NumLayers == 0 && previd != -1)
-			{
-				m_pDevice->SetTexture(0, NULL);
-				m_pDevice->SetTexture(1, NULL);
-				previd = -1;
-			}
-			else if (previd != m_Cache[i].Layers[0]->id)
-			{
-				previd = m_Cache[i].Layers[0]->id;
-				m_pDevice->SetTexture(0, m_Cache[i].Layers[0]->pTexture);
-				m_pDevice->SetTexture(1, NULL);
-			}
+			SetTexture(0, NULL);
+			SetTexture(1, NULL);
 
-			m_pDevice->SetTextureStageState(0, D3DTSS_TEXCOORDINDEX, 0);
-			m_pDevice->SetTextureStageState(0, D3DTSS_COLORARG1, D3DTA_TEXTURE);
-			m_pDevice->SetTextureStageState(0, D3DTSS_COLOROP, D3DTOP_MODULATE);
-			m_pDevice->SetTextureStageState(0, D3DTSS_COLORARG2, D3DTA_DIFFUSE);
+			previd = -1;
+		}
+		else if (previd != p->Layers[0]->id)
+		{
+			previd = p->Layers[0]->id;
+			SetTexture(0, p->Layers[0]);
+			SetTexture(1, NULL);
+		}
 
-			m_pDevice->SetTextureStageState(0, D3DTSS_ALPHAARG1, D3DTA_TEXTURE);
-			m_pDevice->SetTextureStageState(0, D3DTSS_ALPHAOP, D3DTOP_SELECTARG2);
-			m_pDevice->SetTextureStageState(0, D3DTSS_ALPHAARG2, D3DTA_DIFFUSE);
+		if (p->NumLayers == 1)
+		{
+			m_pRS->SetMaterialType(MATERIAL_TYPE_BASE_TEXTURE_ONLY, p->Layers, 1);
+		}
+		else if (p->NumLayers == 2)
+		{
+			m_pRS->SetMaterialType(MATERIAL_TYPE_LIGHTMAP_POLY, p->Layers, p->NumLayers);
+		}
 
-			m_pDevice->SetTextureStageState(1, D3DTSS_COLOROP, D3DTOP_DISABLE);
-			m_pDevice->SetTextureStageState(1, D3DTSS_ALPHAOP, D3DTOP_DISABLE);
+		if (p->Flags & JE_RENDER_FLAG_BILINEAR_FILTER)
+			SetFilterType(FILTER_TYPE_BILINEAR);
+		else
+			SetFilterType(FILTER_TYPE_ANISOTROPIC);
 
-			if (m_Cache[i].Flags & JE_RENDER_FLAG_BILINEAR_FILTER)
-			{
-				m_pDevice->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_LINEAR);
-				m_pDevice->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_LINEAR);
-				m_pDevice->SetSamplerState(0, D3DSAMP_MIPFILTER, D3DTEXF_LINEAR);
+		if (p->Flags & JE_RENDER_FLAG_CLAMP_UV)
+			SetTexWrap(0, JE_FALSE);
+		else
+			SetTexWrap(0, JE_TRUE);
 
-				m_pDevice->SetSamplerState(1, D3DSAMP_MINFILTER, D3DTEXF_LINEAR);
-				m_pDevice->SetSamplerState(1, D3DSAMP_MAGFILTER, D3DTEXF_LINEAR);
-				m_pDevice->SetSamplerState(1, D3DSAMP_MIPFILTER, D3DTEXF_LINEAR);
-			}
+		if (p->Flags & JE_RENDER_FLAG_WIREFRAME)
+			m_pRS->SetFillMode(D3DFILL_WIREFRAME);
+		else
+			m_pRS->SetFillMode(D3DFILL_SOLID);
+
+		m_pRS->EnableLighting(FALSE);
+		m_pRS->SetCullMode(D3DCULL_CCW);
+
+		if (p->Flags & JE_RENDER_FLAG_NO_ZTEST)
+			m_pRS->EnableZBuffer(FALSE);
+		else
+			m_pRS->EnableZBuffer(TRUE);
+
+		if (p->Flags & JE_RENDER_FLAG_NO_ZWRITE)
+			m_pRS->EnableZWriteBuffer(FALSE);
+		else
+			m_pRS->EnableZWriteBuffer(TRUE);
+
+		hres = m_pDevice->DrawPrimitive(D3DPT_TRIANGLEFAN, p->StartVertex, p->NumVertices - 2);
+		if (FAILED(hres))
+		{
+			return JE_FALSE;
+		}
+	}
+
+	m_WorldCache.clear();
+	return JE_TRUE;
+}
+
+jeBoolean PolyCache::FlushMiscCache()
+{
+	HRESULT hres = S_OK;
+	int32 previd = -1;
+	D3DMATERIAL9 mat;
+
+	mat.Diffuse.r = 1.0f;
+	mat.Diffuse.g = 1.0f;
+	mat.Diffuse.b = 1.0f;
+	mat.Diffuse.a = 1.0f;
+
+	mat.Ambient = mat.Diffuse;
+
+	m_pDevice->SetMaterial(&mat);
+
+	for (size_t i = 0; i < m_MiscCache.size(); i++)
+	{
+		PolyCacheEntry *p = &m_MiscCache[i];
+
+		if (p->NumLayers == 0 && previd != -1)
+		{
+			m_pRS->SetMaterialType(MATERIAL_TYPE_NO_TEXTURES, NULL, 0);
+			previd = -1;
+		}
+		else if (previd != p->Layers[0]->id)
+		{
+			previd = p->Layers[0]->id;
+			SetTexture(0, p->Layers[0]);
+			SetTexture(1, NULL);
+		}
+
+		if (p->NumLayers == 1)
+			m_pRS->SetMaterialType(MATERIAL_TYPE_BASE_TEXTURE_ONLY, p->Layers, p->NumLayers);
+
+		if (p->Flags & JE_RENDER_FLAG_BILINEAR_FILTER)
+			SetFilterType(FILTER_TYPE_BILINEAR);
+		else
+			SetFilterType(FILTER_TYPE_ANISOTROPIC);
+
+		if (p->Flags & JE_RENDER_FLAG_CLAMP_UV)
+			SetTexWrap(0, JE_FALSE);
+		else
+			SetTexWrap(0, JE_TRUE);
+
+		if (p->Flags & JE_RENDER_FLAG_WIREFRAME)
+			m_pRS->SetFillMode(D3DFILL_WIREFRAME);
+		else
+			m_pRS->SetFillMode(D3DFILL_SOLID);
+
+		m_pRS->EnableLighting(FALSE);
+		m_pRS->SetCullMode(D3DCULL_NONE);
+
+		if (p->Flags & JE_RENDER_FLAG_NO_ZTEST)
+			m_pRS->EnableZBuffer(FALSE);
+		else
+			m_pRS->EnableZBuffer(TRUE);
+
+		if (p->Flags & JE_RENDER_FLAG_NO_ZWRITE)
+			m_pRS->EnableZWriteBuffer(FALSE);
+		else
+			m_pRS->EnableZWriteBuffer(TRUE);
+
+		hres = m_pDevice->DrawPrimitive(D3DPT_TRIANGLEFAN, p->StartVertex, p->NumVertices - 2);
+		if (FAILED(hres))
+		{
+			return JE_FALSE;
+		}
+	}
+
+	m_MiscCache.clear();
+	return JE_TRUE;
+}
+
+jeBoolean PolyCache::FlushGouraudCache()
+{
+	HRESULT hres = S_OK;
+	D3DMATERIAL9 mat;
+
+	mat.Diffuse.r = 1.0f;
+	mat.Diffuse.g = 1.0f;
+	mat.Diffuse.b = 1.0f;
+	mat.Diffuse.a = 1.0f;
+
+	mat.Ambient = mat.Diffuse;
+
+	m_pDevice->SetMaterial(&mat);
+
+	for (size_t i = 0; i < m_GouraudCache.size(); i++)
+	{
+		PolyCacheEntry *p = &m_GouraudCache[i];
+
+		if (p->NumLayers == 0)
+		{
+			m_pRS->SetMaterialType(MATERIAL_TYPE_NO_TEXTURES, NULL, 0);
+
+			if (p->Flags & JE_RENDER_FLAG_WIREFRAME)
+				m_pRS->SetFillMode(D3DFILL_WIREFRAME);
 			else
-			{
-				m_pDevice->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_ANISOTROPIC);
-				m_pDevice->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_ANISOTROPIC);
-				m_pDevice->SetSamplerState(0, D3DSAMP_MIPFILTER, D3DTEXF_ANISOTROPIC);
+				m_pRS->SetFillMode(D3DFILL_SOLID);
 
-				m_pDevice->SetSamplerState(1, D3DSAMP_MAGFILTER, D3DTEXF_ANISOTROPIC);
-				m_pDevice->SetSamplerState(1, D3DSAMP_MINFILTER, D3DTEXF_ANISOTROPIC);
-				m_pDevice->SetSamplerState(1, D3DSAMP_MIPFILTER, D3DTEXF_ANISOTROPIC);
-			}
+			m_pRS->EnableLighting(FALSE);
+			m_pRS->SetCullMode(D3DCULL_NONE);
 
-			if (m_Cache[i].Flags & JE_RENDER_FLAG_CLAMP_UV)
-			{
-				m_pDevice->SetSamplerState(0, D3DSAMP_ADDRESSU, D3DTADDRESS_CLAMP);
-				m_pDevice->SetSamplerState(0, D3DSAMP_ADDRESSV, D3DTADDRESS_CLAMP);
-			}
+			if (p->Flags & JE_RENDER_FLAG_NO_ZTEST)
+				m_pRS->EnableZBuffer(FALSE);
 			else
-			{
-				m_pDevice->SetSamplerState(0, D3DSAMP_ADDRESSU, D3DTADDRESS_WRAP);
-				m_pDevice->SetSamplerState(0, D3DSAMP_ADDRESSV, D3DTADDRESS_WRAP);
-			}
+				m_pRS->EnableZBuffer(TRUE);
 
-			if (m_Cache[i].NumLayers > 1)
-			{
-				m_pDevice->SetTexture(1, m_Cache[i].Layers[1]->pTexture);
-
-				m_pDevice->SetTextureStageState(1, D3DTSS_TEXCOORDINDEX, 1);
-				m_pDevice->SetTextureStageState(1, D3DTSS_COLORARG1, D3DTA_TEXTURE);
-				m_pDevice->SetTextureStageState(1, D3DTSS_COLORARG2, D3DTA_CURRENT);
-				m_pDevice->SetTextureStageState(1, D3DTSS_COLOROP, D3DTOP_MODULATE);
-				
-				m_pDevice->SetTextureStageState(1, D3DTSS_ALPHAARG1, D3DTA_DIFFUSE);
-				m_pDevice->SetTextureStageState(1, D3DTSS_ALPHAARG2, D3DTA_CURRENT);
-				m_pDevice->SetTextureStageState(1, D3DTSS_ALPHAOP, D3DTOP_MODULATE);
-
-				m_pDevice->SetSamplerState(1, D3DSAMP_ADDRESSU, D3DTADDRESS_CLAMP);
-				m_pDevice->SetSamplerState(1, D3DSAMP_ADDRESSV, D3DTADDRESS_CLAMP);
-								
-				m_pDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_ONE);
-				m_pDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_ONE);
-				m_pDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
-			}
+			if (p->Flags & JE_RENDER_FLAG_NO_ZWRITE)
+				m_pRS->EnableZWriteBuffer(FALSE);
 			else
-			{
-				if (m_Cache[i].Flags & JE_RENDER_FLAG_ALPHA)
-					m_pDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
-				else
-					m_pDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, FALSE);
-			}
+				m_pRS->EnableZWriteBuffer(TRUE);
 
-			if (m_Cache[i].Flags & JE_RENDER_FLAG_ALPHA)
-				m_pDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
-			else
-				m_pDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, FALSE);
-
-			if (m_Cache[i].Flags & JE_RENDER_FLAG_WIREFRAME)
-				m_pDevice->SetRenderState(D3DRS_FILLMODE, D3DFILL_WIREFRAME);
-			else
-				m_pDevice->SetRenderState(D3DRS_FILLMODE, D3DFILL_SOLID);
-
-			m_pDevice->SetRenderState(D3DRS_LIGHTING, FALSE);
-			
-			//if (m_Cache[i].Flags & JE_RENDER_FLAG_COUNTER_CLOCKWISE)
-			//	m_pDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW);
-			//else
-				m_pDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
-
-			if (m_Cache[i].Flags & JE_RENDER_FLAG_NO_ZTEST)
-				m_pDevice->SetRenderState(D3DRS_ZENABLE, D3DZB_FALSE);
-			else
-				m_pDevice->SetRenderState(D3DRS_ZENABLE, D3DZB_TRUE);
-
-			if (m_Cache[i].Flags & JE_RENDER_FLAG_NO_ZWRITE)
-				m_pDevice->SetRenderState(D3DRS_ZWRITEENABLE, FALSE);
-			else
-				m_pDevice->SetRenderState(D3DRS_ZWRITEENABLE, TRUE);
-
-			hres = m_pDevice->DrawPrimitive(D3DPT_TRIANGLEFAN, m_Cache[i].StartVertex, m_Cache[i].NumVertices - 2);
+			hres = m_pDevice->DrawPrimitive(D3DPT_TRIANGLEFAN, p->StartVertex, p->NumVertices - 2);
 			if (FAILED(hres))
 			{
-				D3D9Log::GetPtr()->Printf("ERROR:  DrawPrimitive() failed!!");
 				return JE_FALSE;
 			}
 		}
 	}
 
-	if (LOG_LEVEL > 1)
-		D3D9Log::GetPtr()->Printf("DEBUG:  Poly cache rendered %d vertices", m_NumVerts);
+	m_GouraudCache.clear();
+	return JE_TRUE;
+}
 
-	m_Cache.clear();
+jeBoolean PolyCache::FlushStencilCache()
+{
+	return JE_TRUE;
+}
+
+jeBoolean PolyCache::Flush()
+{
+	std::sort(m_MiscCache.begin(), m_MiscCache.end(), TextureSortFunctor());
+	std::sort(m_WorldCache.begin(), m_WorldCache.end(), TextureSortFunctor());
+
+	m_pDevice->SetFVF(J3D_FVF);
+	m_pDevice->SetStreamSource(0, m_pVB, 0, sizeof(PolyVert));
+
+	if (!FlushWorldCache())
+		return JE_FALSE;
+
+	if (!FlushMiscCache())
+		return JE_FALSE;
+
+	if (!FlushGouraudCache())
+		return JE_FALSE;
+
+	if (!FlushStencilCache())
+		return JE_FALSE;
+
 	m_NumVerts = 0;
 
 	return JE_TRUE;
@@ -855,4 +1002,94 @@ jeBoolean PolyCache::RenderStaticBuffer(uint32 id, int32 StartVertex, int32 NumP
 	}
 
 	return JE_TRUE;
+}
+
+jeBoolean PolyCache::SetTexture(int32 Stage, jeTexture *Texture)
+{
+	if (m_TextureStages[Stage] == Texture)
+		return JE_TRUE;
+
+	if (FAILED(m_pDevice->SetTexture(Stage, Texture->pTexture)))
+		return JE_FALSE;
+	
+	m_TextureStages[Stage] = Texture;
+	return JE_TRUE;
+}
+
+void PolyCache::SetFilterType(uint32 FilterType)
+{
+	if (m_OldFilterType == FilterType)
+		return;
+
+	switch (FilterType)
+	{
+	case FILTER_TYPE_BILINEAR:
+		{
+			m_pDevice->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_LINEAR);
+			m_pDevice->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_LINEAR);
+			m_pDevice->SetSamplerState(0, D3DSAMP_MIPFILTER, D3DTEXF_LINEAR);
+
+			m_pDevice->SetSamplerState(1, D3DSAMP_MINFILTER, D3DTEXF_LINEAR);
+			m_pDevice->SetSamplerState(1, D3DSAMP_MAGFILTER, D3DTEXF_LINEAR);
+			m_pDevice->SetSamplerState(1, D3DSAMP_MIPFILTER, D3DTEXF_LINEAR);
+
+			break;
+		}
+		
+	case FILTER_TYPE_ANISOTROPIC:
+		{
+			m_pDevice->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_ANISOTROPIC);
+			m_pDevice->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_ANISOTROPIC);
+			m_pDevice->SetSamplerState(0, D3DSAMP_MIPFILTER, D3DTEXF_ANISOTROPIC);
+
+			m_pDevice->SetSamplerState(1, D3DSAMP_MINFILTER, D3DTEXF_ANISOTROPIC);
+			m_pDevice->SetSamplerState(1, D3DSAMP_MAGFILTER, D3DTEXF_ANISOTROPIC);
+			m_pDevice->SetSamplerState(1, D3DSAMP_MIPFILTER, D3DTEXF_ANISOTROPIC);
+
+			break;
+		}
+	};
+
+	m_OldFilterType = FilterType;
+}
+
+void PolyCache::SetBlendFunc(D3DBLEND SFunc, D3DBLEND DFunc)
+{
+	if (m_OldSFunc != SFunc)
+	{
+		m_pDevice->SetRenderState(D3DRS_SRCBLEND, SFunc);
+		m_OldSFunc = SFunc;
+	}
+
+	if (m_OldDFunc != DFunc)
+	{
+		m_pDevice->SetRenderState(D3DRS_DESTBLEND, DFunc);
+		m_OldDFunc = DFunc;
+	}
+}
+
+void PolyCache::EnableAlpha(jeBoolean Enable)
+{
+	if (m_bOldAlphaEnable == Enable)
+		return;
+
+	m_pDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, Enable);
+	m_bOldAlphaEnable = Enable;
+}
+
+void PolyCache::SetTexWrap(int32 Stage, jeBoolean bWrap)
+{
+	if (m_bOldTexWrap[Stage] == bWrap)
+		return;
+
+	if (bWrap)
+	{
+		m_pDevice->SetSamplerState(Stage, D3DSAMP_ADDRESSU, D3DTADDRESS_WRAP);
+		m_pDevice->SetSamplerState(Stage, D3DSAMP_ADDRESSV, D3DTADDRESS_WRAP);
+	}
+	else
+	{
+		m_pDevice->SetSamplerState(Stage, D3DSAMP_ADDRESSU, D3DTADDRESS_CLAMP);
+		m_pDevice->SetSamplerState(Stage, D3DSAMP_ADDRESSV, D3DTADDRESS_CLAMP);
+	}
 }

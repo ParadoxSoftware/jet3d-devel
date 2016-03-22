@@ -274,6 +274,10 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "jMinAppClassic7", "source\T
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Jet3DClassic7", "source\Engine\JetEngine\Jet3D.vcxproj", "{DA9C671F-1998-42EC-8D3C-F14AE13AD4AD}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Direct3D9Driver", "source\Drivers\Direct3D9Driver\Direct3D9Driver.vcxproj", "{62A25711-77E3-4C77-B276-076FC67AEDAF}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "OpenGLDriver", "source\Drivers\OpenGLDriver\OpenGLDriver.vcxproj", "{5ADDB82B-5E5C-425E-B091-A4288FE057DE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -559,6 +563,34 @@ Global
 		{DA9C671F-1998-42EC-8D3C-F14AE13AD4AD}.Release|Win32.Build.0 = Release|Win32
 		{DA9C671F-1998-42EC-8D3C-F14AE13AD4AD}.Template|Win32.ActiveCfg = Release|Win32
 		{DA9C671F-1998-42EC-8D3C-F14AE13AD4AD}.Template|Win32.Build.0 = Release|Win32
+		{62A25711-77E3-4C77-B276-076FC67AEDAF}.Debug|Win32.ActiveCfg = Debug|Win32
+		{62A25711-77E3-4C77-B276-076FC67AEDAF}.Debug|Win32.Build.0 = Debug|Win32
+		{62A25711-77E3-4C77-B276-076FC67AEDAF}.KEY Hybrid|Win32.ActiveCfg = Release|Win32
+		{62A25711-77E3-4C77-B276-076FC67AEDAF}.KEY Hybrid|Win32.Build.0 = Release|Win32
+		{62A25711-77E3-4C77-B276-076FC67AEDAF}.KEY Release|Win32.ActiveCfg = Release|Win32
+		{62A25711-77E3-4C77-B276-076FC67AEDAF}.KEY Release|Win32.Build.0 = Release|Win32
+		{62A25711-77E3-4C77-B276-076FC67AEDAF}.NFO Hybrid|Win32.ActiveCfg = Release|Win32
+		{62A25711-77E3-4C77-B276-076FC67AEDAF}.NFO Hybrid|Win32.Build.0 = Release|Win32
+		{62A25711-77E3-4C77-B276-076FC67AEDAF}.NFO Release|Win32.ActiveCfg = Release|Win32
+		{62A25711-77E3-4C77-B276-076FC67AEDAF}.NFO Release|Win32.Build.0 = Release|Win32
+		{62A25711-77E3-4C77-B276-076FC67AEDAF}.Release|Win32.ActiveCfg = Release|Win32
+		{62A25711-77E3-4C77-B276-076FC67AEDAF}.Release|Win32.Build.0 = Release|Win32
+		{62A25711-77E3-4C77-B276-076FC67AEDAF}.Template|Win32.ActiveCfg = Release|Win32
+		{62A25711-77E3-4C77-B276-076FC67AEDAF}.Template|Win32.Build.0 = Release|Win32
+		{5ADDB82B-5E5C-425E-B091-A4288FE057DE}.Debug|Win32.ActiveCfg = Debug|Win32
+		{5ADDB82B-5E5C-425E-B091-A4288FE057DE}.Debug|Win32.Build.0 = Debug|Win32
+		{5ADDB82B-5E5C-425E-B091-A4288FE057DE}.KEY Hybrid|Win32.ActiveCfg = Release|Win32
+		{5ADDB82B-5E5C-425E-B091-A4288FE057DE}.KEY Hybrid|Win32.Build.0 = Release|Win32
+		{5ADDB82B-5E5C-425E-B091-A4288FE057DE}.KEY Release|Win32.ActiveCfg = Release|Win32
+		{5ADDB82B-5E5C-425E-B091-A4288FE057DE}.KEY Release|Win32.Build.0 = Release|Win32
+		{5ADDB82B-5E5C-425E-B091-A4288FE057DE}.NFO Hybrid|Win32.ActiveCfg = Release|Win32
+		{5ADDB82B-5E5C-425E-B091-A4288FE057DE}.NFO Hybrid|Win32.Build.0 = Release|Win32
+		{5ADDB82B-5E5C-425E-B091-A4288FE057DE}.NFO Release|Win32.ActiveCfg = Release|Win32
+		{5ADDB82B-5E5C-425E-B091-A4288FE057DE}.NFO Release|Win32.Build.0 = Release|Win32
+		{5ADDB82B-5E5C-425E-B091-A4288FE057DE}.Release|Win32.ActiveCfg = Release|Win32
+		{5ADDB82B-5E5C-425E-B091-A4288FE057DE}.Release|Win32.Build.0 = Release|Win32
+		{5ADDB82B-5E5C-425E-B091-A4288FE057DE}.Template|Win32.ActiveCfg = Release|Win32
+		{5ADDB82B-5E5C-425E-B091-A4288FE057DE}.Template|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
