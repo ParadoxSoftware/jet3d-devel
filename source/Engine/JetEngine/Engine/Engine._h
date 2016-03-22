@@ -49,7 +49,7 @@ typedef struct  _LARGE_INTEGER
 //=====================================================================================
 
 #define	MAX_SUB_DRIVERS			32
-#define	MAX_DRIVER_MODES		64
+#define	MAX_DRIVER_MODES		128
 
 #define MAX_CLIENT_STRING_LEN	256
 #define MAX_CLIENT_STRINGS		256

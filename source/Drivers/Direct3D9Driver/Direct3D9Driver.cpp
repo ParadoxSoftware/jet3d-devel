@@ -7,7 +7,7 @@
 #ifdef _DEBUG
 #pragma comment(lib, "Jet3DClassic7d.lib")
 #else
-#pragma comment(lib, "Jet3DClassic7d.lib")
+#pragma comment(lib, "Jet3DClassic7.lib")
 #endif
 
 jeRDriver_PixelFormat							PixelFormat[10];
@@ -16,6 +16,7 @@ HWND											hWnd;
 IDirect3D9										*pD3D = NULL;
 IDirect3DDevice9								*pDevice = NULL;
 float											localgamma;
+D3DPRESENT_PARAMETERS							d3dpp;
 
 D3DCAPS9										g_Caps;
 bool											CanDoAntiAlias = false;
@@ -89,7 +90,7 @@ void D3DMatrix_ToXForm3d(D3DMATRIX *mat, jeXForm3d *XForm)
 jeBoolean DRIVERCC D3D9Drv_EnumSubDrivers(DRV_ENUM_DRV_CB *Cb, void *Context)
 {
 	if (LOG_LEVEL > 1)
-		D3D9Log::GetPtr()->Printf("Function Call:  EnumSubDrivers()");
+		LOG("Function Call:  EnumSubDrivers()");
 	else
 		REPORT("Function Call:  EnumSubDrivers()");
 
@@ -104,7 +105,7 @@ jeBoolean DRIVERCC D3D9Drv_EnumModes(S32 Driver, char *DriverName, DRV_ENUM_MODE
 	int32							y = 0, numModes = 0;
 	
 	if (LOG_LEVEL > 1)
-		D3D9Log::GetPtr()->Printf("Function Call:  EnumModes()");
+		LOG("Function Call:  EnumModes()");
 	else
 		REPORT("Function Call:  EnumModes()");
 
@@ -118,7 +119,7 @@ jeBoolean DRIVERCC D3D9Drv_EnumModes(S32 Driver, char *DriverName, DRV_ENUM_MODE
 			hres = pD3D->EnumAdapterModes(D3DADAPTER_DEFAULT, fmt[x], y, &mode);
 			if (FAILED(hres))
 			{
-				D3D9Log::GetPtr()->Printf("ERROR:  Could not enumerate display modes!!");
+				LOG("ERROR:  Could not enumerate display modes!!");
 				return FALSE;
 			}
 
@@ -150,14 +151,14 @@ jeBoolean DRIVERCC D3D9Drv_EnumModes(S32 Driver, char *DriverName, DRV_ENUM_MODE
 jeBoolean DRIVERCC D3D9Drv_Init(DRV_DriverHook *hook)
 {
 	HRESULT						hres;
-	D3DPRESENT_PARAMETERS		d3dpp;
+	//D3DPRESENT_PARAMETERS		d3dpp;
 	int32						bpp;
 	int32						dummy;
 	const char					*modename = NULL;
 	int							w, h;
 
 	if (LOG_LEVEL > 1)
-		D3D9Log::GetPtr()->Printf("Function Call:  Init()");
+		LOG("Function Call:  Init()");
 	else
 		REPORT("Function Call:  Init()");
 
@@ -209,12 +210,12 @@ jeBoolean DRIVERCC D3D9Drv_Init(DRV_DriverHook *hook)
 	hres = pD3D->CheckDeviceMultiSampleType(D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, d3dpp.BackBufferFormat, d3dpp.Windowed, D3DMULTISAMPLE_2_SAMPLES, NULL);
 	if (FAILED(hres))
 	{
-		D3D9Log::GetPtr()->Printf("Feature Request:  Full Scene Anti-Aliasing OFF");
+		LOG("Feature Request:  Full Scene Anti-Aliasing OFF");
 		CanDoAntiAlias = false;
 	}
 	else
 	{
-		D3D9Log::GetPtr()->Printf("Feature Request:  Full Scene Anti-Aliasing ON");
+		LOG("Feature Request:  Full Scene Anti-Aliasing ON");
 		CanDoAntiAlias = true;
 	}
 
@@ -239,47 +240,47 @@ jeBoolean DRIVERCC D3D9Drv_Init(DRV_DriverHook *hook)
 				if (FAILED(hres))
 				{
 					if (hres == D3DERR_DEVICELOST)
-						D3D9Log::GetPtr()->Printf("ERROR:  Device Lost!!");
+						LOG("ERROR:  Device Lost!!");
 					else if (hres == D3DERR_INVALIDCALL)
-						D3D9Log::GetPtr()->Printf("ERROR:  Invalid Call!!");
+						LOG("ERROR:  Invalid Call!!");
 					else if (hres == D3DERR_NOTAVAILABLE)
-						D3D9Log::GetPtr()->Printf("ERROR:  Not Available!!");
+						LOG("ERROR:  Not Available!!");
 					else if (hres == D3DERR_OUTOFVIDEOMEMORY)
-						D3D9Log::GetPtr()->Printf("ERROR:  Out of video memory!!");
+						LOG("ERROR:  Out of video memory!!");
 					else
-						D3D9Log::GetPtr()->Printf("ERROR:  Unknown error!!");
+						LOG("ERROR:  Unknown error!!");
 
 					return FALSE;
 				}
 				else
-					D3D9Log::GetPtr()->Printf("DEVICE:  Created using REF/SW");
+					LOG("DEVICE:  Created using REF/SW");
 			}
 			else
-				D3D9Log::GetPtr()->Printf("DEVICE:  Created using SW/SW");
+				LOG("DEVICE:  Created using SW/SW");
 		}
 		else
-			D3D9Log::GetPtr()->Printf("DEVICE:  Created using HW/SW");
+			LOG("DEVICE:  Created using HW/SW");
 	}
 	else
-		D3D9Log::GetPtr()->Printf("DEVICE:  Created using HW/HW");
+		LOG("DEVICE:  Created using HW/HW");
 
 	pDevice->GetDeviceCaps(&g_Caps);
 
 	if (g_Caps.RasterCaps & D3DPRASTERCAPS_ANISOTROPY)
 	{
-		D3D9Log::GetPtr()->Printf("Feature Request:  Anisotropic Filtering ON");
+		LOG("Feature Request:  Anisotropic Filtering ON");
 		CanDoAnisotropic = true;
 	}
 	else
-		D3D9Log::GetPtr()->Printf("Feature Request:  Anisotropic Filtering OFF");
+		LOG("Feature Request:  Anisotropic Filtering OFF");
 
 	if ((g_Caps.VertexShaderVersion >= D3DVS_VERSION(1, 1)) && (g_Caps.PixelShaderVersion >= D3DPS_VERSION(1, 4)))
 	{
-		D3D9Log::GetPtr()->Printf("Feature Request:  Vertex and Pixel Shaders ON");
+		LOG("Feature Request:  Vertex and Pixel Shaders ON");
 		CanDoShaders = true;
 	}
 	else
-		D3D9Log::GetPtr()->Printf("Feature Request:  Vertex and Pixel Shaders OFF");
+		LOG("Feature Request:  Vertex and Pixel Shaders OFF");
 
 	if (CanDoAntiAlias)
 		pDevice->SetRenderState( D3DRS_MULTISAMPLEANTIALIAS, TRUE);
@@ -295,13 +296,13 @@ jeBoolean DRIVERCC D3D9Drv_Init(DRV_DriverHook *hook)
 	g_pPolyCache = new PolyCache();
 	if (!g_pPolyCache)
 	{
-		D3D9Log::GetPtr()->Printf("ERROR:  Could not create poly cache!!");
+		LOG("ERROR:  Could not create poly cache!!");
 		return FALSE;
 	}
 
 	if (!g_pPolyCache->Initialize(pDevice))
 	{
-		D3D9Log::GetPtr()->Printf("ERROR:  Could not initialize poly cache!!");
+		LOG("ERROR:  Could not initialize poly cache!!");
 		return FALSE;
 	}
 
@@ -315,14 +316,14 @@ jeBoolean DRIVERCC D3D9Drv_Init(DRV_DriverHook *hook)
 
 	if (FAILED(D3DXCreateSprite(pDevice, &pSprite)))
 	{
-		D3D9Log::GetPtr()->Printf("ERROR:  Could not create sprite interface!!");
+		LOG("ERROR:  Could not create sprite interface!!");
 		return FALSE;
 	}
 
 	D3DXCreateFont(pDevice, 18, 0, FW_BOLD, 0, FALSE, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, TEXT("Arial"), &pFont);
 
 	if (LOG_LEVEL > 1)
-		D3D9Log::GetPtr()->Printf("DEBUG:  Initialization successful");
+		LOG("DEBUG:  Initialization successful");
 	else
 		REPORT("DEBUG:  Initialization complete...");
 
@@ -332,7 +333,7 @@ jeBoolean DRIVERCC D3D9Drv_Init(DRV_DriverHook *hook)
 jeBoolean DRIVERCC D3D9Drv_Shutdown(void)
 {
 	if (LOG_LEVEL > 1)
-		D3D9Log::GetPtr()->Printf("Function Call:  Shutdown()");
+		LOG("Function Call:  Shutdown()");
 	else
 		REPORT("Function Call:  Shutdown()");
 
@@ -344,10 +345,10 @@ jeBoolean DRIVERCC D3D9Drv_Shutdown(void)
 	SAFE_RELEASE(pDevice);
 	SAFE_RELEASE(pD3D);
 	
-	D3D9Log::GetPtr()->Printf("Shutdown complete...");
-	D3D9Log::GetPtr()->Shutdown();
+	LOG("Shutdown complete...");
+	D3D9Log::getSingletonPtr()->Shutdown();
+	delete D3D9Log::getSingletonPtr();
 
-//	SAFE_DELETE(D3D9Log::GetPtr());
 	return TRUE;
 }
 
@@ -363,7 +364,7 @@ jeBoolean DRIVERCC D3D9Drv_Shutdown(void)
 jeBoolean DRIVERCC D3D9Drv_EnumPixelFormats(DRV_ENUM_PFORMAT_CB *Cb, void *Context)
 {
 	if (LOG_LEVEL > 1)
-		D3D9Log::GetPtr()->Printf("Function Call:  EnumPixelFormats()");
+		LOG("Function Call:  EnumPixelFormats()");
 	else
 		REPORT("Function Call:  EnumPixelFormats()");
 
@@ -371,7 +372,7 @@ jeBoolean DRIVERCC D3D9Drv_EnumPixelFormats(DRV_ENUM_PFORMAT_CB *Cb, void *Conte
 	{
 		if (!Cb(&PFormats[i], Context))
 		{
-			D3D9Log::GetPtr()->Printf("ERROR:  Cannot enumerate pixel formats!!");
+			LOG("ERROR:  Cannot enumerate pixel formats!!");
 			return JE_FALSE;
 		}
 	}
@@ -441,7 +442,7 @@ jeBoolean DRIVERCC D3D9Drv_EnumPixelFormats(DRV_ENUM_PFORMAT_CB *Cb, void *Conte
 jeBoolean DRIVERCC D3D9Drv_GetDeviceCaps(jeDeviceCaps *DeviceCaps)
 {
 	if (LOG_LEVEL > 1)
-		D3D9Log::GetPtr()->Printf("Function Call:  GetDeviceCaps()");
+		LOG("Function Call:  GetDeviceCaps()");
 	else
 		REPORT("Function Call:  GetDeviceCaps()");
 
@@ -453,7 +454,7 @@ jeBoolean DRIVERCC D3D9Drv_GetDeviceCaps(jeDeviceCaps *DeviceCaps)
 jeBoolean DRIVERCC D3D9Drv_SetGamma(float gamma)
 {
 	if (LOG_LEVEL > 1)
-		D3D9Log::GetPtr()->Printf("Function Call:  SetGamma()");
+		LOG("Function Call:  SetGamma()");
 	else
 		REPORT("Function Call:  SetGamma()");
 
@@ -465,7 +466,7 @@ jeBoolean DRIVERCC D3D9Drv_SetGamma(float gamma)
 jeBoolean DRIVERCC D3D9Drv_GetGamma(float *gamma)
 {
 	if (LOG_LEVEL > 1)
-		D3D9Log::GetPtr()->Printf("Function Call:  GetGamma()");
+		LOG("Function Call:  GetGamma()");
 	else
 		REPORT("Function Call:  GetGamma()");
 
@@ -476,9 +477,15 @@ jeBoolean DRIVERCC D3D9Drv_GetGamma(float *gamma)
 jeBoolean DRIVERCC D3D9Drv_Reset()
 {
 	if (LOG_LEVEL > 1)
-		D3D9Log::GetPtr()->Printf("Function Call:  Reset()");
+		LOG("Function Call:  Reset()");
 	else
 		REPORT("Function Call:  Reset()");
+
+	if (d3dpp.Windowed)
+	{
+		
+	}
+	pDevice->Reset(&d3dpp);
 
 	D3D9_THandle_Shutdown();
 	g_pPolyCache->Shutdown();
@@ -492,7 +499,7 @@ jeBoolean DRIVERCC D3D9Drv_Reset()
 jeBoolean DRIVERCC D3D9Drv_UpdateWindow()
 {
 	if (LOG_LEVEL > 1)
-		D3D9Log::GetPtr()->Printf("Function Call:  UpdateWindow()");
+		LOG("Function Call:  UpdateWindow()");
 	else
 		REPORT("Function Call:  UpdateWindow()");
 
@@ -502,7 +509,7 @@ jeBoolean DRIVERCC D3D9Drv_UpdateWindow()
 jeBoolean DRIVERCC D3D9Drv_SetActive(jeBoolean Active)
 {
 	if (LOG_LEVEL > 1)
-		D3D9Log::GetPtr()->Printf("Function Call:  SetActive()");
+		LOG("Function Call:  SetActive()");
 	else
 		REPORT("Function Call:  SetActive()");
 
@@ -515,7 +522,7 @@ jeBoolean DRIVERCC D3D9Drv_BeginScene(jeBoolean Clear, jeBoolean ClearZ, RECT *W
 	HRESULT							hres;
 
 	if (LOG_LEVEL > 1)
-		D3D9Log::GetPtr()->Printf("Function Call:  BeginScene()");
+		LOG("Function Call:  BeginScene()");
 	else
 		REPORT("Function Call:  BeginScene()");
 
@@ -538,7 +545,7 @@ jeBoolean DRIVERCC D3D9Drv_BeginScene(jeBoolean Clear, jeBoolean ClearZ, RECT *W
 	hres = pDevice->BeginScene();
 	if (FAILED(hres))
 	{
-		D3D9Log::GetPtr()->Printf("ERROR:  Could not begin scene!!");
+		LOG("ERROR:  Could not begin scene!!");
 		return JE_FALSE;
 	}
 
@@ -550,27 +557,27 @@ jeBoolean DRIVERCC D3D9Drv_EndScene()
 	HRESULT							hres;
 
 	if (LOG_LEVEL > 1)
-		D3D9Log::GetPtr()->Printf("Function Call:  EndScene()");
+		LOG("Function Call:  EndScene()");
 	else
 		REPORT("Function Call:  EndScene()");
 
 	if (!g_pPolyCache->Flush())
 	{
-		D3D9Log::GetPtr()->Printf("ERROR:  Failed to flush poly cache!!");
+		LOG("ERROR:  Failed to flush poly cache!!");
 		return JE_FALSE;
 	}
 
 	hres = pDevice->EndScene();
 	if (FAILED(hres))
 	{
-		D3D9Log::GetPtr()->Printf("ERROR:  Could not end scene!!");
+		LOG("ERROR:  Could not end scene!!");
 		return JE_FALSE;
 	}
 
 	hres = pDevice->Present(NULL, NULL, NULL, NULL);
 	if (FAILED(hres))
 	{
-		D3D9Log::GetPtr()->Printf("ERROR:  Could not present scene!!");
+		LOG("ERROR:  Could not present scene!!");
 		return JE_FALSE;
 	}
 
@@ -580,7 +587,7 @@ jeBoolean DRIVERCC D3D9Drv_EndScene()
 jeBoolean DRIVERCC D3D9Drv_BeginBatch()
 {
 	if (LOG_LEVEL > 1)
-		D3D9Log::GetPtr()->Printf("Function Call:  BeginBatch()");
+		LOG("Function Call:  BeginBatch()");
 	else
 		REPORT("Function Call:  BeginBatch()");
 
@@ -590,7 +597,7 @@ jeBoolean DRIVERCC D3D9Drv_BeginBatch()
 jeBoolean DRIVERCC D3D9Drv_EndBatch()
 {
 	if (LOG_LEVEL > 1)
-		D3D9Log::GetPtr()->Printf("Function Call:  EndBatch()");
+		LOG("Function Call:  EndBatch()");
 	else
 		REPORT("Function Call:  EndBatch()");
 
@@ -600,13 +607,13 @@ jeBoolean DRIVERCC D3D9Drv_EndBatch()
 jeBoolean DRIVERCC D3D9Drv_RenderGouraudPoly(jeTLVertex *Pnts, int32 NumPoints, uint32 Flags)
 {
 	if (LOG_LEVEL > 1)
-		D3D9Log::GetPtr()->Printf("Function Call:  RenderGouraudPoly()");
+		LOG("Function Call:  RenderGouraudPoly()");
 	else
 		REPORT("Function Call:  RenderGouraudPoly()");
 
 	if (!g_pPolyCache)
 	{
-		D3D9Log::GetPtr()->Printf("ERROR:  Poly cache not initialized!!");
+		LOG("ERROR:  Poly cache not initialized!!");
 		return JE_FALSE;
 	}
 
@@ -615,13 +622,13 @@ jeBoolean DRIVERCC D3D9Drv_RenderGouraudPoly(jeTLVertex *Pnts, int32 NumPoints, 
 jeBoolean DRIVERCC D3D9Drv_RenderWorldPoly(jeTLVertex *Pnts, int32 NumPoints, jeRDriver_Layer *Layers, int32 NumLayers, void *LMapCBContext, uint32 Flags)
 {
 	if (LOG_LEVEL > 1)
-		D3D9Log::GetPtr()->Printf("Function Call:  RenderWorldPoly()");
+		LOG("Function Call:  RenderWorldPoly()");
 	else
 		REPORT("Function Call:  RenderWorldPoly()");
 
 	if (!g_pPolyCache)
 	{
-		D3D9Log::GetPtr()->Printf("ERROR:  Poly cache not initialized!!");
+		LOG("ERROR:  Poly cache not initialized!!");
 		return JE_FALSE;
 	}
 
@@ -652,13 +659,13 @@ typedef struct
 jeBoolean DRIVERCC D3D9Drv_RenderMiscTexturePoly(jeTLVertex *Pnts, int32 NumPoints, jeRDriver_Layer *Layers, int32 NumLayers, uint32 Flags)
 {
 	if (LOG_LEVEL > 1)
-		D3D9Log::GetPtr()->Printf("Function Call:  RenderMiscTexturePoly()");
+		LOG("Function Call:  RenderMiscTexturePoly()");
 	else
 		REPORT("Function Call:  RenderMiscTexturePoly()");
 
 	if (!g_pPolyCache)
 	{
-		D3D9Log::GetPtr()->Printf("ERROR:  Poly cache not initialized!!");
+		LOG("ERROR:  Poly cache not initialized!!");
 		return JE_FALSE;
 	}
 
@@ -670,28 +677,28 @@ jeBoolean DRIVERCC D3D9Drv_DrawDecal(jeTexture *Handle, RECT *SrcRect, int32 x, 
 	HRESULT						hres;
 
 	if (LOG_LEVEL > 1)
-		D3D9Log::GetPtr()->Printf("Function Call:  DrawDecal()");
+		LOG("Function Call:  DrawDecal()");
 	else
 		REPORT("Function Call:  DrawDecal()");
 
 	hres = pSprite->Begin(D3DXSPRITE_ALPHABLEND);
 	if (FAILED(hres))
 	{
-		D3D9Log::GetPtr()->Printf("ERROR:  Could not begin sprite frame!!");
+		LOG("ERROR:  Could not begin sprite frame!!");
 		return JE_FALSE;
 	}
 
 	hres = pSprite->Draw(Handle->pTexture, NULL, NULL, &D3DXVECTOR3((float)x, (float)y, 1.0f), D3DCOLOR_COLORVALUE(1.0f,1.0f,1.0f,1.0f));
 	if (FAILED(hres))
 	{
-		D3D9Log::GetPtr()->Printf("ERROR:  Could not draw sprite!!");
+		LOG("ERROR:  Could not draw sprite!!");
 		return JE_FALSE;
 	}
 
 	hres = pSprite->End();
 	if (FAILED(hres))
 	{
-		D3D9Log::GetPtr()->Printf("ERROR:  Could not end sprite frame!!");
+		LOG("ERROR:  Could not end sprite frame!!");
 		return JE_FALSE;
 	}
 
@@ -705,28 +712,28 @@ jeBoolean DRIVERCC D3D9Drv_Screenshot(const char *filename)
 	D3DDISPLAYMODE				dmode;
 
 	if (LOG_LEVEL > 1)
-		D3D9Log::GetPtr()->Printf("Function Call:  Screenshot()");
+		LOG("Function Call:  Screenshot()");
 	else
 		REPORT("Function Call:  Screenshot()");
 
 	hres = pDevice->GetDisplayMode(0, &dmode);
 	if (FAILED(hres))
 	{
-		D3D9Log::GetPtr()->Printf("ERROR:  Could not get display mode!!");
+		LOG("ERROR:  Could not get display mode!!");
 		return JE_FALSE;
 	}
 
 	hres = pDevice->CreateOffscreenPlainSurface(dmode.Width, dmode.Height, dmode.Format, D3DPOOL_SYSTEMMEM, &pSurface, NULL);
 	if (FAILED(hres))
 	{
-		D3D9Log::GetPtr()->Printf("ERROR:  Could not create offscreen plain surface!!");
+		LOG("ERROR:  Could not create offscreen plain surface!!");
 		return JE_FALSE;
 	}
 
 	hres = pDevice->GetFrontBufferData(0, pSurface);
 	if (FAILED(hres))
 	{
-		D3D9Log::GetPtr()->Printf("ERROR:  Could not get front buffer data!!");
+		LOG("ERROR:  Could not get front buffer data!!");
 		pSurface->Release();
 		pSurface = NULL;
 		return JE_FALSE;
@@ -735,7 +742,7 @@ jeBoolean DRIVERCC D3D9Drv_Screenshot(const char *filename)
 	hres = D3DXSaveSurfaceToFile(filename, D3DXIFF_BMP, pSurface, NULL, NULL);
 	if (FAILED(hres))
 	{
-		D3D9Log::GetPtr()->Printf("ERROR:  Could not save screenshot!!");
+		LOG("ERROR:  Could not save screenshot!!");
 		pSurface->Release();
 		pSurface = NULL;
 		return JE_FALSE;
@@ -752,13 +759,13 @@ uint32 DRIVERCC D3D9Drv_CreateStaticMesh(jeHWVertex *Points, int32 NumPoints, je
 	uint32						id;
 
 	if (LOG_LEVEL > 1)
-		D3D9Log::GetPtr()->Printf("Function Call:  CreateStaticMesh()");
+		LOG("Function Call:  CreateStaticMesh()");
 	else
 		REPORT("Function Call:  CreateStaticMesh()");
 
 	if (!g_pPolyCache)
 	{
-		D3D9Log::GetPtr()->Printf("ERROR:  No poly cache!!");
+		LOG("ERROR:  No poly cache!!");
 		return 0;
 	}
 
@@ -769,13 +776,13 @@ uint32 DRIVERCC D3D9Drv_CreateStaticMesh(jeHWVertex *Points, int32 NumPoints, je
 jeBoolean DRIVERCC D3D9Drv_RemoveStaticMesh(uint32 id)
 {
 	if (LOG_LEVEL > 1)
-		D3D9Log::GetPtr()->Printf("Function Call:  RemoveStaticMesh()");
+		LOG("Function Call:  RemoveStaticMesh()");
 	else
 		REPORT("Function Call:  RemoveStaticMesh()");
 
 	if (!g_pPolyCache)
 	{
-		D3D9Log::GetPtr()->Printf("ERROR:  No poly cache!!");
+		LOG("ERROR:  No poly cache!!");
 		return JE_FALSE;
 	}
 
@@ -785,13 +792,13 @@ jeBoolean DRIVERCC D3D9Drv_RemoveStaticMesh(uint32 id)
 jeBoolean DRIVERCC D3D9Drv_RenderStaticMesh(uint32 id, int32 StartVertex, int32 NumPolys, jeXForm3d *XForm)
 {
 	if (LOG_LEVEL > 1)
-		D3D9Log::GetPtr()->Printf("Function Call:  RenderStaticMesh()");
+		LOG("Function Call:  RenderStaticMesh()");
 	else
 		REPORT("Function Call:  RenderStaticMesh()");
 
 	if (!g_pPolyCache)
 	{
-		D3D9Log::GetPtr()->Printf("ERROR:  No poly cache!!");
+		LOG("ERROR:  No poly cache!!");
 		return JE_FALSE;
 	}
 
@@ -804,7 +811,7 @@ jeBoolean DRIVERCC D3D9Drv_SetMatrix(uint32 Type, jeXForm3d *Matrix)
 	D3DMATRIX							out;
 
 	if (LOG_LEVEL > 1)
-		D3D9Log::GetPtr()->Printf("Function Call:  SetMatrix()");
+		LOG("Function Call:  SetMatrix()");
 	else
 		REPORT("Function Call:  SetMatrix()");
 
@@ -841,7 +848,7 @@ jeBoolean DRIVERCC D3D9Drv_GetMatrix(uint32 Type, jeXForm3d *Matrix)
 	D3DMATRIX							out;
 
 	if (LOG_LEVEL > 1)
-		D3D9Log::GetPtr()->Printf("Function Call:  GetMatrix()");
+		LOG("Function Call:  GetMatrix()");
 	else
 		REPORT("Function Call:  GetMatrix()");
 
@@ -875,7 +882,7 @@ jeBoolean DRIVERCC D3D9Drv_GetMatrix(uint32 Type, jeXForm3d *Matrix)
 jeBoolean DRIVERCC D3D9Drv_SetCamera(jeCamera *Camera)
 {
 	if (LOG_LEVEL > 1)
-		D3D9Log::GetPtr()->Printf("Function Call:  SetCamera()");
+		LOG("Function Call:  SetCamera()");
 	else
 		REPORT("Function Call:  SetCamera()");
 
@@ -889,7 +896,7 @@ jeFont * DRIVERCC D3D9Drv_CreateFont(int32 Height, int32 Width, uint32 Weight, j
 	uint32					w;
 
 	if (LOG_LEVEL > 1)
-		D3D9Log::GetPtr()->Printf("Function Call:  CreateFont()");
+		LOG("Function Call:  CreateFont()");
 	else
 		REPORT("Function Call:  EnumSubDrivers()");
 
@@ -901,14 +908,14 @@ jeFont * DRIVERCC D3D9Drv_CreateFont(int32 Height, int32 Width, uint32 Weight, j
 	font = new jeFont;
 	if (!font)
 	{
-		D3D9Log::GetPtr()->Printf("ERROR:  Out of memory!!");
+		LOG("ERROR:  Out of memory!!");
 		return NULL;
 	}
 
 	hres = D3DXCreateFont(pDevice, Height, Width, Weight, 0, Italic, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, TEXT(facename), &font->pFont);
 	if (FAILED(hres))
 	{
-		D3D9Log::GetPtr()->Printf("ERROR:  Could not create font!!");
+		LOG("ERROR:  Could not create font!!");
 		delete font;
 		font = NULL;
 
@@ -923,7 +930,7 @@ jeBoolean DRIVERCC D3D9Drv_DrawFont(jeFont *Font, int32 x, int32 y, uint32 Color
 	RECT						r;
 
 	if (LOG_LEVEL > 1)
-		D3D9Log::GetPtr()->Printf("Function Call:  DrawFont()");
+		LOG("Function Call:  DrawFont()");
 
 	pDevice->SetRenderState(D3DRS_ZENABLE, D3DZB_FALSE);
 	pDevice->SetRenderState(D3DRS_ZWRITEENABLE, FALSE);
@@ -932,7 +939,7 @@ jeBoolean DRIVERCC D3D9Drv_DrawFont(jeFont *Font, int32 x, int32 y, uint32 Color
 
 	if (FAILED(Font->pFont->DrawText(NULL, text, (int)strlen(text), &r, DT_NOCLIP, Color)))
 	{
-		D3D9Log::GetPtr()->Printf("ERROR:  Could not draw font!!");
+		LOG("ERROR:  Could not draw font!!");
 		return JE_FALSE;
 	}
 
@@ -945,7 +952,7 @@ jeBoolean DRIVERCC D3D9Drv_DrawFont(jeFont *Font, int32 x, int32 y, uint32 Color
 jeBoolean DRIVERCC D3D9Drv_DestroyFont(jeFont **Font)
 {
 	if (LOG_LEVEL > 1)
-		D3D9Log::GetPtr()->Printf("Function Call:  DestroyFont()");
+		LOG("Function Call:  DestroyFont()");
 	else
 		REPORT("Function Call:  DestroyFont()");
 
@@ -964,7 +971,7 @@ jeBoolean DRIVERCC D3D9Drv_SetRenderState(uint32 state, uint32 value)
 	DWORD								val;
 
 	if (LOG_LEVEL > 1)
-		D3D9Log::GetPtr()->Printf("Function Call:  SetRenderState()");
+		LOG("Function Call:  SetRenderState()");
 	else
 		REPORT("Function Call:  SetRenderState()");
 
@@ -1193,7 +1200,7 @@ jeBoolean DRIVERCC D3D9Drv_SetRenderState(uint32 state, uint32 value)
 
 	if (FAILED(hres))
 	{
-		D3D9Log::GetPtr()->Printf("ERROR:  Could not set render state!!");
+		LOG("ERROR:  Could not set render state!!");
 		return JE_FALSE;
 	}
 
@@ -1205,7 +1212,7 @@ jeBoolean DRIVERCC D3D9Drv_DrawText(char *text, int x, int y, uint32 color)
 	RECT							r;
 
 	if (LOG_LEVEL > 1)
-		D3D9Log::GetPtr()->Printf("Function Call:  DrawText()");
+		LOG("Function Call:  DrawText()");
 	else
 		REPORT("Function Call:  DrawText()");
 
@@ -1321,12 +1328,12 @@ D3D9Driver g_D3D9Drv = {
 extern "C" DRIVERAPI BOOL DriverHook(DRV_Driver **Driver)
 {
 	if (LOG_LEVEL > 1)
-		D3D9Log::GetPtr()->Printf("Function Call:  DriverHook()");
+		LOG("Function Call:  DriverHook()");
 
 	pD3D = Direct3DCreate9(D3D_SDK_VERSION);
 	if (!pD3D)
 	{
-		D3D9Log::GetPtr()->Printf("ERROR:  Could not create Direct3D object!!");
+		LOG("ERROR:  Could not create Direct3D object!!");
 		return FALSE;
 	}
 

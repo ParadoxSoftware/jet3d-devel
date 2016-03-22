@@ -8,12 +8,11 @@
 
 #include <stdio.h>
 #include "DCommon.h"
+#include "jeSingleton.h"
 
 #define LOG_FILE_NAME						"d3d9driver.log"
 
-class D3D9Log;
-
-class D3D9Log
+class D3D9Log : public Jet3D::jeSingleton<D3D9Log>
 {
 public:
 	D3D9Log();
@@ -27,10 +26,8 @@ public:
 	void								Shutdown();
 
 	void								Printf(const char *fmt, ...);
-
-public:
-	static D3D9Log						*Singleton;
-	static D3D9Log						*GetPtr();
 };
+
+#define LOG								D3D9Log::getSingletonPtr()->Printf
 
 #endif

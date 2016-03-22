@@ -4,8 +4,6 @@
 #include "PolyCache.h"
 #include "D3D9Log.h"
 
-__inline DWORD FtoDW( FLOAT f ) { return *((DWORD*)&f); }
-
 struct TextureSortFunctor
 {
 	bool operator ()(PolyCacheEntry &e1, PolyCacheEntry &e2)
@@ -30,6 +28,8 @@ struct TextureSortFunctor
 		return true;
 	}
 };
+
+__inline DWORD FtoDW(FLOAT f) { return *((DWORD*)&f); }
 
 //=====================================================================================
 //	Log2
@@ -216,14 +216,13 @@ PolyCache::PolyCache()
 {
 	m_pVB = NULL;
 	m_pDevice = NULL;
-	m_NumVerts = 0;
 
-	m_StaticBuffers.clear();
 	m_WorldCache.clear();
 	m_MiscCache.clear();
 	m_GouraudCache.clear();
 	m_StencilCache.clear();
 
+	m_NumVerts = 0;
 	m_pRS = NULL;
 }
 
@@ -268,6 +267,15 @@ jeBoolean PolyCache::Initialize(IDirect3DDevice9 *pDevice)
 
 	m_pRS = new RenderStateManager(pDevice);
 
+	int i;
+	for (i = 0; i < MAX_LAYERS; i++)
+	{
+		m_TextureStages[i] = NULL;
+		m_bOldTexWrap[i] = JE_FALSE;
+	}
+
+	m_OldSFunc = m_OldDFunc = D3DBLEND_ONE;
+	
 	return JE_TRUE;
 }
 

@@ -54,6 +54,8 @@ jeBoolean DRIVERCC OGLDrv_EnumModes(S32 Driver, char *DriverName, DRV_ENUM_MODES
 {
 	DEVMODE						mode;
 	int							modecount = 0;
+	int							numModes = 0;
+//	DISPLAY_DEVICE				device;
 
 	fprintf(ogllog, "EnumModes\n");
 	while (EnumDisplaySettings(NULL, modecount, &mode))
@@ -62,18 +64,23 @@ jeBoolean DRIVERCC OGLDrv_EnumModes(S32 Driver, char *DriverName, DRV_ENUM_MODES
 		{
 			if (ChangeDisplaySettings(&mode, CDS_TEST) == DISP_CHANGE_SUCCESSFUL)
 			{
-				char			modename[32];
+				if (mode.dmBitsPerPel > 8 && mode.dmPelsWidth > 512 && mode.dmPelsHeight > 384 && mode.dmDisplayFrequency == 60)
+				{
+					char			modename[32];
 
-				sprintf(modename, "%dx%dx%d", mode.dmPelsWidth, mode.dmPelsHeight, mode.dmBitsPerPel);
-				fprintf(ogllog, "%s\n", modename);
-				Cb(modecount, modename, mode.dmPelsWidth, mode.dmPelsHeight, mode.dmBitsPerPel, Context);
+					sprintf(modename, "%dx%dx%d", mode.dmPelsWidth, mode.dmPelsHeight, mode.dmBitsPerPel);
+					fprintf(ogllog, "%s\n", modename);
+					Cb(numModes, modename, mode.dmPelsWidth, mode.dmPelsHeight, mode.dmBitsPerPel, Context);
+					
+					numModes++;
+				}
 			}
 		}
 
 		modecount++;
 	}
 
-	Cb(modecount, "WindowMode", -1, -1, -1, Context);
+	Cb(numModes, "WindowMode", -1, -1, -1, Context);
 	return JE_TRUE;
 }
 
@@ -649,7 +656,7 @@ jeBoolean DRIVERCC OGLDrv_Screenshot(const char *Name)
 	tgaHeader[16] = 24;
  
 	// Convert the extention (if one exists) to .tga.  They probably expect a .bmp.
-	newName = strdup(Name);
+	newName = _strdup(Name);
 	nameLen = (int)strlen(newName);
 
 	if(nameLen > 3)

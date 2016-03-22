@@ -2,16 +2,6 @@
 #include <assert.h>
 #include "D3D9Log.h"
 
-D3D9Log									*D3D9Log::Singleton = NULL;
-
-D3D9Log *D3D9Log::GetPtr()
-{
-	if (D3D9Log::Singleton == NULL)
-		D3D9Log::Singleton = new D3D9Log();
-
-	return D3D9Log::Singleton;
-}
-
 D3D9Log::D3D9Log()
 {
 	m_pFile = NULL;
