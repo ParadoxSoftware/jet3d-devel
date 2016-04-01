@@ -37,6 +37,8 @@ protected:
 	jeWorld								*m_pWorld;
 	jeResourceMgr						*m_pResMgr;
 
+	jeImage								*m_pImage;
+
 protected:
 	DECLARE_MESSAGE_MAP()
 public:

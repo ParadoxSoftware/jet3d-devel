@@ -22,7 +22,11 @@
 */
 #include <assert.h>
 #include "jeImageImpl.h"
+
+extern "C" {
 #include "FreeImage.h"
+}
+
 #include "ErrorLog.h"
 #include "debug_new.h"
 
