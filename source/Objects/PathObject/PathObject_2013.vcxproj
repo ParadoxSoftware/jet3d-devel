@@ -142,11 +142,6 @@
     <ClInclude Include="Trigger.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="ObjectDef.c" />
-    <ClCompile Include="PathObj.c" />
-    <ClCompile Include="Trigger.c" />
-  </ItemGroup>
-  <ItemGroup>
     <ResourceCompile Include="PathObj.rc">
       <Culture Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">0x0419</Culture>
       <IgnoreStandardIncludePath Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</IgnoreStandardIncludePath>
@@ -157,6 +152,11 @@
     <None Include="PathObject.dep" />
     <None Include="PathObject.dsp" />
     <None Include="PathObject.mak" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="ObjectDef.cpp" />
+    <ClCompile Include="PathObj.cpp" />
+    <ClCompile Include="Trigger.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

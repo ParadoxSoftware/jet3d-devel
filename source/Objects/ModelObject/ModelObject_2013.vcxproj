@@ -138,10 +138,6 @@
     <ClInclude Include="Source\ObjectDef.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Source\ModelObject.c" />
-    <ClCompile Include="Source\ObjectDef.c" />
-  </ItemGroup>
-  <ItemGroup>
     <ResourceCompile Include="Source\ModelObject.rc">
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Source</AdditionalIncludeDirectories>
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Source</AdditionalIncludeDirectories>
@@ -151,6 +147,10 @@
     <None Include="ModelObject.dep" />
     <None Include="ModelObject.dsp" />
     <None Include="ModelObject.mak" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Source\modelobject.cpp" />
+    <ClCompile Include="Source\ObjectDef.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

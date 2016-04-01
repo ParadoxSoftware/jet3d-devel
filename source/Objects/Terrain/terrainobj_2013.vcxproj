@@ -135,12 +135,12 @@
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Source\terrainobjectdef.c" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="terrainobj.dep" />
     <None Include="terrainobj.dsp" />
     <None Include="terrainobj.mak" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Source\terrainobjectdef.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

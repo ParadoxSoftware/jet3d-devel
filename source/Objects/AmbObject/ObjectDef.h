@@ -18,6 +18,12 @@
 /*  Copyright (C) 1996-1999 Eclipse Entertainment, L.L.C. All Rights Reserved           */
 /*                                                                                      */
 /****************************************************************************************/
-#define DLLExport __declspec(dllexport)
+#include "jet.h"
 
-DLLExport jeBoolean Object_RegisterDef( float Major, float Minor);
+#ifdef AmbOBJECT_EXPORTS
+	#define DLLExport __declspec(dllexport)
+#else
+	#define DLLExport __declspec(dllimport)
+#endif
+
+extern "C" DLLExport jeBoolean Object_RegisterDef( float Major, float Minor);

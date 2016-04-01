@@ -132,10 +132,6 @@
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Source\DynamicLight.c" />
-    <ClCompile Include="Source\ObjectDef.c" />
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="Source\DynamicLight.h" />
     <ClInclude Include="Source\ObjectDef.h" />
   </ItemGroup>
@@ -151,6 +147,10 @@
       <IgnoreStandardIncludePath Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</IgnoreStandardIncludePath>
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Source</AdditionalIncludeDirectories>
     </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Source\DynamicLight.cpp" />
+    <ClCompile Include="Source\ObjectDef.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

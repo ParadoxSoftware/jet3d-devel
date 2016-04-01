@@ -132,10 +132,6 @@
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Source\ObjectDef.c" />
-    <ClCompile Include="Source\Spout.c" />
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="Source\ObjectDef.h" />
     <ClInclude Include="Source\Spout.h" />
   </ItemGroup>
@@ -151,6 +147,10 @@
       <IgnoreStandardIncludePath Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</IgnoreStandardIncludePath>
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Source</AdditionalIncludeDirectories>
     </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Source\ObjectDef.cpp" />
+    <ClCompile Include="Source\Spout.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

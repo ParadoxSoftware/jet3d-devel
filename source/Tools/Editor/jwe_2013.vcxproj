@@ -168,39 +168,38 @@
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Core\Brush.c" />
-    <ClCompile Include="Core\BrushList.c" />
-    <ClCompile Include="Core\BrushTemplate.c" />
-    <ClCompile Include="Core\CameraList.c" />
-    <ClCompile Include="Core\CamObj.c" />
-    <ClCompile Include="Core\Class.c" />
-    <ClCompile Include="Core\Descriptor.c" />
-    <ClCompile Include="Core\Draw.c" />
-    <ClCompile Include="Core\Draw3d.c" />
-    <ClCompile Include="Core\Facelist.c" />
-    <ClCompile Include="Core\Group.c" />
-    <ClCompile Include="Core\GroupList.c" />
+    <ClCompile Include="Core\Brush.cpp" />
+    <ClCompile Include="Core\BrushList.cpp" />
+    <ClCompile Include="Core\BrushTemplate.cpp" />
+    <ClCompile Include="Core\CameraList.cpp" />
+    <ClCompile Include="Core\CamObj.cpp" />
+    <ClCompile Include="Core\Class.cpp" />
+    <ClCompile Include="Core\Descriptor.cpp" />
+    <ClCompile Include="Core\Draw.cpp" />
+    <ClCompile Include="Core\Draw3d.cpp" />
+    <ClCompile Include="Core\FACELIST.CPP" />
+    <ClCompile Include="Core\Group.cpp" />
+    <ClCompile Include="Core\GroupList.cpp" />
     <ClCompile Include="Core\Level.cpp" />
-    <ClCompile Include="Core\Light.c" />
-    <ClCompile Include="Core\LightList.c" />
-    <ClCompile Include="Core\MaterialIdentList.c" />
-    <ClCompile Include="Core\MaterialList.c" />
-    <ClCompile Include="Core\MaterialList2.c" />
-    <ClCompile Include="Core\Materials.c" />
-    <ClCompile Include="Core\MatrArray.c" />
-    <ClCompile Include="Core\MatrIdx.c" />
-    <ClCompile Include="Core\Model.c" />
-    <ClCompile Include="Core\modellist.c" />
-    <ClCompile Include="Core\Object.c" />
-    <ClCompile Include="Core\ObjectList.c" />
-    <ClCompile Include="Core\Ortho.c" />
-    <ClCompile Include="Core\Select.c" />
-    <ClCompile Include="Core\TernList.c" />
-    <ClCompile Include="Core\TerrnObj.c" />
-    <ClCompile Include="Core\Transform.c" />
-    <ClCompile Include="Core\Undo.c" />
-    <ClCompile Include="Core\UserObj.c" />
-    <ClCompile Include="Core\Vertlist.c" />
+    <ClCompile Include="Core\Light.cpp" />
+    <ClCompile Include="Core\LightList.cpp" />
+    <ClCompile Include="Core\MaterialIdentList.cpp" />
+    <ClCompile Include="Core\MaterialList.cpp" />
+    <ClCompile Include="Core\MaterialList2.cpp" />
+    <ClCompile Include="Core\Materials.cpp" />
+    <ClCompile Include="Core\MatrIdx.cpp" />
+    <ClCompile Include="Core\MODEL.CPP" />
+    <ClCompile Include="Core\modellist.cpp" />
+    <ClCompile Include="Core\Object.cpp" />
+    <ClCompile Include="Core\ObjectList.cpp" />
+    <ClCompile Include="Core\Ortho.cpp" />
+    <ClCompile Include="Core\Select.cpp" />
+    <ClCompile Include="Core\TernList.cpp" />
+    <ClCompile Include="Core\TerrnObj.cpp" />
+    <ClCompile Include="Core\Transform.cpp" />
+    <ClCompile Include="Core\Undo.cpp" />
+    <ClCompile Include="Core\UserObj.cpp" />
+    <ClCompile Include="Core\VERTLIST.CPP" />
     <ClCompile Include="J3dmfc\J3DApp.cpp" />
     <ClCompile Include="J3dmfc\J3DDoc.cpp" />
     <ClCompile Include="J3dmfc\J3DMainFrm.cpp" />
@@ -241,16 +240,13 @@
     <ClCompile Include="Dialogs\DialogHelpers\TextureListControl.cpp" />
     <ClCompile Include="Dialogs\DialogHelpers\TextureTreeControl.cpp" />
     <ClCompile Include="Dialogs\DialogHelpers\Thin3DSplitterWnd.cpp" />
-    <ClCompile Include="Util\Bmp.c" />
-    <ClCompile Include="Util\Dlist.c" />
-    <ClCompile Include="Util\DrawTool.c" />
-    <ClCompile Include="Util\Drvlist.c" />
-    <ClCompile Include="Util\jeList.c" />
+    <ClCompile Include="Util\BMP.CPP" />
+    <ClCompile Include="Util\DLIST.CPP" />
+    <ClCompile Include="Util\DrawTool.cpp" />
+    <ClCompile Include="Util\DRVLIST.CPP" />
+    <ClCompile Include="Util\jeList.cpp" />
     <ClCompile Include="Util\Mtl9937.cpp" />
     <ClCompile Include="Util\Noise.cpp" />
-    <ClCompile Include="Util\Rect.c" />
-    <ClCompile Include="Util\Spawn.c" />
-    <ClCompile Include="Util\Util.c" />
     <ClCompile Include="AppData.cpp">
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)%(Filename)1.obj</ObjectFileName>
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)%(Filename)1.obj</ObjectFileName>
@@ -343,6 +339,9 @@
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)%(Filename)1.obj</ObjectFileName>
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)%(Filename)1.obj</ObjectFileName>
     </ClCompile>
+    <ClCompile Include="Util\Rect.cpp" />
+    <ClCompile Include="Util\Spawn.cpp" />
+    <ClCompile Include="Util\Util.cpp" />
     <ClCompile Include="View.cpp">
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)%(Filename)1.obj</ObjectFileName>
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)%(Filename)1.obj</ObjectFileName>

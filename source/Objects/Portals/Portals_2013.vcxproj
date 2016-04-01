@@ -133,10 +133,6 @@
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="ObjectDef.c" />
-    <ClCompile Include="PortalObject.c" />
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="ObjectDef.h" />
     <ClInclude Include="PortalObject.h" />
   </ItemGroup>
@@ -144,6 +140,10 @@
     <None Include="Portals.dep" />
     <None Include="Portals.dsp" />
     <None Include="Portals.mak" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="ObjectDef.cpp" />
+    <ClCompile Include="PortalObject.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
