@@ -21,8 +21,9 @@
 	Copyright (C) 1996-1999 Eclipse Entertainment, L.L.C. All Rights Reserved           
 */
 #include <assert.h>
-#include "jeImage.h"
+#include "jeImageImpl.h"
 #include "FreeImage.h"
+#include "ErrorLog.h"
 #include "debug_new.h"
 
 static unsigned free_image_read(void *buffer, unsigned size, unsigned count, fi_handle handle)
@@ -87,36 +88,59 @@ static long free_image_tell(fi_handle handle)
 	return pos;
 }
 
-typedef struct jeImage
+jeImageImpl::jeImageImpl()
 {
-	FIBITMAP *Bmp;
-	jeTexture *pDriverTexture;
-} jeImage;
+	m_pBitmap = NULL;
+	m_pTexture = NULL;
 
-JETAPI jeImage * JETCC jeImage_Create(int32 Width, int32 Height, int32 BPP)
-{
-	jeImage *pImg = new jeImage;
-	memset(pImg, 0, sizeof(jeImage));
-
-	pImg->Bmp = FreeImage_Allocate(Width, Height, BPP);
-	if (!pImg->Bmp)
-	{
-		JE_SAFE_DELETE(pImg);
-		return NULL;
-	}
-
-	pImg->pDriverTexture = NULL;
-
-	return pImg;
+	m_iRefCount = 1;
 }
 
-JETAPI jeImage * JETCC jeImage_CreateFromFile(jeVFile *File)
+jeImageImpl::~jeImageImpl()
+{
+	Destroy();
+}
+
+uint32 jeImageImpl::AddRef()
+{
+	m_iRefCount++;
+	return m_iRefCount;
+}
+
+uint32 jeImageImpl::Release()
+{
+	m_iRefCount--;
+	if (m_iRefCount <= 0)
+	{
+		delete this;
+		return 0;
+	}
+
+	return m_iRefCount;
+}
+
+jeBoolean jeImageImpl::Create(int32 Width, int32 Height, int32 BPP)
+{
+	if (m_pBitmap != NULL)
+		return JE_FALSE;
+
+	m_pBitmap = FreeImage_Allocate(Width, Height, BPP);
+	if (!m_pBitmap)
+		return JE_FALSE;
+
+	return JE_TRUE;
+}
+
+jeBoolean jeImageImpl::CreateFromFile(jeVFile *File)
 {
 	FreeImageIO io;
 	FREE_IMAGE_FORMAT fif;
-	jeImage *pImg = NULL;
+	char fileName[_MAX_PATH];
 
 	memset(&io, 0, sizeof(FreeImageIO));
+
+	jeVFile_GetName(File, fileName, _MAX_PATH);
+	jeErrorLog_AddString(-1, fileName, NULL);
 
 	io.read_proc = (FI_ReadProc)free_image_read;
 	io.seek_proc = (FI_SeekProc)free_image_seek;
@@ -127,79 +151,65 @@ JETAPI jeImage * JETCC jeImage_CreateFromFile(jeVFile *File)
 	if (fif == FIF_UNKNOWN)
 		return NULL;
 
-	pImg = new jeImage;
-	pImg->Bmp = FreeImage_LoadFromHandle(fif, &io, (fi_handle)File);
-	if (!pImg->Bmp)
-	{
-		JE_SAFE_DELETE(pImg);
-		return NULL;
-	}
+	m_pBitmap = FreeImage_LoadFromHandle(fif, &io, (fi_handle)File);
+	if (!m_pBitmap)
+		return JE_FALSE;
 
 	// No more 8-Bit or 16-Bit bitmaps
-	if (FreeImage_GetBPP(pImg->Bmp) < 24)
+	if (FreeImage_GetBPP(m_pBitmap) < 24)
 	{
 		FIBITMAP *conv = NULL;
 
-		conv = FreeImage_ConvertTo32Bits(pImg->Bmp);
-		FreeImage_Unload(pImg->Bmp);
-		pImg->Bmp = conv;
+		conv = FreeImage_ConvertTo32Bits(m_pBitmap);
+		FreeImage_Unload(m_pBitmap);
+		m_pBitmap = conv;
 	}
 
-	FreeImage_FlipVertical(pImg->Bmp);
-	pImg->pDriverTexture = NULL;
-
-	return pImg;
-}
-
-JETAPI void JETCC jeImage_Destroy(jeImage **pImage)
-{
-	FreeImage_Unload((*pImage)->Bmp);
+	FreeImage_FlipVertical(m_pBitmap);
 	
-	(*pImage)->Bmp = NULL;
-	(*pImage)->pDriverTexture = NULL;
-
-	JE_SAFE_DELETE((*pImage));
+	return JE_TRUE;
 }
 
-JETAPI int32 JETCC jeImage_GetWidth(const jeImage *pImage)
+void jeImageImpl::Destroy()
 {
-	assert(pImage);
-
-	return (int32)FreeImage_GetWidth(pImage->Bmp);
+	m_pTexture = NULL;
+	FreeImage_Unload(m_pBitmap);
 }
 
-JETAPI int32 JETCC jeImage_GetHeight(const jeImage *pImage)
+const int32 jeImageImpl::GetWidth() const
 {
-	assert(pImage);
+	assert(m_pBitmap);
 
-	return (int32)FreeImage_GetHeight(pImage->Bmp);
+	return (int32)FreeImage_GetWidth(m_pBitmap);
 }
 
-JETAPI int32 JETCC jeImage_GetBPP(const jeImage *pImage)
+const int32 jeImageImpl::GetHeight() const
 {
-	assert(pImage);
+	assert(m_pBitmap);
 
-	return (int32)FreeImage_GetBPP(pImage->Bmp);
+	return (int32)FreeImage_GetHeight(m_pBitmap);
 }
 
-JETAPI uint8 * JETCC jeImage_GetBits(const jeImage *pImage)
+const int32 jeImageImpl::GetBPP() const
 {
-	assert(pImage);
-	assert(pImage->Bmp);
+	assert(m_pBitmap);
 
-	return (uint8*)FreeImage_GetBits(pImage->Bmp);
+	return (int32)FreeImage_GetBPP(m_pBitmap);
 }
 
-JETAPI void JETCC jeImage_SetTextureHandle(jeImage *Image, jeTexture *Texture)
+uint8 * jeImageImpl::GetBits()
 {
-	assert(Image);
-	
-	Image->pDriverTexture = Texture;
+	assert(m_pBitmap);
+
+	return (uint8*)FreeImage_GetBits(m_pBitmap);
 }
 
-JETAPI jeTexture * JETCC jeImage_GetTextureHandle(const jeImage *Image)
+void jeImageImpl::SetTextureHandle(jeTexture *Texture)
 {
-	assert(Image);
+	m_pTexture = Texture;
+}
 
-	return Image->pDriverTexture;
+jeTexture * jeImageImpl::GetTextureHandle()
+{
+	return m_pTexture;
 }

@@ -338,9 +338,9 @@ DRV_Driver D3DDRV =
 	GetGamma,
 
 	// BEGIN - Hardware T&L - paradoxnj 4/5/2005
-	NULL,
-	NULL,
-	NULL,
+	//NULL,
+	//NULL,
+	//NULL,
 	// END - Hardware T&L - paradoxnj 4/5/2005
 
 	NULL,
@@ -351,9 +351,9 @@ DRV_Driver D3DDRV =
 
 	SetFog,
 
-	NULL,
-	NULL,
-	NULL,
+	//NULL,
+	//NULL,
+	//NULL,
 	
 	NULL,
 	NULL,

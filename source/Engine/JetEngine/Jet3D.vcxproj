@@ -347,6 +347,7 @@
     <ClInclude Include="CSNetMgr.h" />
     <ClInclude Include="..\..\..\include\jeTypes.h" />
     <ClInclude Include="..\..\..\include\jeVersion.h" />
+    <ClInclude Include="Engine\jeImageImpl.h" />
     <ClInclude Include="list.h" />
     <ClInclude Include="..\..\..\include\OBJECT.H" />
     <ClInclude Include="OGGStream.h" />

@@ -59,4 +59,6 @@
 // Shaders
 //#include "jeShader.h"
 
+#include "jeImage.h"
+
 #endif

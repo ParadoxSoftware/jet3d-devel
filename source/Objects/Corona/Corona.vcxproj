@@ -25,7 +25,7 @@
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseOfMfc>false</UseOfMfc>
     <CharacterSet>MultiByte</CharacterSet>
-    <PlatformToolset>v120</PlatformToolset>
+    <PlatformToolset>v110</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -133,11 +133,6 @@
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Source\Corona.c" />
-    <ClCompile Include="Source\ObjectDef.c" />
-    <ClCompile Include="Source\ObjUtil.c" />
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="Source\Corona.h" />
     <ClInclude Include="Source\ObjectDef.h" />
     <ClInclude Include="Source\ObjUtil.h" />
@@ -154,6 +149,11 @@
   <ItemGroup>
     <None Include="Corona.dsp" />
     <None Include="Corona.mak" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Source\Corona.cpp" />
+    <ClCompile Include="Source\ObjectDef.cpp" />
+    <ClCompile Include="Source\ObjUtil.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

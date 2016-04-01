@@ -24,7 +24,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <CharacterSet>MultiByte</CharacterSet>
-    <PlatformToolset>v120</PlatformToolset>
+    <PlatformToolset>v110</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -103,12 +103,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="ObjectDef.c" />
-    <ClCompile Include="StaticMeshObj.c" />
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="ObjectDef.h" />
     <ClInclude Include="StaticMeshObj.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="ObjectDef.cpp" />
+    <ClCompile Include="StaticMeshObj.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -38,7 +38,7 @@ jeBoolean	JETCC AttachEngine ( void * Instance, jeEngine *Engine );
 jeBoolean	JETCC DettachEngine( void * Instance, jeEngine *Engine );
 jeBoolean	JETCC AttachSoundSystem( void * Instance, jeSound_System *SoundSystem );
 jeBoolean	JETCC DettachSoundSystem( void * Instance, jeSound_System *SoundSystem );
-jeBoolean	JETCC Collision(const jeObject *Object, const jeExtBox *Box, const jeVec3d *Front, const jeVec3d *Back, jeVec3d *Impact, jePlane *Plane);
+jeBoolean	JETCC Collision(const void *Object, const jeExtBox *Box, const jeVec3d *Front, const jeVec3d *Back, jeVec3d *Impact, jePlane *Plane);
 jeBoolean JETCC SetMaterial(void * Instance,const jeBitmap *Bmp,const jeRGBA * Color);
 jeBoolean JETCC GetMaterial(const void * Instance,jeBitmap **pBmp,jeRGBA * Color);
 jeBoolean JETCC GetExtBox(const void * Instance,jeExtBox *BBox);

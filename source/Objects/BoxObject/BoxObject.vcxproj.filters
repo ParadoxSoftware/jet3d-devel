@@ -7,14 +7,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="BoxObject.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ObjectDef.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="BoxObject.h">
       <Filter>Source Files</Filter>
     </ClInclude>
@@ -31,5 +23,13 @@
     <None Include="BoxObject.dep" />
     <None Include="BoxObject.dsp" />
     <None Include="BoxObject.mak" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="BoxObject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectDef.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

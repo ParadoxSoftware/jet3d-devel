@@ -65,7 +65,7 @@ ObjectIterator	ObjectList_AppendSort( ObjectList * pList, Object * pObject, Obje
 int32			ObjectList_EnumObjects( ObjectList * pList, void * pVoid, ObjectListCB Callback ) ;
 
 // CALLBACK
-void			ObjectList_DestroyCB( Object * pObject ) ;
+void			ObjectList_DestroyCB( void * pObject ) ;
 
 #ifdef __cplusplus
 }

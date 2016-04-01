@@ -7,13 +7,13 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Source\terrainobjectdef.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="terrainobj.dep" />
     <None Include="terrainobj.dsp" />
     <None Include="terrainobj.mak" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Source\terrainobjectdef.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

@@ -134,6 +134,7 @@ private:
 	bool		m_bShuttingDown;
 	LARGE_INTEGER	m_LIOldTick, m_LIFreq;	//	time-calc vars
 
+	jeImage		*m_pImage;
 
 
 // Generated message map functions

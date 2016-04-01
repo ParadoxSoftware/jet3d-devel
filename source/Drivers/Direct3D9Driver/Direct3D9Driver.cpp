@@ -3,6 +3,7 @@
 #include "D3D9TextureMgr.h"
 #include "PolyCache.h"
 #include "D3D9Log.h"
+#include "D3D9Render.h"
 
 #ifdef _DEBUG
 #pragma comment(lib, "Jet3DClassic7d.lib")
@@ -10,97 +11,60 @@
 #pragma comment(lib, "Jet3DClassic7.lib")
 #endif
 
-jeRDriver_PixelFormat							PixelFormat[10];
-DRV_EngineSettings								EngineSettings;
-HWND											hWnd;
-IDirect3D9										*pD3D = NULL;
-IDirect3DDevice9								*pDevice = NULL;
-float											localgamma;
-D3DPRESENT_PARAMETERS							d3dpp;
+//jeRDriver_PixelFormat							PixelFormat[10];
+//DRV_EngineSettings								EngineSettings;
+//HWND											hWnd;
+//IDirect3D9										*pD3D = NULL;
+//IDirect3DDevice9								*pDevice = NULL;
+//float											localgamma;
+//D3DPRESENT_PARAMETERS							d3dpp;
 
-D3DCAPS9										g_Caps;
-bool											CanDoAntiAlias = false;
-bool											CanDoShaders = false;
-bool											CanDoAnisotropic = false;
+//D3DCAPS9										g_Caps;
+//bool											CanDoAntiAlias = false;
+//bool											CanDoShaders = false;
+//bool											CanDoAnisotropic = false;
 
-D3DDISPLAYMODE									old_mode;
+//D3DDISPLAYMODE									old_mode;
 
-ID3DXSprite										*pSprite = NULL;
-ID3DXFont										*pFont = NULL;
+//ID3DXSprite										*pSprite = NULL;
+//ID3DXFont										*pFont = NULL;
 
-PolyCache										*g_pPolyCache = NULL;
+//PolyCache										*g_pPolyCache = NULL;
 
-#define JE_FONT_NORMAL			0x00000001
-#define JE_FONT_BOLD			0x00000002
+//#define JE_FONT_NORMAL			0x00000001
+//#define JE_FONT_BOLD			0x00000002
 
-RGB_LUT Lut1;
+//RGB_LUT Lut1;
 
-typedef struct jeFont
-{
-	ID3DXFont						*pFont;
-} jeFont;
+//typedef struct jeFont
+//{
+//	ID3DXFont						*pFont;
+//} jeFont;
 
 static jeBoolean PrepPolyVerts(jeTLVertex *Pnts, int32 NumPoints, jeRDriver_Layer *Layers, int32 NumLayers,void *LMapCBContext);
 static void FillLMapSurface(jeTLVertex *Pnts,int32 NumPoints,jeTexture *THandle, jeRDriver_LMapCBInfo *Info, int32 LNum);
 
-inline DWORD FtoDW( FLOAT f ) { return *((DWORD*)&f); }
+//inline DWORD FtoDW( FLOAT f ) { return *((DWORD*)&f); }
 
-void jeXForm3d_ToD3DMatrix(jeXForm3d *XForm, D3DMATRIX *mat)
-{
-	mat->_11 = XForm->AX;
-	mat->_12 = XForm->AY;
-	mat->_13 = XForm->AZ;
-	mat->_14 = 0.0f;
-
-	mat->_21 = XForm->BX;
-	mat->_22 = XForm->BY;
-	mat->_23 = XForm->BZ;
-	mat->_24 = 0.0f;
-
-	mat->_31 = XForm->CX;
-	mat->_32 = XForm->CY;
-	mat->_33 = XForm->CZ;
-	mat->_34 = 0.0f;
-
-	mat->_41 = XForm->Translation.X;
-	mat->_42 = XForm->Translation.Y;
-	mat->_43 = XForm->Translation.Z;
-	mat->_44 = 1.0f;
-}
-
-void D3DMatrix_ToXForm3d(D3DMATRIX *mat, jeXForm3d *XForm)
-{
-	XForm->AX = mat->_11;
-	XForm->AY = mat->_12;
-	XForm->AZ = mat->_13;
-
-	XForm->BX = mat->_21;
-	XForm->BY = mat->_22;
-	XForm->BZ = mat->_23;
-
-	XForm->CX = mat->_31;
-	XForm->CY = mat->_32;
-	XForm->CZ = mat->_33;
-
-	XForm->Translation.X = mat->_41;
-	XForm->Translation.Y = mat->_42;
-	XForm->Translation.Z = mat->_43;
-}
+D3D9Render *g_pRender = NULL;
 
 jeBoolean DRIVERCC D3D9Drv_EnumSubDrivers(DRV_ENUM_DRV_CB *Cb, void *Context)
 {
-	if (LOG_LEVEL > 1)
+	/*if (LOG_LEVEL > 1)
 		LOG("Function Call:  EnumSubDrivers()");
 	else
 		REPORT("Function Call:  EnumSubDrivers()");
 
 	Cb(1, "Direct3D 9 Driver", Context);
-	return TRUE;
+	return TRUE;*/
+
+	assert(g_pRender != NULL);
+	return g_pRender->EnumSubDrivers(Cb, Context);
 }
 
 jeBoolean DRIVERCC D3D9Drv_EnumModes(S32 Driver, char *DriverName, DRV_ENUM_MODES_CB *Cb, void *Context)
 {
-	HRESULT							hres;
+	/*HRESULT							hres;
 	D3DFORMAT						fmt[] = { D3DFMT_X8R8G8B8, D3DFMT_R5G6B5 };
 	int32							y = 0, numModes = 0;
 	
@@ -145,194 +109,200 @@ jeBoolean DRIVERCC D3D9Drv_EnumModes(S32 Driver, char *DriverName, DRV_ENUM_MODE
 
 	Cb(numModes, "WindowMode", -1, -1, -1, Context);
 
-	return TRUE;
+	return TRUE;*/
+
+	assert(g_pRender != NULL);
+	return g_pRender->EnumModes(Driver, DriverName, Cb, Context);
 }
 
 jeBoolean DRIVERCC D3D9Drv_Init(DRV_DriverHook *hook)
 {
-	HRESULT						hres;
-	//D3DPRESENT_PARAMETERS		d3dpp;
-	int32						bpp;
-	int32						dummy;
-	const char					*modename = NULL;
-	int							w, h;
+	//HRESULT						hres;
+	////D3DPRESENT_PARAMETERS		d3dpp;
+	//int32						bpp;
+	//int32						dummy;
+	//const char					*modename = NULL;
+	//int							w, h;
 
-	if (LOG_LEVEL > 1)
-		LOG("Function Call:  Init()");
-	else
-		REPORT("Function Call:  Init()");
+	//if (LOG_LEVEL > 1)
+	//	LOG("Function Call:  Init()");
+	//else
+	//	REPORT("Function Call:  Init()");
 
-	if (pDevice != NULL)
-	{
-		SAFE_RELEASE(pDevice);
-	}
+	//if (pDevice != NULL)
+	//{
+	//	SAFE_RELEASE(pDevice);
+	//}
 
-	pD3D->GetAdapterDisplayMode(D3DADAPTER_DEFAULT, &old_mode);
+	//pD3D->GetAdapterDisplayMode(D3DADAPTER_DEFAULT, &old_mode);
 
-	ZeroMemory(&d3dpp, sizeof(D3DPRESENT_PARAMETERS));
+	//ZeroMemory(&d3dpp, sizeof(D3DPRESENT_PARAMETERS));
 
-	sscanf(hook->ModeName, "%dx%dx%d", &w, &h, &bpp);
-	if (hook->Width == -1 && hook->Height == -1)
-	{
-		RECT					r;
-		
-		GetClientRect(hook->hWnd, &r);
+	//sscanf(hook->ModeName, "%dx%dx%d", &w, &h, &bpp);
+	//if (hook->Width == -1 && hook->Height == -1)
+	//{
+	//	RECT					r;
+	//	
+	//	GetClientRect(hook->hWnd, &r);
 
-		d3dpp.BackBufferWidth = r.right - r.left;
-		d3dpp.BackBufferHeight = r.bottom - r.top;
-		d3dpp.BackBufferFormat = old_mode.Format;
-		d3dpp.Windowed = TRUE;
-	}
-	else
-	{
-		d3dpp.BackBufferWidth = hook->Width;
-		d3dpp.BackBufferHeight = hook->Height;
-		d3dpp.SwapEffect = D3DSWAPEFFECT_DISCARD;
+	//	d3dpp.BackBufferWidth = r.right - r.left;
+	//	d3dpp.BackBufferHeight = r.bottom - r.top;
+	//	d3dpp.BackBufferFormat = old_mode.Format;
+	//	d3dpp.Windowed = TRUE;
+	//}
+	//else
+	//{
+	//	d3dpp.BackBufferWidth = hook->Width;
+	//	d3dpp.BackBufferHeight = hook->Height;
+	//	d3dpp.SwapEffect = D3DSWAPEFFECT_DISCARD;
 
-		if(bpp==32)
-			d3dpp.BackBufferFormat = D3DFMT_X8R8G8B8;
-		else
-			d3dpp.BackBufferFormat = D3DFMT_R5G6B5;
+	//	if(bpp==32)
+	//		d3dpp.BackBufferFormat = D3DFMT_X8R8G8B8;
+	//	else
+	//		d3dpp.BackBufferFormat = D3DFMT_R5G6B5;
 
-		d3dpp.FullScreen_RefreshRateInHz = 60;
-		d3dpp.Windowed = FALSE;
-	}
+	//	d3dpp.FullScreen_RefreshRateInHz = 60;
+	//	d3dpp.Windowed = FALSE;
+	//}
 
-	sscanf(hook->ModeName,"%dx%dx%d",&dummy,&dummy,&bpp);
+	//sscanf(hook->ModeName,"%dx%dx%d",&dummy,&dummy,&bpp);
 
-	d3dpp.BackBufferCount = 1;
-	d3dpp.SwapEffect = D3DSWAPEFFECT_DISCARD;
-	d3dpp.hDeviceWindow = hook->hWnd;
-	d3dpp.EnableAutoDepthStencil = TRUE;
-	d3dpp.AutoDepthStencilFormat = D3DFMT_D16;
-	d3dpp.PresentationInterval = D3DPRESENT_INTERVAL_IMMEDIATE;
+	//d3dpp.BackBufferCount = 1;
+	//d3dpp.SwapEffect = D3DSWAPEFFECT_DISCARD;
+	//d3dpp.hDeviceWindow = hook->hWnd;
+	//d3dpp.EnableAutoDepthStencil = TRUE;
+	//d3dpp.AutoDepthStencilFormat = D3DFMT_D16;
+	//d3dpp.PresentationInterval = D3DPRESENT_INTERVAL_IMMEDIATE;
 
-	hres = pD3D->CheckDeviceMultiSampleType(D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, d3dpp.BackBufferFormat, d3dpp.Windowed, D3DMULTISAMPLE_2_SAMPLES, NULL);
-	if (FAILED(hres))
-	{
-		LOG("Feature Request:  Full Scene Anti-Aliasing OFF");
-		CanDoAntiAlias = false;
-	}
-	else
-	{
-		LOG("Feature Request:  Full Scene Anti-Aliasing ON");
-		CanDoAntiAlias = true;
-	}
+	//hres = pD3D->CheckDeviceMultiSampleType(D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, d3dpp.BackBufferFormat, d3dpp.Windowed, D3DMULTISAMPLE_2_SAMPLES, NULL);
+	//if (FAILED(hres))
+	//{
+	//	LOG("Feature Request:  Full Scene Anti-Aliasing OFF");
+	//	CanDoAntiAlias = false;
+	//}
+	//else
+	//{
+	//	LOG("Feature Request:  Full Scene Anti-Aliasing ON");
+	//	CanDoAntiAlias = true;
+	//}
 
-	if (!CanDoAntiAlias)
-		d3dpp.MultiSampleType = D3DMULTISAMPLE_NONE;
-	else
-		d3dpp.MultiSampleType = D3DMULTISAMPLE_2_SAMPLES;
+	//if (!CanDoAntiAlias)
+	//	d3dpp.MultiSampleType = D3DMULTISAMPLE_NONE;
+	//else
+	//	d3dpp.MultiSampleType = D3DMULTISAMPLE_2_SAMPLES;
 
-	d3dpp.MultiSampleQuality = 0;
-	d3dpp.Flags = 0;
-	
-	hres = pD3D->CreateDevice(D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, hook->hWnd, D3DCREATE_HARDWARE_VERTEXPROCESSING, &d3dpp, &pDevice);
-	if (FAILED(hres))
-	{
-		hres = pD3D->CreateDevice(D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, hook->hWnd, D3DCREATE_SOFTWARE_VERTEXPROCESSING, &d3dpp, &pDevice);
-		if (FAILED(hres))
-		{
-			hres = pD3D->CreateDevice(D3DADAPTER_DEFAULT, D3DDEVTYPE_SW, hook->hWnd, D3DCREATE_SOFTWARE_VERTEXPROCESSING, &d3dpp, &pDevice);
-			if (FAILED(hres))
-			{
-				hres = pD3D->CreateDevice(D3DADAPTER_DEFAULT, D3DDEVTYPE_REF, hook->hWnd, D3DCREATE_SOFTWARE_VERTEXPROCESSING, &d3dpp, &pDevice);
-				if (FAILED(hres))
-				{
-					if (hres == D3DERR_DEVICELOST)
-						LOG("ERROR:  Device Lost!!");
-					else if (hres == D3DERR_INVALIDCALL)
-						LOG("ERROR:  Invalid Call!!");
-					else if (hres == D3DERR_NOTAVAILABLE)
-						LOG("ERROR:  Not Available!!");
-					else if (hres == D3DERR_OUTOFVIDEOMEMORY)
-						LOG("ERROR:  Out of video memory!!");
-					else
-						LOG("ERROR:  Unknown error!!");
+	//d3dpp.MultiSampleQuality = 0;
+	//d3dpp.Flags = 0;
+	//
+	//hres = pD3D->CreateDevice(D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, hook->hWnd, D3DCREATE_HARDWARE_VERTEXPROCESSING, &d3dpp, &pDevice);
+	//if (FAILED(hres))
+	//{
+	//	hres = pD3D->CreateDevice(D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, hook->hWnd, D3DCREATE_SOFTWARE_VERTEXPROCESSING, &d3dpp, &pDevice);
+	//	if (FAILED(hres))
+	//	{
+	//		hres = pD3D->CreateDevice(D3DADAPTER_DEFAULT, D3DDEVTYPE_SW, hook->hWnd, D3DCREATE_SOFTWARE_VERTEXPROCESSING, &d3dpp, &pDevice);
+	//		if (FAILED(hres))
+	//		{
+	//			hres = pD3D->CreateDevice(D3DADAPTER_DEFAULT, D3DDEVTYPE_REF, hook->hWnd, D3DCREATE_SOFTWARE_VERTEXPROCESSING, &d3dpp, &pDevice);
+	//			if (FAILED(hres))
+	//			{
+	//				if (hres == D3DERR_DEVICELOST)
+	//					LOG("ERROR:  Device Lost!!");
+	//				else if (hres == D3DERR_INVALIDCALL)
+	//					LOG("ERROR:  Invalid Call!!");
+	//				else if (hres == D3DERR_NOTAVAILABLE)
+	//					LOG("ERROR:  Not Available!!");
+	//				else if (hres == D3DERR_OUTOFVIDEOMEMORY)
+	//					LOG("ERROR:  Out of video memory!!");
+	//				else
+	//					LOG("ERROR:  Unknown error!!");
 
-					return FALSE;
-				}
-				else
-					LOG("DEVICE:  Created using REF/SW");
-			}
-			else
-				LOG("DEVICE:  Created using SW/SW");
-		}
-		else
-			LOG("DEVICE:  Created using HW/SW");
-	}
-	else
-		LOG("DEVICE:  Created using HW/HW");
+	//				return FALSE;
+	//			}
+	//			else
+	//				LOG("DEVICE:  Created using REF/SW");
+	//		}
+	//		else
+	//			LOG("DEVICE:  Created using SW/SW");
+	//	}
+	//	else
+	//		LOG("DEVICE:  Created using HW/SW");
+	//}
+	//else
+	//	LOG("DEVICE:  Created using HW/HW");
 
-	pDevice->GetDeviceCaps(&g_Caps);
+	//pDevice->GetDeviceCaps(&g_Caps);
 
-	if (g_Caps.RasterCaps & D3DPRASTERCAPS_ANISOTROPY)
-	{
-		LOG("Feature Request:  Anisotropic Filtering ON");
-		CanDoAnisotropic = true;
-	}
-	else
-		LOG("Feature Request:  Anisotropic Filtering OFF");
+	//if (g_Caps.RasterCaps & D3DPRASTERCAPS_ANISOTROPY)
+	//{
+	//	LOG("Feature Request:  Anisotropic Filtering ON");
+	//	CanDoAnisotropic = true;
+	//}
+	//else
+	//	LOG("Feature Request:  Anisotropic Filtering OFF");
 
-	if ((g_Caps.VertexShaderVersion >= D3DVS_VERSION(1, 1)) && (g_Caps.PixelShaderVersion >= D3DPS_VERSION(1, 4)))
-	{
-		LOG("Feature Request:  Vertex and Pixel Shaders ON");
-		CanDoShaders = true;
-	}
-	else
-		LOG("Feature Request:  Vertex and Pixel Shaders OFF");
+	//if ((g_Caps.VertexShaderVersion >= D3DVS_VERSION(1, 1)) && (g_Caps.PixelShaderVersion >= D3DPS_VERSION(1, 4)))
+	//{
+	//	LOG("Feature Request:  Vertex and Pixel Shaders ON");
+	//	CanDoShaders = true;
+	//}
+	//else
+	//	LOG("Feature Request:  Vertex and Pixel Shaders OFF");
 
-	if (CanDoAntiAlias)
-		pDevice->SetRenderState( D3DRS_MULTISAMPLEANTIALIAS, TRUE);
+	//if (CanDoAntiAlias)
+	//	pDevice->SetRenderState( D3DRS_MULTISAMPLEANTIALIAS, TRUE);
 
-	pDevice->SetRenderState( D3DRS_SHADEMODE, D3DSHADE_GOURAUD );
+	//pDevice->SetRenderState( D3DRS_SHADEMODE, D3DSHADE_GOURAUD );
 
-	pDevice->SetRenderState( D3DRS_CULLMODE, D3DCULL_NONE);
-	pDevice->SetRenderState( D3DRS_LIGHTING, FALSE );
+	//pDevice->SetRenderState( D3DRS_CULLMODE, D3DCULL_NONE);
+	//pDevice->SetRenderState( D3DRS_LIGHTING, FALSE );
 
-	pDevice->SetRenderState( D3DRS_ZENABLE,  D3DZB_TRUE  );	
-    pDevice->SetRenderState( D3DRS_ZWRITEENABLE, TRUE );
+	//pDevice->SetRenderState( D3DRS_ZENABLE,  D3DZB_TRUE  );	
+ //   pDevice->SetRenderState( D3DRS_ZWRITEENABLE, TRUE );
 
-	g_pPolyCache = new PolyCache();
-	if (!g_pPolyCache)
-	{
-		LOG("ERROR:  Could not create poly cache!!");
-		return FALSE;
-	}
+	//g_pPolyCache = new PolyCache();
+	//if (!g_pPolyCache)
+	//{
+	//	LOG("ERROR:  Could not create poly cache!!");
+	//	return FALSE;
+	//}
 
-	if (!g_pPolyCache->Initialize(pDevice))
-	{
-		LOG("ERROR:  Could not initialize poly cache!!");
-		return FALSE;
-	}
+	//if (!g_pPolyCache->Initialize(pDevice))
+	//{
+	//	LOG("ERROR:  Could not initialize poly cache!!");
+	//	return FALSE;
+	//}
 
-	D3DXMATRIX matProj;
-	D3DXMatrixPerspectiveFovLH( &matProj, D3DX_PI/4, 1.0f, 1.0f, 4000.0f );
-	pDevice->SetTransform( D3DTS_PROJECTION, &matProj );
+	//D3DXMATRIX matProj;
+	//D3DXMatrixPerspectiveFovLH( &matProj, D3DX_PI/4, 1.0f, 1.0f, 4000.0f );
+	//pDevice->SetTransform( D3DTS_PROJECTION, &matProj );
 
-	localgamma = 1.0f;
+	//localgamma = 1.0f;
 
-	BuildRGBGammaTables(1);
+	//BuildRGBGammaTables(1);
 
-	if (FAILED(D3DXCreateSprite(pDevice, &pSprite)))
-	{
-		LOG("ERROR:  Could not create sprite interface!!");
-		return FALSE;
-	}
+	//if (FAILED(D3DXCreateSprite(pDevice, &pSprite)))
+	//{
+	//	LOG("ERROR:  Could not create sprite interface!!");
+	//	return FALSE;
+	//}
 
-	D3DXCreateFont(pDevice, 18, 0, FW_BOLD, 0, FALSE, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, TEXT("Arial"), &pFont);
+	//D3DXCreateFont(pDevice, 18, 0, FW_BOLD, 0, FALSE, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, TEXT("Arial"), &pFont);
 
-	if (LOG_LEVEL > 1)
-		LOG("DEBUG:  Initialization successful");
-	else
-		REPORT("DEBUG:  Initialization complete...");
+	//if (LOG_LEVEL > 1)
+	//	LOG("DEBUG:  Initialization successful");
+	//else
+	//	REPORT("DEBUG:  Initialization complete...");
 
-	return TRUE;
+	//return TRUE;
+
+	assert(g_pRender != NULL);
+	return g_pRender->Initialize(hook);
 }
 
 jeBoolean DRIVERCC D3D9Drv_Shutdown(void)
 {
-	if (LOG_LEVEL > 1)
+	/*if (LOG_LEVEL > 1)
 		LOG("Function Call:  Shutdown()");
 	else
 		REPORT("Function Call:  Shutdown()");
@@ -349,7 +319,13 @@ jeBoolean DRIVERCC D3D9Drv_Shutdown(void)
 	D3D9Log::getSingletonPtr()->Shutdown();
 	delete D3D9Log::getSingletonPtr();
 
-	return TRUE;
+	return TRUE;*/
+
+	assert(g_pRender != NULL);
+
+	g_pRender->Shutdown();
+	SAFE_DELETE(g_pRender);
+	return JE_TRUE;
 }
 
 /*jeRDriver_PixelFormat PFormats[] = 
@@ -382,101 +358,115 @@ jeBoolean DRIVERCC D3D9Drv_EnumPixelFormats(DRV_ENUM_PFORMAT_CB *Cb, void *Conte
 
 jeBoolean DRIVERCC D3D9Drv_EnumPixelFormats(DRV_ENUM_PFORMAT_CB *Cb, void *Context)
 {
-	int32			i;
-	jePixelFormat	Format3d, Format2d;
-	uint32			CurrentBpp;
-	D3DDISPLAYMODE	mode;
+	//int32			i;
+	//jePixelFormat	Format3d, Format2d;
+	//uint32			CurrentBpp;
+	//D3DDISPLAYMODE	mode;
 
-	pDevice->GetDisplayMode(0, &mode);
+	//pDevice->GetDisplayMode(0, &mode);
 
-	if (mode.Format == D3DFMT_X8R8G8B8 || mode.Format == D3DFMT_A8R8G8B8 || mode.Format == D3DFMT_A2R10G10B10)
-		CurrentBpp = 32;
-	else if (mode.Format == D3DFMT_R5G6B5 || mode.Format == D3DFMT_A1R5G5B5 || mode.Format == D3DFMT_X1R5G5B5)
-		CurrentBpp = 16;
+	//if (mode.Format == D3DFMT_X8R8G8B8 || mode.Format == D3DFMT_A8R8G8B8 || mode.Format == D3DFMT_A2R10G10B10)
+	//	CurrentBpp = 32;
+	//else if (mode.Format == D3DFMT_R5G6B5 || mode.Format == D3DFMT_A1R5G5B5 || mode.Format == D3DFMT_X1R5G5B5)
+	//	CurrentBpp = 16;
 
-	// Setup the 2d surface format
-	if (CurrentBpp == 32 && mode.Format == D3DFMT_A8R8G8B8)
-		Format2d = JE_PIXELFORMAT_32BIT_ARGB;
-	else if (CurrentBpp == 32 && mode.Format == D3DFMT_X8R8G8B8)
-		Format2d = JE_PIXELFORMAT_32BIT_XRGB;
-	else if (CurrentBpp == 16 && mode.Format == D3DFMT_A1R5G5B5)
-		Format2d = JE_PIXELFORMAT_16BIT_1555_ARGB;
-	else if (CurrentBpp == 16 && mode.Format == D3DFMT_R5G6B5)
-		Format2d = JE_PIXELFORMAT_16BIT_565_RGB;
-	else
-		Format2d = JE_PIXELFORMAT_16BIT_555_RGB;
-
-	// Setup the 3d (Texture) format
-	//if (mode.Format == D3DFMT_R5G6B5)
-	//	Format3d = JE_PIXELFORMAT_16BIT_555_RGB;
+	//// Setup the 2d surface format
+	//if (CurrentBpp == 32 && mode.Format == D3DFMT_A8R8G8B8)
+	//	Format2d = JE_PIXELFORMAT_32BIT_ARGB;
+	//else if (CurrentBpp == 32 && mode.Format == D3DFMT_X8R8G8B8)
+	//	Format2d = JE_PIXELFORMAT_32BIT_XRGB;
+	//else if (CurrentBpp == 16 && mode.Format == D3DFMT_A1R5G5B5)
+	//	Format2d = JE_PIXELFORMAT_16BIT_1555_ARGB;
+	//else if (CurrentBpp == 16 && mode.Format == D3DFMT_R5G6B5)
+	//	Format2d = JE_PIXELFORMAT_16BIT_565_RGB;
 	//else
-		Format3d = JE_PIXELFORMAT_16BIT_565_RGB;
-	//Format3d = JE_PIXELFORMAT_32BIT_ARGB;
+	//	Format2d = JE_PIXELFORMAT_16BIT_555_RGB;
 
-	// Create the surface formats now
-	PixelFormat[0].PixelFormat = Format3d;							// 3d 565/555 surface
-	PixelFormat[0].Flags = RDRIVER_PF_3D | RDRIVER_PF_COMBINE_LIGHTMAP;
-		
-	PixelFormat[1].PixelFormat = JE_PIXELFORMAT_16BIT_4444_ARGB;	// 3d 4444 surface
-	PixelFormat[1].Flags = RDRIVER_PF_3D | RDRIVER_PF_COMBINE_LIGHTMAP | RDRIVER_PF_ALPHA;
+	//// Setup the 3d (Texture) format
+	////if (mode.Format == D3DFMT_R5G6B5)
+	////	Format3d = JE_PIXELFORMAT_16BIT_555_RGB;
+	////else
+	//	Format3d = JE_PIXELFORMAT_16BIT_565_RGB;
+	////Format3d = JE_PIXELFORMAT_32BIT_ARGB;
 
-	PixelFormat[2].PixelFormat = Format2d;							// 2d 565/555 surface
-	PixelFormat[2].Flags = RDRIVER_PF_2D | RDRIVER_PF_CAN_DO_COLORKEY;
+	//// Create the surface formats now
+	//PixelFormat[0].PixelFormat = Format3d;							// 3d 565/555 surface
+	//PixelFormat[0].Flags = RDRIVER_PF_3D | RDRIVER_PF_COMBINE_LIGHTMAP;
+	//	
+	//PixelFormat[1].PixelFormat = JE_PIXELFORMAT_16BIT_4444_ARGB;	// 3d 4444 surface
+	//PixelFormat[1].Flags = RDRIVER_PF_3D | RDRIVER_PF_COMBINE_LIGHTMAP | RDRIVER_PF_ALPHA;
 
-	PixelFormat[3].PixelFormat = Format3d;							// Lightmap 565/555 surface
-	PixelFormat[3].Flags = RDRIVER_PF_LIGHTMAP;
+	//PixelFormat[2].PixelFormat = Format2d;							// 2d 565/555 surface
+	//PixelFormat[2].Flags = RDRIVER_PF_2D | RDRIVER_PF_CAN_DO_COLORKEY;
 
-	PixelFormat[4].PixelFormat = JE_PIXELFORMAT_16BIT_1555_ARGB;	
-	PixelFormat[4].Flags = RDRIVER_PF_3D | RDRIVER_PF_COMBINE_LIGHTMAP | RDRIVER_PF_ALPHA;
+	//PixelFormat[3].PixelFormat = Format3d;							// Lightmap 565/555 surface
+	//PixelFormat[3].Flags = RDRIVER_PF_LIGHTMAP;
 
-	// Then hand them off to the caller
-	for (i=0; i<5; i++)
-	{
-		if (!Cb(&PixelFormat[i], Context))
-			return JE_TRUE;
-	}
+	//PixelFormat[4].PixelFormat = JE_PIXELFORMAT_16BIT_1555_ARGB;	
+	//PixelFormat[4].Flags = RDRIVER_PF_3D | RDRIVER_PF_COMBINE_LIGHTMAP | RDRIVER_PF_ALPHA;
 
-	return TRUE;
+	//// Then hand them off to the caller
+	//for (i=0; i<5; i++)
+	//{
+	//	if (!Cb(&PixelFormat[i], Context))
+	//		return JE_TRUE;
+	//}
+
+	//return TRUE;
+
+	assert(g_pRender != NULL);
+
+	return g_pRender->EnumPixelFormats(Cb, Context);
 }
 
 jeBoolean DRIVERCC D3D9Drv_GetDeviceCaps(jeDeviceCaps *DeviceCaps)
 {
-	if (LOG_LEVEL > 1)
+	/*if (LOG_LEVEL > 1)
 		LOG("Function Call:  GetDeviceCaps()");
 	else
 		REPORT("Function Call:  GetDeviceCaps()");
 
 	DeviceCaps->SuggestedDefaultRenderFlags = JE_RENDER_FLAG_BILINEAR_FILTER;
 	DeviceCaps->CanChangeRenderFlags = 0xFFFFFFFF;
-	return JE_TRUE;
+	return JE_TRUE;*/
+
+	assert(g_pRender != NULL);
+	return g_pRender->GetDeviceCaps(DeviceCaps);
 }
 
 jeBoolean DRIVERCC D3D9Drv_SetGamma(float gamma)
 {
-	if (LOG_LEVEL > 1)
+	/*if (LOG_LEVEL > 1)
 		LOG("Function Call:  SetGamma()");
 	else
 		REPORT("Function Call:  SetGamma()");
 
 	localgamma=gamma;
 	BuildRGBGammaTables(gamma);
-	return JE_TRUE;
+	return JE_TRUE;*/
+
+	assert(g_pRender != NULL);
+	return g_pRender->SetGamma(gamma);
 }
 
 jeBoolean DRIVERCC D3D9Drv_GetGamma(float *gamma)
 {
-	if (LOG_LEVEL > 1)
+	/*if (LOG_LEVEL > 1)
 		LOG("Function Call:  GetGamma()");
 	else
 		REPORT("Function Call:  GetGamma()");
 
 	*gamma = localgamma;
-	return JE_TRUE;
+	return JE_TRUE;*/
+
+	assert(g_pRender != NULL);
+
+	return g_pRender->GetGamma(gamma);
 }
 
 jeBoolean DRIVERCC D3D9Drv_Reset()
 {
-	if (LOG_LEVEL > 1)
+	/*if (LOG_LEVEL > 1)
 		LOG("Function Call:  Reset()");
 	else
 		REPORT("Function Call:  Reset()");
@@ -493,33 +483,44 @@ jeBoolean DRIVERCC D3D9Drv_Reset()
 	D3D9_THandle_Startup();
 	g_pPolyCache->Initialize(pDevice);
 
-	return TRUE;
+	return TRUE;*/
+
+	assert(g_pRender != NULL);
+
+	return g_pRender->Reset();
 }
 
 jeBoolean DRIVERCC D3D9Drv_UpdateWindow()
 {
-	if (LOG_LEVEL > 1)
+	/*if (LOG_LEVEL > 1)
 		LOG("Function Call:  UpdateWindow()");
 	else
 		REPORT("Function Call:  UpdateWindow()");
 
-	return TRUE;
+	return TRUE;*/
+
+	assert(g_pRender != NULL);
+	return g_pRender->UpdateWindow();
 }
 
 jeBoolean DRIVERCC D3D9Drv_SetActive(jeBoolean Active)
 {
-	if (LOG_LEVEL > 1)
+	/*if (LOG_LEVEL > 1)
 		LOG("Function Call:  SetActive()");
 	else
 		REPORT("Function Call:  SetActive()");
 
 	Active;
-	return TRUE;
+	return TRUE;*/
+
+	assert(g_pRender != NULL);
+
+	return g_pRender->SetActive(Active);
 }
 
 jeBoolean DRIVERCC D3D9Drv_BeginScene(jeBoolean Clear, jeBoolean ClearZ, RECT *WorldRect, jeBoolean Wireframe)
 {
-	HRESULT							hres;
+	/*HRESULT							hres;
 
 	if (LOG_LEVEL > 1)
 		LOG("Function Call:  BeginScene()");
@@ -549,12 +550,16 @@ jeBoolean DRIVERCC D3D9Drv_BeginScene(jeBoolean Clear, jeBoolean ClearZ, RECT *W
 		return JE_FALSE;
 	}
 
-	return JE_TRUE;
+	return JE_TRUE;*/
+
+	assert(g_pRender != NULL);
+
+	return g_pRender->BeginScene(Clear, ClearZ, WorldRect, Wireframe);
 }
 
 jeBoolean DRIVERCC D3D9Drv_EndScene()
 {
-	HRESULT							hres;
+	/*HRESULT							hres;
 
 	if (LOG_LEVEL > 1)
 		LOG("Function Call:  EndScene()");
@@ -581,32 +586,44 @@ jeBoolean DRIVERCC D3D9Drv_EndScene()
 		return JE_FALSE;
 	}
 
-	return JE_TRUE;
+	return JE_TRUE;*/
+
+	assert(g_pRender != NULL);
+
+	return g_pRender->EndScene();
 }
 
 jeBoolean DRIVERCC D3D9Drv_BeginBatch()
 {
-	if (LOG_LEVEL > 1)
+	/*if (LOG_LEVEL > 1)
 		LOG("Function Call:  BeginBatch()");
 	else
 		REPORT("Function Call:  BeginBatch()");
 
-	return JE_TRUE;
+	return JE_TRUE;*/
+
+	assert(g_pRender != NULL);
+
+	return g_pRender->BeginBatch();
 }
 
 jeBoolean DRIVERCC D3D9Drv_EndBatch()
 {
-	if (LOG_LEVEL > 1)
+	/*if (LOG_LEVEL > 1)
 		LOG("Function Call:  EndBatch()");
 	else
 		REPORT("Function Call:  EndBatch()");
 
-	return JE_TRUE;
+	return JE_TRUE;*/
+
+	assert(g_pRender != NULL);
+
+	return g_pRender->EndBatch();
 }
 
 jeBoolean DRIVERCC D3D9Drv_RenderGouraudPoly(jeTLVertex *Pnts, int32 NumPoints, uint32 Flags)
 {
-	if (LOG_LEVEL > 1)
+	/*if (LOG_LEVEL > 1)
 		LOG("Function Call:  RenderGouraudPoly()");
 	else
 		REPORT("Function Call:  RenderGouraudPoly()");
@@ -617,11 +634,16 @@ jeBoolean DRIVERCC D3D9Drv_RenderGouraudPoly(jeTLVertex *Pnts, int32 NumPoints, 
 		return JE_FALSE;
 	}
 
-	return g_pPolyCache->AddGouraudPoly(Pnts, NumPoints, Flags);
+	return g_pPolyCache->AddGouraudPoly(Pnts, NumPoints, Flags);*/
+
+	assert(g_pRender != NULL);
+
+	return g_pRender->RenderGouraudPoly(Pnts, NumPoints, Flags);
 }
+
 jeBoolean DRIVERCC D3D9Drv_RenderWorldPoly(jeTLVertex *Pnts, int32 NumPoints, jeRDriver_Layer *Layers, int32 NumLayers, void *LMapCBContext, uint32 Flags)
 {
-	if (LOG_LEVEL > 1)
+	/*if (LOG_LEVEL > 1)
 		LOG("Function Call:  RenderWorldPoly()");
 	else
 		REPORT("Function Call:  RenderWorldPoly()");
@@ -632,7 +654,10 @@ jeBoolean DRIVERCC D3D9Drv_RenderWorldPoly(jeTLVertex *Pnts, int32 NumPoints, je
 		return JE_FALSE;
 	}
 
-	return g_pPolyCache->AddWorldPoly(Pnts, NumPoints, Layers, NumLayers, LMapCBContext, Flags);
+	return g_pPolyCache->AddWorldPoly(Pnts, NumPoints, Layers, NumLayers, LMapCBContext, Flags);*/
+
+	assert(g_pRender != NULL);
+	return g_pRender->RenderWorldPoly(Pnts, NumPoints, Layers, NumLayers, LMapCBContext, Flags);
 }
 /*
 typedef struct
@@ -658,7 +683,7 @@ typedef struct
 
 jeBoolean DRIVERCC D3D9Drv_RenderMiscTexturePoly(jeTLVertex *Pnts, int32 NumPoints, jeRDriver_Layer *Layers, int32 NumLayers, uint32 Flags)
 {
-	if (LOG_LEVEL > 1)
+	/*if (LOG_LEVEL > 1)
 		LOG("Function Call:  RenderMiscTexturePoly()");
 	else
 		REPORT("Function Call:  RenderMiscTexturePoly()");
@@ -669,12 +694,16 @@ jeBoolean DRIVERCC D3D9Drv_RenderMiscTexturePoly(jeTLVertex *Pnts, int32 NumPoin
 		return JE_FALSE;
 	}
 
-	return g_pPolyCache->AddMiscTexturePoly(Pnts, NumPoints, Layers, NumLayers, Flags);
+	return g_pPolyCache->AddMiscTexturePoly(Pnts, NumPoints, Layers, NumLayers, Flags);*/
+
+	assert(g_pRender != NULL);
+
+	return g_pRender->RenderMiscTexturePoly(Pnts, NumPoints, Layers, NumLayers, Flags);
 }
 
 jeBoolean DRIVERCC D3D9Drv_DrawDecal(jeTexture *Handle, RECT *SrcRect, int32 x, int32 y)
 {
-	HRESULT						hres;
+	/*HRESULT						hres;
 
 	if (LOG_LEVEL > 1)
 		LOG("Function Call:  DrawDecal()");
@@ -702,12 +731,16 @@ jeBoolean DRIVERCC D3D9Drv_DrawDecal(jeTexture *Handle, RECT *SrcRect, int32 x, 
 		return JE_FALSE;
 	}
 
-	return JE_TRUE;
+	return JE_TRUE;*/
+
+	assert(g_pRender != NULL);
+
+	return g_pRender->DrawDecal(Handle, SrcRect, x, y);
 }
 
 jeBoolean DRIVERCC D3D9Drv_Screenshot(const char *filename)
 {
-	HRESULT						hres;
+	/*HRESULT						hres;
 	IDirect3DSurface9			*pSurface = NULL;
 	D3DDISPLAYMODE				dmode;
 
@@ -751,147 +784,151 @@ jeBoolean DRIVERCC D3D9Drv_Screenshot(const char *filename)
 	pSurface->Release();
 	pSurface = NULL;
 
-	return JE_TRUE;
+	return JE_TRUE;*/
+
+	assert(g_pRender != NULL);
+
+	return g_pRender->ScreenShot(filename);
 }
 
-uint32 DRIVERCC D3D9Drv_CreateStaticMesh(jeHWVertex *Points, int32 NumPoints, jeRDriver_Layer *Layers, int32 NumLayers, uint32 Flags)
-{
-	uint32						id;
+//uint32 DRIVERCC D3D9Drv_CreateStaticMesh(jeHWVertex *Points, int32 NumPoints, jeRDriver_Layer *Layers, int32 NumLayers, uint32 Flags)
+//{
+//	uint32						id;
+//
+//	if (LOG_LEVEL > 1)
+//		LOG("Function Call:  CreateStaticMesh()");
+//	else
+//		REPORT("Function Call:  CreateStaticMesh()");
+//
+//	if (!g_pPolyCache)
+//	{
+//		LOG("ERROR:  No poly cache!!");
+//		return 0;
+//	}
+//
+//	id = g_pPolyCache->AddStaticBuffer(Points, NumPoints, Layers, NumLayers, Flags);
+//	return id;
+//}
+//
+//jeBoolean DRIVERCC D3D9Drv_RemoveStaticMesh(uint32 id)
+//{
+//	if (LOG_LEVEL > 1)
+//		LOG("Function Call:  RemoveStaticMesh()");
+//	else
+//		REPORT("Function Call:  RemoveStaticMesh()");
+//
+//	if (!g_pPolyCache)
+//	{
+//		LOG("ERROR:  No poly cache!!");
+//		return JE_FALSE;
+//	}
+//
+//	return g_pPolyCache->RemoveStaticBuffer(id);
+//}
+//
+//jeBoolean DRIVERCC D3D9Drv_RenderStaticMesh(uint32 id, int32 StartVertex, int32 NumPolys, jeXForm3d *XForm)
+//{
+//	if (LOG_LEVEL > 1)
+//		LOG("Function Call:  RenderStaticMesh()");
+//	else
+//		REPORT("Function Call:  RenderStaticMesh()");
+//
+//	if (!g_pPolyCache)
+//	{
+//		LOG("ERROR:  No poly cache!!");
+//		return JE_FALSE;
+//	}
+//
+//	return g_pPolyCache->RenderStaticBuffer(id, StartVertex, NumPolys, XForm);
+//}
 
-	if (LOG_LEVEL > 1)
-		LOG("Function Call:  CreateStaticMesh()");
-	else
-		REPORT("Function Call:  CreateStaticMesh()");
+//jeBoolean DRIVERCC D3D9Drv_SetMatrix(uint32 Type, jeXForm3d *Matrix)
+//{
+//	D3DTRANSFORMSTATETYPE				t;
+//	D3DMATRIX							out;
+//
+//	if (LOG_LEVEL > 1)
+//		LOG("Function Call:  SetMatrix()");
+//	else
+//		REPORT("Function Call:  SetMatrix()");
+//
+//	switch (Type)
+//	{
+//	case JE_XFORM_TYPE_WORLD:
+//		{
+//			t = D3DTS_WORLD;
+//			break;
+//		}
+//	case JE_XFORM_TYPE_VIEW:
+//		{
+//			t = D3DTS_VIEW;
+//			break;
+//		}
+//	case JE_XFORM_TYPE_PROJECTION:
+//		{
+//			t = D3DTS_PROJECTION;
+//			break;
+//		}
+//	default:
+//		return JE_FALSE;
+//	}
+//
+//	jeXForm3d_ToD3DMatrix(Matrix, &out);
+//	pDevice->SetTransform(t, &out);
+//
+//	return JE_TRUE;
+//}
+//
+//jeBoolean DRIVERCC D3D9Drv_GetMatrix(uint32 Type, jeXForm3d *Matrix)
+//{
+//	D3DTRANSFORMSTATETYPE				t;
+//	D3DMATRIX							out;
+//
+//	if (LOG_LEVEL > 1)
+//		LOG("Function Call:  GetMatrix()");
+//	else
+//		REPORT("Function Call:  GetMatrix()");
+//
+//	switch (Type)
+//	{
+//	case JE_XFORM_TYPE_WORLD:
+//		{
+//			t = D3DTS_WORLD;
+//			break;
+//		}
+//	case JE_XFORM_TYPE_VIEW:
+//		{
+//			t = D3DTS_VIEW;
+//			break;
+//		}
+//	case JE_XFORM_TYPE_PROJECTION:
+//		{
+//			t = D3DTS_PROJECTION;
+//			break;
+//		}
+//	default:
+//		return JE_FALSE;
+//	}
+//
+//	pDevice->GetTransform(t, &out);
+//	D3DMatrix_ToXForm3d(&out, Matrix);
+//
+//	return JE_TRUE;
+//}
 
-	if (!g_pPolyCache)
-	{
-		LOG("ERROR:  No poly cache!!");
-		return 0;
-	}
-
-	id = g_pPolyCache->AddStaticBuffer(Points, NumPoints, Layers, NumLayers, Flags);
-	return id;
-}
-
-jeBoolean DRIVERCC D3D9Drv_RemoveStaticMesh(uint32 id)
-{
-	if (LOG_LEVEL > 1)
-		LOG("Function Call:  RemoveStaticMesh()");
-	else
-		REPORT("Function Call:  RemoveStaticMesh()");
-
-	if (!g_pPolyCache)
-	{
-		LOG("ERROR:  No poly cache!!");
-		return JE_FALSE;
-	}
-
-	return g_pPolyCache->RemoveStaticBuffer(id);
-}
-
-jeBoolean DRIVERCC D3D9Drv_RenderStaticMesh(uint32 id, int32 StartVertex, int32 NumPolys, jeXForm3d *XForm)
-{
-	if (LOG_LEVEL > 1)
-		LOG("Function Call:  RenderStaticMesh()");
-	else
-		REPORT("Function Call:  RenderStaticMesh()");
-
-	if (!g_pPolyCache)
-	{
-		LOG("ERROR:  No poly cache!!");
-		return JE_FALSE;
-	}
-
-	return g_pPolyCache->RenderStaticBuffer(id, StartVertex, NumPolys, XForm);
-}
-
-jeBoolean DRIVERCC D3D9Drv_SetMatrix(uint32 Type, jeXForm3d *Matrix)
-{
-	D3DTRANSFORMSTATETYPE				t;
-	D3DMATRIX							out;
-
-	if (LOG_LEVEL > 1)
-		LOG("Function Call:  SetMatrix()");
-	else
-		REPORT("Function Call:  SetMatrix()");
-
-	switch (Type)
-	{
-	case JE_XFORM_TYPE_WORLD:
-		{
-			t = D3DTS_WORLD;
-			break;
-		}
-	case JE_XFORM_TYPE_VIEW:
-		{
-			t = D3DTS_VIEW;
-			break;
-		}
-	case JE_XFORM_TYPE_PROJECTION:
-		{
-			t = D3DTS_PROJECTION;
-			break;
-		}
-	default:
-		return JE_FALSE;
-	}
-
-	jeXForm3d_ToD3DMatrix(Matrix, &out);
-	pDevice->SetTransform(t, &out);
-
-	return JE_TRUE;
-}
-
-jeBoolean DRIVERCC D3D9Drv_GetMatrix(uint32 Type, jeXForm3d *Matrix)
-{
-	D3DTRANSFORMSTATETYPE				t;
-	D3DMATRIX							out;
-
-	if (LOG_LEVEL > 1)
-		LOG("Function Call:  GetMatrix()");
-	else
-		REPORT("Function Call:  GetMatrix()");
-
-	switch (Type)
-	{
-	case JE_XFORM_TYPE_WORLD:
-		{
-			t = D3DTS_WORLD;
-			break;
-		}
-	case JE_XFORM_TYPE_VIEW:
-		{
-			t = D3DTS_VIEW;
-			break;
-		}
-	case JE_XFORM_TYPE_PROJECTION:
-		{
-			t = D3DTS_PROJECTION;
-			break;
-		}
-	default:
-		return JE_FALSE;
-	}
-
-	pDevice->GetTransform(t, &out);
-	D3DMatrix_ToXForm3d(&out, Matrix);
-
-	return JE_TRUE;
-}
-
-jeBoolean DRIVERCC D3D9Drv_SetCamera(jeCamera *Camera)
-{
-	if (LOG_LEVEL > 1)
-		LOG("Function Call:  SetCamera()");
-	else
-		REPORT("Function Call:  SetCamera()");
-
-	return JE_TRUE;
-}
+//jeBoolean DRIVERCC D3D9Drv_SetCamera(jeCamera *Camera)
+//{
+//	if (LOG_LEVEL > 1)
+//		LOG("Function Call:  SetCamera()");
+//	else
+//		REPORT("Function Call:  SetCamera()");
+//
+//	return JE_TRUE;
+//}
 
 jeFont * DRIVERCC D3D9Drv_CreateFont(int32 Height, int32 Width, uint32 Weight, jeBoolean Italic, const char *facename)
 {
-	jeFont					*font = NULL;
+	/*jeFont					*font = NULL;
 	HRESULT					hres;
 	uint32					w;
 
@@ -922,12 +959,16 @@ jeFont * DRIVERCC D3D9Drv_CreateFont(int32 Height, int32 Width, uint32 Weight, j
 		return NULL;
 	}
 
-	return font;
+	return font;*/
+
+	assert(g_pRender != NULL);
+
+	return g_pRender->CreateFont(Height, Width, Weight, Italic, facename);
 }
 
 jeBoolean DRIVERCC D3D9Drv_DrawFont(jeFont *Font, int32 x, int32 y, uint32 Color, const char *text)
 {
-	RECT						r;
+	/*RECT						r;
 
 	if (LOG_LEVEL > 1)
 		LOG("Function Call:  DrawFont()");
@@ -946,12 +987,16 @@ jeBoolean DRIVERCC D3D9Drv_DrawFont(jeFont *Font, int32 x, int32 y, uint32 Color
 	pDevice->SetRenderState(D3DRS_ZENABLE, D3DZB_TRUE);
 	pDevice->SetRenderState(D3DRS_ZWRITEENABLE, TRUE);
 
-	return JE_TRUE;
+	return JE_TRUE;*/
+
+	assert(g_pRender != NULL);
+
+	return g_pRender->DrawFont(Font, x, y, Color, text);
 }
 
 jeBoolean DRIVERCC D3D9Drv_DestroyFont(jeFont **Font)
 {
-	if (LOG_LEVEL > 1)
+	/*if (LOG_LEVEL > 1)
 		LOG("Function Call:  DestroyFont()");
 	else
 		REPORT("Function Call:  DestroyFont()");
@@ -962,12 +1007,16 @@ jeBoolean DRIVERCC D3D9Drv_DestroyFont(jeFont **Font)
 	delete (*Font);
 	(*Font) = NULL;
 
-	return JE_TRUE;
+	return JE_TRUE;*/
+
+	assert(g_pRender != NULL);
+
+	return g_pRender->DestroyFont(Font);
 }
 
 jeBoolean DRIVERCC D3D9Drv_SetRenderState(uint32 state, uint32 value)
 {
-	HRESULT								hres;
+	/*HRESULT								hres;
 	DWORD								val;
 
 	if (LOG_LEVEL > 1)
@@ -1204,12 +1253,16 @@ jeBoolean DRIVERCC D3D9Drv_SetRenderState(uint32 state, uint32 value)
 		return JE_FALSE;
 	}
 
-	return JE_TRUE;
+	return JE_TRUE;*/
+
+	assert(g_pRender != NULL);
+
+	return g_pRender->SetRenderState(state, value);
 }
 
 jeBoolean DRIVERCC D3D9Drv_DrawText(char *text, int x, int y, uint32 color)
 {
-	RECT							r;
+	/*RECT							r;
 
 	if (LOG_LEVEL > 1)
 		LOG("Function Call:  DrawText()");
@@ -1221,12 +1274,16 @@ jeBoolean DRIVERCC D3D9Drv_DrawText(char *text, int x, int y, uint32 color)
 	if (FAILED(pFont->DrawText(NULL, text, (int)strlen(text), &r, DT_NOCLIP, color)))
 		return JE_FALSE;
 
-	return JE_TRUE;
+	return JE_TRUE;*/
+
+	assert(g_pRender != NULL);
+
+	return g_pRender->DrawText(text, x, y, color);
 }
 
 D3D9Driver g_D3D9Drv = {
 
-	"Direct3D 9 Driver.  Copyright 2004-2006, Paradox Software",
+	"Direct3D 9 Driver.  Copyright 2004-2016, Paradox Software",
 	DRV_VERSION_MAJOR,
 	DRV_VERSION_MINOR,
 
@@ -1296,9 +1353,9 @@ D3D9Driver g_D3D9Drv = {
 	D3D9Drv_GetGamma,
 
 	// BEGIN - Hardware T&L - paradoxnj 4/5/2005
-	D3D9Drv_SetMatrix,
-	D3D9Drv_GetMatrix,
-	NULL,
+	//D3D9Drv_SetMatrix,
+	//D3D9Drv_GetMatrix,
+	//NULL,
 	// END - Hardware T&L - paradoxnj 4/5/2005
 
 	NULL,
@@ -1308,9 +1365,9 @@ D3D9Driver g_D3D9Drv = {
 
 	NULL,
 
-	D3D9Drv_CreateStaticMesh,
-	D3D9Drv_RemoveStaticMesh,
-	D3D9Drv_RenderStaticMesh,
+	//D3D9Drv_CreateStaticMesh,
+	//D3D9Drv_RemoveStaticMesh,
+	//D3D9Drv_RenderStaticMesh,
 
 	D3D9Drv_CreateFont,
 	D3D9Drv_DrawFont,
@@ -1330,19 +1387,20 @@ extern "C" DRIVERAPI BOOL DriverHook(DRV_Driver **Driver)
 	if (LOG_LEVEL > 1)
 		LOG("Function Call:  DriverHook()");
 
-	pD3D = Direct3DCreate9(D3D_SDK_VERSION);
+	/*pD3D = Direct3DCreate9(D3D_SDK_VERSION);
 	if (!pD3D)
 	{
 		LOG("ERROR:  Could not create Direct3D object!!");
 		return FALSE;
-	}
+	}*/
+	g_pRender = new D3D9Render();
 
 	D3D9_THandle_Startup();
 
-	EngineSettings.CanSupportFlags = (DRV_SUPPORT_ALPHA | DRV_SUPPORT_COLORKEY);
-	EngineSettings.PreferenceFlags = 0;
+	/*EngineSettings.CanSupportFlags = (DRV_SUPPORT_ALPHA | DRV_SUPPORT_COLORKEY);
+	EngineSettings.PreferenceFlags = 0;*/
 
-	g_D3D9Drv.EngineSettings = &EngineSettings;
+	g_D3D9Drv.EngineSettings = g_pRender->GetEngineSettings();
 
 	*Driver = &g_D3D9Drv;
 	return TRUE;
@@ -1351,223 +1409,223 @@ extern "C" DRIVERAPI BOOL DriverHook(DRV_Driver **Driver)
 //====================================================================================
 //	PrepPolyVerts
 //====================================================================================
-static jeBoolean PrepPolyVerts(jeTLVertex *Pnts, int32 NumPoints, jeRDriver_Layer *Layers, int32 NumLayers,void *LMapCBContext)
-{
-	float			InvScale, u, v;
-	float			ShiftU, ShiftV, ScaleU, ScaleV;
-	jeTLVertex		*TempVerts,*pTVerts, *pVerts;
-	//float			du, dv, dx, dy, MipScale;
-	int32			j;
-//	D3DSURFACE_DESC				desc;
+//static jeBoolean PrepPolyVerts(jeTLVertex *Pnts, int32 NumPoints, jeRDriver_Layer *Layers, int32 NumLayers,void *LMapCBContext)
+//{
+//	float			InvScale, u, v;
+//	float			ShiftU, ShiftV, ScaleU, ScaleV;
+//	jeTLVertex		*TempVerts,*pTVerts, *pVerts;
+//	//float			du, dv, dx, dy, MipScale;
+//	int32			j;
+////	D3DSURFACE_DESC				desc;
+//
+//	float				InvScale2, ShiftU2, ShiftV2;
+//	jeRDriver_Layer		*LMapLayer;
+//	jeRDriver_Layer		*TexLayer;
+//
+//	TempVerts = (jeTLVertex*)malloc(sizeof(jeTLVertex)*NumPoints);
+//	memcpy(TempVerts,Pnts,sizeof(jeTLVertex)*NumPoints);
+//
+//	pTVerts = &TempVerts[0];
+//
+//	// Set up shifts and scaled for texture uv's
+//	TexLayer = &Layers[0];
+//	LMapLayer = &Layers[1];
+//
+//	// Normalize UV's using Texture Size
+//	InvScale = 1.0f / (float)((1<<TexLayer->THandle->Log));
+//
+//	ShiftU = TexLayer->ShiftU;
+//	ShiftV = TexLayer->ShiftV;
+//	ScaleU = (1.0f/(TexLayer->ScaleU));
+//	ScaleV = (1.0f/(TexLayer->ScaleV));
+//
+//	if(NumLayers>1)
+//	{
+//		// Set up shifts and scaled for lightmap uv's
+//		ShiftU2 = (float)-LMapLayer->ShiftU + 8.0f;
+//		ShiftV2 = (float)-LMapLayer->ShiftV + 8.0f;
+//
+//		InvScale2 = 1.0f/(float)((1<<LMapLayer->THandle->Log)<<4);
+//	}
+//
+//	pVerts = &Pnts[0];
+//
+//	for (j=0; j<NumPoints; j++)
+//	{
+//
+//		u = pTVerts->u*ScaleU+ShiftU;
+//		v = pTVerts->v*ScaleV+ShiftV;
+//
+//		pVerts->u = u * InvScale;
+//		pVerts->v = v * InvScale;
+//
+//		if(NumLayers>1)
+//		{
+//			u = pTVerts->u + ShiftU2;
+//			v = pTVerts->v + ShiftV2;
+//
+//			pVerts->pad1 =u * InvScale2;
+//			pVerts->pad2 =v * InvScale2;
+//		}
+//
+//
+//	//	pVerts->color = pTVerts->Color;
+//
+//		pTVerts++;
+//		pVerts++;
+//	}
+//
+//	free(TempVerts);
+//	return TRUE;
+//}
+//
+////=====================================================================================
+////	Log2
+////	Return the log of a size
+////=====================================================================================
+//uint32 Log2(uint32 P2)
+//{
+//	uint32		p = 0;
+//	int32		i = 0;
+//	
+//	for (i = P2; i > 0; i>>=1)
+//		p++;
+//
+//	return (p-1);
+//}
+//
+////=====================================================================================
+////	SnapToPower2
+////	Snaps a number to a power of 2
+////=====================================================================================
+//int32 SnapToPower2(int32 Width)
+//{
+//		 if (Width <= 1) return 1;
+//	else if (Width <= 2) return 2;
+//	else if (Width <= 4) return 4;
+//	else if (Width <= 8) return 8;
+//	else if (Width <= 16) return 16;
+//	else if (Width <= 32) return 32;
+//	else if (Width <= 64) return 64;
+//	else if (Width <= 128) return 128;
+//	else if (Width <= 256) return 256;
+//	else if (Width <= 512) return 512;
+//	else if (Width <= 1024) return 1024;
+//	else if (Width <= 2048) return 2048;
+//	else 
+//		return -1;
+//}
+//
+////=====================================================================================
+////	Return the max log of a (power of 2) width and height
+////=====================================================================================
+//int32 GetLog(int32 Width, int32 Height)
+//{
+//	int32	LWidth = SnapToPower2(max(Width, Height));
+//	
+//	return Log2(LWidth);
+//}
 
-	float				InvScale2, ShiftU2, ShiftV2;
-	jeRDriver_Layer		*LMapLayer;
-	jeRDriver_Layer		*TexLayer;
-
-	TempVerts = (jeTLVertex*)malloc(sizeof(jeTLVertex)*NumPoints);
-	memcpy(TempVerts,Pnts,sizeof(jeTLVertex)*NumPoints);
-
-	pTVerts = &TempVerts[0];
-
-	// Set up shifts and scaled for texture uv's
-	TexLayer = &Layers[0];
-	LMapLayer = &Layers[1];
-
-	// Normalize UV's using Texture Size
-	InvScale = 1.0f / (float)((1<<TexLayer->THandle->Log));
-
-	ShiftU = TexLayer->ShiftU;
-	ShiftV = TexLayer->ShiftV;
-	ScaleU = (1.0f/(TexLayer->ScaleU));
-	ScaleV = (1.0f/(TexLayer->ScaleV));
-
-	if(NumLayers>1)
-	{
-		// Set up shifts and scaled for lightmap uv's
-		ShiftU2 = (float)-LMapLayer->ShiftU + 8.0f;
-		ShiftV2 = (float)-LMapLayer->ShiftV + 8.0f;
-
-		InvScale2 = 1.0f/(float)((1<<LMapLayer->THandle->Log)<<4);
-	}
-
-	pVerts = &Pnts[0];
-
-	for (j=0; j<NumPoints; j++)
-	{
-
-		u = pTVerts->u*ScaleU+ShiftU;
-		v = pTVerts->v*ScaleV+ShiftV;
-
-		pVerts->u = u * InvScale;
-		pVerts->v = v * InvScale;
-
-		if(NumLayers>1)
-		{
-			u = pTVerts->u + ShiftU2;
-			v = pTVerts->v + ShiftV2;
-
-			pVerts->pad1 =u * InvScale2;
-			pVerts->pad2 =v * InvScale2;
-		}
-
-
-	//	pVerts->color = pTVerts->Color;
-
-		pTVerts++;
-		pVerts++;
-	}
-
-	free(TempVerts);
-	return TRUE;
-}
-
-//=====================================================================================
-//	Log2
-//	Return the log of a size
-//=====================================================================================
-uint32 Log2(uint32 P2)
-{
-	uint32		p = 0;
-	int32		i = 0;
-	
-	for (i = P2; i > 0; i>>=1)
-		p++;
-
-	return (p-1);
-}
-
-//=====================================================================================
-//	SnapToPower2
-//	Snaps a number to a power of 2
-//=====================================================================================
-int32 SnapToPower2(int32 Width)
-{
-		 if (Width <= 1) return 1;
-	else if (Width <= 2) return 2;
-	else if (Width <= 4) return 4;
-	else if (Width <= 8) return 8;
-	else if (Width <= 16) return 16;
-	else if (Width <= 32) return 32;
-	else if (Width <= 64) return 64;
-	else if (Width <= 128) return 128;
-	else if (Width <= 256) return 256;
-	else if (Width <= 512) return 512;
-	else if (Width <= 1024) return 1024;
-	else if (Width <= 2048) return 2048;
-	else 
-		return -1;
-}
-
-//=====================================================================================
-//	Return the max log of a (power of 2) width and height
-//=====================================================================================
-int32 GetLog(int32 Width, int32 Height)
-{
-	int32	LWidth = SnapToPower2(max(Width, Height));
-	
-	return Log2(LWidth);
-}
-
-//=====================================================================================
-//	FillLMapSurface
-//=====================================================================================
-static void FillLMapSurface(jeTLVertex *Pnts,int32 NumPoints,jeTexture *THandle, jeRDriver_LMapCBInfo *Info, int32 LNum)
-{
-	U16					*pTempBits,*pTempBits2;
-	int32				w, h, Width, Height, Size;
-	U8					*pBitPtr;
-	RGB_LUT				*Lut;
-	int32				Extra;
-	//U8					PrevR,PrevG,PrevB;
-
-	pBitPtr = (U8*)Info->RGBLight[LNum];
-
-	Width = THandle->Width;
-	Height = THandle->Height;
-	Size = THandle->Log;
-
-	Lut = &Lut1;
-
-	D3D9_THandle_Lock(THandle, 0, (void**)&pTempBits);
-	pTempBits2=pTempBits;
-
-	Extra = (THandle->stride-THandle->Width);
-
-	for (h=0; h< Height; h++)
-	{
-		for (w=0; w< Width; w++)
-		{
-			U8	R, G, B;
-			U16	Color;
-	
-			R = *pBitPtr++;
-			G = *pBitPtr++;
-			B =  *pBitPtr++;
-			
-			Color = (U16)((Lut->R[R] | Lut->G[G] | Lut->B[B])&0xFFFF);
-
-			*((U16*)pTempBits) = Color;
-			((U16*)pTempBits)++;
-		}
-		pTempBits += Extra;
-	}
-	D3D9_THandle_Unlock(THandle, 0);
-
-	
-}
-
-void BuildRGBGammaTables(float Gamma)
-{
-	int32				i, Val;
-	int32				GammaTable[256];
-	DWORD			R_Left, G_Left, B_Left; //, A_Left;
-	DWORD			R_Right, G_Right, B_Right; //, A_Right;
-
-	if (Gamma == 1.0)
-	{
-		{
-			for (i=0 ; i<256 ; i++)
-				GammaTable[i] = i;
-		}
-	}
-	else for (i=0 ; i<256 ; i++)
-	{
-		float Ratio = (i+0.5f)/255.5f;
-
-		float RGB = (float)(255.0 * pow((double)Ratio, 1.0/(double)Gamma) + 0.5);
-		
-		if (RGB < 0.0f)
-			RGB = 0.0f;
-		if (RGB > 255.0f)
-			RGB = 255.0f;
-
-		GammaTable[i] = (int32)RGB;
-	}
-
-
-	for (i=0; i< 256; i++)
-	{
-		Val = GammaTable[i];
-
-		R_Left = 11;
-		G_Left = 5;
-		B_Left = 0;
-		//A_Left = PixelMask.A_Shift;
-
-		R_Right = 3;
-		G_Right = 2;
-		B_Right = 3;
-		//A_Right = 8 - PixelMask.A_Width;
-
-		Val = GammaTable[i];
-
-		Lut1.R[i] = (((uint32)Val >> R_Right) << R_Left) & 0xF800;
-		Lut1.G[i] = (((uint32)Val >> G_Right) << G_Left) & 0x7E0;
-		Lut1.B[i] = (((uint32)Val >> B_Right) << B_Left) & 0x1F;
-		//D3DInfo.Lut1.A[i] = (((uint32)  i >> A_Right) << A_Left) & 0x00;
-
-		//Lut1.R[i] = (i<<11) & 0xF800;
-		//Lut1.G[i] = (i<<5) &	0x7E0;
-		//Lut1.B[i] = (i) &		0x1F;
-	}
-}
+////=====================================================================================
+////	FillLMapSurface
+////=====================================================================================
+//static void FillLMapSurface(jeTLVertex *Pnts,int32 NumPoints,jeTexture *THandle, jeRDriver_LMapCBInfo *Info, int32 LNum)
+//{
+//	U16					*pTempBits,*pTempBits2;
+//	int32				w, h, Width, Height, Size;
+//	U8					*pBitPtr;
+//	RGB_LUT				*Lut;
+//	int32				Extra;
+//	//U8					PrevR,PrevG,PrevB;
+//
+//	pBitPtr = (U8*)Info->RGBLight[LNum];
+//
+//	Width = THandle->Width;
+//	Height = THandle->Height;
+//	Size = THandle->Log;
+//
+//	Lut = &Lut1;
+//
+//	D3D9_THandle_Lock(THandle, 0, (void**)&pTempBits);
+//	pTempBits2=pTempBits;
+//
+//	Extra = (THandle->stride-THandle->Width);
+//
+//	for (h=0; h< Height; h++)
+//	{
+//		for (w=0; w< Width; w++)
+//		{
+//			U8	R, G, B;
+//			U16	Color;
+//	
+//			R = *pBitPtr++;
+//			G = *pBitPtr++;
+//			B =  *pBitPtr++;
+//			
+//			Color = (U16)((Lut->R[R] | Lut->G[G] | Lut->B[B])&0xFFFF);
+//
+//			*((U16*)pTempBits) = Color;
+//			((U16*)pTempBits)++;
+//		}
+//		pTempBits += Extra;
+//	}
+//	D3D9_THandle_Unlock(THandle, 0);
+//
+//	
+//}
+//
+//void BuildRGBGammaTables(float Gamma)
+//{
+//	int32				i, Val;
+//	int32				GammaTable[256];
+//	DWORD			R_Left, G_Left, B_Left; //, A_Left;
+//	DWORD			R_Right, G_Right, B_Right; //, A_Right;
+//
+//	if (Gamma == 1.0)
+//	{
+//		{
+//			for (i=0 ; i<256 ; i++)
+//				GammaTable[i] = i;
+//		}
+//	}
+//	else for (i=0 ; i<256 ; i++)
+//	{
+//		float Ratio = (i+0.5f)/255.5f;
+//
+//		float RGB = (float)(255.0 * pow((double)Ratio, 1.0/(double)Gamma) + 0.5);
+//		
+//		if (RGB < 0.0f)
+//			RGB = 0.0f;
+//		if (RGB > 255.0f)
+//			RGB = 255.0f;
+//
+//		GammaTable[i] = (int32)RGB;
+//	}
+//
+//
+//	for (i=0; i< 256; i++)
+//	{
+//		Val = GammaTable[i];
+//
+//		R_Left = 11;
+//		G_Left = 5;
+//		B_Left = 0;
+//		//A_Left = PixelMask.A_Shift;
+//
+//		R_Right = 3;
+//		G_Right = 2;
+//		B_Right = 3;
+//		//A_Right = 8 - PixelMask.A_Width;
+//
+//		Val = GammaTable[i];
+//
+//		Lut1.R[i] = (((uint32)Val >> R_Right) << R_Left) & 0xF800;
+//		Lut1.G[i] = (((uint32)Val >> G_Right) << G_Left) & 0x7E0;
+//		Lut1.B[i] = (((uint32)Val >> B_Right) << B_Left) & 0x1F;
+//		//D3DInfo.Lut1.A[i] = (((uint32)  i >> A_Right) << A_Left) & 0x00;
+//
+//		//Lut1.R[i] = (i<<11) & 0xF800;
+//		//Lut1.G[i] = (i<<5) &	0x7E0;
+//		//Lut1.B[i] = (i) &		0x1F;
+//	}
+//}

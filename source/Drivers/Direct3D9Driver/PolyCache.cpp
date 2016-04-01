@@ -3,6 +3,7 @@
 #include <vector>
 #include "PolyCache.h"
 #include "D3D9Log.h"
+#include "D3D9Render.h"
 
 struct TextureSortFunctor
 {
@@ -109,7 +110,8 @@ static void FillLMapSurface(jeTLVertex *Pnts,int32 NumPoints,jeTexture *THandle,
 	Height = THandle->Height;
 	Size = THandle->Log;
 
-	Lut = &Lut1;
+	//Lut = &Lut1;
+	Lut = D3D9Render::getSingletonPtr()->GetRGBTable();
 
 	D3D9_THandle_Lock(THandle, 0, (void**)&pTempBits);
 	pTempBits2=pTempBits;
@@ -236,7 +238,7 @@ jeBoolean PolyCache::Initialize(IDirect3DDevice9 *pDevice)
 	HRESULT								hres;
 
 	if (LOG_LEVEL > 1)
-		D3D9Log::GetPtr()->Printf("Function Call:  PolyCache::Initialize()");
+		LOG("Function Call:  PolyCache::Initialize()");
 	else
 		REPORT("Function Call:  PolyCache::Initialize()");
 
@@ -246,7 +248,7 @@ jeBoolean PolyCache::Initialize(IDirect3DDevice9 *pDevice)
 	hres = m_pDevice->CreateVertexBuffer(sizeof(PolyVert) * 25000, D3DUSAGE_DYNAMIC, J3D_FVF, D3DPOOL_DEFAULT, &m_pVB, NULL);
 	if (FAILED(hres))
 	{
-		D3D9Log::GetPtr()->Printf("ERROR:   Could not create vertex buffer!!");
+		LOG("ERROR:   Could not create vertex buffer!!");
 		return JE_FALSE;
 	}
 
@@ -282,7 +284,7 @@ jeBoolean PolyCache::Initialize(IDirect3DDevice9 *pDevice)
 void PolyCache::Shutdown()
 {
 	if (LOG_LEVEL > 1)
-		D3D9Log::GetPtr()->Printf("Function Call:  PolyCache::Shutdown()");
+		LOG("Function Call:  PolyCache::Shutdown()");
 	else
 		REPORT("Function Call:  PolyCache::Shutdown()");
 
@@ -317,7 +319,7 @@ jeBoolean PolyCache::AddMiscTexturePoly(jeTLVertex *Pnts, int32 NumPoints, jeRDr
 	DWORD							dwAlpha = 0;
 
 	if (LOG_LEVEL > 1)
-		D3D9Log::GetPtr()->Printf("Function Call:  PolyCache::AddMiscTexturePoly()");
+		LOG("Function Call:  PolyCache::AddMiscTexturePoly()");
 	else
 		REPORT("Function Call:  PolyCache::AddMiscTexturePoly()");
 
@@ -336,7 +338,7 @@ jeBoolean PolyCache::AddMiscTexturePoly(jeTLVertex *Pnts, int32 NumPoints, jeRDr
 	verts = new PolyVert[NumPoints];
 	if (!verts)
 	{
-		D3D9Log::GetPtr()->Printf("ERROR:  Out of memory!!");
+		LOG("ERROR:  Out of memory!!");
 		return JE_FALSE;
 	}
 
@@ -367,7 +369,7 @@ jeBoolean PolyCache::AddMiscTexturePoly(jeTLVertex *Pnts, int32 NumPoints, jeRDr
 
 	if (FAILED(hres))
 	{
-		D3D9Log::GetPtr()->Printf("ERROR:  Could not lock vertex buffer!!");
+		LOG("ERROR:  Could not lock vertex buffer!!");
 		SAFE_DELETE_ARRAY(verts);
 		return JE_FALSE;
 	}
@@ -377,7 +379,7 @@ jeBoolean PolyCache::AddMiscTexturePoly(jeTLVertex *Pnts, int32 NumPoints, jeRDr
 	hres = m_pVB->Unlock();
 	if (FAILED(hres))
 	{
-		D3D9Log::GetPtr()->Printf("ERROR:  Could not unlock vertex buffer!!");
+		LOG("ERROR:  Could not unlock vertex buffer!!");
 		SAFE_DELETE_ARRAY(verts);
 		return JE_FALSE;
 	}
@@ -407,7 +409,7 @@ jeBoolean PolyCache::AddGouraudPoly(jeTLVertex *Pnts, int32 NumPoints, uint32 Fl
 	DWORD							dwAlpha = 0;
 
 	if (LOG_LEVEL > 1)
-		D3D9Log::GetPtr()->Printf("Function Call:  PolyCache::AddGouraudPoly()");
+		LOG("Function Call:  PolyCache::AddGouraudPoly()");
 	else
 		REPORT("Function Call:  PolyCache::AddGouraudPoly()");
 
@@ -426,7 +428,7 @@ jeBoolean PolyCache::AddGouraudPoly(jeTLVertex *Pnts, int32 NumPoints, uint32 Fl
 	verts = new PolyVert[NumPoints];
 	if (!verts)
 	{
-		D3D9Log::GetPtr()->Printf("ERROR:  Out of memory!!");
+		LOG("ERROR:  Out of memory!!");
 		return JE_FALSE;
 	}
 
@@ -457,7 +459,7 @@ jeBoolean PolyCache::AddGouraudPoly(jeTLVertex *Pnts, int32 NumPoints, uint32 Fl
 
 	if (FAILED(hres))
 	{
-		D3D9Log::GetPtr()->Printf("ERROR:  Could not lock vertex buffer!!");
+		LOG("ERROR:  Could not lock vertex buffer!!");
 		SAFE_DELETE_ARRAY(verts);
 		return JE_FALSE;
 	}
@@ -467,7 +469,7 @@ jeBoolean PolyCache::AddGouraudPoly(jeTLVertex *Pnts, int32 NumPoints, uint32 Fl
 	hres = m_pVB->Unlock();
 	if (FAILED(hres))
 	{
-		D3D9Log::GetPtr()->Printf("ERROR:  Could not unlock vertex buffer!!");
+		LOG("ERROR:  Could not unlock vertex buffer!!");
 		SAFE_DELETE_ARRAY(verts);
 		return JE_FALSE;
 	}
@@ -493,7 +495,7 @@ jeBoolean PolyCache::AddWorldPoly(jeTLVertex *Pnts, int32 NumPoints, jeRDriver_L
 	DWORD							dwAlpha = 0;
 
 	if (LOG_LEVEL > 1)
-		D3D9Log::GetPtr()->Printf("Function Call:  PolyCache::AddWorldPoly()");
+		LOG("Function Call:  PolyCache::AddWorldPoly()");
 	else
 		REPORT("Function Call:  PolyCache::AddWorldPoly()");
 
@@ -508,7 +510,7 @@ jeBoolean PolyCache::AddWorldPoly(jeTLVertex *Pnts, int32 NumPoints, jeRDriver_L
 	{
 		g_D3D9Drv.SetupLightmap(&LMapInfo, LMapCBContext);
 		if (!Layers[1].THandle)
-			D3D9Log::GetPtr()->Printf("WARNING:  No lightmap!!");
+			LOG("WARNING:  No lightmap!!");
 
 		if (LMapInfo.Dynamic || !Layers[1].THandle->Lightmap)
 		{
@@ -531,7 +533,7 @@ jeBoolean PolyCache::AddWorldPoly(jeTLVertex *Pnts, int32 NumPoints, jeRDriver_L
 	verts = new PolyVert[NumPoints];
 	if (!verts)
 	{
-		D3D9Log::GetPtr()->Printf("ERROR:  Out of memory!!");
+		LOG("ERROR:  Out of memory!!");
 		return JE_FALSE;
 	}
 
@@ -562,7 +564,7 @@ jeBoolean PolyCache::AddWorldPoly(jeTLVertex *Pnts, int32 NumPoints, jeRDriver_L
 
 	if (FAILED(hres))
 	{
-		D3D9Log::GetPtr()->Printf("ERROR:  Could not lock vertex buffer!!");
+		LOG("ERROR:  Could not lock vertex buffer!!");
 		SAFE_DELETE_ARRAY(verts);
 		return JE_FALSE;
 	}
@@ -572,7 +574,7 @@ jeBoolean PolyCache::AddWorldPoly(jeTLVertex *Pnts, int32 NumPoints, jeRDriver_L
 	hres = m_pVB->Unlock();
 	if (FAILED(hres))
 	{
-		D3D9Log::GetPtr()->Printf("ERROR:  Could not unlock vertex buffer!!");
+		LOG("ERROR:  Could not unlock vertex buffer!!");
 		SAFE_DELETE_ARRAY(verts);
 		return JE_FALSE;
 	}
@@ -835,7 +837,7 @@ uint32 PolyCache::AddStaticBuffer(jeHWVertex *Points, int32 NumPoints, jeRDriver
 	StaticBuffer						*buffer = NULL;
 
 	if (LOG_LEVEL > 1)
-		D3D9Log::GetPtr()->Printf("Function Call:  PolyCache::AddStaticBuffer()");
+		LOG("Function Call:  PolyCache::AddStaticBuffer()");
 	else
 		REPORT("Function Call:  PolyCache::AddStaticBuffer()");
 
@@ -871,7 +873,7 @@ uint32 PolyCache::AddStaticBuffer(jeHWVertex *Points, int32 NumPoints, jeRDriver
 	hres = m_pDevice->CreateVertexBuffer(sizeof(jeHWVertex) * NumPoints, 0, J3D_HW_FVF, D3DPOOL_DEFAULT, &buffer->pVB, NULL);
 	if (FAILED(hres))
 	{
-		D3D9Log::GetPtr()->Printf("ERROR:  Could not create static vertex buffer!!");
+		LOG("ERROR:  Could not create static vertex buffer!!");
 		return 0;
 	}
 
@@ -883,7 +885,7 @@ uint32 PolyCache::AddStaticBuffer(jeHWVertex *Points, int32 NumPoints, jeRDriver
 	hres = buffer->pVB->Lock(0, sizeof(jeHWVertex) * NumPoints, &data, 0);
 	if (FAILED(hres))
 	{
-		D3D9Log::GetPtr()->Printf("ERROR:  Could not lock static vertex buffer!!");
+		LOG("ERROR:  Could not lock static vertex buffer!!");
 		buffer->Active = JE_FALSE;
 		buffer->Layers = NULL;
 		buffer->NumVerts = 0;
@@ -897,7 +899,7 @@ uint32 PolyCache::AddStaticBuffer(jeHWVertex *Points, int32 NumPoints, jeRDriver
 	hres = buffer->pVB->Unlock();
 	if (FAILED(hres))
 	{
-		D3D9Log::GetPtr()->Printf("ERROR:  Could not unlock static vertex buffer!!");
+		LOG("ERROR:  Could not unlock static vertex buffer!!");
 		buffer->Active = JE_FALSE;
 		buffer->Layers = NULL;
 		buffer->NumVerts = 0;
@@ -915,7 +917,7 @@ jeBoolean PolyCache::RemoveStaticBuffer(uint32 id)
 	uint32							actual_id = id - 1;
 
 	if (LOG_LEVEL > 1)
-		D3D9Log::GetPtr()->Printf("Function Call:  PolyCache::RemoveStaticBuffer()");
+		LOG("Function Call:  PolyCache::RemoveStaticBuffer()");
 	else
 		REPORT("Function Call:  PolyCache::RemoveStaticBuffer()");
 
@@ -938,7 +940,7 @@ jeBoolean PolyCache::RenderStaticBuffer(uint32 id, int32 StartVertex, int32 NumP
 	HRESULT							hres;
 
 	if (LOG_LEVEL > 1)
-		D3D9Log::GetPtr()->Printf("Function Call:  PolyCache::RenderStaticBuffer()");
+		LOG("Function Call:  PolyCache::RenderStaticBuffer()");
 	else
 		REPORT("Function Call:  PolyCache::RenderStaticBuffer()");
 
@@ -1005,7 +1007,7 @@ jeBoolean PolyCache::RenderStaticBuffer(uint32 id, int32 StartVertex, int32 NumP
 	hres = m_pDevice->DrawPrimitive(D3DPT_TRIANGLELIST, StartVertex, m_StaticBuffers[actual_id].NumVerts / 3);
 	if (FAILED(hres))
 	{
-		D3D9Log::GetPtr()->Printf("ERROR:  Could not draw static buffer!!");
+		LOG("ERROR:  Could not draw static buffer!!");
 		return JE_FALSE;
 	}
 

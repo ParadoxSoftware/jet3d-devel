@@ -6,19 +6,19 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="ObjectDef.c">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="StaticMeshObj.c">
-      <Filter>Source</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="ObjectDef.h">
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="StaticMeshObj.h">
       <Filter>Source</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="ObjectDef.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="StaticMeshObj.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

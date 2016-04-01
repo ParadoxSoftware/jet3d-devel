@@ -30,6 +30,8 @@
 #ifndef SETTINGS_H
 #define SETTINGS_H
 
+#include "StdAfx.h"
+
 typedef struct tagSettings Settings ;
 
 //---------------------------------------------------

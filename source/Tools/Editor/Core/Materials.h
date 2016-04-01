@@ -22,9 +22,9 @@
 #ifndef MATERIALS_H
 #define MATERIALS_H
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+//#ifdef __cplusplus
+//extern "C" {
+//#endif
 
 #include "bitmap.h"
 #include "jeWorld.h"
@@ -47,9 +47,9 @@ const jeBitmap		*	Materials_GetBitmap( Material_Struct* Material );
 const jeMaterialSpec*	Materials_GetMaterialSpec( Material_Struct* Material );
 
 
-#ifdef __cplusplus
-}
-#endif
+//#ifdef __cplusplus
+//}
+//#endif
 
 #endif //Prevent multiple inclusion
 /* EOF: Materials.h */

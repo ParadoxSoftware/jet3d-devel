@@ -19,7 +19,7 @@
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseOfMfc>false</UseOfMfc>
     <CharacterSet>MultiByte</CharacterSet>
-    <PlatformToolset>v120</PlatformToolset>
+    <PlatformToolset>v110</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
@@ -138,11 +138,6 @@
     </Bscmake>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="AmbObject.c" />
-    <ClCompile Include="ObjectDef.c" />
-    <ClCompile Include="Snd.c" />
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="AmbObject.h" />
     <ClInclude Include="ObjectDef.h" />
     <ClInclude Include="Snd.h" />
@@ -162,6 +157,11 @@
     <None Include="AmbObject.dep" />
     <None Include="AmbObject.dsp" />
     <None Include="AmbObject.mak" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="AmbObject.cpp" />
+    <ClCompile Include="ObjectDef.cpp" />
+    <ClCompile Include="Snd.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

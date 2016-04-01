@@ -24,6 +24,7 @@
 #include <vector>
 #include "D3D9TextureMgr.h"
 #include "Direct3D9Driver.h"
+#include "D3D9Render.h"
 #include "D3D9Log.h"
 
 extern D3D9Driver							g_D3D9Drv;
@@ -34,7 +35,7 @@ jeTexture									TextureList[MAX_THANDLES];
 static jeTexture *GetNextTHandle()
 {
 	if (LOG_LEVEL > 1)
-		D3D9Log::GetPtr()->Printf("Function Call:  GetNextTHandle()");
+		LOG("Function Call:  GetNextTHandle()");
 	else
 		REPORT("Function Call:  GetNextTHandle()");
 
@@ -58,7 +59,7 @@ static jeTexture *GetNextTHandle()
 jeBoolean D3D9_THandle_Startup()
 {
 	if (LOG_LEVEL > 1)
-		D3D9Log::GetPtr()->Printf("Function Call:  THandle_Startup()");
+		LOG("Function Call:  THandle_Startup()");
 	else
 		REPORT("Function Call:  THandle_Startup()");
 
@@ -79,7 +80,7 @@ jeBoolean D3D9_THandle_Startup()
 jeBoolean D3D9_THandle_Shutdown()
 {
 	if (LOG_LEVEL > 1)
-		D3D9Log::GetPtr()->Printf("Function Call:  THandle_Shutdown()");
+		LOG("Function Call:  THandle_Shutdown()");
 	else
 		REPORT("Function Call:  THandle_Shutdown()");
 
@@ -99,14 +100,14 @@ jeTexture* DRIVERCC D3D9_THandle_Create(int32 Width, int32 Height, int32 NumMipL
 	int32						Size; //, i;
 
 	if (LOG_LEVEL > 1)
-		D3D9Log::GetPtr()->Printf("Function Call:  THandle_Create()");
+		LOG("Function Call:  THandle_Create()");
 	else
 		REPORT("Function Call:  THandle_Create()");
 
 	Handle = GetNextTHandle();
 	if (!Handle)
 	{
-		D3D9Log::GetPtr()->Printf("ERROR:  No more empty THandle slots!!");
+		LOG("ERROR:  No more empty THandle slots!!");
 		return NULL;
 	}
 
@@ -115,7 +116,7 @@ jeTexture* DRIVERCC D3D9_THandle_Create(int32 Width, int32 Height, int32 NumMipL
 	Handle->Height = Height;
 	Handle->Locked = JE_FALSE;
 
-	Handle->Log = (uint8)GetLog(Width, Height);
+	Handle->Log = (uint8)D3D9Render::GetLog(Width, Height);
 	Handle->stride = Width ;
 
 	Size = 1 << Handle->Log;
@@ -157,15 +158,15 @@ jeTexture* DRIVERCC D3D9_THandle_Create(int32 Width, int32 Height, int32 NumMipL
 		Handle->Format = D3DFMT_UNKNOWN;
 		}
 
-	hres = pDevice->CreateTexture(Width, Height, NumMipLevels, 0, Handle->Format, D3DPOOL_MANAGED, &Handle->pTexture, NULL);
+	hres = D3D9Render::getSingletonPtr()->GetDevice()->CreateTexture(Width, Height, NumMipLevels, 0, Handle->Format, D3DPOOL_MANAGED, &Handle->pTexture, NULL);
 	if (FAILED(hres))
 	{
-		D3D9Log::GetPtr()->Printf("ERROR:  Could not create texture!!");
+		LOG("ERROR:  Could not create texture!!");
 		D3D9_THandle_Destroy(Handle);
 		return NULL;
 	}
 
-	Handle->Log = (uint8)GetLog(Width, Height);
+	Handle->Log = (uint8)D3D9Render::GetLog(Width, Height);
 	Handle->Lightmap=JE_FALSE;
 
 	return Handle;
@@ -181,14 +182,14 @@ jeTexture *DRIVERCC D3D9_THandle_CreateFromFile(jeVFile *File)
 //	int						idx;
 
 	if (LOG_LEVEL > 1)
-		D3D9Log::GetPtr()->Printf("Function Call: THandle_CreateFromFile()");
+		LOG("Function Call: THandle_CreateFromFile()");
 	else
 		REPORT("Function Call:  THandle_CreateFromFile()");
 
 	Handle = GetNextTHandle();
 	if (!Handle)
 	{
-		D3D9Log::GetPtr()->Printf("ERROR:  No more empty THandle slots!!");
+		LOG("ERROR:  No more empty THandle slots!!");
 		return NULL;
 	}
 
@@ -199,7 +200,7 @@ jeTexture *DRIVERCC D3D9_THandle_CreateFromFile(jeVFile *File)
 	Handle->Data = new uint8[size];
 	if (!Handle->Data)
 	{
-		D3D9Log::GetPtr()->Printf("ERROR:  Out of memory!!");
+		LOG("ERROR:  Out of memory!!");
 		return NULL;
 	}
 
@@ -207,13 +208,14 @@ jeTexture *DRIVERCC D3D9_THandle_CreateFromFile(jeVFile *File)
 	jeVFile_Read(File, Handle->Data, size);
 
 	// Setup the texture
-	hres = D3DXCreateTextureFromFileInMemoryEx(pDevice, (void*)Handle->Data, size, D3DX_DEFAULT, D3DX_DEFAULT, D3DX_DEFAULT, 0, D3DFMT_UNKNOWN, D3DPOOL_MANAGED, D3DX_DEFAULT, D3DX_DEFAULT, 0, &info, NULL, &Handle->pTexture);
+	hres = D3DXCreateTextureFromFileInMemoryEx(D3D9Render::getSingletonPtr()->GetDevice(), (void*)Handle->Data, size, D3DX_DEFAULT, D3DX_DEFAULT, D3DX_DEFAULT, 0, D3DFMT_UNKNOWN, D3DPOOL_MANAGED, D3DX_DEFAULT, D3DX_DEFAULT, 0, &info, NULL, &Handle->pTexture);
 	if (FAILED(hres))
 	{
-		D3D9Log::GetPtr()->Printf("ERROR:  Could not load texture!!");
+		LOG("ERROR:  Could not load texture!!");
 
-		delete [] Handle->Data;
-		Handle->Data = NULL;
+		SAFE_DELETE_ARRAY(Handle->Data);
+		//delete [] Handle->Data;
+		//Handle->Data = NULL;
 
 		return NULL;
 	}
@@ -239,7 +241,7 @@ jeBoolean DRIVERCC D3D9_THandle_Destroy(jeTexture *Handle)
 	int32					id;
 
 	if (LOG_LEVEL > 1)
-		D3D9Log::GetPtr()->Printf("Function Call:  THandle_Destroy()");
+		LOG("Function Call:  THandle_Destroy()");
 	else
 		REPORT("Function Call:  THandle_Destroy()");
 
@@ -268,20 +270,20 @@ jeBoolean DRIVERCC D3D9_THandle_Lock(jeTexture *Handle, int32 MipLevel, void **B
 	HRESULT						hres;
 
 	if (LOG_LEVEL > 1)
-		D3D9Log::GetPtr()->Printf("Function Call:  THandle_Lock()");
+		LOG("Function Call:  THandle_Lock()");
 	else
 		REPORT("Function Call:  THandle_Lock()");
 
 	if (Handle->DriverOwned)
 	{
-		D3D9Log::GetPtr()->Printf("ERROR:  Cannot lock driver owned texture!!");
+		LOG("ERROR:  Cannot lock driver owned texture!!");
 		return JE_FALSE;
 	}
 
 	hres = Handle->pTexture->LockRect(MipLevel, &Handle->lock, NULL, D3DLOCK_DISCARD);
 	if (FAILED(hres))
 	{
-		D3D9Log::GetPtr()->Printf("ERROR:  Could not lock texture!!");
+		LOG("ERROR:  Could not lock texture!!");
 		return JE_FALSE;
 	}
 
@@ -297,20 +299,20 @@ jeBoolean DRIVERCC D3D9_THandle_Unlock(jeTexture *Handle, int32 MipLevel)
 	HRESULT						hres;
 
 	if (LOG_LEVEL > 1)
-		D3D9Log::GetPtr()->Printf("Function Call:  THandle_Unlock()");
+		LOG("Function Call:  THandle_Unlock()");
 	else
 		REPORT("Function Call:  THandle_Unlock()");
 
 	if (Handle->DriverOwned)
 	{
-		D3D9Log::GetPtr()->Printf("ERROR:  Cannot unlock driver owned texture!!");
+		LOG("ERROR:  Cannot unlock driver owned texture!!");
 		return JE_FALSE;
 	}
 
 	hres = Handle->pTexture->UnlockRect(MipLevel);
 	if (FAILED(hres))
 	{
-		D3D9Log::GetPtr()->Printf("ERROR:  Could not unlock texture!!");
+		LOG("ERROR:  Could not unlock texture!!");
 		return JE_FALSE;
 	}
 
@@ -323,14 +325,14 @@ jeBoolean DRIVERCC D3D9_THandle_GetInfo(jeTexture *Handle, int32 MipLevel, jeTex
 	D3DSURFACE_DESC				desc;
 
 	if (LOG_LEVEL > 1)
-		D3D9Log::GetPtr()->Printf("Function Call:  THandle_GetInfo()");
+		LOG("Function Call:  THandle_GetInfo()");
 	else
 		REPORT("Function Call:  THandle_GetInfo()");
 
 	hres = Handle->pTexture->GetLevelDesc(MipLevel, &desc);
 	if (FAILED(hres))
 	{
-		D3D9Log::GetPtr()->Printf("ERROR:  Could not get level description!!");
+		LOG("ERROR:  Could not get level description!!");
 		return JE_FALSE;
 	}
 

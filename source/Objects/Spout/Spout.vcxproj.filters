@@ -6,14 +6,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Source\ObjectDef.c">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Spout.c">
-      <Filter>Source</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="Source\ObjectDef.h">
       <Filter>Source</Filter>
     </ClInclude>
@@ -28,5 +20,13 @@
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Source\Spout.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Source\ObjectDef.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Spout.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

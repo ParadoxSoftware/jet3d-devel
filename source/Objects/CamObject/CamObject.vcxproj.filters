@@ -7,14 +7,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="CamObject.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ObjectDef.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="CamObject.h">
       <Filter>Source Files</Filter>
     </ClInclude>
@@ -32,5 +24,13 @@
     <None Include="CamObject.dep" />
     <None Include="CamObject.dsp" />
     <None Include="CamObject.mak" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="CamObject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectDef.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

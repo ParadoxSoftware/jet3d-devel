@@ -18,14 +18,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Source\ModelObject.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\ObjectDef.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
     <ResourceCompile Include="Source\ModelObject.rc">
       <Filter>Source Files</Filter>
     </ResourceCompile>
@@ -34,5 +26,13 @@
     <None Include="ModelObject.dep" />
     <None Include="ModelObject.dsp" />
     <None Include="ModelObject.mak" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Source\modelobject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ObjectDef.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

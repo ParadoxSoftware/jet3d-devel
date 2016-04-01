@@ -28,17 +28,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="ObjectDef.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PathObj.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Trigger.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
     <ResourceCompile Include="PathObj.rc">
       <Filter>Source Files</Filter>
     </ResourceCompile>
@@ -50,5 +39,16 @@
     <None Include="PathObject.dep" />
     <None Include="PathObject.dsp" />
     <None Include="PathObject.mak" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="ObjectDef.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PathObj.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Trigger.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

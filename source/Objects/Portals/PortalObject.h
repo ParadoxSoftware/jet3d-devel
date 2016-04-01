@@ -64,4 +64,4 @@ jeBoolean JETCC PortalFrame( void * Instance, jeFloat Time);
 jeBoolean	JETCC ChangeBoxCollision(const void *Instance,const jeVec3d *Pos, const jeExtBox *FrontBox, const jeExtBox *BackBox, jeExtBox *ImpactBox, jePlane *Plane);
 
 // Krouer
-void JETCC SetRenderNextFlag(const void *Instance, jeBoolean NextFlag);
+void JETCC SetRenderNextFlag(void *Instance, jeBoolean NextFlag);

@@ -19,7 +19,7 @@
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseOfMfc>false</UseOfMfc>
     <CharacterSet>MultiByte</CharacterSet>
-    <PlatformToolset>v120</PlatformToolset>
+    <PlatformToolset>v110</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
@@ -133,10 +133,6 @@
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="BoxObject.c" />
-    <ClCompile Include="ObjectDef.c" />
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="BoxObject.h" />
     <ClInclude Include="ObjectDef.h" />
   </ItemGroup>
@@ -150,6 +146,10 @@
     <None Include="BoxObject.dep" />
     <None Include="BoxObject.dsp" />
     <None Include="BoxObject.mak" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="BoxObject.cpp" />
+    <ClCompile Include="ObjectDef.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

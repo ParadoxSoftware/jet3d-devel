@@ -49,6 +49,7 @@
 
 #include "jeBSP.h"
 #include "jeFileLogger.h"
+#include "jeImageImpl.h"
 
 #ifdef _DEBUG
 	#define DEBUG_OUTPUT_LEVEL		0
@@ -1071,16 +1072,16 @@ JETAPI jeBoolean JETCC jeEngine_AddImage(jeEngine *Engine, jeImage *Image)
 	PFormat.PixelFormat = JE_PIXELFORMAT_32BIT_ARGB;
 	PFormat.Flags = 0;
 
-	jeTexture *pTex = Engine->DriverInfo.RDriver->THandle_Create(jeImage_GetWidth(Image), jeImage_GetHeight(Image), 1, &PFormat);
+	jeTexture *pTex = Engine->DriverInfo.RDriver->THandle_Create(Image->GetWidth(), Image->GetHeight(), 1, &PFormat);
 	
 	uint8 *texdata = NULL;
-	int32 size = jeImage_GetWidth(Image) * jeImage_GetHeight(Image) * jeImage_GetBPP(Image);
+	int32 size = Image->GetWidth() * Image->GetHeight() * Image->GetBPP();
 
 	Engine->DriverInfo.RDriver->THandle_Lock(pTex, 0, (void**)texdata);
-	memcpy(texdata, jeImage_GetBits(Image), size);
+	memcpy(texdata, Image->GetBits(), size);
 	Engine->DriverInfo.RDriver->THandle_UnLock(pTex, 0);
 
-	jeImage_SetTextureHandle(Image, pTex);
+	Image->SetTextureHandle(pTex);
 
 	Engine->AttachedImages.push_back(Image);
 	return JE_TRUE;
@@ -1096,8 +1097,8 @@ JETAPI jeBoolean JETCC jeEngine_RemoveImage(jeEngine *Engine, jeImage *Image)
 	{
 		if ((*i) == Image)
 		{
-			Engine->DriverInfo.RDriver->THandle_Destroy(jeImage_GetTextureHandle(Image));
-			jeImage_SetTextureHandle(Image, NULL);
+			Engine->DriverInfo.RDriver->THandle_Destroy(Image->GetTextureHandle());
+			Image->SetTextureHandle(NULL);
 			Engine->AttachedImages.erase(i);
 			return JE_TRUE;
 		}
@@ -1112,7 +1113,7 @@ JETAPI jeBoolean JETCC jeEngine_RemoveImage(jeEngine *Engine, jeImage *Image)
 //	jeEngine_DrawBitmap
 //================================================================================
 JETAPI jeBoolean JETCC jeEngine_DrawImage(const jeEngine *Engine,
-	const jeImage *Image,
+	jeImage *Image,
 	const jeRect * Source, uint32 x, uint32 y)
 {
 	jeTexture			*TH;
@@ -1129,7 +1130,7 @@ JETAPI jeBoolean JETCC jeEngine_DrawImage(const jeEngine *Engine,
 	
 	assert(Engine->AttachedImages.size() > 0);
 	
-	TH = jeImage_GetTextureHandle(Image);
+	TH = Image->GetTextureHandle();
 	assert(TH);
 
 	//Ret = Engine->DriverInfo.RDriver->Drawdecal(TH,(RECT *)Source,x,y);
@@ -1161,7 +1162,7 @@ JETAPI jeBoolean JETCC jeEngine_DrawImage(const jeEngine *Engine,
 //	jeEngine_DrawBitmap3D
 //================================================================================
 JETAPI jeBoolean JETCC jeEngine_DrawImage3D(const jeEngine *Engine,
-	const jeImage *Image, const jeRect * pRect, uint32 x, uint32 y)
+	jeImage *Image, const jeRect * pRect, uint32 x, uint32 y)
 {
 	jeTexture			*TH = NULL;
 	jeBoolean			Ret;
@@ -1177,15 +1178,15 @@ JETAPI jeBoolean JETCC jeEngine_DrawImage3D(const jeEngine *Engine,
 	
 	assert(Engine->AttachedImages.size() > 0);
 	
-	w = (float)jeImage_GetWidth(Image);
-	h = (float)jeImage_GetHeight(Image);
+	w = (float)Image->GetWidth();
+	h = (float)Image->GetHeight();
 
 	assert( w <= 256.0f );
 	assert( h <= 256.0f );
 
 	w = 1.0f/w; h = 1.0f/h;
 
-	TH = jeImage_GetTextureHandle(Image);
+	TH = Image->GetTextureHandle();
 	assert(TH);
 
 	if ( pRect )
@@ -1197,8 +1198,8 @@ JETAPI jeBoolean JETCC jeEngine_DrawImage3D(const jeEngine *Engine,
 	else
 	{
 		Rect.Left = Rect.Top = 0;
-		Rect.Right = jeImage_GetWidth(Image);
-		Rect.Bottom = jeImage_GetHeight(Image);
+		Rect.Right = Image->GetWidth();
+		Rect.Bottom = Image->GetHeight();
 	}
 
 	u1 = Rect.Left * w;
@@ -2882,29 +2883,29 @@ JETAPI void JETCC jeEngine_FillRect(jeEngine *Engine, const jeRect *Rect, const 
 // END - Bug Fix - jeEngine_FillRect() not implemented - paradoxnj
 
 // BEGIN - Hardware T&L - paradoxnj 6/8/2005
-JETAPI jeBoolean JETCC jeEngine_SetMatrix(jeEngine *Engine, uint32 Type, jeXForm3d *Matrix)
-{
-	if (Engine->DriverInfo.RDriver->SetMatrix)
-		return Engine->DriverInfo.RDriver->SetMatrix(Type, Matrix);
-
-	return JE_FALSE;
-}
-
-JETAPI jeBoolean JETCC jeEngine_GetMatrix(jeEngine *Engine, uint32 Type, jeXForm3d *Matrix)
-{
-	if (Engine->DriverInfo.RDriver->GetMatrix)
-		return Engine->DriverInfo.RDriver->GetMatrix(Type, Matrix);
-
-	return JE_FALSE;
-}
-
-JETAPI jeBoolean JETCC jeEngine_SetCamera(jeEngine *Engine, jeCamera *Camera)
-{
-	if (Engine->DriverInfo.RDriver->SetCamera)
-		return Engine->DriverInfo.RDriver->SetCamera(Camera);
-
-	return JE_FALSE;
-}
+//JETAPI jeBoolean JETCC jeEngine_SetMatrix(jeEngine *Engine, uint32 Type, jeXForm3d *Matrix)
+//{
+//	if (Engine->DriverInfo.RDriver->SetMatrix)
+//		return Engine->DriverInfo.RDriver->SetMatrix(Type, Matrix);
+//
+//	return JE_FALSE;
+//}
+//
+//JETAPI jeBoolean JETCC jeEngine_GetMatrix(jeEngine *Engine, uint32 Type, jeXForm3d *Matrix)
+//{
+//	if (Engine->DriverInfo.RDriver->GetMatrix)
+//		return Engine->DriverInfo.RDriver->GetMatrix(Type, Matrix);
+//
+////	return JE_FALSE;
+//}
+//
+//JETAPI jeBoolean JETCC jeEngine_SetCamera(jeEngine *Engine, jeCamera *Camera)
+//{
+//	if (Engine->DriverInfo.RDriver->SetCamera)
+//		return Engine->DriverInfo.RDriver->SetCamera(Camera);
+//
+//	return JE_FALSE;
+//}
 // END - Hardware T&L - paradoxnj 6/8/2005
 
 JETAPI jeFont * JETCC jeEngine_CreateFont(jeEngine *Engine, int32 Height, int32 Width, uint32 Weight, jeBoolean Italic, const char *facename)
@@ -2926,4 +2927,9 @@ JETAPI jeBoolean JETCC jeEngine_DestroyFont(jeEngine *Engine, jeFont **Font)
 		return Engine->DriverInfo.RDriver->Font_Destroy(Font);
 
 	return JE_FALSE;
+}
+
+JETAPI jeImage * JETCC jeEngine_CreateImage()
+{
+	return new jeImageImpl();
 }

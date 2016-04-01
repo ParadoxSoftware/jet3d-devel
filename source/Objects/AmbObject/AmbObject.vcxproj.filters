@@ -7,17 +7,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="AmbObject.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ObjectDef.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Snd.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="AmbObject.h">
       <Filter>Source Files</Filter>
     </ClInclude>
@@ -42,5 +31,16 @@
     <None Include="AmbObject.dep" />
     <None Include="AmbObject.dsp" />
     <None Include="AmbObject.mak" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="AmbObject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectDef.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Snd.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

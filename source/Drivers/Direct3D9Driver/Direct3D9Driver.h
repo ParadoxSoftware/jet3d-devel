@@ -19,12 +19,12 @@
 #define REPORT(x)
 #endif
 
-extern HWND									hWnd;
-extern IDirect3D9								*pD3D;
-extern IDirect3DDevice9						*pDevice;
-extern float									localgamma;
-extern D3DCAPS9								g_Caps;
-extern bool									CanDoAntiAlias;
+//extern HWND									hWnd;
+//extern IDirect3D9								*pD3D;
+//extern IDirect3DDevice9						*pDevice;
+//extern float									localgamma;
+//extern D3DCAPS9								g_Caps;
+//extern bool									CanDoAntiAlias;
 
 #define MAX_LAYERS							2
 #define JE_HW_FVF							( D3DFVF_XYZ | D3DFVF_NORMAL | D3DFVF_DIFFUSE | D3DFVF_TEX2 )
@@ -36,7 +36,7 @@ extern bool									CanDoAntiAlias;
 jeVertexCache	*jeVertexCache_Create(const void* lpD3D,const DWORD& FVF,
 						const unsigned int& VertexCount, unsigned int Size, JVB_BUFFER_TYPE bufType);
 
-void BuildRGBGammaTables(float Gamma);
+//void BuildRGBGammaTables(float Gamma);
 
 typedef DRV_Driver				D3D9Driver;
 
@@ -86,16 +86,16 @@ jeBoolean								DRIVERCC D3D9Drv_DrawText(char *text, int x, int y, uint32 colo
 
 extern "C" DRIVERAPI D3D9Driver			g_D3D9Drv;
 
-int32 GetLog(int32 Width, int32 Height);
+//int32 GetLog(int32 Width, int32 Height);
 
-typedef struct RGB_LUT
-{
-	uint32				R[256];
-	uint32				G[256];
-	uint32				B[256];
-	uint32				A[256];
-} RGB_LUT;
-
-extern RGB_LUT Lut1;
+//typedef struct RGB_LUT
+//{
+//	uint32				R[256];
+//	uint32				G[256];
+//	uint32				B[256];
+//	uint32				A[256];
+//} RGB_LUT;
+//
+//extern RGB_LUT Lut1;
 
 #endif //DIRECT3D9DRIVER_H

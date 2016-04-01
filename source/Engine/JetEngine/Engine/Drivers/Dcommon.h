@@ -458,9 +458,9 @@ typedef jeBoolean DRIVERCC SET_CAMERA(jeCamera *Camera);
 // END - Hardware T&L - paradoxnj 4/5/2005
 
 // Static Meshes - paradoxnj 8/1/2005
-typedef uint32 DRIVERCC ADD_STATIC_MESH(jeHWVertex *Points, int32 NumPoints, jeRDriver_Layer *Layers, int32 NumLayers, uint32 Flags);
-typedef jeBoolean DRIVERCC REMOVE_STATIC_MESH(uint32 id);
-typedef jeBoolean DRIVERCC RENDER_STATIC_MESH(uint32 id, int32 StartVertex, int32 NumPolys, jeXForm3d *XForm);
+//typedef uint32 DRIVERCC ADD_STATIC_MESH(jeHWVertex *Points, int32 NumPoints, jeRDriver_Layer *Layers, int32 NumLayers, uint32 Flags);
+//typedef jeBoolean DRIVERCC REMOVE_STATIC_MESH(uint32 id);
+//typedef jeBoolean DRIVERCC RENDER_STATIC_MESH(uint32 id, int32 StartVertex, int32 NumPolys, jeXForm3d *XForm);
 // Static Meshes - paradoxnj 8/1/2005
 
 // BEGIN - Hardware True Type Fonts - paradoxnj 8/3/2005
@@ -550,9 +550,9 @@ typedef struct
 	GET_GAMMA			*GetGamma;
 	
 	// BEGIN - Hardware T&L - paradoxnj 4/5/2005
-	SET_MATRIX			*SetMatrix;
-	GET_MATRIX			*GetMatrix;
-	SET_CAMERA			*SetCamera;
+	//SET_MATRIX			*SetMatrix;
+	//GET_MATRIX			*GetMatrix;
+	//SET_CAMERA			*SetCamera;
 	// END - Hardware T&L - paradoxnj 4/5/2005
 
 	// Driver preferences
@@ -567,16 +567,16 @@ typedef struct
 	SET_FOG				*SetFog;
 
 	// BEGIN - Static Meshes - paradoxnj 8/2/2005
-	ADD_STATIC_MESH		*StaticMesh_Add;
-	REMOVE_STATIC_MESH	*StaticMesh_Remove;
-	RENDER_STATIC_MESH	*StaticMesh_Render;
+	//ADD_STATIC_MESH		*StaticMesh_Add;
+	//REMOVE_STATIC_MESH	*StaticMesh_Remove;
+	//RENDER_STATIC_MESH	*StaticMesh_Render;
 	// END - Static Meshes - paradoxnj 8/2/2005
 
 	// BEGIN - Hardware True Type Fonts - paradoxnj 8/13/2005
 	CREATE_FONT			*Font_Create;
 	DRAW_FONT			*Font_Draw;
 	DESTROY_FONT		*Font_Destroy;
-	// END - Hardware Truw Type Fonts - paradoxnj 8/13/2005
+	// END - Hardware True Type Fonts - paradoxnj 8/13/2005
 
 	// BEGIN - Render state access - paradoxnj 12/25/2005
 	SET_RENDER_STATE	*SetRenderState;
@@ -722,6 +722,7 @@ public:
 #endif
 
 typedef jeBoolean DRV_Hook(DRV_Driver **Hook);
+typedef jeBoolean DRV_Release(DRV_Driver **Hook);
 
 //
 //	Error defines set by the driver.  These will be in the LastError member of AFX_DRIVER

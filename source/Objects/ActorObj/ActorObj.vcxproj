@@ -19,7 +19,7 @@
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseOfMfc>false</UseOfMfc>
     <CharacterSet>MultiByte</CharacterSet>
-    <PlatformToolset>v120</PlatformToolset>
+    <PlatformToolset>v110</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
@@ -137,15 +137,15 @@
     </Bscmake>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="ObjectDef.c" />
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="ObjectDef.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ActorObj.dep" />
     <None Include="ActorObj.dsp" />
     <None Include="ActorObj.mak" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="ObjectDef.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

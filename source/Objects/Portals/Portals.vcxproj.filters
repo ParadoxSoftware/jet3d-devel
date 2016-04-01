@@ -7,14 +7,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="ObjectDef.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PortalObject.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="ObjectDef.h">
       <Filter>Source Files</Filter>
     </ClInclude>
@@ -26,5 +18,13 @@
     <None Include="Portals.dep" />
     <None Include="Portals.dsp" />
     <None Include="Portals.mak" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="ObjectDef.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PortalObject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

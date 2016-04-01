@@ -19,7 +19,7 @@
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseOfMfc>false</UseOfMfc>
     <CharacterSet>MultiByte</CharacterSet>
-    <PlatformToolset>v120</PlatformToolset>
+    <PlatformToolset>v110</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
@@ -134,10 +134,6 @@
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="CamObject.c" />
-    <ClCompile Include="ObjectDef.c" />
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="CamObject.h" />
     <ClInclude Include="ObjectDef.h" />
     <ClInclude Include="resource.h" />
@@ -151,6 +147,10 @@
     <None Include="CamObject.dep" />
     <None Include="CamObject.dsp" />
     <None Include="CamObject.mak" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="CamObject.cpp" />
+    <ClCompile Include="ObjectDef.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

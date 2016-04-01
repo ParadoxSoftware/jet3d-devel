@@ -1095,9 +1095,9 @@ DRV_Driver OGLDRV =
 	OGLDrv_SetGamma,
 	OGLDrv_GetGamma,
 
-	OGLDrv_SetMatrix,
-	OGLDrv_GetMatrix,
-	OGLDrv_SetCamera,
+	//OGLDrv_SetMatrix,
+	//OGLDrv_GetMatrix,
+	//OGLDrv_SetCamera,
 
 	NULL,
 	NULL,
@@ -1105,9 +1105,9 @@ DRV_Driver OGLDRV =
 	NULL,
 	NULL,
 
-	NULL,
-	NULL,
-	NULL,
+	//NULL,
+	//NULL,
+	//NULL,
 
 	NULL,
 	NULL,

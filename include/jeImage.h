@@ -26,27 +26,25 @@
 #include "Basetype.h"
 #include "VFILE.H"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-typedef struct jeImage						jeImage;
 typedef struct jeTexture					jeTexture;
 
-JETAPI jeImage * JETCC jeImage_Create(int32 Width, int32 Height, int32 BPP);
-JETAPI jeImage * JETCC jeImage_CreateFromFile(jeVFile *File);
-JETAPI void JETCC jeImage_Destroy(jeImage **pImage);
+class jeImage : virtual public jeUnknown
+{
+protected:
+	virtual ~jeImage(){}
 
-JETAPI int32 JETCC jeImage_GetWidth(const jeImage *pImage);
-JETAPI int32 JETCC jeImage_GetHeight(const jeImage *pImage);
-JETAPI int32 JETCC jeImage_GetBPP(const jeImage *pImage);
-JETAPI uint8 * JETCC jeImage_GetBits(const jeImage *pImage);
+public:
+	virtual jeBoolean Create(int32 Width, int32 Height, int32 BPP) = 0;
+	virtual jeBoolean CreateFromFile(jeVFile *File) = 0;
+	virtual void Destroy() = 0;
 
-JETAPI void JETCC jeImage_SetTextureHandle(jeImage *Image, jeTexture *Texture);
-JETAPI jeTexture * JETCC jeImage_GetTextureHandle(const jeImage *Image);
+	virtual const int32 GetWidth() const = 0;
+	virtual const int32 GetHeight() const = 0;
+	virtual const int32 GetBPP() const = 0;
+	virtual uint8 * GetBits() = 0;
 
-#ifdef __cplusplus
-}
-#endif
+	virtual void SetTextureHandle(jeTexture *Texture) = 0;
+	virtual jeTexture * GetTextureHandle() = 0;
+};
 
 #endif

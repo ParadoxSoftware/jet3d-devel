@@ -150,6 +150,7 @@ m_strGameName = _T("Jet3D_MinApp");
 	m_bBrowseLevel = false;
 	m_bJustMoved = true;
 
+	m_pImage = NULL;
 
 #ifdef NDEBUG
 	m_strDriverName = _T("D3D");
@@ -566,7 +567,24 @@ bool	CMainFrame::InitializeJet3D()
 		GetCursorPos(&point);
 		m_ptOldMousePoint = point;
 
+		m_pImage = jeEngine_CreateImage();
+		jeVFile *File = jeVFile_OpenNewSystem(NULL, JE_VFILE_TYPE_DOS, "GlobalMaterials\\rhine.bmp", NULL, JE_VFILE_OPEN_READONLY);
+		if (!File)
+		{
+			AfxMessageBox("Could not open image file!!");
+		}
 
+		if (!m_pImage->CreateFromFile(File))
+		{
+			AfxMessageBox("Could not load image!!");
+			m_pImage->Release();
+			m_pImage = NULL;
+		}
+
+		jeVFile_Close(File);
+		
+		if (m_pImage)
+			jeEngine_AddImage(m_pEngine, m_pImage);
 
 //ShowWindow(SW_SHOW);
 
@@ -698,6 +716,13 @@ bool CMainFrame::ShutdownAll()
 		{
 			// stop it for now. we'll kill it later...
 			jeEngine_Activate(m_pEngine, FALSE);
+		}
+
+		if (m_pImage)
+		{
+			jeEngine_RemoveImage(m_pEngine, m_pImage);
+			m_pImage->Release();
+			m_pImage = NULL;
 		}
 
 		//	destroy world, engine, etc...
@@ -1392,6 +1417,8 @@ bool CMainFrame::RenderView(jeFloat fElapsedTime)
 			//	tom morris june 2005	
 			//jeEngine_Printf(m_pEngine, 0, 0, "jMinApp - Press ESC to close jMinApp.");
 			jeEngine_Printf(m_pEngine, 0, 10, 10, JE_COLOR_COLORVALUE(100,100,100,100), "jMinApp - Press ESC to close jMinApp.");
+
+			jeEngine_DrawImage(m_pEngine, m_pImage, NULL, 1, 1);
 
 			//	flip the new rendered frame to the screen
 			if (!jeEngine_EndFrame(m_pEngine))

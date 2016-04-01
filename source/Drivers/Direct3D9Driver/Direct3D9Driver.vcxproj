@@ -99,6 +99,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="D3D9Log.cpp" />
+    <ClCompile Include="D3D9Render.cpp" />
     <ClCompile Include="D3D9TextureMgr.cpp" />
     <ClCompile Include="Direct3D9Driver.cpp" />
     <ClCompile Include="jeVertexBuffer.cpp" />
@@ -107,6 +108,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="D3D9Log.h" />
+    <ClInclude Include="D3D9Render.h" />
     <ClInclude Include="D3D9TextureMgr.h" />
     <ClInclude Include="..\..\Engine\JetEngine\Engine\Drivers\Dcommon.h" />
     <ClInclude Include="Direct3D9Driver.h" />

@@ -34,103 +34,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Core\Brush.c">
-      <Filter>Core</Filter>
-    </ClCompile>
-    <ClCompile Include="Core\BrushList.c">
-      <Filter>Core</Filter>
-    </ClCompile>
-    <ClCompile Include="Core\BrushTemplate.c">
-      <Filter>Core</Filter>
-    </ClCompile>
-    <ClCompile Include="Core\CameraList.c">
-      <Filter>Core</Filter>
-    </ClCompile>
-    <ClCompile Include="Core\CamObj.c">
-      <Filter>Core</Filter>
-    </ClCompile>
-    <ClCompile Include="Core\Class.c">
-      <Filter>Core</Filter>
-    </ClCompile>
-    <ClCompile Include="Core\Descriptor.c">
-      <Filter>Core</Filter>
-    </ClCompile>
-    <ClCompile Include="Core\Draw.c">
-      <Filter>Core</Filter>
-    </ClCompile>
-    <ClCompile Include="Core\Draw3d.c">
-      <Filter>Core</Filter>
-    </ClCompile>
-    <ClCompile Include="Core\Facelist.c">
-      <Filter>Core</Filter>
-    </ClCompile>
-    <ClCompile Include="Core\Group.c">
-      <Filter>Core</Filter>
-    </ClCompile>
-    <ClCompile Include="Core\GroupList.c">
-      <Filter>Core</Filter>
-    </ClCompile>
     <ClCompile Include="Core\Level.cpp">
-      <Filter>Core</Filter>
-    </ClCompile>
-    <ClCompile Include="Core\Light.c">
-      <Filter>Core</Filter>
-    </ClCompile>
-    <ClCompile Include="Core\LightList.c">
-      <Filter>Core</Filter>
-    </ClCompile>
-    <ClCompile Include="Core\MaterialIdentList.c">
-      <Filter>Core</Filter>
-    </ClCompile>
-    <ClCompile Include="Core\MaterialList.c">
-      <Filter>Core</Filter>
-    </ClCompile>
-    <ClCompile Include="Core\MaterialList2.c">
-      <Filter>Core</Filter>
-    </ClCompile>
-    <ClCompile Include="Core\Materials.c">
-      <Filter>Core</Filter>
-    </ClCompile>
-    <ClCompile Include="Core\MatrArray.c">
-      <Filter>Core</Filter>
-    </ClCompile>
-    <ClCompile Include="Core\MatrIdx.c">
-      <Filter>Core</Filter>
-    </ClCompile>
-    <ClCompile Include="Core\Model.c">
-      <Filter>Core</Filter>
-    </ClCompile>
-    <ClCompile Include="Core\modellist.c">
-      <Filter>Core</Filter>
-    </ClCompile>
-    <ClCompile Include="Core\Object.c">
-      <Filter>Core</Filter>
-    </ClCompile>
-    <ClCompile Include="Core\ObjectList.c">
-      <Filter>Core</Filter>
-    </ClCompile>
-    <ClCompile Include="Core\Ortho.c">
-      <Filter>Core</Filter>
-    </ClCompile>
-    <ClCompile Include="Core\Select.c">
-      <Filter>Core</Filter>
-    </ClCompile>
-    <ClCompile Include="Core\TernList.c">
-      <Filter>Core</Filter>
-    </ClCompile>
-    <ClCompile Include="Core\TerrnObj.c">
-      <Filter>Core</Filter>
-    </ClCompile>
-    <ClCompile Include="Core\Transform.c">
-      <Filter>Core</Filter>
-    </ClCompile>
-    <ClCompile Include="Core\Undo.c">
-      <Filter>Core</Filter>
-    </ClCompile>
-    <ClCompile Include="Core\UserObj.c">
-      <Filter>Core</Filter>
-    </ClCompile>
-    <ClCompile Include="Core\Vertlist.c">
       <Filter>Core</Filter>
     </ClCompile>
     <ClCompile Include="J3dmfc\J3DApp.cpp">
@@ -253,34 +157,10 @@
     <ClCompile Include="Dialogs\DialogHelpers\Thin3DSplitterWnd.cpp">
       <Filter>Dialogs\DialogHelpers</Filter>
     </ClCompile>
-    <ClCompile Include="Util\Bmp.c">
-      <Filter>Utilities</Filter>
-    </ClCompile>
-    <ClCompile Include="Util\Dlist.c">
-      <Filter>Utilities</Filter>
-    </ClCompile>
-    <ClCompile Include="Util\DrawTool.c">
-      <Filter>Utilities</Filter>
-    </ClCompile>
-    <ClCompile Include="Util\Drvlist.c">
-      <Filter>Utilities</Filter>
-    </ClCompile>
-    <ClCompile Include="Util\jeList.c">
-      <Filter>Utilities</Filter>
-    </ClCompile>
     <ClCompile Include="Util\Mtl9937.cpp">
       <Filter>Utilities</Filter>
     </ClCompile>
     <ClCompile Include="Util\Noise.cpp">
-      <Filter>Utilities</Filter>
-    </ClCompile>
-    <ClCompile Include="Util\Rect.c">
-      <Filter>Utilities</Filter>
-    </ClCompile>
-    <ClCompile Include="Util\Spawn.c">
-      <Filter>Utilities</Filter>
-    </ClCompile>
-    <ClCompile Include="Util\Util.c">
       <Filter>Utilities</Filter>
     </ClCompile>
     <ClCompile Include="AppData.cpp">
@@ -357,6 +237,123 @@
     </ClCompile>
     <ClCompile Include="WndReg.cpp">
       <Filter>MFC Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Brush.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\BrushList.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\BrushTemplate.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\CameraList.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\CamObj.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Class.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Descriptor.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Draw.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Draw3d.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\FACELIST.CPP">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Group.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\GroupList.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Light.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\LightList.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\MaterialIdentList.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\MaterialList.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\MaterialList2.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Materials.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\MatrIdx.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\MODEL.CPP">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\modellist.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Object.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\ObjectList.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Ortho.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Select.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\TernList.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\TerrnObj.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Transform.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Undo.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\UserObj.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\VERTLIST.CPP">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Util\BMP.CPP">
+      <Filter>Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="Util\DLIST.CPP">
+      <Filter>Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="Util\DrawTool.cpp">
+      <Filter>Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="Util\DRVLIST.CPP">
+      <Filter>Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="Util\jeList.cpp">
+      <Filter>Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="Util\Rect.cpp">
+      <Filter>Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="Util\Spawn.cpp">
+      <Filter>Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="Util\Util.cpp">
+      <Filter>Utilities</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
