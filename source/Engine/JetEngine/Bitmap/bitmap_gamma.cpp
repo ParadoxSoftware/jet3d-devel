@@ -92,7 +92,7 @@ jeFloat Gamma;
 	jeBitmap_Palette *	Pal;
 	jeBitmap_Info		PalInfo;
 	void *	Bits;
-	int		Size;
+	int32		Size;
 	jePixelFormat Format;
 	
 		// gamma correct the palette
