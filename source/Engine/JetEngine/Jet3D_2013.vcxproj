@@ -156,6 +156,11 @@
     <ClCompile Include="..\External\nvwa\debug_new.cpp" />
     <ClCompile Include="..\External\nvwa\mem_pool_base.cpp" />
     <ClCompile Include="..\External\nvwa\static_mem_pool.cpp" />
+    <ClCompile Include="Bitmap\Bitmap.cpp" />
+    <ClCompile Include="Bitmap\bitmap_blitdata.cpp" />
+    <ClCompile Include="Bitmap\bitmap_gamma.cpp" />
+    <ClCompile Include="Bitmap\Compression\arithc.cpp" />
+    <ClCompile Include="Bitmap\PixelFormat.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Engine\jeImage.cpp" />
     <ClCompile Include="List.c" />
@@ -182,11 +187,6 @@
     <ClCompile Include="Actor\TKEvents.cpp" />
     <ClCompile Include="Actor\VKFrame.cpp" />
     <ClCompile Include="Actor\XFArray.cpp" />
-    <ClCompile Include="Bitmap\bitmap.c" />
-    <ClCompile Include="Bitmap\bitmap_blitdata.c" />
-    <ClCompile Include="Bitmap\bitmap_gamma.c" />
-    <ClCompile Include="Bitmap\pixelformat.c" />
-    <ClCompile Include="Bitmap\Compression\arithc.c" />
     <ClCompile Include="Bitmap\Compression\codealphas.c" />
     <ClCompile Include="Bitmap\Compression\codeimage.c" />
     <ClCompile Include="Bitmap\Compression\codepal.c" />
