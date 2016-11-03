@@ -330,6 +330,7 @@
     <ClInclude Include="..\..\..\include\jeFileLogger.h" />
     <ClInclude Include="..\..\..\include\jeImage.h" />
     <ClInclude Include="..\..\..\include\jeLogger.h" />
+    <ClInclude Include="..\..\..\include\jeVec3d.h" />
     <ClInclude Include="..\External\nvwa\bool_array.h" />
     <ClInclude Include="..\External\nvwa\class_level_lock.h" />
     <ClInclude Include="..\External\nvwa\cont_ptr_utils.h" />
@@ -343,7 +344,6 @@
     <ClInclude Include="..\External\nvwa\set_assign.h" />
     <ClInclude Include="..\External\nvwa\static_assert.h" />
     <ClInclude Include="..\External\nvwa\static_mem_pool.h" />
-    <ClInclude Include="CSNetMgr.h" />
     <ClInclude Include="..\..\..\include\jeTypes.h" />
     <ClInclude Include="..\..\..\include\jeVersion.h" />
     <ClInclude Include="list.h" />
