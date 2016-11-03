@@ -93,7 +93,7 @@ int bmult,bscale,blen,zOutLen;
 
 jeBoolean codePal_Write(const jeBitmap_Palette * P,jeVFile * F,int *pWroteLen)
 {
-int Size;
+int32 Size;
 jePixelFormat Format;
 void *Data;
 int R,G,B,A;
@@ -295,7 +295,7 @@ return JE_TRUE;
 
 jeBoolean codePal_Read(jeBitmap_Palette * P,jeVFile * F)
 {
-int Size;
+int32 Size;
 jePixelFormat Format;
 void *Data;
 jeBitmap_Info Info;

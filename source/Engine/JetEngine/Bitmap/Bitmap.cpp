@@ -2939,7 +2939,7 @@ int32 fmxtra,tow,toh,toxtra,fmw,fmh,fmstep,x,y,bpp;
 
 	if ( fmstep == 2 && bpp > 1 )
 	{
-	int32 R1,G1,B1,A1,R2,G2,B2,A2,R3,G3,B3,A3,R4,G4,B4,A4;
+	int R1,G1,B1,A1,R2,G2,B2,A2,R3,G3,B3,A3,R4,G4,B4,A4;
 	jePixelFormat_ColorGetter GetColor;
 	jePixelFormat_ColorPutter PutColor;
 	const jePixelFormat_Operations *ops;
@@ -5111,7 +5111,7 @@ uint8 flags;
 uint8 b;
 int len,logw,logh;
 const jeBitmap_Info * pi;
-int R,G,B;
+int32 R,G,B;
 
 /*
 	bit flags :
@@ -5184,9 +5184,9 @@ int R,G,B;
 	if ( jeBitmap_GetAverageColor(Bmp,&R,&G,&B) )
 	{
 		flags |= INFO_FLAG_HAS_AVERAGE;
-		*ptr++ = JE_CLAMP8(R);
-		*ptr++ = JE_CLAMP8(G);
-		*ptr++ = JE_CLAMP8(B);
+		*ptr++ = JE_CLAMP8((uint8)R);
+		*ptr++ = JE_CLAMP8((uint8)G);
+		*ptr++ = JE_CLAMP8((uint8)B);
 	}
 
 	*data = flags;
@@ -5782,7 +5782,7 @@ uint32 Pixel;
 			}
 			else
 			{
-				jePixelFormat_DecomposePixel(P->Format,Pixel,R,G,B,A);
+				jePixelFormat_DecomposePixel(P->Format,Pixel,(int*)R,(int*)G,(int*)B,(int*)A);
 			}
 		}
 	}
@@ -5790,7 +5790,7 @@ uint32 Pixel;
 	{
 		if ( ! jeBitmap_Palette_GetEntry(P,Color,&Pixel) )
 			return JE_FALSE;
-		jePixelFormat_DecomposePixel(P->Format,Pixel,R,G,B,A);
+		jePixelFormat_DecomposePixel(P->Format,Pixel,(int*)R,(int*)G,(int*)B,(int*)A);
 	}
 	return JE_TRUE;
 }
@@ -5819,7 +5819,7 @@ JETAPI jeBoolean JETCC jeBitmap_Palette_SetEntry(jeBitmap_Palette *P,int32 Color
 	{
 	char *Data;
 	jePixelFormat Format;
-	int Size;
+	int32 Size;
 
 		if ( ! jeBitmap_Palette_Lock(P,(void **)&Data,&Format,&Size) )
 			return JE_FALSE;
@@ -5857,7 +5857,7 @@ JETAPI jeBoolean JETCC jeBitmap_Palette_GetEntry(const jeBitmap_Palette *P,int32
 	{
 	char *Data;
 	jePixelFormat Format;
-	int Size;
+	int32 Size;
 
 		// must cast away const cuz we don't have a lockforread/write on palettes
 
@@ -5970,7 +5970,7 @@ JETAPI jeBoolean JETCC jeBitmap_Palette_WriteToFile(const jeBitmap_Palette *P,je
 {
 jePixelFormat Format;
 void *Data;
-int Size,codedLen,StartPos;
+int32 Size,codedLen,StartPos;
 
 	assert(P);
 
@@ -5987,7 +5987,7 @@ int Size,codedLen,StartPos;
 
 	jeBitmap_Palette_WriteHeaderToFile(Size,Format,JE_TRUE,F);
 
-	if ( ! codePal_Write(P, F, &codedLen) )
+	if ( ! codePal_Write(P, F, (int*)&codedLen) )
 	{
 		jeErrorLog_AddString(-1,"Bitmap_Palette_WriteToFile : codePal failed!",NULL);
 		return JE_FALSE;
@@ -6257,7 +6257,7 @@ JETAPI jeBoolean JETCC jeBitmap_GetAverageColor(const jeBitmap *Bmp,int32 *pR,in
 						Pixel = GetPixel(&ptr);
 						if ( Pixel != ck )
 						{
-							Decomposer(Pixel,(int32 *)&R,(int32 *)&G,(int32 *)&B,(int32 *)&A);
+							Decomposer(Pixel,(int*)&R,(int*)&G,(int*)&B,(int*)&A);
 							Rt += R; Gt += G; Bt += B;
 							cnt ++;
 						}
@@ -6271,7 +6271,7 @@ JETAPI jeBoolean JETCC jeBitmap_GetAverageColor(const jeBitmap *Bmp,int32 *pR,in
 				{
 					for(x=w;x--;)
 					{
-						GetColor(&ptr,(int32 *)&R,(int32 *)&G,(int32 *)&B,(int32 *)&A);
+						GetColor(&ptr,(int*)&R,(int*)&G,(int*)&B,(int*)&A);
 						if ( A > 80 )
 						{
 							Rt += R; Gt += G; Bt += B;

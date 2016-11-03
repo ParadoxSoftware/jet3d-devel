@@ -37,16 +37,16 @@ extern jeBoolean sortPal(int size,uint8 *rgb_colors, int *permutation,int *usage
 
 /** internal-used only : **/
 
-typedef struct _palNode palNode;
+//typedef struct _palNode palNode;
 
 typedef struct _palNode {
 	RGB color;
 	int index;
 	int c1,c2,c3;
-	palNode *next,*prev; // NULL if not yet decided
+	struct _palNode *next,*prev; // NULL if not yet decided
 	jeBoolean visited;
 	int d_next;
-};
+} palNode;
 
 extern palNode * initPal(uint8 * rgb_colors,int size);
 extern jeBoolean readOutPal(palNode *start_node,int size,uint8 *rgb_colors,int *permutation);
