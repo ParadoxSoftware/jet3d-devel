@@ -47,9 +47,39 @@ struct JETAPI jeVec3d
 
 	jeVec3d &add(const jeVec3d &v1);
 	jeVec3d &subtract(const jeVec3d &v1);
+	jeVec3d &scale(jeFloat s);
+	jeVec3d cross(const jeVec3d &v1) const;
+	jeFloat dot(const jeVec3d &v1) const;
+
 	jeVec3d &inverse();
 
+	jeFloat magnitude() const;
+	jeVec3d normalize() const;
+	jeFloat distance(const jeVec3d &v1) const;
+
+	bool operator ==(const jeVec3d &v1) const;
+	bool operator !=(const jeVec3d &v1) const;
+
+	jeVec3d &operator +=(const jeVec3d &v1);
+	jeVec3d &operator -=(const jeVec3d &v1);
+	jeVec3d &operator *=(const jeFloat scale);
+	jeVec3d &operator /=(const jeFloat scale);
 };
+
+__inline jeVec3d operator +(jeVec3d &v1, const jeVec3d &v2)
+{
+	return v1.add(v2);
+}
+
+__inline jeVec3d operator -(jeVec3d &v1, const jeVec3d &v2)
+{
+	return v1.subtract(v2);
+}
+
+__inline jeVec3d operator *(jeVec3d &v1, jeFloat scale)
+{
+	return v1.scale(scale);
+}
 
 } // namespace jet3d
 

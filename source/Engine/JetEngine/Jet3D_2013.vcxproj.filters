@@ -517,6 +517,9 @@
     <ClCompile Include="Actor\VKFrame.cpp">
       <Filter>Actor</Filter>
     </ClCompile>
+    <ClCompile Include="Math\jeVec3d.cpp">
+      <Filter>Math</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />

@@ -213,6 +213,7 @@
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Engine\jeImage.cpp" />
     <ClCompile Include="List.c" />
+    <ClCompile Include="Math\jeVec3d.cpp" />
     <ClCompile Include="Object.cpp" />
     <ClCompile Include="OGGStream.cpp" />
     <ClCompile Include="Report.cpp" />
