@@ -18,6 +18,7 @@
 /*  Copyright (C) 1996-1999 Eclipse Entertainment, L.L.C. All Rights Reserved           */
 /*                                                                                      */
 /****************************************************************************************/
+#include <assert.h>
 #include "arithc.h"
 #include "arithc._h"
 
@@ -40,7 +41,8 @@ return(ari);
 
 void arithFree(arithInfo * ari)
 {
-if (ari) destroy(ari);
+//if (ari) destroy(ari);
+	if (ari) delete ari;
 }
 
 
@@ -328,7 +330,7 @@ uint32 arithDecByteRaw(arithInfo * ari)
 {
 uint32 got;
 uint32 range,code;
-uint32 dec_range_over_symtot;
+//uint32 dec_range_over_symtot;
 
 	range = ari->range;
 	code = ari->code;

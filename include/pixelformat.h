@@ -23,10 +23,6 @@
 
 #include "BaseType.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 typedef enum		// all supported formats (including shifts)
 {
 	JE_PIXELFORMAT_NO_DATA = 0,
@@ -50,7 +46,7 @@ typedef enum		// all supported formats (including shifts)
 	JE_PIXELFORMAT_32BIT_BGRA, 
 	JE_PIXELFORMAT_32BIT_ABGR,
 	
-	JE_PIXELFORMAT_WAVELET,			// #20 , Wavelet Compression
+	//JE_PIXELFORMAT_WAVELET,			// #20 , Wavelet Compression
 
 	JE_PIXELFORMAT_COUNT
 } jePixelFormat;
@@ -140,10 +136,5 @@ JETAPI uint32		JETCC jePixelFormat_GetPixel(jePixelFormat Format,uint8 **ppData)
 JETAPI void			JETCC jePixelFormat_PutPixel(jePixelFormat Format,uint8 **ppData,uint32 Pixel);
 	
 JETAPI uint32		JETCC jePixelFormat_ConvertPixel(jePixelFormat Format,uint32 Pixel,jePixelFormat ToFormat);
-
-
-#ifdef __cplusplus
-}
-#endif
 
 #endif

@@ -21,7 +21,11 @@
 
 /* #define DEBUG */
 
-#include "Utility.h"
+#include <assert.h>
+#include "BaseType.h"
+#include "Ram.h"
+
+//#include "Utility.h"
 #include "StrUtil.h"
 #include "lbitio.h"
 #include "huffman2.h"
@@ -147,7 +151,7 @@ EndOfFunc:
 
 if ( HuffExitMess )
   {
-  BrandoError(HuffExitMess);
+//  BrandoError(HuffExitMess);
   return(JE_FALSE);
   }
 else
@@ -169,7 +173,8 @@ jeBoolean ret;
 if ( RawLen == 0 ) return JE_TRUE;
 
 if ( (BII = LBitIO_Init(HuffArray)) == NULL )
-	{ BrandoError("LBitIO_Init failed!"); return(0); }
+	{ //BrandoError("LBitIO_Init failed!"); 
+		return(0); }
 
 if ( ! CompressFlag )
 	{
@@ -197,7 +202,8 @@ jeBoolean ret;
 if ( RawLen == 0 ) return JE_TRUE;
 
 if ( (BII = LBitIO_Init(HuffArray)) == NULL )
-	{ BrandoError("LBitIO_Init failed!"); return(0); }
+	{ //BrandoError("LBitIO_Init failed!"); 
+		return(0); }
 
 if ( ! CompressFlag )
 	{
@@ -249,7 +255,7 @@ jeBoolean ret;
 		}
 	}
 
-	destroy(runArray);
+	jeRam_Free(runArray); runArray = nullptr;
 
 return ret;
 }
@@ -276,12 +282,13 @@ else
 		long * CharCounts = NULL;
 
 		if ( (CharCounts = (long *)jeRam_Allocate(256*sizeof(long))) == NULL )
-			{ BrandoError("jeRam_Allocate failed!"); return(0); }
+			{ //BrandoError("jeRam_Allocate failed!"); 
+				return(0); }
 
-		memclear(CharCounts,256*sizeof(long));
+		memset(CharCounts,0,256*sizeof(long));
 		for(i=0;i<RawLen;i++) CharCounts[RawArray[i]] ++;
 		MaxCount = CharCounts[MaxIn(CharCounts,256)];
-		destroy(CharCounts);
+		jeRam_Free(CharCounts); CharCounts = nullptr;
 
 		if ( (MaxCount*DOBLOCK_DIVISOR) >= RawLen ) doblock = 1;
 		else doblock = 0;
@@ -356,7 +363,7 @@ else //Encode
 	if ( (CharCounts = (long *)jeRam_Allocate(256*sizeof(long))) == NULL )
 		CleanUp("jeRam_Allocate failed!");
 
-	memclear(CharCounts,256*sizeof(long));
+	memset(CharCounts,0,256*sizeof(long));
 	for(i=0;i<RawLen;i++) CharCounts[RawArray[i]] ++;
 
 	Huff2_ScaleCounts(HI,CharCounts,256);
@@ -390,12 +397,12 @@ else
 	}
 #endif
 
-destroy(CharCounts);
+jeRam_Free(CharCounts); CharCounts = nullptr;
 if ( HI ) Huff2_CleanUp(HI);
 
 if ( HuffExitMess )
   {
-  BrandoError(HuffExitMess);
+//  BrandoError(HuffExitMess);
   return(JE_FALSE);
   }
 else
@@ -525,13 +532,13 @@ CleanUp(NULL);
 
 EndOfFunc:
 
-destroy(LitArray);
-destroy(BlockArray);
-destroy(CharCounts);
+jeRam_Free(LitArray); LitArray = nullptr;
+jeRam_Free(BlockArray); BlockArray = nullptr;
+jeRam_Free(CharCounts); CharCounts = nullptr;
 
 if ( HuffExitMess )
   {
-  BrandoError(HuffExitMess);
+//  BrandoError(HuffExitMess);
   return(JE_FALSE);
   }
 else
@@ -623,11 +630,11 @@ if ( RawLen == 0 ) return JE_TRUE;
 if ( (BII = LBitIO_Init(HuffArray)) == NULL )
 	CleanUp("LBitIO_Init failed!");
 
-if ( (o1Arrays = (uint8**)jeRam_Allocate(257*sizeofpointer)) == NULL )
+if ( (o1Arrays = (uint8**)jeRam_Allocate(257*sizeof(void*))) == NULL )
 	CleanUp("jeRam_Allocate failed!");
 for(lc=0;lc<257;lc++) o1Arrays[lc] = NULL;
 
-if ( (o1ArrayPtrs = (uint8**)jeRam_Allocate(257*sizeofpointer)) == NULL )
+if ( (o1ArrayPtrs = (uint8**)jeRam_Allocate(257*sizeof(void*))) == NULL )
 	CleanUp("jeRam_Allocate failed!");
 
 if ( (o1ArrayLens = (uint32*)jeRam_Allocate(257*sizeof(uint32))) == NULL )
@@ -735,18 +742,20 @@ CleanUp(NULL);
 
 EndOfFunc:
 
-destroy(o1ArrayLens);
-destroy(o1ArrayPtrs);
+jeRam_Free(o1ArrayLens); o1ArrayLens = nullptr;
+jeRam_Free(o1ArrayPtrs); o1ArrayPtrs = nullptr;
 if ( o1Arrays )
 	{
-	for(lc=0;lc<257;lc++) destroy( o1Arrays[lc] );
-	destroy(o1Arrays);
+		for (lc = 0; lc < 257; lc++) {
+			jeRam_Free(o1Arrays[lc]); o1Arrays[lc] = nullptr;
+		}
+		jeRam_Free(o1Arrays); o1Arrays = nullptr;
 	}
 if ( BII ) LBitIO_CleanUp(BII);
 
 if ( HuffExitMess )
   {
-  BrandoError(HuffExitMess);
+//  BrandoError(HuffExitMess);
   return(JE_FALSE);
   }
 else

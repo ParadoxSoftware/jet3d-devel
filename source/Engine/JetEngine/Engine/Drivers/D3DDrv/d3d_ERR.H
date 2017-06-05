@@ -28,14 +28,6 @@
 //================================================================================
 //	Global functions
 //================================================================================
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 char *D3DErrorToString(HRESULT error);
-
-#ifdef __cplusplus
-}
-#endif
 
 #endif

@@ -43,43 +43,7 @@
     <ClCompile Include="Camera.cpp">
       <Filter>Math</Filter>
     </ClCompile>
-    <ClCompile Include="Bitmap\Compression\codealphas.cpp">
-      <Filter>Bitmap\Compression</Filter>
-    </ClCompile>
-    <ClCompile Include="Bitmap\Compression\codeimage.cpp">
-      <Filter>Bitmap\Compression</Filter>
-    </ClCompile>
     <ClCompile Include="Bitmap\Compression\CodePal.cpp">
-      <Filter>Bitmap\Compression</Filter>
-    </ClCompile>
-    <ClCompile Include="Bitmap\Compression\Coder.cpp">
-      <Filter>Bitmap\Compression</Filter>
-    </ClCompile>
-    <ClCompile Include="Bitmap\Compression\coder_bp.cpp">
-      <Filter>Bitmap\Compression</Filter>
-    </ClCompile>
-    <ClCompile Include="Bitmap\Compression\coder_bpb2.cpp">
-      <Filter>Bitmap\Compression</Filter>
-    </ClCompile>
-    <ClCompile Include="Bitmap\Compression\coder_bpbf.cpp">
-      <Filter>Bitmap\Compression</Filter>
-    </ClCompile>
-    <ClCompile Include="Bitmap\Compression\coder_bpbfr.cpp">
-      <Filter>Bitmap\Compression</Filter>
-    </ClCompile>
-    <ClCompile Include="Bitmap\Compression\coder_bpbfrl.cpp">
-      <Filter>Bitmap\Compression</Filter>
-    </ClCompile>
-    <ClCompile Include="Bitmap\Compression\coder_f.cpp">
-      <Filter>Bitmap\Compression</Filter>
-    </ClCompile>
-    <ClCompile Include="Bitmap\Compression\coder_f2.cpp">
-      <Filter>Bitmap\Compression</Filter>
-    </ClCompile>
-    <ClCompile Include="Bitmap\Compression\coder_f3.cpp">
-      <Filter>Bitmap\Compression</Filter>
-    </ClCompile>
-    <ClCompile Include="Bitmap\Compression\CodeUtil.cpp">
       <Filter>Bitmap\Compression</Filter>
     </ClCompile>
     <ClCompile Include="Bitmap\Compression\colorconv.cpp">
@@ -133,9 +97,6 @@
     <ClCompile Include="Engine\Engine.cpp">
       <Filter>Engine</Filter>
     </ClCompile>
-    <ClCompile Include="VFile\dirtree.c">
-      <Filter>VFS</Filter>
-    </ClCompile>
     <ClCompile Include="Support\Errorlog.cpp">
       <Filter>Support</Filter>
     </ClCompile>
@@ -145,34 +106,10 @@
     <ClCompile Include="Engine\FontBmp.cpp">
       <Filter>Engine</Filter>
     </ClCompile>
-    <ClCompile Include="VFile\fsdos.c">
-      <Filter>VFS</Filter>
-    </ClCompile>
-    <ClCompile Include="VFile\fsfakenet.c">
-      <Filter>VFS</Filter>
-    </ClCompile>
-    <ClCompile Include="VFile\Fsinet.cpp">
-      <Filter>VFS</Filter>
-    </ClCompile>
-    <ClCompile Include="VFile\fslz.c">
-      <Filter>VFS</Filter>
-    </ClCompile>
-    <ClCompile Include="VFile\Fsmemory.c">
-      <Filter>VFS</Filter>
-    </ClCompile>
-    <ClCompile Include="VFile\fsvfs.c">
-      <Filter>VFS</Filter>
-    </ClCompile>
     <ClCompile Include="Bitmap\Compression\huffa.cpp">
       <Filter>Bitmap\Compression</Filter>
     </ClCompile>
     <ClCompile Include="Bitmap\Compression\huffman2.cpp">
-      <Filter>Bitmap\Compression</Filter>
-    </ClCompile>
-    <ClCompile Include="Bitmap\Compression\Image.cpp">
-      <Filter>Bitmap\Compression</Filter>
-    </ClCompile>
-    <ClCompile Include="Bitmap\Compression\IntMath.cpp">
       <Filter>Bitmap\Compression</Filter>
     </ClCompile>
     <ClCompile Include="Bsp\jeBSP.cpp">
@@ -271,9 +208,6 @@
     <ClCompile Include="Support\jeProperty.cpp">
       <Filter>Support</Filter>
     </ClCompile>
-    <ClCompile Include="Math\jeVec3d_Katmai.cpp">
-      <Filter>Math</Filter>
-    </ClCompile>
     <ClCompile Include="Math\jeRay.cpp">
       <Filter>Math</Filter>
     </ClCompile>
@@ -289,9 +223,6 @@
     <ClCompile Include="..\External\nvwa\mem_pool_base.cpp">
       <Filter>NVWA</Filter>
     </ClCompile>
-    <ClCompile Include="Bitmap\Compression\KatCache.cpp">
-      <Filter>Bitmap\Compression</Filter>
-    </ClCompile>
     <ClCompile Include="Bitmap\Compression\Ladder.cpp">
       <Filter>Bitmap\Compression</Filter>
     </ClCompile>
@@ -306,9 +237,6 @@
     </ClCompile>
     <ClCompile Include="guWorld\jeTexVec.cpp">
       <Filter>World</Filter>
-    </ClCompile>
-    <ClCompile Include="List.c">
-      <Filter>Support</Filter>
     </ClCompile>
     <ClCompile Include="Actor\Motion.cpp">
       <Filter>Actor</Filter>
@@ -394,9 +322,6 @@
     <ClCompile Include="Bitmap\Compression\runtrans.cpp">
       <Filter>Bitmap\Compression</Filter>
     </ClCompile>
-    <ClCompile Include="Bitmap\Compression\SContext.cpp">
-      <Filter>Bitmap\Compression</Filter>
-    </ClCompile>
     <ClCompile Include="Bitmap\Compression\SortPal.cpp">
       <Filter>Bitmap\Compression</Filter>
     </ClCompile>
@@ -418,40 +343,10 @@
     <ClCompile Include="Actor\StrBlock.cpp">
       <Filter>Actor</Filter>
     </ClCompile>
-    <ClCompile Include="Bitmap\Compression\soz.cpp">
-      <Filter>Bitmap\Compression</Filter>
-    </ClCompile>
     <ClCompile Include="Terrain\Terrain.cpp">
       <Filter>World</Filter>
     </ClCompile>
     <ClCompile Include="Bitmap\Compression\StrUtil.cpp">
-      <Filter>Bitmap\Compression</Filter>
-    </ClCompile>
-    <ClCompile Include="Bitmap\Compression\TBlock.cpp">
-      <Filter>Bitmap\Compression</Filter>
-    </ClCompile>
-    <ClCompile Include="Bitmap\Compression\trans_bcw3.cpp">
-      <Filter>Bitmap\Compression</Filter>
-    </ClCompile>
-    <ClCompile Include="Bitmap\Compression\trans_cdf22.cpp">
-      <Filter>Bitmap\Compression</Filter>
-    </ClCompile>
-    <ClCompile Include="Bitmap\Compression\trans_cdf22q.cpp">
-      <Filter>Bitmap\Compression</Filter>
-    </ClCompile>
-    <ClCompile Include="Bitmap\Compression\trans_cdf24.cpp">
-      <Filter>Bitmap\Compression</Filter>
-    </ClCompile>
-    <ClCompile Include="Bitmap\Compression\trans_d4.cpp">
-      <Filter>Bitmap\Compression</Filter>
-    </ClCompile>
-    <ClCompile Include="Bitmap\Compression\trans_l97.cpp">
-      <Filter>Bitmap\Compression</Filter>
-    </ClCompile>
-    <ClCompile Include="Bitmap\Compression\trans_spt.cpp">
-      <Filter>Bitmap\Compression</Filter>
-    </ClCompile>
-    <ClCompile Include="Bitmap\Compression\transform.cpp">
       <Filter>Bitmap\Compression</Filter>
     </ClCompile>
     <ClCompile Include="Engine\splash_bmp.cpp">
@@ -478,9 +373,6 @@
     <ClCompile Include="Support\Util.cpp">
       <Filter>Support</Filter>
     </ClCompile>
-    <ClCompile Include="Bitmap\Compression\Utility.cpp">
-      <Filter>Bitmap\Compression</Filter>
-    </ClCompile>
     <ClCompile Include="Tsc.cpp">
       <Filter>Support</Filter>
     </ClCompile>
@@ -499,17 +391,11 @@
     <ClCompile Include="guWorld\VisObject.cpp">
       <Filter>World</Filter>
     </ClCompile>
-    <ClCompile Include="VFile\vfile.c">
-      <Filter>VFS</Filter>
-    </ClCompile>
     <ClCompile Include="Actor\XFArray.cpp">
       <Filter>Math</Filter>
     </ClCompile>
     <ClCompile Include="Math\Xform3d.cpp">
       <Filter>Math</Filter>
-    </ClCompile>
-    <ClCompile Include="Bitmap\Compression\Wavelet.cpp">
-      <Filter>Bitmap\Compression</Filter>
     </ClCompile>
     <ClCompile Include="Bitmap\Compression\YUV.cpp">
       <Filter>Bitmap\Compression</Filter>
@@ -519,6 +405,36 @@
     </ClCompile>
     <ClCompile Include="Math\jeVec3d.cpp">
       <Filter>Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Bitmap\Compression\CodeUtil.cpp">
+      <Filter>Bitmap\Compression</Filter>
+    </ClCompile>
+    <ClCompile Include="Bitmap\Compression\Image.cpp">
+      <Filter>Bitmap\Compression</Filter>
+    </ClCompile>
+    <ClCompile Include="List.cpp">
+      <Filter>Support</Filter>
+    </ClCompile>
+    <ClCompile Include="VFile\DirTree.cpp">
+      <Filter>VFS</Filter>
+    </ClCompile>
+    <ClCompile Include="VFile\FSDOS.CPP">
+      <Filter>VFS</Filter>
+    </ClCompile>
+    <ClCompile Include="VFile\FSLZ.cpp">
+      <Filter>VFS</Filter>
+    </ClCompile>
+    <ClCompile Include="VFile\FSMemory.cpp">
+      <Filter>VFS</Filter>
+    </ClCompile>
+    <ClCompile Include="VFile\FSVFS.cpp">
+      <Filter>VFS</Filter>
+    </ClCompile>
+    <ClCompile Include="VFile\VFile.cpp">
+      <Filter>VFS</Filter>
+    </ClCompile>
+    <ClCompile Include="Support\jeResourceMgrImpl.cpp">
+      <Filter>Support</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -580,19 +496,7 @@
     <ClInclude Include="..\External\nvwa\class_level_lock.h">
       <Filter>NVWA</Filter>
     </ClInclude>
-    <ClInclude Include="Bitmap\Compression\codealphas.h">
-      <Filter>Bitmap\Compression</Filter>
-    </ClInclude>
-    <ClInclude Include="Bitmap\Compression\codeimage.h">
-      <Filter>Bitmap\Compression</Filter>
-    </ClInclude>
     <ClInclude Include="Bitmap\Compression\codepal.h">
-      <Filter>Bitmap\Compression</Filter>
-    </ClInclude>
-    <ClInclude Include="Bitmap\Compression\coder.h">
-      <Filter>Bitmap\Compression</Filter>
-    </ClInclude>
-    <ClInclude Include="Bitmap\Compression\codeutil.h">
       <Filter>Bitmap\Compression</Filter>
     </ClInclude>
     <ClInclude Include="Bitmap\Compression\colorconv.h">
@@ -640,9 +544,6 @@
     <ClInclude Include="..\External\nvwa\cont_ptr_utils.h">
       <Filter>NVWA</Filter>
     </ClInclude>
-    <ClInclude Include="bitmap\compression\cache3dn.h">
-      <Filter>Bitmap\Compression</Filter>
-    </ClInclude>
     <ClInclude Include="Support\cpu.h">
       <Filter>Support</Filter>
     </ClInclude>
@@ -676,12 +577,6 @@
     <ClInclude Include="VFile\fsdos.h">
       <Filter>VFS</Filter>
     </ClInclude>
-    <ClInclude Include="VFile\fsfakenet.h">
-      <Filter>VFS</Filter>
-    </ClInclude>
-    <ClInclude Include="VFile\fsINet.h">
-      <Filter>VFS</Filter>
-    </ClInclude>
     <ClInclude Include="VFile\fslz.H">
       <Filter>VFS</Filter>
     </ClInclude>
@@ -695,12 +590,6 @@
       <Filter>Bitmap\Compression</Filter>
     </ClInclude>
     <ClInclude Include="Bitmap\Compression\huffman2.h">
-      <Filter>Bitmap\Compression</Filter>
-    </ClInclude>
-    <ClInclude Include="Bitmap\Compression\image.h">
-      <Filter>Bitmap\Compression</Filter>
-    </ClInclude>
-    <ClInclude Include="Bitmap\Compression\intmath.h">
       <Filter>Bitmap\Compression</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\jeBSP.h">
@@ -778,9 +667,6 @@
     <ClInclude Include="..\..\..\include\jeProperty.h">
       <Filter>Support</Filter>
     </ClInclude>
-    <ClInclude Include="Math\jeVec3d_Katmai.h">
-      <Filter>Math</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\include\jeRay.h">
       <Filter>Math</Filter>
     </ClInclude>
@@ -797,9 +683,6 @@
       <Filter>NVWA</Filter>
     </ClInclude>
     <ClInclude Include="Bitmap\Compression\lbitio.h">
-      <Filter>Bitmap\Compression</Filter>
-    </ClInclude>
-    <ClInclude Include="Bitmap\Compression\katcache.h">
       <Filter>Bitmap\Compression</Filter>
     </ClInclude>
     <ClInclude Include="Bitmap\Compression\ladder.h">
@@ -913,9 +796,6 @@
     <ClInclude Include="Bitmap\Compression\runtrans.h">
       <Filter>Bitmap\Compression</Filter>
     </ClInclude>
-    <ClInclude Include="Bitmap\Compression\scontext.h">
-      <Filter>Bitmap\Compression</Filter>
-    </ClInclude>
     <ClInclude Include="Bitmap\Compression\sortpal.h">
       <Filter>Bitmap\Compression</Filter>
     </ClInclude>
@@ -946,19 +826,10 @@
     <ClInclude Include="Actor\strblock.h">
       <Filter>Actor</Filter>
     </ClInclude>
-    <ClInclude Include="Bitmap\Compression\soz.h">
-      <Filter>Bitmap\Compression</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\include\TERRAIN.H">
       <Filter>World</Filter>
     </ClInclude>
     <ClInclude Include="Bitmap\Compression\strutil.h">
-      <Filter>Bitmap\Compression</Filter>
-    </ClInclude>
-    <ClInclude Include="Bitmap\Compression\tblock.h">
-      <Filter>Bitmap\Compression</Filter>
-    </ClInclude>
-    <ClInclude Include="Bitmap\Compression\transform.h">
       <Filter>Bitmap\Compression</Filter>
     </ClInclude>
     <ClInclude Include="..\External\nvwa\pctimer.h">
@@ -984,9 +855,6 @@
     </ClInclude>
     <ClInclude Include="Support\Util.h">
       <Filter>Support</Filter>
-    </ClInclude>
-    <ClInclude Include="Bitmap\Compression\utility.h">
-      <Filter>Bitmap\Compression</Filter>
     </ClInclude>
     <ClInclude Include="tsc.h">
       <Filter>Support</Filter>
@@ -1021,20 +889,29 @@
     <ClInclude Include="Bitmap\Compression\yuv.h">
       <Filter>Bitmap\Compression</Filter>
     </ClInclude>
-    <ClInclude Include="Bitmap\Compression\wavelet.h">
-      <Filter>Bitmap\Compression</Filter>
-    </ClInclude>
     <ClInclude Include="Actor\vkframe.h">
       <Filter>Actor</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\jeVec3d.h">
       <Filter>Interface Headers</Filter>
     </ClInclude>
+    <ClInclude Include="Bitmap\Compression\codeutil.h">
+      <Filter>Bitmap\Compression</Filter>
+    </ClInclude>
+    <ClInclude Include="Bitmap\Compression\image.h">
+      <Filter>Bitmap\Compression</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\jeResourceMgr.h">
+      <Filter>Interface Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Support\jeResourceMgrImpl.h">
+      <Filter>Support</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\jeImageImpl.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="bitmap\compression\cache3dn.asm">
-      <Filter>Bitmap\Compression</Filter>
-    </CustomBuild>
     <CustomBuild Include="Bitmap\Compression\rungasm.asm">
       <Filter>Bitmap\Compression</Filter>
     </CustomBuild>

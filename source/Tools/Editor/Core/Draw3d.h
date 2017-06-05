@@ -28,14 +28,14 @@
 #include "Jet.h"
 
 #ifdef __cplusplus
-extern "C" {
+//extern "C" {
 #endif
 
 void	Draw3d_ManipulatedBrushes( Level * pLevel, jeWorld* pWorld, jeCamera* pCamera, jeEngine* pEngine ) ;
 
 
 #ifdef __cplusplus
-}
+//}
 #endif
 
 #endif // Prevent multiple inclusion

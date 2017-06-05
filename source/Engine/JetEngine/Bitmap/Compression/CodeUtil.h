@@ -32,13 +32,9 @@
 
 ***/
 
-#include "Utility.h"
+//#include "Utility.h"
 #include "arithc.h"
 #include "lbitio.h"
-
-#ifdef __cplusplus
-extern "C" {
-#endif
 
 void cu_putEscaping_byte(uint32 val,uint8 **stream);	/** escape of 0xFF **/
 uint32  cu_getEscaping_byte(uint8 **stream);	/** stream is moved ahead **/
@@ -63,11 +59,6 @@ int  cu_getEscaping_bii(struct LBitIOInfo *stream,int escape_bits);
 
 void cu_putExpanding_bii(int val,struct LBitIOInfo *stream,int init_bits,int step_bits);	/** escape of (1<<escape_bits) **/
 int  cu_getExpanding_bii(struct LBitIOInfo *stream,int init_bits,int step_bits);
-
-#ifdef __cplusplus
-}
-#endif
-
 
 #endif // CODEUTIL_H
 

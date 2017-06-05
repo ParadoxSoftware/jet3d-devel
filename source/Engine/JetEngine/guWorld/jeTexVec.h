@@ -25,10 +25,6 @@
 #include "Vec3d.h"
 #include "jeGArray.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 //========================================================================================
 //	Typedefs/#defines
 //========================================================================================
@@ -69,9 +65,5 @@ jeBoolean jeTexVec_ArrayRefTexVecByIndex(jeTexVec_Array *Array, jeTexVec_ArrayIn
 void jeTexVec_ArrayRemoveTexVec(jeTexVec_Array *Array, jeTexVec_ArrayIndex *Index);
 void jeTexVec_ArraySetTexVecByIndex(jeTexVec_Array *Array, jeTexVec_ArrayIndex Index, const jeTexVec *TexVec);
 const jeTexVec *jeTexVec_ArrayGetTexVecByIndex(const jeTexVec_Array *Array, jeTexVec_ArrayIndex Index);
-
-#ifdef __cplusplus
-}
-#endif
 
 #endif

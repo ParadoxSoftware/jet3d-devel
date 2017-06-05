@@ -21,7 +21,7 @@
 #include <assert.h>
 
 #include "YUV.h"
-#include "Utility.h"
+//#include "Utility.h"
 #include "Cpu.h"
 
 #pragma warning(disable : 4244)	// int -> uint8 conversions abound
@@ -51,9 +51,9 @@ int y,u,v,r,g,b;
 	g = G_YUV(y,u,v);
 	b = B_YUV(y,u,v);
 
-	RGB[0] = minmax(r,0,255);	// we could get negative ones and whatnot
-	RGB[1] = minmax(g,0,255);	//	because the y,u,v are not really 24 bits;
-	RGB[2] = minmax(b,0,255);	//	there are regions of YUV space that will never be reached by RGBb_to_YUVb
+	RGB[0] = JE_MINMAX(r,0,255);	// we could get negative ones and whatnot
+	RGB[1] = JE_MINMAX(g,0,255);	//	because the y,u,v are not really 24 bits;
+	RGB[2] = JE_MINMAX(b,0,255);	//	there are regions of YUV space that will never be reached by RGBb_to_YUVb
 }
 
 
@@ -86,9 +86,9 @@ int y,u,v,r,g,b;
 		g = G_YUV(y,u,v);
 		b = B_YUV(y,u,v);
 
-		*RGB++ = minmax(r,0,255);	// we could get negative ones and whatnot
-		*RGB++ = minmax(g,0,255);	//	because the y,u,v are not really 24 bits;
-		*RGB++ = minmax(b,0,255);	//	there are regions of YUV space that will never be reached by RGBb_to_YUVb
+		*RGB++ = JE_MINMAX(r,0,255);	// we could get negative ones and whatnot
+		*RGB++ = JE_MINMAX(g,0,255);	//	because the y,u,v are not really 24 bits;
+		*RGB++ = JE_MINMAX(b,0,255);	//	there are regions of YUV space that will never be reached by RGBb_to_YUVb
 	}
 }
 
@@ -101,9 +101,9 @@ int R = RGB[0], G = RGB[1], B = RGB[2];
 	*U = U_RGB(R,G,B) + 127;
 	*V = V_RGB(R,G,B) + 127;
 
-	assert( isinrange(*Y,0,255) );
-	assert( isinrange(*U,0,255) );
-	assert( isinrange(*V,0,255) );
+	assert( JE_ISINRANGE(*Y,0,255) );
+	assert( JE_ISINRANGE(*U,0,255) );
+	assert( JE_ISINRANGE(*V,0,255) );
 }
 
 void YUVi_to_RGBb(int y,int u,int v,uint8 *RGB)
@@ -111,33 +111,33 @@ void YUVi_to_RGBb(int y,int u,int v,uint8 *RGB)
 int r,g,b;
 
 // yuv can be kicked out of 0,255 by the wavelet
-//	assert( isinrange(y,0,255) );
-//	assert( isinrange(u,0,255) );
-//	assert( isinrange(v,0,255) );
+//	assert( JE_ISINRANGE(y,0,255) );
+//	assert( JE_ISINRANGE(u,0,255) );
+//	assert( JE_ISINRANGE(v,0,255) );
 
 	u -= 127;
 	v -= 127;
 	r = R_YUV(y,u,v); // this is just like a matrix multiply
 	g = G_YUV(y,u,v);
 	b = B_YUV(y,u,v);
-	RGB[0] = minmax(r,0,255);	// we could get negative ones and whatnot
-	RGB[1] = minmax(g,0,255);	//	because the y,u,v are not really 24 bits;
-	RGB[2] = minmax(b,0,255);	//	there are regions of YUV space that will never be reached by RGBb_to_YUVb
+	RGB[0] = JE_MINMAX(r,0,255);	// we could get negative ones and whatnot
+	RGB[1] = JE_MINMAX(g,0,255);	//	because the y,u,v are not really 24 bits;
+	RGB[2] = JE_MINMAX(b,0,255);	//	there are regions of YUV space that will never be reached by RGBb_to_YUVb
 }
 
 void RGBi_to_YUVi(int R,int G,int B,int *Y,int *U,int *V)
 {
-	assert( isinrange(R,0,255) );
-	assert( isinrange(G,0,255) );
-	assert( isinrange(B,0,255) );
+	assert( JE_ISINRANGE(R,0,255) );
+	assert( JE_ISINRANGE(G,0,255) );
+	assert( JE_ISINRANGE(B,0,255) );
 
 	*Y = Y_RGB(R,G,B);
 	*U = U_RGB(R,G,B) + 127;
 	*V = V_RGB(R,G,B) + 127;
 
-	assert( isinrange(*Y,0,255) );
-	assert( isinrange(*U,0,255) );
-	assert( isinrange(*V,0,255) );
+	assert( JE_ISINRANGE(*Y,0,255) );
+	assert( JE_ISINRANGE(*U,0,255) );
+	assert( JE_ISINRANGE(*V,0,255) );
 }
 
 void YUVi_to_RGBi(int y,int u,int v,int *R,int *G,int *B)
@@ -145,9 +145,9 @@ void YUVi_to_RGBi(int y,int u,int v,int *R,int *G,int *B)
 int r,g,b;
 
 // yuv can be kicked out of 0,255 by the wavelet
-//	assert( isinrange(y,0,255) );
-//	assert( isinrange(u,0,255) );
-//	assert( isinrange(v,0,255) );
+//	assert( JE_ISINRANGE(y,0,255) );
+//	assert( JE_ISINRANGE(u,0,255) );
+//	assert( JE_ISINRANGE(v,0,255) );
 
 	u -= 127;
 	v -= 127;
@@ -155,9 +155,9 @@ int r,g,b;
 	g = G_YUV(y,u,v);
 	b = B_YUV(y,u,v);
 
-	*R = minmax(r,0,255);	// we could get negative ones and whatnot
-	*G = minmax(g,0,255);	//	because the y,u,v are not really 24 bits;
-	*B = minmax(b,0,255);	//	there are regions of YUV space that will never be reached by RGBb_to_YUVb
+	*R = JE_MINMAX(r,0,255);	// we could get negative ones and whatnot
+	*G = JE_MINMAX(g,0,255);	//	because the y,u,v are not really 24 bits;
+	*B = JE_MINMAX(b,0,255);	//	there are regions of YUV space that will never be reached by RGBb_to_YUVb
 }
 
 void YUVi_to_RGBi_line(int *line1,int *line2,int *line3,int len)
@@ -166,9 +166,9 @@ int y,u,v,r,g,b;
 
 	// <> use MMX
 
-	cachetouch_w(line1,len>>3);
+	/*cachetouch_w(line1,len>>3);
 	cachetouch_w(line2,len>>3);
-	cachetouch_w(line3,len>>3);
+	cachetouch_w(line3,len>>3);*/
 	while(len--)
 	{
 		y = *line1;
@@ -179,9 +179,9 @@ int y,u,v,r,g,b;
 		g = G_YUV(y,u,v);
 		b = B_YUV(y,u,v);
 
-		r = minmax(r,0,255);
-		g = minmax(g,0,255);
-		b = minmax(b,0,255);
+		r = JE_MINMAX(r,0,255);
+		g = JE_MINMAX(g,0,255);
+		b = JE_MINMAX(b,0,255);
 
 		*line1++ = r;
 		*line2++ = g;
@@ -201,10 +201,10 @@ uint8 * bline;
 	bline = ibline;
 	len = ilen;
 
-	cachetouch_r(line1,len>>3);
+	/*cachetouch_r(line1,len>>3);
 	cachetouch_r(line2,len>>3);
 	cachetouch_r(line3,len>>3);
-	cachetouch_w(bline,(len*3)>>5);
+	cachetouch_w(bline,(len*3)>>5);*/
 	
 	while(len--)
 	{
@@ -216,9 +216,9 @@ uint8 * bline;
 		g = G_YUV(y,u,v);
 		b = B_YUV(y,u,v);
 
-		r = minmax(r,0,255);
-		g = minmax(g,0,255);
-		b = minmax(b,0,255);
+		r = JE_MINMAX(r,0,255);
+		g = JE_MINMAX(g,0,255);
+		b = JE_MINMAX(b,0,255);
 
 		bline[0] = b;
 		bline[1] = g;
@@ -242,10 +242,10 @@ int yz;
 		bline = BGRptr;
 		len = w;
 
-		cachetouch_r(line1,len>>3);
+		/*cachetouch_r(line1,len>>3);
 		cachetouch_r(line2,len>>3);
 		cachetouch_r(line3,len>>3);
-		cachetouch_w(bline,(len*3)>>5);
+		cachetouch_w(bline,(len*3)>>5);*/
 		
 		while(len--)
 		{
@@ -257,9 +257,9 @@ int yz;
 			g = G_YUV(y,u,v);
 			b = B_YUV(y,u,v);
 
-			r = minmax(r,0,255);
-			g = minmax(g,0,255);
-			b = minmax(b,0,255);
+			r = JE_MINMAX(r,0,255);
+			g = JE_MINMAX(g,0,255);
+			b = JE_MINMAX(b,0,255);
 
 			bline[0] = b;
 			bline[1] = g;
@@ -283,10 +283,10 @@ uint8 * bline;
 	bline = ibline;
 	len = ilen;
 
-	cachetouch_r(line1,len>>3);
+	/*cachetouch_r(line1,len>>3);
 	cachetouch_r(line2,len>>3);
 	cachetouch_r(line3,len>>3);
-	cachetouch_w(bline,len>>3);
+	cachetouch_w(bline,len>>3);*/
 	
 	while(len--)
 	{
@@ -298,9 +298,9 @@ uint8 * bline;
 		g = G_YUV(y,u,v);
 		b = B_YUV(y,u,v);
 
-		r = minmax(r,0,255);
-		g = minmax(g,0,255);
-		b = minmax(b,0,255);
+		r = JE_MINMAX(r,0,255);
+		g = JE_MINMAX(g,0,255);
+		b = JE_MINMAX(b,0,255);
 
 		bline[0] = b;
 		bline[1] = g;
@@ -331,10 +331,10 @@ int yz;
 
 		assert(w > 1 && h > 1 );
 
-		cachetouch_r(line1,w>>3);
+		/*cachetouch_r(line1,w>>3);
 		cachetouch_r(line2,w>>3);
 		cachetouch_r(line3,w>>3);
-		cachetouch_w(bline,(w*3)>>5);
+		cachetouch_w(bline,(w*3)>>5);*/
 			
 		__asm
 		{
@@ -496,10 +496,10 @@ void YUVi_to_BGRb_line_mmx2(int *line1,int *line2,int *line3,uint8 * bline,int l
 
 	len --;
 
-	cachetouch_r(line1,len>>3);
+	/*cachetouch_r(line1,len>>3);
 	cachetouch_r(line2,len>>3);
 	cachetouch_r(line3,len>>3);
-	cachetouch_w(bline,(len*3)>>5);
+	cachetouch_w(bline,(len*3)>>5);*/
 	
 	__asm
 	{
@@ -583,9 +583,9 @@ void YUVi_to_BGRb_line_mmx2(int *line1,int *line2,int *line3,uint8 * bline,int l
 	g = G_YUV(y,u,v);
 	b = B_YUV(y,u,v);
 
-	r = minmax(r,0,255);
-	g = minmax(g,0,255);
-	b = minmax(b,0,255);
+	r = JE_MINMAX(r,0,255);
+	g = JE_MINMAX(g,0,255);
+	b = JE_MINMAX(b,0,255);
 
 	bline[0] = b;
 	bline[1] = g;
@@ -597,10 +597,10 @@ void YUVi_to_XRGB_line_mmx(int *line1,int *line2,int *line3,uint8 * bline,int le
 {
 	assert(len > 0 );
 
-	cachetouch_r(line1,len>>3);
+	/*cachetouch_r(line1,len>>3);
 	cachetouch_r(line2,len>>3);
 	cachetouch_r(line3,len>>3);
-	cachetouch_w(bline,len>>3);
+	cachetouch_w(bline,len>>3);*/
 
 	__asm
 	{

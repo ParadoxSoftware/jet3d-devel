@@ -25,9 +25,9 @@
 #ifndef OBJECTDEF_H
 #define OBJECTDEF_H
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+//#ifdef __cplusplus
+//extern "C" {
+//#endif
 #include "jwObject.h"
 #include "Group.h"
 #include "Drawtool.h"
@@ -47,9 +47,9 @@ jeBoolean		Object_Init( Object * pObject, Group * pGroup, OBJECT_KIND ObjectKind
 #define OBJECT_DIRTY	0x10000000
 #define OBJECT_INLEVEL  0x20000000
 
-#ifdef __cplusplus
-}
-#endif
+//#ifdef __cplusplus
+//}
+//#endif
 
 #endif // Prevent multiple inclusion
 /* EOF: ObjectDef.h */

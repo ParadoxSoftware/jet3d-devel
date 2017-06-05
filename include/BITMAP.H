@@ -25,10 +25,6 @@
 #include "PixelFormat.h"
 #include "jePtrMgr.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 // from vfile.h
 typedef	struct jeVFile jeVFile;
 
@@ -631,9 +627,5 @@ int x,y;
 /***********************************************************************************/
 
 #endif
-#ifdef __cplusplus
-}
-#endif
-
 
 #endif

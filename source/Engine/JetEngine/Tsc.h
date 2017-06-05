@@ -21,10 +21,6 @@
 #ifndef TSC_H
 #define TSC_H
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 /**********
 *
 
@@ -61,9 +57,5 @@ extern double timeTSC(void);	// use the TSC as a clock!
 	// hz is machine independent
 
 extern double diffTSChz(const unsigned long *tsc1,const unsigned long*tsc2);
-
-#ifdef __cplusplus
-}
-#endif
 
 #endif

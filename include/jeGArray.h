@@ -26,10 +26,6 @@
 #include "VFile.h"
 #include "jePtrMgr.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 //========================================================================================
 //	Typedefs/#defines
 //========================================================================================
@@ -72,9 +68,5 @@ jeGArray_RefType *jeGArray_GetRefCounts(const jeGArray *Array);
 const		jeGArray_RefType jeGArray_GetElementRefCountByIndex(const jeGArray *Array, jeGArray_Index Index);
 void		jeGArray_SetElementByIndex(jeGArray *Array, jeGArray_Index Index, const jeGArray_Element *Element);
 const		jeGArray_Element *jeGArray_GetElementByIndex(const jeGArray *Array, jeGArray_Index Index);
-
-#ifdef __cplusplus
-}
-#endif
 
 #endif

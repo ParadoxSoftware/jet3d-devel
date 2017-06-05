@@ -26,11 +26,6 @@
 #include "Bitmap.h"
 #include "Engine.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-
 typedef struct jeMaterialSpec		jeMaterialSpec;
 
 /*******
@@ -65,12 +60,6 @@ JETAPI jeBoolean JETCC jeTClip_Pop(void);
 
 JETAPI jeBoolean JETCC jeTClip_SetTexture(const jeMaterialSpec * Material, int32 RenderFlags);
 JETAPI void JETCC jeTClip_Triangle(const JE_LVertex TriVertex[3]);
-
-
-#ifdef __cplusplus
-}
-#endif
-
 
 #endif
 

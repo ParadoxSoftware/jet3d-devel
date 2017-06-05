@@ -21,8 +21,11 @@
 
 //#define DEBUG
 //#define LOG
-
+#include <assert.h>
 #include <stdlib.h>
+
+#include "BaseType.h"
+#include "Ram.h"
 
 #include "arithc.h"
 #include "soz.h"
@@ -52,13 +55,15 @@ soz *sc;
 
     /* malloc soz structure and array for frequencies */
 	if ( ! (sc = (soz *)new(soz)) ) return NULL;
-	if ( ! (sc->tree = (uint16 *)newarray(uint16,size)) )
-		{ destroy(sc); return(NULL); }
+	if ( ! (sc->tree = (uint16 *)jeRam_AllocateClear(sizeof(uint16) * size)) )
+	{
+		jeRam_Free(sc); sc = nullptr; return(NULL);
+	}
 
 	sc->arith = arithinfo;
 	sc->size = size;
-	sc->inc = max(inc,1);
-	sc->totmax = max(totmax,size+3);
+	sc->inc = JE_MAX(inc,1);
+	sc->totmax = JE_MAX(totmax,size+3);
 
 	sozReset(sc);
 
@@ -155,7 +160,7 @@ void sozFree(soz *sc)
 	symtot = symcnt = 0;
 #endif
 
-destroy(sc->tree);
-destroy(sc);
+	jeRam_Free(sc->tree); sc->tree = nullptr;
+	jeRam_Free(sc); sc = nullptr;
 }
 

@@ -21,7 +21,7 @@
 #ifndef SORTPAL_H
 #define SORTPAL_H
 
-#include "Utility.h"
+// "Utility.h"
 
 #pragma pack(1)
 typedef struct {

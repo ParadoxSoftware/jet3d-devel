@@ -21,10 +21,6 @@
 #ifndef JE_LOG_H
 #define JE_LOG_H
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 /*****
 
 the Log protos :
@@ -62,9 +58,5 @@ static _inline void Log_Printf(const char * str, ...) { }
 #define Log_PrintMatrices(pXF)
 
 #endif	// NO_LOG
-
-#ifdef __cplusplus
-}
-#endif
 
 #endif // LOG_H

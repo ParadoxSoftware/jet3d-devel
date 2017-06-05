@@ -21,10 +21,6 @@
 #ifndef JEJMAI__H
 #define JEJMAI__H
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 #include <stdio.h>
 #include "jeMemAllocInfo.h"
 
@@ -144,9 +140,5 @@ static void JETCC jeMemAllocInfo_LoadFlags();
 static void JETCC jeMemAllocInfo_LoadFileNames();
 static jeMemAllocInfoPtr *jMAI_pushPtrChain_x86(uint32 MoveNum);
 static jeMemAllocInfoPtr *jMAI_pushPtrChain_mmx(uint32 MoveNum);
-
-#ifdef __cplusplus
-}
-#endif
 
 #endif

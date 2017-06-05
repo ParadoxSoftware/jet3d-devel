@@ -24,7 +24,9 @@
 #ifdef DEBUG
 #include <stdio.h>
 #endif
-
+#include <assert.h>
+#include "BaseType.h"
+#include "Ram.h"
 #include "arithc.h"
 
 typedef struct scontext
@@ -53,17 +55,19 @@ int i;
 
     /* malloc scontext structure and array for frequencies */
 	if ( ! (sc = (scontext *)new(scontext)) ) return NULL;
-	if ( ! (sc->tree = (uint16 *)newarray(uint16,size)) )
-		{ destroy(sc); return(NULL); }
+	if ( ! (sc->tree = (uint16 *)jeRam_AllocateClear(sizeof(uint16) * size)) )
+	{
+		jeRam_Free(sc); sc = nullptr;  return(NULL);
+	}
 
 	sc->arith = arithinfo;
 	sc->total = 0;
 	sc->escape = 1;
 	sc->size = size;
 	sc->nzero = size;
-	sc->inc = max(inc,1);
-	sc->totmax = max(totmax,size+3);
-	sc->escmax = min(max(escmax,3),(size>>2)+2);
+	sc->inc = JE_MAX(inc,1);
+	sc->totmax = JE_MAX(totmax,size+3);
+	sc->escmax = JE_MIN(JE_MAX(escmax,3),(size>>2)+2);
 	sc->noesc = noesc;
 	if ( noesc ) 
 	{
@@ -215,7 +219,7 @@ if ( sc->escape > sc->escmax ) sc->escape = sc->escmax;
 
 void scontextFree(scontext *sc)
 {
-destroy(sc->tree);
-destroy(sc);
+	jeRam_Free(sc->tree); sc->tree = nullptr;
+	jeRam_Free(sc); sc = nullptr;
 }
 

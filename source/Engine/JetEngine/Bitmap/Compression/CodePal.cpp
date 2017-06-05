@@ -18,11 +18,14 @@
 /*  Copyright (C) 1996-1999 Eclipse Entertainment, L.L.C. All Rights Reserved           */
 /*                                                                                      */
 /****************************************************************************************/
+#include <assert.h>
+#include "Basetype.h"
+#include "Ram.h"
 #include "CodePal.h"
 #include "Bitmap.h"
 #include "VFile.h"
 #include "arithc.h"
-#include "CodeUtil.h"
+//#include "CodeUtil.h"
 #include "YUV.h"
 #include "Log.h"
 #include "o0coder.h"
@@ -143,10 +146,10 @@ ozero * oz;
 	// send first byte of each raw
 	WroteLen = 0;
 
-	assert( isinrange(Ya[0],0,255) );
-	assert( isinrange(Ua[0],0,255) );
-	assert( isinrange(Va[0],0,255) );
-	assert( isinrange(Aa[0],0,255) );
+	assert( JE_ISINRANGE(Ya[0],0,255) );
+	assert( JE_ISINRANGE(Ua[0],0,255) );
+	assert( JE_ISINRANGE(Va[0],0,255) );
+	assert( JE_ISINRANGE(Aa[0],0,255) );
 	OutBuf[0] = (uint8) Ya[0];
 	OutBuf[1] = (uint8) Ua[0];
 	OutBuf[2] = (uint8) Va[0];
@@ -170,12 +173,12 @@ ozero * oz;
 		tot = 0; count  =0;
 		for(s=1;s<Size;s++)
 		{
-			tot += abs(Ya[s]);
-			tot += abs(Ua[s]);
-			tot += abs(Va[s]);
+			tot += JE_ABS(Ya[s]);
+			tot += JE_ABS(Ua[s]);
+			tot += JE_ABS(Va[s]);
 			if ( HasAlpha )
 			{
-				tot += abs(Aa[s]);
+				tot += JE_ABS(Aa[s]);
 				count += 4;
 			}
 			else
@@ -256,7 +259,7 @@ ozero * oz;
 			{
 			int v;
 				v = *ptr++;
-				ozeroEncode(oz,abs(v));
+				ozeroEncode(oz,JE_ABS(v));
 				if ( v )
 				{
 					arithEncBitRaw(ari,(v<0)?1:0);
@@ -439,7 +442,7 @@ void cu_putLaplaceSigned_ari(int sval, arithInfo * ari, int r, int max)
 int low,prob;
 int val;
 
-	val = abs(sval);
+	val = JE_ABS(sval);
 	
 	low = 0;
 	prob = ONE - r;
@@ -496,7 +499,7 @@ return val;
 void cu_Laplace_PutScaleFromAverage(arithInfo * ari,int avg,int *pscale)
 {
 
-	avg = abs(avg);	
+	avg = JE_ABS(avg);	
 
 	arithEncByteRaw(ari,avg);
 

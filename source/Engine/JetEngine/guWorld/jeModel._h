@@ -25,10 +25,6 @@
 #include "jeBrush.h"
 #include "BaseType.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 #if 0
 // Clean engine.h up for Jet3D 2.0 so we can inlcude engine.h here in the public eye
 //	and QUIT doing this:
@@ -93,9 +89,5 @@ typedef struct BSP_Proxy
 	jeBoolean (*RayIntersectsBrushes)(const jeBSP *BSP, const jeVec3d *Front, const jeVec3d *Back, jeBrushRayInfo *Info);
 	const jeBSP_DebugInfo* (*GetDebugInfo)(const jeBSP *BSPTree);
 } BSP_Proxy;
-
-#ifdef __cplusplus
-}
-#endif
 
 #endif

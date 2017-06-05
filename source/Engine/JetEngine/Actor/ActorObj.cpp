@@ -23,6 +23,7 @@
 #include "ActorUtil.h"
 #include "ActorPropertyList.h"
 
+#include "UVMap.h"
 
 #define ACTOROBJECT_VERSION 1
 

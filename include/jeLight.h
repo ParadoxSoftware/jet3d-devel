@@ -27,10 +27,6 @@
 #include "jePtrMgr.h"
 #include "jeTypes.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 //========================================================================================
 
 typedef struct		jeLight		jeLight;
@@ -101,9 +97,5 @@ JETAPI jeBoolean	JETCC jeLight_SetInverseSquaredLight(jeLight *Light,
 								jeFloat Brightness);
 
 //========================================================================================
-
-#ifdef __cplusplus
-}
-#endif
 
 #endif

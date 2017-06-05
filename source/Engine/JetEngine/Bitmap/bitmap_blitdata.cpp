@@ -38,7 +38,7 @@
 #include	"VFile.h"
 #include	"Errorlog.h"
 
-#include	"Wavelet.h"
+//#include	"Wavelet.h"
 #include	"palcreate.h"
 #include	"palettize.h"
 
@@ -95,8 +95,8 @@ jeBoolean BlitData_Palettize(void);
 jeBoolean BlitData_DePalettize(void);
 jeBoolean BlitData_FromSeparateAlpha(void);
 jeBoolean BlitData_ToSeparateAlpha(void);
-jeBoolean BlitData_Wavelet_Compress(void);
-jeBoolean BlitData_Wavelet_DeCompress(void);
+//jeBoolean BlitData_Wavelet_Compress(void);
+//jeBoolean BlitData_Wavelet_DeCompress(void);
 
 jeBoolean jeBitmap_BlitData_Sub(	const jeBitmap_Info * iSrcInfo,const void *iSrcData, const jeBitmap *iSrcBmp,
 								jeBitmap_Info * iDstInfo,void *iDstData,	const jeBitmap *iDstBmp,
@@ -251,7 +251,7 @@ jeBoolean jeBitmap_BlitData_Sub(	const jeBitmap_Info * iSrcInfo,const void *iSrc
 
 	/****/
 
-	if (	SrcFormat == JE_PIXELFORMAT_WAVELET ||
+	/*if (	SrcFormat == JE_PIXELFORMAT_WAVELET ||
 			DstFormat == JE_PIXELFORMAT_WAVELET )
 	{
 		if (	SrcFormat == JE_PIXELFORMAT_WAVELET &&
@@ -279,7 +279,7 @@ jeBoolean jeBitmap_BlitData_Sub(	const jeBitmap_Info * iSrcInfo,const void *iSrc
 			return BlitData_Wavelet_Compress();	
 		}
 	}
-	else if ( SrcFormat == DstFormat )
+	else*/ if ( SrcFormat == DstFormat )
 	{
 		return BlitData_SameFormat();
 	}
@@ -549,6 +549,7 @@ uint8 *SrcPtr,*DstPtr,*AlphaPtr;
 int x,y,R,G,B,A;
 uint32 ColorKey,Pixel;
 int AlphaXtra;
+uint32 DstColorKey = 0;
 
 	/*******
 	**
@@ -584,21 +585,20 @@ int AlphaXtra;
 	{
 		if ( SrcFormat == DstFormat )
 		{
-		uint8 Pixel,DstColorKey;
-
+		
 			assert(DstInfo->HasColorKey);
 			
-			DstColorKey = (uint8)DstInfo->ColorKey;
+			DstColorKey = (uint32)DstInfo->ColorKey;
 			for(y=SizeY;y--;)
 			{
 				for(x=SizeX;x--;)
 				{
-					Pixel = *SrcPtr++;
+					Pixel = (uint32)*SrcPtr++;
 					A = *AlphaPtr++;
 					if ( A < ALPHA_TO_TRANSPARENCY_THRESHOLD )
-						*DstPtr++ = DstColorKey;
+						*DstPtr++ = (uint8)DstColorKey;
 					else
-						*DstPtr++ = Pixel;
+						*DstPtr++ = (uint8)Pixel;
 				}
 				SrcPtr += SrcXtra;
 				DstPtr += DstXtraBytes;
@@ -618,7 +618,7 @@ int AlphaXtra;
 
 			if ( ! jePixelFormat_HasAlpha(DstFormat) && DstInfo->HasColorKey )
 			{
-			uint32 Pixel,DstColorKey;
+//			uint32 Pixel,DstColorKey;
 				// source is palettized
 				// dest has color key and no alpha
 				DstColorKey = DstInfo->ColorKey;
@@ -651,7 +651,7 @@ int AlphaXtra;
 			}
 			else if ( DstInfo->HasColorKey )
 			{
-			uint32 Pixel,DstColorKey;
+			//uint32 Pixel,DstColorKey;
 				// source is palettized
 				// dest has alpha and color key
 				DstColorKey = DstInfo->ColorKey;
@@ -1326,9 +1326,9 @@ jeBoolean BlitData_DePalettize(void)
 	if ( SrcFormat == JE_PIXELFORMAT_8BIT )
 	{
 	uint8 * SrcPtr;
-	jeBitmap_Palette * DstPal;
+	//jeBitmap_Palette * DstPal;
 	int x,y,pal;
-	const jePixelFormat_Operations *SrcOps,*DstOps;
+//	const jePixelFormat_Operations *SrcOps,*DstOps;
 
 		x = y = pal = 0; //touch 'em
 
@@ -1371,7 +1371,7 @@ jeBoolean BlitData_DePalettize(void)
 
 		if ( DstInfo->HasColorKey ) // everything in Jet3D has colorkey!
 		{
-		int pal;
+		//int pal;
 		uint32 Pixel;
 			for(pal=0;pal<DstPal->Size;pal++)
 			{
@@ -1396,7 +1396,8 @@ jeBoolean BlitData_DePalettize(void)
 
 		if ( SrcOps->AMask && ! DstOps->AMask && DstInfo->HasColorKey )
 		{
-		int pal,R,G,B,A;
+		//int pal,R,G,B,A;
+		int R, G, B, A;
 		uint32 Pixel;
 
 			// if Src format has alpha & Dst format doesn't, turn it into color key
@@ -1825,7 +1826,7 @@ return palettizePlane(	SrcInfo,SrcData,
 
 /*}{*********************************************************************/
 
-jeBoolean BlitData_Wavelet_Compress(void)
+/*jeBoolean BlitData_Wavelet_Compress(void)
 {
 const jeWavelet_Options * opts;
 	if ( DstBmp && DstBmp->HasWaveletOptions )
@@ -1835,11 +1836,11 @@ const jeWavelet_Options * opts;
 	else
 		opts = NULL;
 return jeWavelet_Compress((jeWavelet *)DstData,SrcInfo,SrcData,SrcBmp,opts);
-}
+}*/
 
 /*}{*********************************************************************/
 
-jeBoolean BlitData_Wavelet_DeCompress(void)
+/*jeBoolean BlitData_Wavelet_DeCompress(void)
 {
 	if ( SrcBmp && SrcBmp->WaveletMipLock > 0 )
 	{
@@ -1861,6 +1862,6 @@ jeBoolean BlitData_Wavelet_DeCompress(void)
 	}
 
 return JE_TRUE;
-}
+}*/
 
 #pragma warning (default : 4731)

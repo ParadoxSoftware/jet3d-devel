@@ -21,10 +21,6 @@
 #ifndef	THREADQUEUE_H
 #define THREADQUEUE_H
 
-#ifdef	__cplusplus
-extern "C" {
-#endif
-
 #include	"basetype.h"
 #include	"ErrorLog.h"
 
@@ -109,10 +105,6 @@ JETAPI void JETCC jeThreadQueue_GetDebugInfo(int * pActiveJobCount,int *pSemapho
 #define jeThreadQueue_GetDebugInfo(a,s,n)
 #endif
 
-
-#ifdef	__cplusplus
-}
-#endif
 
 #endif
 

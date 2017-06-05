@@ -70,7 +70,7 @@ static jeProperty_List	ActorObjPropertyList = { ACTOROBJ_LAST_INDEX, &( ActorObj
 ////////////////////////////////////////////////////////////////////////////////////////
 //	UV material mapper setup
 ////////////////////////////////////////////////////////////////////////////////////////
-typedef jeBoolean JETCC UVMAP( const jeXForm3d* pXForm, jeLVertex* pVerts, const jeVec3d* pNormals, int nverts );
+typedef jeBoolean JETCC UVMAP(const jeXForm3d* pXForm, jeLVertex* pVerts, const jeVec3d* pNormals, int nverts);
 typedef struct
 {
 	int		Index;

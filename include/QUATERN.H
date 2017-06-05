@@ -94,10 +94,6 @@
 #include "BaseType.h"
 #include "Xform3d.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 typedef struct 
 {
 	jeFloat	W;
@@ -226,10 +222,6 @@ JETAPI jeBoolean JETCC jeQuaternion_Compare( jeQuaternion *Q1, jeQuaternion *Q2,
 
 #ifndef NDEBUG
 JETAPI void JETCC jeQuaternion_SetMaximalAssertionMode( jeBoolean Enable );
-#endif
-
-#ifdef __cplusplus
-}
 #endif
 
 #endif

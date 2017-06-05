@@ -21,12 +21,8 @@
 #ifndef __IMAGE_H
 #define __IMAGE_H
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 #include "BaseType.h"
-#include "Utility.h"
+//#include "Utility.h"
 
 typedef struct image 
 {
@@ -60,8 +56,5 @@ extern void transposeImage(image *im);
 double PSNR(double rmse);
 double imageRMSE(image *src,image *comp);
 
-#ifdef __cplusplus
-}
-#endif
 #endif
 

@@ -20,7 +20,11 @@
 /****************************************************************************************/
 /*}{**********************************************************************************/
 
-#include "Utility.h"
+#include <assert.h>
+#include "BaseType.h"
+#include "Ram.h"
+
+//#include "Utility.h"
 #include "arithc.h"
 #include "arithc._h"
 #include "rungae.h"

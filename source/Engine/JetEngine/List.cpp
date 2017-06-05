@@ -1179,15 +1179,16 @@ void Hash_Destroy(Hash *pHash)
 {
 	if ( pHash )
 	{
-	HashNode *pList,*pNode,*pNext;
-	
+	//HashNode *pList,*pNode,*pNext;
+		LinkNode *pList, *pNode, *pNext;
+
 		assert( pHash->MySelf1 == pHash && pHash->MySelf2 == pHash );
 
 		Debug(pHash->Members += 2) // count Head & Tail
 
-		pList = pHash->NodeList;
+		pList = (LinkNode*)pHash->NodeList;
 		LN_Walk_Editting(pNode,pList,pNext) {
-			MemPool_FreeHunk(HashNodePool_g,pNode);
+			MemPool_FreeHunk(HashNodePool_g,(HashNode*)pNode);
 			assert(pHash->Members > 1);
 			Debug(pHash->Members --)
 		}

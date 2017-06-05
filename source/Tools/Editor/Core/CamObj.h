@@ -35,7 +35,7 @@ typedef struct tagCamera Camera ;
 
 
 #ifdef __cplusplus
-extern "C" {
+//extern "C" {
 #endif
 
 // CREATORS
@@ -89,7 +89,7 @@ void Camera_RenderOrtho( const Ortho * pOrtho, Camera *pCamera, int32 hDC, jeBoo
 jeBoolean		Camera_ReattachCB( Camera * pCamera, void* lParam );
 
 #ifdef __cplusplus
-}
+//}
 #endif
 
 #endif // Prevent multiple inclusion

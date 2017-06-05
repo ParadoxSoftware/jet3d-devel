@@ -36,10 +36,6 @@
 
 #include "jeMemAllocInfo.h"	// Added by Icestorm
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 /*******
 
 CB note : do NOT do jeRam_Allocate then memset(mem,0,len) !!!
@@ -210,10 +206,6 @@ JETAPI     void JETCC jeRam_AddAllocation(int n,uint32 size);
 #define jeRam_IsValidPtr(ptr)	(JE_TRUE)
 #else
 jeBoolean jeRam_IsValidPtr(const void *ptr);
-#endif
-
-#ifdef __cplusplus
-  }
 #endif
 
 #ifdef REDEFINE_NDEBUGANDDEBUG

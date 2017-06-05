@@ -33,11 +33,6 @@
 #include "jeChain.h"
 #include "jePtrMgr.h"
 
-
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 #ifndef WINVER
 #define HWND void *
 #endif
@@ -338,11 +333,6 @@ struct jeObjectDef
 
 #ifndef WINVER
 #undef HWND
-#endif
-
-
-#ifdef __cplusplus
-}
 #endif
 
 #endif

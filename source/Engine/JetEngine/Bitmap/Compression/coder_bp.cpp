@@ -30,8 +30,10 @@ then when do we send the signs?  That is, we want to truncate our stream, and
 we don't want to send signs for zero-valued coefficients, so.. ?
 
 *****/
-
-#include "Utility.h"
+#include <assert.h>
+#include "BaseType.h"
+#include "Ram.h"
+//#include "Utility.h"
 #include "arithc.h"
 #include "soz.h"
 #include "Coder.h"
@@ -80,7 +82,7 @@ int i;
 
 	c->data = d;
 
-	if ( (d->o1 = (soz **)newarray(void *,ORDER1_CONTEXTS)) == NULL )
+	if ((d->o1 = (soz **)jeRam_AllocateClear(sizeof(void *) * ORDER1_CONTEXTS)) == NULL)
 	{
 		coderBPFree(c);
 		return JE_FALSE;
@@ -111,9 +113,9 @@ void coderBPFree(coder *c)
 			{
 				if ( d->o1[i] ) sozFree(d->o1[i]);
 			}
-			destroy(d->o1);
+			jeRam_Free(d->o1); d->o1 = nullptr;
 		}
-		destroy(d);
+		jeRam_Free(d); d = nullptr;
 		c->data = NULL;
 	}
 }
@@ -167,9 +169,9 @@ int *dp,*pp,*dpn;
 		dpn = dp + fullw;
 		for(x=0;x<width;x+=2) 
 		{	/** x & y are the parent's location *2 **/
-			par = abs(pp[x>>1]);
-			A = abs(dp[x]);		B = abs(dp[x+1]);
-			C = abs(dpn[x]);	D = abs(dpn[x+1]);
+			par = JE_ABS(pp[x>>1]);
+			A = JE_ABS(dp[x]);		B = JE_ABS(dp[x+1]);
+			C = JE_ABS(dpn[x]);	D = JE_ABS(dpn[x+1]);
 
 			context = ((A & donemask)?1:0) + ((B & donemask)?1:0) + ((C & donemask)?1:0) + ((D & donemask)?1:0);
 			if (par&nextmask) context += 5;
@@ -238,9 +240,9 @@ int *dp,*pp,*dpn;
 		dpn = dp + fullw;
 		for(x=0;x<width;x+=2) 
 		{
-			par = abs(pp[x>>1]);
-			A = abs(dp[x]);		B = abs(dp[x+1]);
-			C = abs(dpn[x]);	D = abs(dpn[x+1]);
+			par = JE_ABS(pp[x>>1]);
+			A = JE_ABS(dp[x]);		B = JE_ABS(dp[x+1]);
+			C = JE_ABS(dpn[x]);	D = JE_ABS(dpn[x+1]);
 			context = ((A & donemask)?1:0) + ((B & donemask)?1:0) + ((C & donemask)?1:0) + ((D & donemask)?1:0);
 			if (par&nextmask) context += 5;
 

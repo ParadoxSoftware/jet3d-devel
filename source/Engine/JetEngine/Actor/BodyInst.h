@@ -37,12 +37,6 @@
 #include "XFArray.h"
 #include "Camera.h"
 
-
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-
 typedef struct jeBodyInst jeBodyInst;
 
 typedef int16 jeBodyInst_Index;
@@ -119,10 +113,5 @@ const jeBodyInst_Geometry * JETCF jeBodyInst_GetGeometry(
 								const jeXFArray *BoneXformArray,
 								int LevelOfDetail,
 								const jeCamera *Camera);
-
-
-#ifdef __cplusplus
-}
-#endif
 
 #endif

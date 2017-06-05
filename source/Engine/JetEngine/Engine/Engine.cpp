@@ -24,7 +24,7 @@
 #include <mmsystem.h> //timeGetTime
 #pragma warning (default:4201)
 
-#include "debug_new.h"
+//#include "debug_new.h"
 
 #include <string.h>
 #include <stdlib.h> // _MAX_PATH
@@ -50,6 +50,7 @@
 #include "jeBSP.h"
 #include "jeFileLogger.h"
 #include "jeImageImpl.h"
+#include "jeResourceMgrImpl.h"
 
 #ifdef _DEBUG
 	#define DEBUG_OUTPUT_LEVEL		0
@@ -110,9 +111,9 @@ JETAPI jeEngine * JETCC jeEngine_Create(HWND hWnd, const char *AppName, const ch
 	assert(hWnd);
 
 	// Attempt to create a new engine object
-	//Engine = (jeEngine *)jeRam_AllocateClear(sizeof(jeEngine));
-	Engine = new jeEngine;
-	memset(Engine, 0, sizeof(jeEngine));
+	Engine = (jeEngine *)jeRam_AllocateClear(sizeof(jeEngine));
+	//Engine = new jeEngine;
+	//memset(Engine, 0, sizeof(jeEngine));
 
 	if (!Engine)
 	{
@@ -174,6 +175,16 @@ JETAPI jeEngine * JETCC jeEngine_Create(HWND hWnd, const char *AppName, const ch
 			Engine->EngineLog->logMessage(jet3d::jeLogger::LogInfo, "Drivers enumerated");
 	}
 
+	// Initialize the new resource manager
+	Engine->ResourceMgr = new jet3d::jeResourceMgrImpl();
+	if (!Engine->ResourceMgr->Initialize())
+	{
+		Engine->EngineLog->logMessage(jet3d::jeLogger::LogError, "Could not enumerate drivers!!");
+		goto ExitWithError;
+	}
+	else
+		Engine->EngineLog->logMessage(jet3d::jeLogger::LogInfo, "Resource manager initialized");
+
 	if (!jeEngine_BitmapListInit(Engine))
 	{
 		Engine->EngineLog->logMessage(jet3d::jeLogger::LogError, "Could not initialize bitmap list!!");
@@ -211,6 +222,7 @@ JETAPI jeEngine * JETCC jeEngine_Create(HWND hWnd, const char *AppName, const ch
 	// jeImage to replace jeBitmap
 	//Engine->AttachedImages.clear();
 	Engine->EngineLog->logMessage(jet3d::jeLogger::LogInfo, "Image list initialized");
+	//Engine->ImageFileFormats.clear();
 
 	Engine->ChangeDriverCBChain = jeChain_Create();
 
@@ -280,7 +292,7 @@ JETAPI void	JETCC jeEngine_Destroy(jeEngine **pEngine)
 		jeEngine_Free(*pEngine);
 		*pEngine = NULL;
 
-		check_leaks();
+//		check_leaks();
 	}
 }
 
@@ -318,6 +330,14 @@ JETAPI void JETCC jeEngine_Free(jeEngine *Engine)
 	Ret = jeEngine_BitmapListShutdown(Engine);
 	assert(Ret == JE_TRUE);
 	Engine->EngineLog->logMessage(jet3d::jeLogger::LogInfo, "BitmapList shutdown");
+
+	// Shutdown resource manager
+	if (!Engine->ResourceMgr->Shutdown())
+		Engine->EngineLog->logMessage(jet3d::jeLogger::LogWarn, "Resource manager was not shut down properly!!");
+	else
+		Engine->EngineLog->logMessage(jet3d::jeLogger::LogInfo, "Resource manager shutdown");
+
+	JE_SAFE_RELEASE(Engine->ResourceMgr);
 
 	//if (Engine->DriverDirectory)
 	//	jeRam_Free(Engine->DriverDirectory);
@@ -938,8 +958,19 @@ JETAPI void JETCC jeEngine_UpdateGamma(jeEngine *Engine)
 		{
 			jeErrorLog_AddString(-1, "jeEngine_UpdateGamma:  BitmapList_SetGamma for Engine failed", NULL);
 		}
-	}
 
+		/*BitmapListItr i = Engine->AttachedBitmaps.begin();
+		while (i != Engine->AttachedBitmaps.end())
+		{
+			if (!jeBitmap_SetGammaCorrection((*i), Engine->BitmapGamma, JE_TRUE))
+			{
+				jeErrorLog_AddString(-1, "jeEngine_UpdateGamma:  BitmapList_SetGamma for Engine failed", NULL);
+				break;
+			}
+
+			i++;
+		}*/
+	}
 }
 
 //================================================================================
@@ -949,8 +980,8 @@ JETAPI void JETCC jeEngine_UpdateGamma(jeEngine *Engine)
 jeBoolean jeEngine_BitmapListInit(jeEngine *Engine)
 {
 	assert( jeEngine_IsValid(Engine) );
-	assert(Engine->AttachedBitmaps == NULL);
-
+	//assert(Engine->AttachedBitmaps == NULL);
+	
 	if ( Engine->AttachedBitmaps == NULL )
 	{
 		Engine->AttachedBitmaps = BitmapList_Create();
@@ -960,6 +991,8 @@ jeBoolean jeEngine_BitmapListInit(jeEngine *Engine)
 			return JE_FALSE;
 		}
 	}
+
+	//Engine->AttachedBitmaps.clear();
 	return JE_TRUE;
 }
 
@@ -970,16 +1003,21 @@ jeBoolean jeEngine_BitmapListShutdown(jeEngine *Engine)
 {
 	assert( jeEngine_IsValid(Engine) );
 
-	if ( Engine->AttachedBitmaps )
-	{
-		assert(	Engine->DriverInfo.RDriver || BitmapList_CountMembersAttached(Engine->AttachedBitmaps) == 0 );
+	assert(	Engine->DriverInfo.RDriver || BitmapList_CountMembersAttached(Engine->AttachedBitmaps) == 0 );
 
-		//BitmapList_DetachAll(Engine->AttachedBitmaps);
-		// Destroy detaches for you!
-		BitmapList_Destroy(Engine->AttachedBitmaps);
-		Engine->AttachedBitmaps = NULL;
+	BitmapList_DetachAll(Engine->AttachedBitmaps);
+	// Destroy detaches for you!
+	BitmapList_Destroy(Engine->AttachedBitmaps);
+	/*BitmapListItr i = Engine->AttachedBitmaps.begin();
+	while (i != Engine->AttachedBitmaps.end())
+	{
+		jeBitmap_Destroy(&(*i));
+		(*i) = nullptr;
+		i++;
 	}
 
+	Engine->AttachedBitmaps.clear();*/
+	
 	return JE_TRUE;
 }
 
@@ -990,7 +1028,7 @@ JETAPI jeBoolean JETCC jeEngine_AddBitmap(jeEngine *Engine, jeBitmap *Bitmap, je
 {
 	assert( jeEngine_IsValid(Engine) );
 	assert(Bitmap);
-	assert(Engine->AttachedBitmaps);
+	//assert(Engine->AttachedBitmaps);
 	//assert(Engine->FrameState == FrameState_None);
 
 #if (DEBUG_OUTPUT_LEVEL >= 1)
@@ -1014,6 +1052,21 @@ JETAPI jeBoolean JETCC jeEngine_AddBitmap(jeEngine *Engine, jeBitmap *Bitmap, je
 	// Add bitmap to the list of bitmaps attached to the engine
 	if ( BitmapList_Add(Engine->AttachedBitmaps, (jeBitmap *)Bitmap) )
 	{
+		/*if (Engine->AttachedBitmaps.size() > 0)
+		{ 
+			// Check if bitmap is already in the list
+			BitmapListItr i = Engine->AttachedBitmaps.begin();
+			while (i != Engine->AttachedBitmaps.end())
+			{
+				if (Bitmap == (*i))
+					return JE_TRUE;
+
+				i++;
+			}
+		}
+
+		Engine->AttachedBitmaps.push_back(Bitmap);*/
+
 		if ( Engine->DriverInfo.RDriver )
 		{
 			if ( ! jeBitmap_AttachToDriver(Bitmap,Engine->DriverInfo.RDriver,0) )
@@ -1034,7 +1087,7 @@ JETAPI jeBoolean JETCC jeEngine_RemoveBitmap(jeEngine *Engine, jeBitmap *Bitmap)
 {
 	assert( jeEngine_IsValid(Engine) );
 	assert(Bitmap);
-	assert(Engine->AttachedBitmaps);
+	//assert(Engine->AttachedBitmaps);
 //	assert(Engine->FrameState == FrameState_None);
 
 #if (DEBUG_OUTPUT_LEVEL >= 1)
@@ -1043,6 +1096,18 @@ JETAPI jeBoolean JETCC jeEngine_RemoveBitmap(jeEngine *Engine, jeBitmap *Bitmap)
 
 	if ( BitmapList_Remove(Engine->AttachedBitmaps, Bitmap) )
 	{
+		/*BitmapListItr i = Engine->AttachedBitmaps.begin();
+		while (i != Engine->AttachedBitmaps.end())
+		{
+			if (Bitmap == (*i))
+			{
+				Engine->AttachedBitmaps.erase(i);
+				break;
+			}
+
+			i++;
+		}*/
+
 		if (!jeBitmap_DetachDriver(Bitmap, JE_TRUE))
 		{
 			jeErrorLog_AddString(-1, "jeEngine_RemoveBitmap:  jeBitmap_DetachDriver failed...", NULL);
@@ -1356,6 +1421,17 @@ JETAPI jeBoolean JETCC jeEngine_DrawBitmap(const jeEngine *Engine,
 	assert(Engine->AttachedBitmaps);
 	assert(BitmapList_Has(Engine->AttachedBitmaps, (jeBitmap *)Bitmap) == JE_TRUE);
 
+	/*std::list<jeBitmap*>::const_iterator i = Engine->AttachedBitmaps.begin();
+	while (i != Engine->AttachedBitmaps.end())
+	{
+		if (Bitmap == (*i))
+			break;
+
+		i++;
+	}
+
+	assert(i != Engine->AttachedBitmaps.end());*/
+
 	TH = jeBitmap_GetTHandle(Bitmap);
 	assert(TH);
 
@@ -1428,6 +1504,17 @@ JETAPI jeBoolean JETCC jeEngine_DrawBitmap3D(const jeEngine *Engine,
 	
 	assert(Engine->AttachedBitmaps);
 	assert(BitmapList_Has(Engine->AttachedBitmaps, (jeBitmap *)Bitmap) == JE_TRUE);
+
+	/*std::list<jeBitmap*>::const_iterator i = Engine->AttachedBitmaps.begin();
+	while (i != Engine->AttachedBitmaps.end())
+	{
+		if (Bitmap == (*i))
+			break;
+
+		i++;
+	}
+
+	assert(i != Engine->AttachedBitmaps.end());*/
 
 	w = (float)jeBitmap_Width( Bitmap);
 	h = (float)jeBitmap_Height(Bitmap);
@@ -1523,6 +1610,23 @@ jeBoolean jeEngine_AttachAll(jeEngine *Engine)
 		jeErrorLog_AddString(-1, "jeEngine_AttachAll:  BitmapList_AttachAll for Engine failed...", NULL);
 		return JE_FALSE;
 	}
+	/*BitmapListItr i = Engine->AttachedBitmaps.begin();
+	while (i != Engine->AttachedBitmaps.end())
+	{
+		if (!jeBitmap_SetGammaCorrection_DontChange((*i), Engine->BitmapGamma))
+		{
+			jeErrorLog_AddString(-1, "BitmapList_AttachAll : SetGamma failed", NULL);
+			return JE_FALSE;
+		}
+
+		if (!jeBitmap_AttachToDriver((*i), RDriver, 0))
+		{
+			jeErrorLog_AddString(-1,"BitmapList_AttachAll : AttachToDriver failed", NULL);
+			return JE_FALSE;
+		}
+
+		i++;
+	}*/
 
 #if (DEBUG_OUTPUT_LEVEL >= 2)
 	OutputDebugString("END BitmapList_AttachAll\n");
@@ -1544,6 +1648,12 @@ jeBoolean jeEngine_DetachAll(jeEngine *Engine)
 		jeErrorLog_AddString(-1, "jeEngine_DetachAll:  BitmapList_DetachAll failed for engine.", NULL);
 		return JE_FALSE;
 	}
+	/*BitmapListItr i = Engine->AttachedBitmaps.begin();
+	while (i != Engine->AttachedBitmaps.end())
+	{
+		if (!jeBitmap_DetachDriver((*i), JE_TRUE))
+			return JE_FALSE;
+	}*/
 
 	return JE_TRUE;
 }
@@ -2932,4 +3042,9 @@ JETAPI jeBoolean JETCC jeEngine_DestroyFont(jeEngine *Engine, jeFont **Font)
 JETAPI jeImage * JETCC jeEngine_CreateImage()
 {
 	return new jeImageImpl();
+}
+
+JETAPI jet3d::jeResourceMgr * JETCC jeEngine_GetResourceManager(jeEngine *Engine)
+{
+	return Engine->ResourceMgr;
 }

@@ -30,10 +30,7 @@
 #include "Camera.h"
 #include "VFile.h"
 #include "jeImage.h"
-
-#ifdef __cplusplus
-extern "C" {
-#endif
+#include "jeResourceMgr.h"
 
 //-------------------------------------------------
 
@@ -282,10 +279,6 @@ JETAPI jeBoolean JETCC jeEngine_SetFog(jeEngine *Engine, float r, float g, float
 //JETAPI jeBoolean JETCC jeEngine_SetCamera(jeEngine *Engine, jeCamera *Camera);
 // END - Hardware T&L - paradoxnj 6/8/2005
 
-#ifdef __cplusplus
-}
-#endif
-
 // jeImage to replace jeBitmap
 JETAPI jeImage * JETCC jeEngine_CreateImage();
 
@@ -294,5 +287,8 @@ JETAPI jeBoolean JETCC jeEngine_RemoveImage(jeEngine *Engine, jeImage *Image);
 
 JETAPI jeBoolean JETCC jeEngine_DrawImage(const jeEngine *Engine, jeImage *Bitmap, const jeRect * Source, uint32 x, uint32 y);
 JETAPI jeBoolean JETCC jeEngine_DrawImage3D(const jeEngine *Engine, jeImage *Bitmap, const jeRect * pRect, uint32 x, uint32 y);
+
+// New Resource Manager
+JETAPI jet3d::jeResourceMgr * JETCC jeEngine_GetResourceManager(jeEngine *pEngine);
 
 #endif // JE_ENGINE_H

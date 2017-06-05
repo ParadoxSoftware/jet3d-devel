@@ -8,10 +8,6 @@
 #include <string.h>
 
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 #define MAX_VIDS	35
 #define JEMSG_VIDEO_NOTIFY  WM_USER+13
 	
@@ -39,10 +35,6 @@ JETAPI void JETCC jeVideo_Notify();
 JETAPI void JETCC jeVideo_Open(jeVidMgr *VidMgr, LPSTR szFile );
 JETAPI void JETCC jeVideo_Play (jeVidMgr *VidMgr, int vid);
 JETAPI jeBoolean JETCC jeVideo_IsPlaying();
-
-#ifdef __cplusplus
-}
-#endif
 
 #endif
 

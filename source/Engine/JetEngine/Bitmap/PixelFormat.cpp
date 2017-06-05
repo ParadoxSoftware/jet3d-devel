@@ -859,7 +859,7 @@ static const jePixelFormat_Operations jePixelFormat_Operations_Array_Def[] =
 	{0x0000FF00,0x00FF0000,0xFF000000,0x000000FF, 	8 ,16,24, 0,	0,0,0,0,4,0,"32 bit BGRA",	Compose_32bgra,Decompose_32bgra, Get_32bgra,Put_32bgra,	GetPixel_32bit,PutPixel_32bit},
 	{0x000000FF,0x0000FF00,0x00FF0000,0xFF000000,	0 , 8,16,24,	0,0,0,0,4,0,"32 bit ABGR",	Compose_32abgr,Decompose_32abgr, Get_32abgr,Put_32abgr,	GetPixel_32bit,PutPixel_32bit},
 
-	{0,0,0,0, 			0,0,0,0,	0,0,0,0,	0 ,0,	"wavelet"},
+	//{0,0,0,0, 			0,0,0,0,	0,0,0,0,	0 ,0,	"wavelet"},
 
 	{0,0,0,0,			0,0,0,0,	0,0,0,0,	0 ,0,	"invalid"}
 };

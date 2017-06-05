@@ -24,10 +24,6 @@
 #include "BaseType.h"
 #include "jeLight.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 typedef struct QuadTree			QuadTree;
 
 typedef struct jeTerrain		jeTerrain;
@@ -62,10 +58,6 @@ jeBoolean	QuadTree_IntersectRay(QuadTree *QT,jeVec3d *pStart,jeVec3d *pDirection
 jeBoolean	QuadTree_IntersectThickRay(const QuadTree * QT,const jeVec3d * From,const jeVec3d * To,jeFloat Radius,jeVec3d * pImpact);
 
 void		QuadTree_ResetAllVertexLighting(QuadTree * QT);
-
-#ifdef __cplusplus
-}
-#endif
 
 //---------------------------------------------------------------------------
 #endif // QUAD_H

@@ -30,8 +30,10 @@ Lena 4.163
 Barb 4.496
 
 *****/
-
-#include "Utility.h"
+#include <assert.h>
+#include "Basetype.h"
+#include "Ram.h"
+//#include "Utility.h"
 #include "arithc.h"
 #include "Coder.h"
 
@@ -61,7 +63,7 @@ extern int tune_param;
 #define P0Init			8
 #define P1Init			0
 
-#define AddSignContext(context,val,mask) do { context *= 3; if( abs(val)&(mask) ) { if ( (val) > 0 ) context ++; else context += 2; } } while(0)
+#define AddSignContext(context,val,mask) do { context *= 3; if( JE_ABS(val)&(mask) ) { if ( (val) > 0 ) context ++; else context += 2; } } while(0)
 
 typedef struct 
 {
@@ -124,7 +126,7 @@ void coderBPB2Free(coder *c)
 		bpb2Info *d;
 		d = (bpb2Info *)c->data;
 		jeThreadQueue_Semaphore_Destroy(&(d->lock));
-		destroy(d);
+		jeRam_Free(d); d = nullptr;
 		c->data = NULL;
 	}
 }
@@ -153,28 +155,28 @@ int P,N,W,NE,NW,X1,X2,X3,X4;
 
 	/*** elaborate context-making ***/
 
-	VD	= abs(*dp)&donemask;	// current val already done
+	VD	= JE_ABS(*dp)&donemask;	// current val already done
 
-	P	= abs(*pp)&nextmask;
+	P	= JE_ABS(*pp)&nextmask;
 
 	if ( y == 0 ) 
 	{
 		N = NW = NE = VD;
-		if ( x == 0 ) W = VD; else W = abs(dp[-1]) & nextmask;
+		if ( x == 0 ) W = VD; else W = JE_ABS(dp[-1]) & nextmask;
 	}
 	else if ( x == 0 ) 
 	{
 		W = NW = 0;
-		N  = abs(dp[-fullw])	& nextmask;
-		NE = abs(dp[1-fullw])	& nextmask;
+		N  = JE_ABS(dp[-fullw])	& nextmask;
+		NE = JE_ABS(dp[1-fullw])	& nextmask;
 	}
 	else 
 	{
-		N = abs(dp[-fullw])		& nextmask;
-		W = abs(dp[-1])			& nextmask;
-		NW = abs(dp[-1-fullw])	& nextmask;
+		N = JE_ABS(dp[-fullw])		& nextmask;
+		W = JE_ABS(dp[-1])			& nextmask;
+		NW = JE_ABS(dp[-1-fullw])	& nextmask;
 		if ( x == (width-1) ) NE = VD;
-		else	NE = abs(dp[1-fullw]) & nextmask;
+		else	NE = JE_ABS(dp[1-fullw]) & nextmask;
 	}
 
 	shapes = 0;
@@ -182,8 +184,8 @@ int P,N,W,NE,NW,X1,X2,X3,X4;
 	if ( W > VD ) shapes += SHAPE(1);
 
 #ifdef BIG_SHAPE_CNTX
-	if ( (abs(dp[fullw])& donemask) > VD ) shapes += SHAPE(2);	// S
-	if ( (abs(dp[1])	& donemask) > VD ) shapes += SHAPE(3);	// E
+	if ( (JE_ABS(dp[fullw])& donemask) > VD ) shapes += SHAPE(2);	// S
+	if ( (JE_ABS(dp[1])	& donemask) > VD ) shapes += SHAPE(3);	// E
 #endif
 
 	/** band 0 has more vertical correlation **/
@@ -194,33 +196,33 @@ int P,N,W,NE,NW,X1,X2,X3,X4;
 		case 0:
 		case 1:	// transposed!
 #if 1
-			if ( y > 1 ) 			X1 = abs(dp[-fullw-fullw]) & nextmask; else X1 = VD;	//NN
-			if ( y < (height-1) )	X2 = abs(dp[fullw])		& donemask;	else X2 = VD;			//S
-			if ( y > 2 ) 			X3 = abs(pp[-fullw])	& nextmask; else X3 = VD;			//PN
-			if ( y < (height-2) )	X4 = abs(pp[fullw]) 	& nextmask; else X4 = VD;			//PS
+			if ( y > 1 ) 			X1 = JE_ABS(dp[-fullw-fullw]) & nextmask; else X1 = VD;	//NN
+			if ( y < (height-1) )	X2 = JE_ABS(dp[fullw])		& donemask;	else X2 = VD;			//S
+			if ( y > 2 ) 			X3 = JE_ABS(pp[-fullw])	& nextmask; else X3 = VD;			//PN
+			if ( y < (height-2) )	X4 = JE_ABS(pp[fullw]) 	& nextmask; else X4 = VD;			//PS
 #else
-			if ( x > 1		)		X1 = abs(dp[-2]) & nextmask; else X1 = VD;	//WW
-			if ( x < (width-1) )	X2 = abs(dp[fullw]) & donemask; else X2 = VD;	//E
-			if ( x > 2 ) 			X3 = abs(pp[-1]) & nextmask; else X3 = VD;	//PW
-			if ( x < (width-2) )	X4 = abs(pp[1])  & nextmask; else X4 = VD;	//PE
+			if ( x > 1		)		X1 = JE_ABS(dp[-2]) & nextmask; else X1 = VD;	//WW
+			if ( x < (width-1) )	X2 = JE_ABS(dp[fullw]) & donemask; else X2 = VD;	//E
+			if ( x > 2 ) 			X3 = JE_ABS(pp[-1]) & nextmask; else X3 = VD;	//PW
+			if ( x < (width-2) )	X4 = JE_ABS(pp[1])  & nextmask; else X4 = VD;	//PE
 #endif
 			break;
 
 		case 2:
-			if ( y < (height-1) )	X1 = abs(dp[fullw])	& donemask;	else X1 = VD;	//S
-			if ( x < (width-1) )	X2 = abs(dp[1])		& donemask;	else X2 = VD;	//E
-			X3 = abs( sister_x[ x + fullw*y ] ) & nextmask;
-			X4 = abs( sister_y[ x + fullw*y ] ) & nextmask;
+			if ( y < (height-1) )	X1 = JE_ABS(dp[fullw])	& donemask;	else X1 = VD;	//S
+			if ( x < (width-1) )	X2 = JE_ABS(dp[1])		& donemask;	else X2 = VD;	//E
+			X3 = JE_ABS( sister_x[ x + fullw*y ] ) & nextmask;
+			X4 = JE_ABS( sister_y[ x + fullw*y ] ) & nextmask;
 			break;
 		default:
 			assert("band_n not in 0-2 !" == NULL);
 			break;
 	}
 
-	statptr = &stats_array[ min(VAL_CONTEXT_MAX, ((VD + P + N + W + NW + NE + X1 + X2 + X3 + X4)>>2)) + shapes ];
+	statptr = &stats_array[ JE_MIN(VAL_CONTEXT_MAX, ((VD + P + N + W + NW + NE + X1 + X2 + X3 + X4)>>2)) + shapes ];
 }
 
-static void codeBandInit(bpb2Info *d,int *band,uint width,uint height,uint fullw,uint band_n)
+static void codeBandInit(bpb2Info *d,int *band,uint32 width,uint32 height,uint32 fullw,uint32 band_n)
 {
 	switch(band_n)
 	{
@@ -278,7 +280,7 @@ int *dp,*pp,*dpn;
 
 			getStats(&dp[x],&pp[x>>1],x,y,width,height,fullw);
 
-			bit = (abs(dp[x])&bitmask)?1:0;
+			bit = (JE_ABS(dp[x])&bitmask)?1:0;
 			arithEncBit(ari,statptr->p0,statptr->pt,bit);
 			bitModel(bit,statptr->p0,statptr->pt);
 

@@ -29,7 +29,7 @@
 #include "jeProperty.h"
 
 #ifdef __cplusplus
-extern "C" {
+//extern "C" {
 #endif
 
 typedef struct BoxTemplate BoxTemplate ;
@@ -74,7 +74,7 @@ jeBoolean			BrushTemplate_WriteToFile( BrushTemplate * pTemplate, jeVFile * pF) 
 
 
 #ifdef __cplusplus
-}
+//}
 #endif
 
 #endif //Prevent multiple inclusion

@@ -25,10 +25,6 @@
 #include "Vec3d.h"
 #include "jePlane.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 //=======================================================================================
 //=======================================================================================
 typedef uint16	jePoly_NumVertType;
@@ -67,8 +63,5 @@ jeBoolean	jePoly_IsValid(const jePoly *Poly);
 jeBoolean	jePoly_EdgeExist(const jePoly *Poly, const jeVec3d *v1, const jeVec3d *v2, int32 *i1, int32 *i2);
 jeBoolean	jePoly_Merge(const jePoly *Poly1, const jePoly *Poly2, const jeVec3d *Normal, jePoly **Out);
 jeBoolean	jePoly_RemoveDegenerateEdges(jePoly *Poly, jeFloat Epsilon);
-#ifdef __cplusplus
-}
-#endif
 
 #endif

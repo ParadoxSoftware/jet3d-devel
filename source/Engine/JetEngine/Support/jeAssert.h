@@ -24,10 +24,6 @@
 #include <assert.h>
 #include "BaseType.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 // You should use jeAssert() anywhere in the Jet3D engine that
 // you would normally use assert().
 //
@@ -62,9 +58,5 @@ extern void jeAssert_SetCriticalShutdownCallback( jeAssert_CriticalShutdownCallb
 												jeAssert_CriticalShutdownCallback * pOldCB , uint32 * pOldContext);
 
 /************************************************************/
-
-#ifdef __cplusplus
-}
-#endif
 
 #endif

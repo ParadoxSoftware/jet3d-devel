@@ -37,10 +37,6 @@
 #include "BaseType.h"
 #include "jeTypes.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 // This looks like a big mess.  But these guys are sticking together for life.
 // Might as well be in the same file, for speed!!!
 /*! @brief Represent the Binary Space Partition data handler */
@@ -220,9 +216,5 @@ jeBoolean		jeBSP_ChangeBoxCollision(	const jeBSP		*BSP,
 jeBoolean		jeBSP_RayIntersectsBrushes(const jeBSP *BSP, const jeVec3d *Front, const jeVec3d *Back, jeBrushRayInfo *Info);
 
 const			jeBSP_DebugInfo *jeBSP_GetDebugInfo(const jeBSP *BSPTree);
-
-#ifdef __cplusplus
-}
-#endif
 
 #endif

@@ -36,10 +36,6 @@
 	#define ERRORLOG_FULL_REPORTING
 //#endif
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 /*
 	Temporary structure forward, to hold place for when jeThreadQueue is fully
 	implemented.
@@ -144,9 +140,5 @@ JETAPI jeBoolean JETCC jeErrorLog_Report(int History, jeErrorLog_ErrorClassType 
 	// reports from the error log.  
 	// history is 0 for most recent,  1.. for second most recent etc.
 	// returns JE_TRUE if report succeeded.  JE_FALSE if it failed.
-
-#ifdef __cplusplus
-}
-#endif
 
 #endif

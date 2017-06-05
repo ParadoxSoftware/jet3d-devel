@@ -26,10 +26,6 @@
 #include "Object.h"
 #include "List.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 //-------------------------
 
 typedef struct jeVisObject		jeVisObject;
@@ -69,10 +65,6 @@ const jeObject *	jeVisObject_Object(const jeVisObject *VO);
 void				jeVisObject_AddArea(jeVisObject *VO,uint32 AreaUID); // use 0 to clear the list
 
 //-------------------------
-
-#ifdef __cplusplus
-}
-#endif
 
 #endif
 

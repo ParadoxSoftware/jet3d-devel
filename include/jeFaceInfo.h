@@ -29,10 +29,6 @@
 #include "jePortal.h"
 #include "Object.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 //========================================================================================
 //	Typedefs/#defines
 //========================================================================================
@@ -97,9 +93,5 @@ JETAPI jeBoolean	JETCC jeFaceInfo_ArrayRefFaceInfoIndex(jeFaceInfo_Array *Array,
 JETAPI void			JETCC jeFaceInfo_ArrayRemoveFaceInfo(jeFaceInfo_Array *Array, jeFaceInfo_ArrayIndex *Index);
 JETAPI void			JETCC jeFaceInfo_ArraySetFaceInfoByIndex(jeFaceInfo_Array *Array, jeFaceInfo_ArrayIndex Index, const jeFaceInfo *FaceInfo);
 JETAPI const		jeFaceInfo * JETCC jeFaceInfo_ArrayGetFaceInfoByIndex(const jeFaceInfo_Array *Array, jeFaceInfo_ArrayIndex Index);
-
-#ifdef __cplusplus
-}
-#endif
 
 #endif

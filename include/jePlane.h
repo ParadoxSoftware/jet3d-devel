@@ -27,10 +27,6 @@
 #include "ExtBox.h"
 #include "Xform3d.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 // Update by cjp. defining PLANE_CC as __fastcall on win32
 #ifdef WIN32
 #define PLANE_CC _fastcall
@@ -86,8 +82,5 @@ float PLANE_CC jePlane_PointDistanceFast(const jePlane *Plane, const jeVec3d *Po
 jePlane_Side	jePlane_BoxSide(const jePlane *Plane, const jeExtBox *Box, jeFloat Epsilon);
 jeBoolean		jePlane_Compare(const jePlane *Plane1, const jePlane *Plane2, float NEpsilon, float DEpsilon);
 	// NEpsilon = Normal Epsilon, DEpsilon = Dist Epsilon
-#ifdef __cplusplus
-}
-#endif
 
 #endif

@@ -26,7 +26,7 @@
 #include "jeBrush.h"
 
 #ifdef __cplusplus
-extern "C" {
+//extern "C" {
 #endif
 
 typedef List FaceList ;
@@ -54,7 +54,7 @@ jeBoolean FaceList_Search( FaceList * pList, jeBrush_Face*  pFace, FaceIterator 
 //ITERATION
 int FaceList_Enum(FaceList * pList, FaceListCB CallbackFcn, void *lParam);
 #ifdef __cplusplus
-}
+//}
 #endif
 
 #endif // Prevent multiple inclusion

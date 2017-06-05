@@ -27,7 +27,9 @@
 
 ******/
 
-#include "Utility.h"
+#include "BaseType.h"
+#include "Ram.h"
+//#include "Utility.h"
 #include "colorconv.h"
 #include <math.h>
 #include <limits.h>
@@ -101,14 +103,18 @@ palNode *nodes,*start_node;
 	}
 
 	if ( ! readOutPal(start_node,size,rgb_colors,permutation) ) {
-		BrandoError("bad linked list");
-		destroy(nodes);
+		//BrandoError("bad linked list");
+		//destroy(nodes);
+		jeRam_Free(nodes);
+		nodes = nullptr;
 		return JE_FALSE;
 	}
 
 	reportTotLen(start_node,usage);
 
-	destroy(nodes);
+	//destroy(nodes);
+	jeRam_Free(nodes);
+	nodes = nullptr;
 
 return JE_TRUE;
 }
@@ -366,8 +372,8 @@ palNode * initPal(uint8 * rgb_colors,int size)
 int i;
 palNode *nodes;
 
-	if ( (nodes = (palNode *)newarray(palNode,size)) == NULL ) {
-		BrandoError("node malloc failed");
+	if ( (nodes = (palNode *)jeRam_AllocateClear(sizeof(palNode) * size)) == NULL ) {
+		//BrandoError("node malloc failed");
 		return NULL;
 	}
 

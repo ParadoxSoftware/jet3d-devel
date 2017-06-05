@@ -19,7 +19,11 @@
 /*                                                                                      */
 /****************************************************************************************/
 
-#include "Utility.h"
+#include <assert.h>
+#include "BaseType.h"
+#include "Ram.h"
+
+//#include "Utility.h"
 #include "arithc.h"
 #include "Context.h"
 
@@ -68,12 +72,14 @@ while (size < length)	size += size;
     /* malloc context structure and array for frequencies */
 if ((pContext = (context *) new(context)) == NULL) return(NULL);
 if ((pContext->tree = (uint16 *) jeRam_Allocate((size+1)*sizeof(uint16))) == NULL)
-	{ destroy(pContext); return(NULL); }
+{
+	jeRam_Free(pContext); pContext = nullptr; return(NULL);
+}
 
 pContext->arith = arithinfo;
 pContext->total = 0;		/* total frequency */
 pContext->totalMax = arithinfo->safeProbMax;
-pContext->escapeMax = max( (length >> 2), 3);
+pContext->escapeMax = JE_MAX( (length >> 2), 3);
 pContext->tree_size = size;	/* no. symbols before growing */
     
     /* initialise contents of tree array to zero */
@@ -457,8 +463,9 @@ if ( pContext->total+pContext->escapeP > pContext->totalMax ) {
 
 void contextFree(context *pContext)
 {
-if ( ! pContext ) return;
-jeRam_Free(pContext->tree);
-destroy(pContext);
+	if ( ! pContext ) return;
+
+	jeRam_Free(pContext->tree); pContext->tree = nullptr;
+	jeRam_Free(pContext); pContext = nullptr;
 }
 

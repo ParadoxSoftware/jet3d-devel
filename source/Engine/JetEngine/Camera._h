@@ -28,10 +28,6 @@
 
 #include "List.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 typedef struct jeCamera 
 {
 	jeFloat		FovRadians;					// Field of View for Camera
@@ -79,9 +75,5 @@ void JETCF jeCamera_GetViewAngleXSinCos( const jeCamera *Camera, jeFloat *SinAng
 void JETCF jeCamera_GetViewAngleYSinCos( const jeCamera *Camera, jeFloat *SinAngle, jeFloat *CosAngle );
 
 //-----------------------------------------------------
-
-#ifdef __cplusplus
-}
-#endif
 
 #endif

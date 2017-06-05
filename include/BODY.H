@@ -35,10 +35,6 @@
 
 #include "jeMaterial.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 #define JE_BODY_NUMBER_OF_LOD			(16)		// 0 is highest detail (this gives 16 levels of LOD)
 #define JE_BODY_NO_PARENT_BONE         (-1)   
 #define JE_BODY_HIGHEST_LOD            (0)
@@ -164,9 +160,5 @@ JETAPI jeBoolean JETCC jeBody_GetIndexedBoneVertexLocations(const jeBody* pBody,
 	jeVec3d* pVerts);
 JETAPI jeBoolean JETCC jeBody_GetNamedBoneVertexLocations(const jeBody* pBody, const char* pBoneName, int aSize,
 	jeVec3d* pVerts);
-
-#ifdef __cplusplus
-}
-#endif
 
 #endif

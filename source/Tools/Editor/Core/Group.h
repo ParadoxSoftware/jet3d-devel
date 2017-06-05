@@ -32,7 +32,7 @@
 #include "jeMaterial.h"
 
 #ifdef __cplusplus
-extern "C" {
+//extern "C" {
 #endif
 
 typedef struct tagGroup Group ;
@@ -84,7 +84,7 @@ Group	* Group_CreateFromPrefabFile(jeVFile * pF, jePtrMgr* pPtrMgr, MaterialIden
 
 
 #ifdef __cplusplus
-}
+//}
 #endif
 
 #endif // Prevent multiple inclusion

@@ -18,6 +18,9 @@
 /*  Copyright (C) 1996-1999 Eclipse Entertainment, L.L.C. All Rights Reserved           */
 /*                                                                                      */
 /****************************************************************************************/
+#include <assert.h>
+#include "Basetype.h"
+#include "Ram.h"
 #include "rungo1.h"
 #include "rungae.h"
 
@@ -40,9 +43,9 @@ int i;
 
 	ro1->numContexts = nc;
 	ro1->ari = ari;
-	ro1->rungs = (rung_t *)newarray(rung_t,nc);
+	ro1->rungs = (rung_t *)jeRam_AllocateClear(sizeof(rung_t) * nc);
 	if ( ! ro1->rungs ) {
-		destroy(ro1);
+		jeRam_Free(ro1); ro1 = nullptr;
 		return NULL;
 	}
 
@@ -57,8 +60,8 @@ return ro1;
 void		rungO1Destroy(rungO1 * ro1)
 {
 	assert(ro1 && ro1->rungs);
-	destroy(ro1->rungs);
-	destroy(ro1);
+	jeRam_Free(ro1->rungs); ro1->rungs = nullptr;
+	jeRam_Free(ro1); ro1 = nullptr;
 }
 
 void	rungO1Encode(rungO1 * ro1, int context, jeBoolean bit)

@@ -21,7 +21,8 @@
 #ifndef CRB_ARITHC_H
 #define CRB_ARITHC_H
 
-#include "Utility.h"
+#include "BaseType.h"
+//#include "Utility.h"
 
 /*
  * Notez:

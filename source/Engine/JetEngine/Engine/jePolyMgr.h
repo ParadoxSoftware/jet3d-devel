@@ -27,10 +27,6 @@
 #include "BaseType.h"
 #include "jeTypes.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 //========================================================================================
 //	Typedefs/#defines
 //========================================================================================
@@ -68,9 +64,5 @@ void jePolyMgr_RenderWorldPoly(	jePolyMgr				*Mgr,
 								void					*LMapCBContext,
 								uint32					Flags);
 void jePolyMgr_FlushBatch(jePolyMgr *Mgr);
-
-#ifdef __cplusplus
-}
-#endif
 
 #endif

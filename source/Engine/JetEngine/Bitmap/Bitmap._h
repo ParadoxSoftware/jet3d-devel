@@ -24,10 +24,6 @@
 #include	"Bitmap.h"
 #include	"Dcommon.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 /***
 **
 *
@@ -57,10 +53,6 @@ jeTexture * JETCC jeBitmap_GetTHandle(const jeBitmap *Bmp);
 jeBoolean BITMAP_JET_INTERNAL jeBitmap_SetDriverFlags(jeBitmap *Bmp,uint32 Flags);
 
 jeBoolean			JETCC jeBitmap_SetGammaCorrection_DontChange(jeBitmap *Bmp,jeFloat Gamma);
-
-#ifdef __cplusplus
-}
-#endif
 
 
 #endif // BITMAP_PRIVATE_H

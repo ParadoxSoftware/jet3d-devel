@@ -25,11 +25,6 @@
 #ifndef JE_PROPERTY_H
 #define JE_PROPERTY_H
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-#pragma once
 #include "Vec3d.h"
 #define PROPERTY_LOCAL_DATATYPE_START 1000
 #define PROPERTY_DATA_INVALID			0
@@ -126,9 +121,5 @@ JETAPI jeBoolean JETCC jeProperty_FillCombo( jeProperty *pjeProperty, char *Name
 JETAPI jeBoolean JETCC jeProperty_FillCurTime( jeProperty *pjeProperty, float Time, int FieldId );
 JETAPI void JETCC jeProperty_SetDataInvalid( jeProperty *pjeProperty );
 JETAPI void JETCC jeProperty_SetDisabled( jeProperty *pjeProperty, jeBoolean bDisable );
-
-#ifdef __cplusplus
-}
-#endif
 
 #endif 

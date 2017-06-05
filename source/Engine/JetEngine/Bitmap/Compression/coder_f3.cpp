@@ -24,8 +24,11 @@
 coderFast3
 
 *****/
+#include <assert.h>
+#include "BaseType.h"
+#include "Ram.h"
 
-#include "Utility.h"
+//#include "Utility.h"
 #include "arithc.h"
 #include "Coder.h"
 #include "rungae.h"
@@ -92,7 +95,7 @@ void coderFast3Free(coder *c)
 	{
 		bpInfo *d;
 		d = (bpInfo *)c->data;
-		destroy(d);
+		jeRam_Free(d); d = nullptr;
 		c->data = NULL;
 	}
 }
@@ -140,7 +143,7 @@ int val,x;
 		for(x=width;x--;) 
 		{
 			val = *dp++;
-			val = abs(val);
+			val = JE_ABS(val);
 			val = (val>>bitshift)&1;
 			if ( val )
 				goto CodeLine;
@@ -166,11 +169,11 @@ int val,x;
 			mov		ecx, edx
 			xor		eax, edx	// no stall on edx
 			and		ecx, 01h
-			add		eax, ecx	// now eax = abs(val) and ecx = (val < 0 ) ? 1 : 0;
+			add		eax, ecx	// now eax = JE_ABS(val) and ecx = (val < 0 ) ? 1 : 0;
 			*/
 
 			sign = (val < 0) ? -1 : 0;
-			val = abs(val);
+			val = JE_ABS(val);
 			val >>= bitshift;
 			rungModelEncBit(ari,val&1,rungs);
 			if ( val == 1 )

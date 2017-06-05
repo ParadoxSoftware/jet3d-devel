@@ -812,6 +812,9 @@ jeBoolean jeBSPNode_LightUpdateFromPoint_r(jeBSPNode *Node, jeBSP *BSP, jeBSPNod
 //jeTexture * jeBitmap_CreateTHandle(DRV_Driver *Driver,int Width,int Height,int NumMipLevels,
 //			jePixelFormat SeekFormat1,jePixelFormat SeekFormat2,jeBoolean SeekCK,jeBoolean SeekAlpha,jeBoolean SeekSeparates,uint32 DriverFlags);
 
+jeTexture * jeBitmap_CreateTHandle(DRV_Driver *Driver, int32 Width, int32 Height, int32 NumMipLevels,
+	jePixelFormat SeekFormat1, jePixelFormat SeekFormat2, jeBoolean SeekCK, jeBoolean SeekAlpha, jeBoolean SeekSeparates, uint32 DriverFlags);
+
 // Added by chrisjp.. this should speed up level loading a good bit..
 void DetermineSupportedLightmapFormat(jePixelFormat goalFormat, DRV_Driver *Driver)
 {

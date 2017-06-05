@@ -557,9 +557,10 @@ JETAPI jeBoolean JETCC jeActor_AddMotion(jeActor_Def *Ad, jeMotion *NewMotion, i
 JETAPI void JETCC jeActor_ClearPose(jeActor *A, const jeXForm3d *Transform)
 {
 	assert( jeActor_IsValid(A) != JE_FALSE );
-	assert ( (Transform==NULL) || (jeXForm3d_IsOrthonormal(Transform) != JE_FALSE) );
+	//assert ( (Transform==NULL) || (jeXForm3d_IsOrthonormal(Transform) != JE_FALSE) );
 	jePose_Clear( A->Pose ,Transform);
-	A->Xf = *Transform; //Incarnadine
+	//A->Xf = *Transform; //Incarnadine
+	jeXForm3d_Copy(Transform, &A->Xf);
 	A->needsRelighting = JE_TRUE;
 }
 
@@ -568,10 +569,11 @@ JETAPI void JETCC jeActor_SetPose(jeActor *A, const jeMotion *M,
 {
 	assert( jeActor_IsValid(A) != JE_FALSE );
 	assert( M != NULL );
-	assert ( (Transform==NULL) || (jeXForm3d_IsOrthonormal(Transform) != JE_FALSE) );
+	//assert ( (Transform==NULL) || (jeXForm3d_IsOrthonormal(Transform) != JE_FALSE) );
 
 	jePose_SetMotion( A->Pose,M,Time,Transform);
-	A->Xf = *Transform; //Incarnadine
+	//A->Xf = *Transform; //Incarnadine
+	jeXForm3d_Copy(Transform, &A->Xf);
 	A->needsRelighting = JE_TRUE;
 }
 
@@ -582,11 +584,12 @@ JETAPI void JETCC jeActor_BlendPose(jeActor *A, const jeMotion *M,
 {
 	assert( jeActor_IsValid(A) != JE_FALSE );
 	assert( M != NULL );
-	assert ( (Transform==NULL) || (jeXForm3d_IsOrthonormal(Transform) != JE_FALSE) );
+	//assert ( (Transform==NULL) || (jeXForm3d_IsOrthonormal(Transform) != JE_FALSE) );
 
 	jePose_BlendMotion( A->Pose,M,Time,Transform,
 						BlendAmount,(jePose_BlendingType)A->BlendingType);
-	A->Xf = *Transform; //Incarnadine
+	//A->Xf = *Transform; //Incarnadine
+	jeXForm3d_Copy(Transform, &A->Xf);
 	A->needsRelighting = JE_TRUE;
 }
 

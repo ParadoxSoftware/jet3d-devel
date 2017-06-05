@@ -30,10 +30,6 @@
 #include "VFile.h"
 #include "jeResource.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 typedef struct jeCamera								jeCamera;
 typedef struct jeEngine								jeEngine;
 typedef struct jeFrustum							jeFrustum;
@@ -113,10 +109,6 @@ JETAPI jeBoolean JETCC jeStaticMesh_SetExtBox(jeStaticMesh *Mesh, jeExtBox *BBox
 	@return JE_TRUE if there was a collision, JE_FALSE if not
 */
 JETAPI jeBoolean JETCC jeStaticMesh_Collision(jeStaticMesh *Mesh, jeExtBox *BBox, jeVec3d *Front, jeVec3d *Back, jeVec3d *Impact, jePlane *Plane);
-
-#ifdef __cplusplus
-}
-#endif
 
 // End of header
 #endif

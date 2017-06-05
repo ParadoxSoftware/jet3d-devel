@@ -54,8 +54,9 @@ note : alpha now coded as a 4th plane of the wavelet; the alpha
 
 
 **********/
-
-#include "Utility.h"
+#include <assert.h>
+//#include "Utility.h"
+#include "BaseType.h"
 #include "Image.h"
 #include "Coder.h"
 #include "CodeUtil.h"
@@ -390,8 +391,8 @@ void codeImageAlpha(coder * coder,image * im,jeBoolean encoding)
 				predx = w + ((w - ww)>>2) + ((ne - nw)>>1);	// vector from x
 				predy = n + ((n - nn) + (w - nw) + (ne - nne))/3;	// vector from y
 
-				dx = abs(w - ww) + abs(ne - n) + abs(n - nw);
-				dy = abs(n - nn) + abs(w - nw) + abs(ne - nne);
+				dx = JE_ABS(w - ww) + JE_ABS(ne - n) + JE_ABS(n - nw);
+				dy = JE_ABS(n - nn) + JE_ABS(w - nw) + JE_ABS(ne - nne);
 				
 		// gradient cuttoffs
 #define GRAD1_DIFF	50	// <- doesn't matter much or help much
@@ -418,8 +419,8 @@ void codeImageAlpha(coder * coder,image * im,jeBoolean encoding)
 					/*** now do corrections for 45/135 gradients: ***/
 					// uses nww and nnw	(not loaded)
 						
-					d45  = abs(w - ww) + abs(ne - nn) + abs(n - nnw);
-					d135 = abs(w - n) + abs(nw - nn) + abs(n - nne);
+					d45  = JE_ABS(w - ww) + JE_ABS(ne - nn) + JE_ABS(n - nnw);
+					d135 = JE_ABS(w - n) + JE_ABS(nw - nn) + JE_ABS(n - nne);
 
 					if ( d45 - d135 > 32 )
 						pred += ((ne - nw)>>3);
@@ -431,7 +432,7 @@ void codeImageAlpha(coder * coder,image * im,jeBoolean encoding)
 						pred -= ((ne - nw)>>4);
 				}
 
-				putminmax(pred,0,255);
+				pred = JE_MINMAX(pred,0,255);
 
 				shapeCntx = 0;
 				if ( w  > pred ) shapeCntx += 1<<0;
@@ -441,7 +442,7 @@ void codeImageAlpha(coder * coder,image * im,jeBoolean encoding)
 				if ( nw > pred ) shapeCntx += 1<<4;
 				if ( ne > pred ) shapeCntx += 1<<5;
 
-				gradCntx = abs(dx + dy); putminmax(gradCntx,0,255);
+				gradCntx = JE_ABS(dx + dy); gradCntx = JE_MINMAX(gradCntx,0,255);
 				gradCntx = grad_context_table[gradCntx];
 				cntx = (gradCntx<<SHAPE_BITS) + shapeCntx;
 				signCntx = (sign<<SIGN_SHAPE_BITS) + (shapeCntx & SIGN_SHAPE_MASK);

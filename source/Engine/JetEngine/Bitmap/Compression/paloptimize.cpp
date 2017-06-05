@@ -69,13 +69,17 @@ The problems :
 			seems to help sometimes, but isn't a clear win
 
 **********/
+#include <assert.h>
+#include <string.h>
+#include "BaseType.h"
+#include "Ram.h"
 
 #include "YUV.h"
 #include "palettize.h"
-#include "Utility.h"
+//#include "Utility.h"
 #include "Tsc.h"
 #include "Log.h"
-#include "IntMath.h"
+//#include "IntMath.h"
 
 #include "Bitmap.h"
 #include "PixelFormat.h"
@@ -149,7 +153,7 @@ palOptInfo optInfo[256];
 		palInfo = closestPalInit(palette);
 		if ( ! palInfo ) return;
 
-		memclear(optInfo,sizeof(palOptInfo)*palEntries);
+		memset(optInfo,0,sizeof(palOptInfo)*palEntries);
 
 		mse = 0;
 		samples =0;
@@ -233,12 +237,12 @@ palOptInfo optInfo[256];
 			diffB = GaussianRand(diffB,abs(diffB));
 #endif
 
-			palPtr[0] = minmax( palPtr[0]+diffR , 0,255);
-			palPtr[1] = minmax( palPtr[1]+diffG , 0,255);
-			palPtr[2] = minmax( palPtr[2]+diffB , 0,255);
+			palPtr[0] = JE_MINMAX( palPtr[0]+diffR , 0,255);
+			palPtr[1] = JE_MINMAX( palPtr[1]+diffG , 0,255);
+			palPtr[2] = JE_MINMAX( palPtr[2]+diffB , 0,255);
 		}
 		
-		if ( abs(mse - last_mse) < 50 && extraStepSize == 0 )
+		if ( JE_ABS(mse - last_mse) < 50 && extraStepSize == 0 )
 		{
 			break;
 		}

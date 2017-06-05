@@ -19,6 +19,7 @@
 /*                                                                                      */
 /****************************************************************************************/
 #include <math.h>
+#include <string.h>
 #include <assert.h>
 
 #include "Camera.h"
@@ -27,7 +28,7 @@
 #include "List.h"
 #include "Camera._h"
 
-#include "debug_new.h"
+//#include "debug_new.h"
 
 #ifndef max
 #define max(AA,BB)  (  ((AA)>(BB)) ?(AA):(BB)  )
@@ -115,12 +116,12 @@ jeXForm3d * pXF;
 		if ( ! (Camera->XFormStack = Stack_Create()) )
 			return JE_FALSE;
 
-	//pXF = (jeXForm3d *)jeRam_Allocate(sizeof(jeXForm3d)*2);
-	pXF = new jeXForm3d;
+	pXF = (jeXForm3d *)jeRam_Allocate(sizeof(jeXForm3d)*2);
+	//pXF = new jeXForm3d;
 	if ( ! pXF )
 		return JE_FALSE;
-	pXF[0] = Camera->TransposeXForm;
-	pXF[1] = Camera->XForm;
+	memcpy(&pXF[0], &Camera->TransposeXForm, sizeof(jeXForm3d));
+	memcpy(&pXF[1], &Camera->XForm, sizeof(jeXForm3d));
 	Stack_Push(Camera->XFormStack,(void *)pXF);
 
 return JE_TRUE;

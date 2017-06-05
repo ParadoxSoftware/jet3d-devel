@@ -23,10 +23,6 @@
 
 #include "arithc.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 typedef struct oOne oOne;
 
 extern oOne * O1coder_Init(arithInfo * ari,long numChars,long numContexts);
@@ -41,10 +37,6 @@ extern void O1coder_Reset(oOne * O1I);
 #define oOneEncode(x,y,z) 	O1coder_EncodeC((oOne *)x,y,z)
 #define oOneDecode(x,y)   	O1coder_DecodeC((oOne *)x,y)
 #define oOneFree(x)     	O1coder_CleanUp((oOne *)x)
-
-#ifdef __cplusplus
-}
-#endif
 
 #endif
 

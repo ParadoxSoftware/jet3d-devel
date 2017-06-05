@@ -23,10 +23,6 @@
 
 #include "Vec3d.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 /*{****
 
 // CB note <>
@@ -256,11 +252,6 @@ JETAPI void JETCC jeXForm3d_Mirror(
 	#define jeXForm3d_SetMaximalAssertionMode(Enable )
 #else
 	JETAPI 	void JETCC jeXForm3d_SetMaximalAssertionMode( jeBoolean Enable );
-#endif
-
-
-#ifdef __cplusplus
-}
 #endif
 
 #endif

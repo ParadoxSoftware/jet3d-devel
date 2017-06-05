@@ -31,8 +31,11 @@ todos :
 	2. try rung on the signs too
 
 *****/
+#include <assert.h>
+#include "BaseType.h"
+#include "Ram.h"
 
-#include "Utility.h"
+//#include "Utility.h"
 #include "arithc.h"
 #include "Coder.h"
 #include "rungae.h"
@@ -90,7 +93,7 @@ void coderFastFree(coder *c)
 	{
 		bpInfo *d;
 		d = (bpInfo *)c->data;
-		destroy(d);
+		jeRam_Free(d); d = nullptr;
 		c->data = NULL;
 	}
 }
@@ -143,7 +146,7 @@ rung_t * rungs;
 		{
 		int val;
 			val = *dp++;
-			val = abs(val);
+			val = JE_ABS(val);
 			val = (val>>bitshift)&1;
 			if ( val )
 				goto CodeLine;
@@ -159,7 +162,7 @@ rung_t * rungs;
 		pp = parent + (y>>1)*fullw;
 		for(x=0;x<width;x+=2) 
 		{
-			par = abs(*pp); pp++;
+			par = JE_ABS(*pp); pp++;
 			par = par >> bitshift;
 			par = par ? 2 : 0;
 
@@ -260,7 +263,7 @@ rung_t * rungs;
 		for(x=0;x<width;x+=2) 
 		{
 			par = *pp++;
-			par = abs(par) & nextmask;
+			par = JE_ABS(par) & nextmask;
 			par = par ? 2 : 0;
 
 			val = *dp;

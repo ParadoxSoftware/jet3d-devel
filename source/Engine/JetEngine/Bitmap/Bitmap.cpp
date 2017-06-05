@@ -87,7 +87,7 @@ see {} for notes/long-term-todos
 #include	"bitmap_blitdata.h"
 #include	"bitmap_gamma.h"
 
-#include	"Wavelet.h"
+//#include	"Wavelet.h"
 #include	"palcreate.h"
 #include	"palettize.h"
 #include	"CodePal.h"
@@ -250,10 +250,10 @@ jeBitmap * Bmp;
 
 	Bmp->SeekMipCount = MipCount;
 
-	if ( Format == JE_PIXELFORMAT_WAVELET )
+	/*if ( Format == JE_PIXELFORMAT_WAVELET )
 	{
 		Bmp->Wavelet = jeWavelet_CreateEmpty(Width,Height);
-	}
+	}*/
 
 return Bmp;
 }
@@ -277,10 +277,10 @@ jeBitmap * Bmp;
 	if ( Bmp->Info.Palette )
 		jeBitmap_Palette_CreateRef(Bmp->Info.Palette);
 
-	if ( Bmp->Info.Format == JE_PIXELFORMAT_WAVELET )
+	/*if ( Bmp->Info.Format == JE_PIXELFORMAT_WAVELET )
 	{
 		Bmp->Wavelet = jeWavelet_CreateEmpty(Bmp->Info.Width,Bmp->Info.Height);
-	}
+	}*/
 
 return Bmp;
 }
@@ -321,10 +321,10 @@ jeBitmap *	Bitmap;
 						jeRam_Free(Bitmap->Data[i]);
 				}
 
-				if ( Bitmap->Wavelet )
+				/*if ( Bitmap->Wavelet )
 				{
 					jeWavelet_Destroy(&(Bitmap->Wavelet));
-				}
+				}*/
 			}
 		}
 
@@ -519,9 +519,9 @@ jeBoolean jeBitmap_WaitReady(const jeBitmap *Bmp)
 	
 	if ( Bmp->StreamingStatus >= JE_BITMAP_STREAMING_STARTED )
 	{
-		assert(Bmp->Wavelet);
-		ThreadLog_Printf("Wavelet : Waiting %08X Streaming\n",(uint32)(Bmp->Wavelet));
-		jeWavelet_WaitStreaming(Bmp->Wavelet);
+		//assert(Bmp->Wavelet);
+		//ThreadLog_Printf("Wavelet : Waiting %08X Streaming\n",(uint32)(Bmp->Wavelet));
+		//jeWavelet_WaitStreaming(Bmp->Wavelet);
 		((jeBitmap *)Bmp)->StreamingStatus = JE_BITMAP_STREAMING_DATADONE;
 		((jeBitmap *)Bmp)->StreamingTHandle = JE_FALSE;
 	}
@@ -545,7 +545,7 @@ jeBoolean jeBitmap_PeekReady(const jeBitmap *Bmp)
 	//	and PeekReady calls jeBitmap_Update_SystemToDriver !
 	//	be carefull!
 
-	if ( Bmp->StreamingStatus >= JE_BITMAP_STREAMING_STARTED )
+	/*if ( Bmp->StreamingStatus >= JE_BITMAP_STREAMING_STARTED )
 	{
 		assert(Bmp->Wavelet);
 		if ( Bmp->DriverHandle )
@@ -575,16 +575,16 @@ jeBoolean jeBitmap_PeekReady(const jeBitmap *Bmp)
 				}
 			}
 		}
-	}
+	}*/
 
 return JE_TRUE;
 }
 
 JETAPI jeBitmap_StreamingStatus JETCC jeBitmap_GetStreamingStatus(const jeBitmap *Bmp)
 {
-jeThreadQueue_JobStatus Status;
-jeThreadQueue_Job * Job;
-jeBitmap_StreamingStatus Ret;
+//jeThreadQueue_JobStatus Status;
+//jeThreadQueue_Job * Job;
+//jeBitmap_StreamingStatus Ret;
 
 	assert( jeBitmap_IsValid(Bmp) );
 
@@ -596,9 +596,9 @@ jeBitmap_StreamingStatus Ret;
 	if ( Bmp->StreamingStatus < JE_BITMAP_STREAMING_STARTED )
 		return JE_BITMAP_STREAMING_NOT;
 
-	assert(Bmp->Wavelet);
+	//assert(Bmp->Wavelet);
 
-	Job = jeWavelet_StreamingJob(Bmp->Wavelet);
+	/*Job = jeWavelet_StreamingJob(Bmp->Wavelet);
 	if ( ! Job )
 	{
 		//StreamingStatus could be DATADONE ; if so, return a real _DONE
@@ -637,7 +637,8 @@ jeBitmap_StreamingStatus Ret;
 		Ret == JE_BITMAP_STREAMING_NOT )
 		((jeBitmap *)Bmp)->StreamingTHandle = JE_FALSE;
 
-return Ret;
+return Ret;*/
+	return JE_BITMAP_STREAMING_NOT;
 }
 
 /*}{ *************** Locks *******************/
@@ -905,7 +906,7 @@ jeBitmap * Bmp = (jeBitmap *)iBmp;
 	}
 	
 	//LockForRead must special case wavelet for making many mips at once
-	if ( Bmp->Info.Format == JE_PIXELFORMAT_WAVELET )
+	/*if ( Bmp->Info.Format == JE_PIXELFORMAT_WAVELET )
 	{
 	jeBitmap * Lock;
 	jeBitmap_Info * Infos[MAXMIPLEVELS];
@@ -978,7 +979,7 @@ jeBitmap * Bmp = (jeBitmap *)iBmp;
 			}
 		}
 	}
-	else
+	else*/
 	{
 		for(mip=MinimumMip;mip <= MaximumMip;mip ++)
 		{
@@ -1177,11 +1178,11 @@ void * bits;
 
 		Bmp->DriverBitsLocked = JE_TRUE;
 	}
-	else if ( Bmp->Wavelet )
+	/*else if ( Bmp->Wavelet )
 	{
 		//{} with WaveletMipLock
 		bits = Bmp->Wavelet;
-	}
+	}*/
 	else
 	{
 		bits = Bmp->Data[0];
@@ -1219,8 +1220,8 @@ jeBitmap * Bmp;
 	Bmp->LockOwner = BmpSrc;
 	jeBitmap_CreateRef(BmpSrc); // we do a _Destroy() in UnLock()
 
-	Bmp->HasWaveletOptions = BmpSrc->HasWaveletOptions;
-	Bmp->WaveletOptions = BmpSrc->WaveletOptions;
+	//Bmp->HasWaveletOptions = BmpSrc->HasWaveletOptions;
+	//Bmp->WaveletOptions = BmpSrc->WaveletOptions;
 
 	BmpSrc->LockCount += LockCnt;
 
@@ -1317,7 +1318,7 @@ jeBitmap * Ret;
 
 	assert( jeBitmap_IsValid(Ret) );
 
-	if (	Src->Info.Format == JE_PIXELFORMAT_WAVELET &&
+	/*if (	Src->Info.Format == JE_PIXELFORMAT_WAVELET &&
 			Ret->Info.Format == JE_PIXELFORMAT_WAVELET )
 	{
 		assert(Src->Wavelet);
@@ -1326,9 +1327,9 @@ jeBitmap * Ret;
 
 		Ret->WaveletMipLock = mip;
 	}
-	else
+	else*/
 	{
-		assert( Ret->Info.Format != JE_PIXELFORMAT_WAVELET);
+		//assert( Ret->Info.Format != JE_PIXELFORMAT_WAVELET);
 
 		if ( ! jeBitmap_AllocSystemMip(Ret,0) )
 		{
@@ -1371,12 +1372,12 @@ jeBitmap * Ret;
 
 	Ret->Data[0] = Src->Data[mip];
 
-	if ( Src->Info.Format == JE_PIXELFORMAT_WAVELET )
+	/*if ( Src->Info.Format == JE_PIXELFORMAT_WAVELET )
 	{
 		assert(Src->Wavelet);
 		Ret->Wavelet = Src->Wavelet;
 		Ret->WaveletMipLock = mip;
-	}
+	}*/
 
 	Ret->Info.Palette = Src->Info.Palette;
 	if ( Ret->Info.Palette )
@@ -1933,8 +1934,8 @@ JETAPI	jeBoolean	JETCC	jeBitmap_HasAlpha(const jeBitmap * Bmp)
 	if ( Bmp->Alpha )
 		return JE_TRUE;
 
-	if ( Bmp->Wavelet )
-		return jeWavelet_HasAlpha(Bmp->Wavelet);
+	//if ( Bmp->Wavelet )
+	//	return jeWavelet_HasAlpha(Bmp->Wavelet);
 
 	if ( jePixelFormat_HasGoodAlpha(Bmp->Info.Format) )
 		return JE_TRUE;
@@ -2029,7 +2030,7 @@ jeBoolean	BITMAP_JET_INTERNAL jeBitmap_AttachToDriver(jeBitmap *Bmp,
 //		if ( Bmp->DriverFlags & RDRIVER_PF_COMBINE_LIGHTMAP )
 //			Bmp->SeekMipCount = max(Bmp->SeekMipCount,4);
 
-		NumMipLevels = max(Bmp->SeekMipCount,(Bmp->Info.MaximumMip + 1));
+		NumMipLevels = JE_MAX(Bmp->SeekMipCount,(Bmp->Info.MaximumMip + 1));
 		if ( NumMipLevels > 4 ) NumMipLevels = 4; // {} kind of a hack, our drivers ignore mips > 4
 
 		// make sizes power-of-two and square
@@ -2135,8 +2136,8 @@ jeBoolean	BITMAP_JET_INTERNAL jeBitmap_AttachToDriver(jeBitmap *Bmp,
 		if (	Bmp->StreamingStatus >= JE_BITMAP_STREAMING_STARTED && 
 				Bmp->StreamingStatus < JE_BITMAP_STREAMING_DATADONE )
 		{
-			assert( Bmp->Wavelet );
-			assert( jeWavelet_StreamingJob(Bmp->Wavelet) );
+			//assert( Bmp->Wavelet );
+			//assert( jeWavelet_StreamingJob(Bmp->Wavelet) );
 			Bmp->StreamingTHandle = JE_TRUE;
 			return JE_TRUE;
 		}
@@ -2420,7 +2421,7 @@ int32 SaveMaxMip;
 
 	// <> thread the wavelet decompressor
 
-	if ( Bmp->Info.Format == JE_PIXELFORMAT_WAVELET &&
+	/*if ( Bmp->Info.Format == JE_PIXELFORMAT_WAVELET &&
 		jeWavelet_CanDecompressMips(Bmp->Wavelet,&(Bmp->DriverInfo)) )
 	{
 	jeBitmap * DstLocks[MAXMIPLEVELS];
@@ -2457,7 +2458,7 @@ int32 SaveMaxMip;
 		}
 
 	return JE_TRUE;
-	}
+	}*/
 
 	MipsChanged = JE_FALSE;
 	for(mip=Bmp->DriverInfo.MinimumMip;mip<=Bmp->DriverInfo.MaximumMip;mip++)
@@ -2894,7 +2895,7 @@ jeBoolean Ret;
 	Ret = jeBitmap_UpdateMips_Data(	&FmInfo, Bmp->Data[fm],
 									&ToInfo, Bmp->Data[to]);
 
-	Bmp->Info.MaximumMip = max(Bmp->Info.MaximumMip,to);
+	Bmp->Info.MaximumMip = JE_MAX(Bmp->Info.MaximumMip,to);
 
 return Ret;
 }
@@ -3300,8 +3301,8 @@ int32 mip;
 		}
 	}
 
-	Bmp->Info.MinimumMip = min(Bmp->Info.MinimumMip,low);
-	Bmp->Info.MaximumMip = max(Bmp->Info.MaximumMip,high);
+	Bmp->Info.MinimumMip = JE_MIN(Bmp->Info.MinimumMip,low);
+	Bmp->Info.MaximumMip = JE_MAX(Bmp->Info.MaximumMip,high);
 
 return JE_TRUE;
 }
@@ -3509,9 +3510,9 @@ uint8 *SrcBits,*DstBits;
 	}
 
 	if ( SizeX < 0 )
-		SizeX = min(SrcLockInfo->Width,DstLockInfo->Width);
+		SizeX = JE_MIN(SrcLockInfo->Width,DstLockInfo->Width);
 	if ( SizeY < 0 )
-		SizeY = min(SrcLockInfo->Height,DstLockInfo->Height);
+		SizeY = JE_MIN(SrcLockInfo->Height,DstLockInfo->Height);
 
 	if (( (SrcX + SizeX) > SrcLockInfo->Width ) ||
 		( (SrcY + SizeY) > SrcLockInfo->Height) ||
@@ -3555,7 +3556,7 @@ jeBitmap_Palette * Pal;
 	Pal = jeBitmap_GetPalette(Bmp);
 	if ( Bmp->Info.HasColorKey )
 	{
-	uint32 CK;
+		uint32 CK = 0;
 		if ( jePixelFormat_IsRaw(NewFormat) )
 		{
 			if ( jePixelFormat_IsRaw(Bmp->Info.Format) )
@@ -3594,18 +3595,20 @@ JETAPI jeBoolean JETCC jeBitmap_SetCompressionOptions(jeBitmap * Bmp,int32 cleve
 {
 	assert(jeBitmap_IsValid(Bmp));
 
-	Bmp->HasWaveletOptions = jeWavelet_SetOptions(&(Bmp->WaveletOptions),clevel,NeedMips,ratio);
+	//Bmp->HasWaveletOptions = jeWavelet_SetOptions(&(Bmp->WaveletOptions),clevel,NeedMips,ratio);
 
-return Bmp->HasWaveletOptions;
+//return Bmp->HasWaveletOptions;
+	return JE_TRUE;
 }
 
 JETAPI jeBoolean JETCC jeBitmap_SetCompressionOptionsExpert(jeBitmap * Bmp,jeFloat Ratio,int32 TransformN,int32 CoderN,jeBoolean TransposeLHs,jeBoolean Block)
 {
 	assert(jeBitmap_IsValid(Bmp));
 
-	Bmp->HasWaveletOptions = jeWavelet_SetExpertOptions(&(Bmp->WaveletOptions),Ratio,TransformN,CoderN,TransposeLHs,Block);
+	//Bmp->HasWaveletOptions = jeWavelet_SetExpertOptions(&(Bmp->WaveletOptions),Ratio,TransformN,CoderN,TransposeLHs,Block);
 
-return Bmp->HasWaveletOptions;
+//return Bmp->HasWaveletOptions;
+	return JE_TRUE;
 }
 
 JETAPI jeBoolean JETCC jeBitmap_SetFormat(jeBitmap *Bmp, 
@@ -3625,7 +3628,7 @@ JETAPI jeBoolean JETCC jeBitmap_SetFormat(jeBitmap *Bmp,
 
 	// always affects the non-Driver copy
 
-	if ( NewFormat == JE_PIXELFORMAT_WAVELET )
+	/*if ( NewFormat == JE_PIXELFORMAT_WAVELET )
 	{
 		jeBitmap_ClearMips(Bmp);
 
@@ -3661,7 +3664,7 @@ JETAPI jeBoolean JETCC jeBitmap_SetFormat(jeBitmap *Bmp,
 		}
 
 		return JE_TRUE;
-	}
+	}*/
 
 	if ( NewFormat == Bmp->Info.Format )
 	{
@@ -3755,12 +3758,12 @@ JETAPI jeBoolean JETCC jeBitmap_SetFormat(jeBitmap *Bmp,
 		Bmp->Info.ColorKey = ColorKey;
 
 		// {} this is not very polite; we do restore them later, though...
-		OldMaxMips = max(Bmp->Info.MaximumMip,Bmp->DriverInfo.MaximumMip);
+		OldMaxMips = JE_MAX(Bmp->Info.MaximumMip,Bmp->DriverInfo.MaximumMip);
 		jeBitmap_ClearMips(Bmp);		
 
-		if ( ! Bmp->Wavelet && Bmp->Data[Bmp->Info.MinimumMip] == NULL && 
-				Bmp->DriverHandle == NULL )
-			return JE_TRUE;
+		//if ( ! Bmp->Wavelet && Bmp->Data[Bmp->Info.MinimumMip] == NULL && 
+		//		Bmp->DriverHandle == NULL )
+		//	return JE_TRUE;
 
 		if ( OldBPP == NewBPP )
 		{
@@ -3800,8 +3803,8 @@ JETAPI jeBoolean JETCC jeBitmap_SetFormat(jeBitmap *Bmp,
 			Bmp->Info.Stride = Bmp->Info.Width;
 			Bmp->Data[0] = NULL;
 			Bmp->Alpha = NULL;
-			Bmp->Wavelet = NULL;
-			Bmp->WaveletMipLock = 0;
+			//Bmp->Wavelet = NULL;
+			//Bmp->WaveletMipLock = 0;
 
 			if ( ! jeBitmap_AllocSystemMip(Bmp,0) )
 				return JE_FALSE;
@@ -3841,10 +3844,10 @@ JETAPI jeBoolean JETCC jeBitmap_SetFormat(jeBitmap *Bmp,
 				OldBmp.Data[0] = NULL;
 			}
 			// ok, now delete wavelet
-			if ( OldBmp.Wavelet )
+			/*if ( OldBmp.Wavelet )
 			{
 				jeWavelet_Destroy(&(OldBmp.Wavelet));
-			}
+			}*/
 
 			if ( jePixelFormat_HasGoodAlpha(NewFormat) )
 			{
@@ -4244,7 +4247,7 @@ JETAPI jeBitmap * JETCC jeBitmap_CreateFromFileName(const jeVFile *BaseFS,const 
 	}
 	else
 	{
-		if ( _strnicmp(Name,"http:",5) == 0 || _strnicmp(Name,"ftp:",4) == 0 || _strnicmp(Name,"www.",4) == 0 )
+		/*if ( _strnicmp(Name,"http:",5) == 0 || _strnicmp(Name,"ftp:",4) == 0 || _strnicmp(Name,"www.",4) == 0 )
 		{
 		jeVFile * inet;
 			inet = jeVFile_OpenNewSystem(NULL,JE_VFILE_TYPE_INTERNET,NULL,NULL,JE_VFILE_OPEN_READONLY|JE_VFILE_OPEN_DIRECTORY);
@@ -4252,7 +4255,7 @@ JETAPI jeBitmap * JETCC jeBitmap_CreateFromFileName(const jeVFile *BaseFS,const 
 			File = jeVFile_Open(inet,Name,JE_VFILE_OPEN_READONLY);
 			jeVFile_Close(inet);
 		}
-		else
+		else*/
 		{
 			File = jeVFile_OpenNewSystem(NULL,JE_VFILE_TYPE_DOS,Name,NULL,JE_VFILE_OPEN_READONLY);
 		}
@@ -4315,7 +4318,7 @@ JETAPI jeBitmap * JETCC jeBitmap_CreateFromFileName2(const jeVFile *BaseFS,const
 	}
 	else
 	{
-		if ( _strnicmp(Name,"http:",5) == 0 || _strnicmp(Name,"ftp:",4) == 0 || _strnicmp(Name,"www.",4) == 0 )
+		/*if ( _strnicmp(Name,"http:",5) == 0 || _strnicmp(Name,"ftp:",4) == 0 || _strnicmp(Name,"www.",4) == 0 )
 		{
 		jeVFile * inet;
 			inet = jeVFile_OpenNewSystem(NULL,JE_VFILE_TYPE_INTERNET,NULL,NULL,JE_VFILE_OPEN_READONLY|JE_VFILE_OPEN_DIRECTORY);
@@ -4323,7 +4326,7 @@ JETAPI jeBitmap * JETCC jeBitmap_CreateFromFileName2(const jeVFile *BaseFS,const
 			File = jeVFile_Open(inet,Name,JE_VFILE_OPEN_READONLY);
 			jeVFile_Close(inet);
 		}
-		else
+		else*/
 		{
 			File = jeVFile_OpenNewSystem(NULL,JE_VFILE_TYPE_DOS,Name,NULL,JE_VFILE_OPEN_READONLY);
 		}
@@ -4532,7 +4535,7 @@ jeVFile * HF;
 			}
 		}
 
-		if ( Bmp->Info.Format == JE_PIXELFORMAT_WAVELET )
+		/*if ( Bmp->Info.Format == JE_PIXELFORMAT_WAVELET )
 		{
 
 			Bmp->Wavelet = jeWavelet_CreateFromFile(Bmp,F);
@@ -4547,7 +4550,7 @@ jeVFile * HF;
 				Bmp->StreamingStatus = JE_BITMAP_STREAMING_STARTED;
 			// else already set to STREAMING_NOT
 		}
-		else
+		else*/
 		{
 			for(;;)
 			{
@@ -4696,12 +4699,12 @@ jeVFile * HF;
 			return JE_FALSE;
 	}
 
-	if ( Bmp->Info.Format == JE_PIXELFORMAT_WAVELET )
+	/*if ( Bmp->Info.Format == JE_PIXELFORMAT_WAVELET )
 	{
 		if ( ! jeWavelet_WriteToFile(Bmp->Wavelet,F) )
 			return JE_FALSE;
 	}
-	else
+	else*/
 	{
 		for( mip = Bmp->Info.MinimumMip; mip <= Bmp->Info.MaximumMip; mip++ )
 		{
@@ -5206,8 +5209,8 @@ jeBoolean jeBitmap_Palette_BlitData(jePixelFormat SrcFormat,const void *SrcData,
 {
 char *SrcPtr,*DstPtr;
 jeBoolean SrcHasCK,DstHasCK;
-uint32 SrcCK,DstCK;
-int SrcCKi,DstCKi;
+uint32 SrcCK = 0,DstCK = 0;
+int SrcCKi = 0,DstCKi = 0;
 
 	assert( SrcData && DstData );
 
@@ -5554,7 +5557,7 @@ JETAPI jeBoolean JETCC jeBitmap_Palette_UnLock(jeBitmap_Palette *P)
 		{
 			if ( P->ColorKeyIndex >= 0 && P->ColorKeyIndex < P->Size )
 			{
-			uint8 *Bits,*pBits;
+			uint8 *Bits = nullptr,*pBits = nullptr;
 			uint32 Pixel;
 			int p;
 			const jePixelFormat_Operations *ops;

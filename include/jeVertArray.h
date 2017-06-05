@@ -27,10 +27,6 @@
 #include "Vec3d.h"
 #include "VFile.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 //========================================================================================
 //	Typedefs/#defines
 //========================================================================================
@@ -83,10 +79,5 @@ JETAPI jeVertArray_Optimizer * JETCC jeVertArray_CreateOptimizer(jeVertArray *Ar
 JETAPI void				JETCC jeVertArray_DestroyOptimizer(jeVertArray *Array, jeVertArray_Optimizer **Optimizer);
 JETAPI jeVertArray_Index JETCC jeVertArray_GetOptimizedIndex(jeVertArray *Array, jeVertArray_Optimizer *Optimizer, jeVertArray_Index Index);
 JETAPI jeBoolean		JETCC jeVertArray_GetEdgeVerts(jeVertArray_Optimizer *Optimizer, const jeVec3d *v1, const jeVec3d *v2, jeVertArray_Index *EdgeVerts, int32 *NumEdgeVerts, int32 MaxEdgeVerts);
-
-
-#ifdef __cplusplus
-}
-#endif
 
 #endif

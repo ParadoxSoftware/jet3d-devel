@@ -23,11 +23,6 @@
 
 #include "windows.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-
 typedef struct ActorObj
 {
 	jeWorld			*World;
@@ -140,9 +135,5 @@ typedef struct jeActor_Def
 
 	jeActor_Def			*ValidityCheck;
 } jeActor_Def;
-
-#ifdef __cplusplus
-}
-#endif
 
 #endif

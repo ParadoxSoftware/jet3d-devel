@@ -23,10 +23,6 @@
 
 #include <stdio.h>
 
-#ifdef __cplusplus
-extern "C" { 
-#endif 
-
 #ifdef DO_REPORT	//}{
 
 //#pragma message("  PASS THIS AS A PARAMETER TO REPORT")
@@ -58,10 +54,6 @@ void Report_DoReport(const char * str,int count,double tot,double totsqr);
 #define REPORT(x)
 
 #endif //}{
-
-#ifdef __cplusplus
-}
-#endif
 
 #endif // REPORT_H
 

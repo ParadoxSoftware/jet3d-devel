@@ -20,8 +20,11 @@
 /****************************************************************************************/
 
 #include <stdlib.h>
+#include <assert.h>
+#include "BaseType.h"
+#include "Ram.h"
 
-#include "Utility.h"
+//#include "Utility.h"
 #include "arithc.h"
 #include "o0coder.h"
 #include "Context.h"
@@ -105,5 +108,5 @@ return(sym);
 void O0coder_CleanUp(ozero * O0I)
 {
 if ( O0I->order0 ) contextFree(O0I->order0);
-destroy(O0I);
+jeRam_Free(O0I); O0I = nullptr;
 }

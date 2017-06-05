@@ -19,7 +19,9 @@
 /*                                                                                      */
 /****************************************************************************************/
 
-#include "Utility.h"
+#include "Basetype.h"
+#include "Ram.h"
+//#include "Utility.h"
 #include "colorconv.h"
 
 #include <math.h>
@@ -90,14 +92,14 @@ jeBoolean didStuff;
 	} while( didStuff);
 
 	if ( ! readOutPal(start,ncolors,palette,permutation) ) {
-		BrandoError("bad linked list");
-		destroy(nodes);
+		//BrandoError("bad linked list");
+		jeRam_Free(nodes); nodes = nullptr;
 		return JE_FALSE;
 	}
 
 	*ncolors_ptr = ncolors;
 
-	destroy(nodes);
+	jeRam_Free(nodes); nodes = nullptr;
 
 return JE_TRUE;
 }
@@ -150,14 +152,14 @@ palNode *cur,*found,*start,*nodes,*freenodes,*foundnext;
 	}
 
 	if ( ! readOutPal(start,ncolors,palette,permutation) ) {
-		BrandoError("bad linked list");
-		destroy(nodes);
+		//BrandoError("bad linked list");
+		jeRam_Free(nodes); nodes = nullptr;
 		return JE_FALSE;
 	}
 
 	*ncolors_ptr = ncolors;
 
-	destroy(nodes);
+	jeRam_Free(nodes); nodes = nullptr;
 
 return JE_TRUE;
 }

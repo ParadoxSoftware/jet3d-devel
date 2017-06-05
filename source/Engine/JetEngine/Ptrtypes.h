@@ -23,10 +23,6 @@
 
 #include "BaseType.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 // System.h
 typedef struct	jeEngine			jeEngine;
 
@@ -60,7 +56,4 @@ typedef struct	jeEntity_EntitySet jeEntity_EntitySet;
 typedef struct	User_Info		User_Info;
 typedef struct  jeUPoly			jeUPoly;
 
-#ifdef __cplusplus
-}
-#endif
 #endif

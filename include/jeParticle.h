@@ -26,11 +26,6 @@
 #include "Bitmap.h"
 #include "Vec3d.h"
 
-#ifdef	__cplusplus
-extern "C" {
-#endif
-
-
 ////////////////////////////////////////////////////////////////////////////////////////
 //	Particle system structs
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -98,8 +93,4 @@ JETAPI int JETCC jeParticle_GetCount(
 JETAPI void JETCC jeParticle_SystemRemoveAll(
 	jeParticle_System	*ps );	// particle system whose particles will all be destroyed
 
-
-#ifdef	__cplusplus
-}
-#endif
 #endif

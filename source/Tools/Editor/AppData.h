@@ -29,7 +29,7 @@ typedef struct tagAppData AppData ;
 
 
 #ifdef __cplusplus
-extern "C" {
+//extern "C" {
 #endif
 
 AppData	*		AppData_Create( void ) ;
@@ -50,7 +50,7 @@ uint32			AppData_GetVertex( void ) ;
 uint32			AppData_GetSelectedVertex( void ) ;
 
 #ifdef __cplusplus
-}
+//}
 #endif
 
 #endif // Prevent multiple inclusion

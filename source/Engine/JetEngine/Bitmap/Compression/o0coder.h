@@ -23,10 +23,6 @@
 
 #include "arithc.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 typedef struct ozero ozero;
 
 extern ozero * O0coder_Init(arithInfo *ari,long NumChars);
@@ -50,10 +46,6 @@ extern void O0coder_AddC(ozero * O0I,long Char);
 #define oZeroAdd    	ozeroAdd
 #define oZeroDecode 	ozeroDecode
 #define oZeroFree		ozeroFree
-
-#ifdef __cplusplus
-}
-#endif
 
 #endif
 

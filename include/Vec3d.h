@@ -23,10 +23,6 @@
 
 #include "BaseType.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 typedef struct jeVec3d
 {
 	jeFloat X, Y, Z, Pad;
@@ -63,9 +59,5 @@ JETAPI jeFloat JETCC	jeVec3d_DistanceBetween(const jeVec3d *V1, const jeVec3d *V
 JETAPI jeFloat JETCC	jeVec3d_DistanceBetweenSquared(const jeVec3d *V1, const jeVec3d *V2);
 
 JETAPI jeBoolean JETCC jeVec3d_IsValid(const jeVec3d *V);
-
-#ifdef __cplusplus
-}
-#endif
 
 #endif

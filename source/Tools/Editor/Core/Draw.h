@@ -34,7 +34,7 @@
 #include "Ortho.h"
 
 #ifdef __cplusplus
-extern "C" {
+//extern "C" {
 #endif
 
 void		Draw_CornerHandles( Rect * pSelBounds, HDC hDC, MODE eMode );
@@ -52,7 +52,7 @@ void		Draw_SelectBoundElipse( const jeExtBox * pSelWorldBounds, Ortho * pOrtho, 
 void		Draw_SelectGetElipseBox( const jeExtBox * pSelWorldBounds, Ortho * pOrtho, Rect *pBox );
 void		Draw_SelectAxis( Level * pLevel, Ortho * pOrtho, HDC hDC );
 #ifdef __cplusplus
-}
+//}
 #endif
 
 #endif // Prevent multiple inclusion

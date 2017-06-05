@@ -26,10 +26,6 @@
 
 #include "BaseType.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 typedef struct	DDMemMgr				DDMemMgr;
 typedef struct	DDMemMgr_Partition		DDMemMgr_Partition;
 
@@ -45,7 +41,4 @@ uint32		DDMemMgr_PartitionGetFreeMem(DDMemMgr_Partition *Partition);
 jeBoolean	DDMemMgr_PartitionAllocMem(DDMemMgr_Partition *Partition, uint32 Size);
 void		DDMemMgr_PartitionFreeMem(DDMemMgr_Partition *Partition, uint32 Size);
 
-#ifdef __cplusplus
-}
-#endif
 #endif

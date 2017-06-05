@@ -64,7 +64,7 @@
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <StructMemberAlignment>16Bytes</StructMemberAlignment>
-      <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
+      <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
       <PrecompiledHeader>
       </PrecompiledHeader>
       <PrecompiledHeaderOutputFile>.\Debug/Jet3D.pch</PrecompiledHeaderOutputFile>
@@ -125,7 +125,6 @@
       <CompileAs>Default</CompileAs>
     </ClCompile>
     <Link>
-      <AdditionalOptions>/MACHINE:I386 %(AdditionalOptions)</AdditionalOptions>
       <AdditionalDependencies>amstrmid.lib;oldnames.lib;urlmon.lib;winmm.lib;quartz.lib;dxguid.lib;ddraw.lib;ogg_static.lib;vorbis_static.lib;vorbisfile_static.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>..\..\..\lib;..\External\VorbisSDK\lib;..\External\EAXSDK\lib;..\External\DXSDK_81\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
@@ -136,6 +135,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
       <ProgramDatabaseFile>..\..\..\bin\$(TargetName).pdb</ProgramDatabaseFile>
+      <IgnoreSpecificDefaultLibraries>msvcrt</IgnoreSpecificDefaultLibraries>
     </Link>
     <Midl>
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -160,26 +160,13 @@
     <ClCompile Include="Bitmap\bitmap_blitdata.cpp" />
     <ClCompile Include="Bitmap\bitmap_gamma.cpp" />
     <ClCompile Include="Bitmap\Compression\arithc.cpp" />
-    <ClCompile Include="Bitmap\Compression\codealphas.cpp" />
-    <ClCompile Include="Bitmap\Compression\codeimage.cpp" />
     <ClCompile Include="Bitmap\Compression\CodePal.cpp" />
-    <ClCompile Include="Bitmap\Compression\Coder.cpp" />
-    <ClCompile Include="Bitmap\Compression\coder_bp.cpp" />
-    <ClCompile Include="Bitmap\Compression\coder_bpb2.cpp" />
-    <ClCompile Include="Bitmap\Compression\coder_bpbf.cpp" />
-    <ClCompile Include="Bitmap\Compression\coder_bpbfr.cpp" />
-    <ClCompile Include="Bitmap\Compression\coder_bpbfrl.cpp" />
-    <ClCompile Include="Bitmap\Compression\coder_f.cpp" />
-    <ClCompile Include="Bitmap\Compression\coder_f2.cpp" />
-    <ClCompile Include="Bitmap\Compression\coder_f3.cpp" />
     <ClCompile Include="Bitmap\Compression\CodeUtil.cpp" />
     <ClCompile Include="Bitmap\Compression\colorconv.cpp" />
     <ClCompile Include="Bitmap\Compression\Context.cpp" />
     <ClCompile Include="Bitmap\Compression\huffa.cpp" />
     <ClCompile Include="Bitmap\Compression\huffman2.cpp" />
     <ClCompile Include="Bitmap\Compression\Image.cpp" />
-    <ClCompile Include="Bitmap\Compression\IntMath.cpp" />
-    <ClCompile Include="Bitmap\Compression\KatCache.cpp" />
     <ClCompile Include="Bitmap\Compression\Ladder.cpp" />
     <ClCompile Include="Bitmap\Compression\lbitio.cpp" />
     <ClCompile Include="Bitmap\Compression\lza.cpp" />
@@ -192,33 +179,21 @@
     <ClCompile Include="Bitmap\Compression\rungae.cpp" />
     <ClCompile Include="Bitmap\Compression\rungo1.cpp" />
     <ClCompile Include="Bitmap\Compression\runtrans.cpp" />
-    <ClCompile Include="Bitmap\Compression\SContext.cpp" />
     <ClCompile Include="Bitmap\Compression\SortPal.cpp" />
     <ClCompile Include="Bitmap\Compression\SortPalx.cpp" />
-    <ClCompile Include="Bitmap\Compression\soz.cpp" />
     <ClCompile Include="Bitmap\Compression\StrUtil.cpp" />
-    <ClCompile Include="Bitmap\Compression\TBlock.cpp" />
-    <ClCompile Include="Bitmap\Compression\transform.cpp" />
-    <ClCompile Include="Bitmap\Compression\trans_bcw3.cpp" />
-    <ClCompile Include="Bitmap\Compression\trans_cdf22.cpp" />
-    <ClCompile Include="Bitmap\Compression\trans_cdf22q.cpp" />
-    <ClCompile Include="Bitmap\Compression\trans_cdf24.cpp" />
-    <ClCompile Include="Bitmap\Compression\trans_d4.cpp" />
-    <ClCompile Include="Bitmap\Compression\trans_l97.cpp" />
-    <ClCompile Include="Bitmap\Compression\trans_spt.cpp" />
-    <ClCompile Include="Bitmap\Compression\Utility.cpp" />
-    <ClCompile Include="Bitmap\Compression\Wavelet.cpp" />
     <ClCompile Include="Bitmap\Compression\YUV.cpp" />
     <ClCompile Include="Bitmap\PixelFormat.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Engine\jeImage.cpp" />
-    <ClCompile Include="List.c" />
+    <ClCompile Include="List.cpp" />
     <ClCompile Include="Math\jeVec3d.cpp" />
     <ClCompile Include="Object.cpp" />
     <ClCompile Include="OGGStream.cpp" />
     <ClCompile Include="Report.cpp" />
     <ClCompile Include="Sound.cpp" />
     <ClCompile Include="Sound3d.cpp" />
+    <ClCompile Include="Support\jeResourceMgrImpl.cpp" />
     <ClCompile Include="TClip.cpp" />
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="Tsc.cpp" />
@@ -288,7 +263,6 @@
     <ClCompile Include="Math\crc32.cpp" />
     <ClCompile Include="Math\ExtBox.cpp" />
     <ClCompile Include="Math\jeRay.cpp" />
-    <ClCompile Include="Math\jeVec3d_Katmai.cpp" />
     <ClCompile Include="Math\ObjectPos.cpp" />
     <ClCompile Include="Math\Quatern.cpp" />
     <ClCompile Include="Math\Vec2d.cpp" />
@@ -312,18 +286,16 @@
     <ClCompile Include="Support\ThreadLog.cpp" />
     <ClCompile Include="Support\ThreadQueue.cpp" />
     <ClCompile Include="Support\Util.cpp" />
-    <ClCompile Include="VFile\dirtree.c" />
-    <ClCompile Include="VFile\fsdos.c" />
-    <ClCompile Include="VFile\fsfakenet.c" />
-    <ClCompile Include="VFile\Fsinet.cpp" />
-    <ClCompile Include="VFile\fslz.c" />
-    <ClCompile Include="VFile\Fsmemory.c" />
-    <ClCompile Include="VFile\fsvfs.c" />
-    <ClCompile Include="VFile\vfile.c" />
+    <ClCompile Include="VFile\DirTree.cpp" />
+    <ClCompile Include="VFile\FSDOS.CPP" />
+    <ClCompile Include="VFile\FSLZ.cpp" />
+    <ClCompile Include="VFile\FSMemory.cpp" />
+    <ClCompile Include="VFile\FSVFS.cpp" />
     <ClCompile Include="Terrain\Quad.cpp" />
     <ClCompile Include="Terrain\Terrain.cpp" />
     <ClCompile Include="Particle\jeParticle.cpp" />
     <ClCompile Include="Mp3Mgr\Mp3Mgr.cpp" />
+    <ClCompile Include="VFile\VFile.cpp" />
     <ClCompile Include="VideoMgr\VideoMgr.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -331,6 +303,7 @@
     <ClInclude Include="..\..\..\include\jeFileLogger.h" />
     <ClInclude Include="..\..\..\include\jeImage.h" />
     <ClInclude Include="..\..\..\include\jeLogger.h" />
+    <ClInclude Include="..\..\..\include\jeResourceMgr.h" />
     <ClInclude Include="..\..\..\include\jeVec3d.h" />
     <ClInclude Include="..\External\nvwa\bool_array.h" />
     <ClInclude Include="..\External\nvwa\class_level_lock.h" />
@@ -347,6 +320,9 @@
     <ClInclude Include="..\External\nvwa\static_mem_pool.h" />
     <ClInclude Include="..\..\..\include\jeTypes.h" />
     <ClInclude Include="..\..\..\include\jeVersion.h" />
+    <ClInclude Include="Bitmap\Compression\codeutil.h" />
+    <ClInclude Include="Bitmap\Compression\image.h" />
+    <ClInclude Include="Engine\jeImageImpl.h" />
     <ClInclude Include="list.h" />
     <ClInclude Include="..\..\..\include\OBJECT.H" />
     <ClInclude Include="OGGStream.h" />
@@ -355,6 +331,7 @@
     <ClInclude Include="resource.h" />
     <ClInclude Include="..\..\..\include\Sound.h" />
     <ClInclude Include="..\..\..\include\Sound3d.h" />
+    <ClInclude Include="Support\jeResourceMgrImpl.h" />
     <ClInclude Include="tclip.h" />
     <ClInclude Include="timer.h" />
     <ClInclude Include="tsc.h" />
@@ -381,19 +358,11 @@
     <ClInclude Include="Bitmap\bitmap_gamma.h" />
     <ClInclude Include="..\..\..\include\pixelformat.h" />
     <ClInclude Include="Bitmap\Compression\arithc.h" />
-    <ClInclude Include="bitmap\compression\cache3dn.h" />
-    <ClInclude Include="Bitmap\Compression\codealphas.h" />
-    <ClInclude Include="Bitmap\Compression\codeimage.h" />
     <ClInclude Include="Bitmap\Compression\codepal.h" />
-    <ClInclude Include="Bitmap\Compression\coder.h" />
-    <ClInclude Include="Bitmap\Compression\codeutil.h" />
     <ClInclude Include="Bitmap\Compression\colorconv.h" />
     <ClInclude Include="Bitmap\Compression\context.h" />
     <ClInclude Include="Bitmap\Compression\huffa.h" />
     <ClInclude Include="Bitmap\Compression\huffman2.h" />
-    <ClInclude Include="Bitmap\Compression\image.h" />
-    <ClInclude Include="Bitmap\Compression\intmath.h" />
-    <ClInclude Include="Bitmap\Compression\katcache.h" />
     <ClInclude Include="Bitmap\Compression\ladder.h" />
     <ClInclude Include="Bitmap\Compression\lbitio.h" />
     <ClInclude Include="Bitmap\Compression\lza.h" />
@@ -406,15 +375,9 @@
     <ClInclude Include="Bitmap\Compression\rungae.h" />
     <ClInclude Include="Bitmap\Compression\rungo1.h" />
     <ClInclude Include="Bitmap\Compression\runtrans.h" />
-    <ClInclude Include="Bitmap\Compression\scontext.h" />
     <ClInclude Include="Bitmap\Compression\sortpal.h" />
     <ClInclude Include="Bitmap\Compression\sortpalx.h" />
-    <ClInclude Include="Bitmap\Compression\soz.h" />
     <ClInclude Include="Bitmap\Compression\strutil.h" />
-    <ClInclude Include="Bitmap\Compression\tblock.h" />
-    <ClInclude Include="Bitmap\Compression\transform.h" />
-    <ClInclude Include="Bitmap\Compression\utility.h" />
-    <ClInclude Include="Bitmap\Compression\wavelet.h" />
     <ClInclude Include="Bitmap\Compression\yuv.h" />
     <ClInclude Include="..\..\..\include\jeBSP.h" />
     <ClInclude Include="Engine\BitmapList.h" />
@@ -456,7 +419,6 @@
     <ClInclude Include="Math\crc32.h" />
     <ClInclude Include="..\..\..\include\ExtBox.h" />
     <ClInclude Include="..\..\..\include\jeRay.h" />
-    <ClInclude Include="Math\jeVec3d_Katmai.h" />
     <ClInclude Include="..\..\..\include\ObjectPos.h" />
     <ClInclude Include="..\..\..\include\QUATERN.H" />
     <ClInclude Include="Math\vec2d.h" />
@@ -482,8 +444,6 @@
     <ClInclude Include="Support\Util.h" />
     <ClInclude Include="VFile\dirtree.h" />
     <ClInclude Include="VFile\fsdos.h" />
-    <ClInclude Include="VFile\fsfakenet.h" />
-    <ClInclude Include="VFile\fsINet.h" />
     <ClInclude Include="VFile\fslz.H" />
     <ClInclude Include="VFile\Fsmemory.h" />
     <ClInclude Include="VFile\fsvfs.h" />
@@ -505,14 +465,6 @@
     <None Include="Actor\Actor._h" />
     <None Include="Bitmap\bitmap.__h" />
     <None Include="Bitmap\bitmap._h" />
-    <CustomBuild Include="bitmap\compression\cache3dn.asm">
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">"$(VCInstallDir)\bin\ml.exe" -c -coff  /Fo "$(IntDir)%(Filename).obj" "%(FullPath)"
-</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)%(Filename).obj;%(Outputs)</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">"$(VCInstallDir)\bin\ml.exe" -c -coff  /Fo "$(IntDir)%(Filename).obj" "%(FullPath)"
-</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)%(Filename).obj;%(Outputs)</Outputs>
-    </CustomBuild>
     <CustomBuild Include="Bitmap\Compression\rungasm.asm">
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Performing Custom Build Step on %(FullPath) to $(IntDir)%(Filename)</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">"$(VCInstallDir)\bin\ml.exe" -Zi -c -coff  /Fo "$(IntDir)%(Filename).obj" "%(FullPath)"

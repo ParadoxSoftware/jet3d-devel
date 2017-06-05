@@ -32,10 +32,6 @@
 #include "jeVertArray.h"
 #include "jePtrMgr.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 typedef struct jeEngine		jeEngine;
 typedef struct jeCamera		jeCamera;
 
@@ -135,9 +131,5 @@ JETAPI jeBoolean	JETCC jeBrush_FaceSetFaceInfo(jeBrush_Face *Face, const jeFaceI
 JETAPI jeFaceInfo_ArrayIndex JETCC jeBrush_FaceGetFaceInfoIndex(jeBrush_Face *Face);
 
 JETAPI jeBoolean	JETCC jeBrush_Render(const jeBrush *Brush, const jeEngine *Engine, const jeCamera *Camera);
-
-#ifdef __cplusplus
-}
-#endif
 
 #endif

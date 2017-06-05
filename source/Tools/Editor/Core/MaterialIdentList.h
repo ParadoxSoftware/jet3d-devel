@@ -25,7 +25,7 @@
 #include "jeList.h"
 
 #ifdef __cplusplus
-extern "C" {
+//extern "C" {
 #endif
 #include "jeMaterial.h"
 
@@ -70,7 +70,7 @@ void			MaterialIdentList_DestroyCB( MaterialIdent * pMaterialIdent ) ;
 int32			MaterialIdentList_GetWorldIndexByFileIndex(MaterialIdentList * pList, int32 FileIndex);
 
 #ifdef __cplusplus
-}
+//}
 #endif
 
 #endif // Prevent multiple inclusion

@@ -23,7 +23,6 @@
 #ifndef __JE_IMAGE_IMPL_H__
 #define __JE_IMAGE_IMPL_H__
 
-#include "FreeImage.h"
 #include "jeImage.h"
 
 class jeImageImpl : public jeImage
@@ -34,24 +33,77 @@ public:
 
 protected:
 	uint32 m_iRefCount;
-	FIBITMAP *m_pBitmap;
 	jeTexture *m_pTexture;
+
+	uint8 *m_pData;
+	int32 m_Width;
+	int32 m_Height;
+	int32 m_ByteDepth;
+	int32 m_ImageSize;
+
+	std::string m_strFileName;
 
 public:
 	uint32 AddRef();
 	uint32 Release();
 
+	jeBoolean IsDirty();
+	const std::string &GetFileName();
+	jet3d::jeResource *MakeCopy();
+
 	jeBoolean Create(int32 Width, int32 Height, int32 BPP);
-	jeBoolean CreateFromFile(jeVFile *File);
 	void Destroy();
 
 	const int32 GetWidth() const;
 	const int32 GetHeight() const;
 	const int32 GetBPP() const;
+	const int32 GetImageSize() const;
+	
+	void SetBits(uint8 *pBits);
 	uint8 * GetBits();
-
+	
 	void SetTextureHandle(jeTexture *Texture);
 	jeTexture * GetTextureHandle();
+};
+
+class jeImage_BMP : public jet3d::jeResourceFactory
+{
+public:
+	jeImage_BMP() { m_strFileExtension = "bmp"; }
+	virtual ~jeImage_BMP() {}
+
+protected:
+	typedef struct _BitmapFileHeader
+	{
+		uint16 bfType;
+		uint32 bfSize;
+		uint16 bfReserved1;
+		uint16 bfReserved2;
+		uint32 bfOffBits;
+	} BitmapFileHeader;
+
+	typedef struct _BitmapInfoHeader
+	{
+		uint32 biSize;
+		int32 biWidth;
+		int32 biHeight;
+		uint16 biPlanes;
+		uint16 biBitCount;
+		uint32 biCompression;
+		uint32 biSizeImage;
+		int32 biXPelsPerMeter;
+		int32 biYPelsPerMeter;
+		uint32 biClrUsed;
+		uint32 biClrImportant;
+	} BitmapInfoHeader;
+
+	std::string m_strFileExtension;
+
+public:
+	jet3d::jeResource *Load(jeVFile *pFile);
+	jeBoolean Save(jeVFile *pFile, jet3d::jeResource *pResource);
+
+	const std::string &GetFileExtension() { return m_strFileExtension; }
 };
 
 #endif

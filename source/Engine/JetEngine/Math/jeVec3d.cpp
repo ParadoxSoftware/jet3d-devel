@@ -47,5 +47,8 @@ jeVec3d::jeVec3d(jeFloat _x, jeFloat _y, jeFloat _z)
 	z = _z;
 }
 
+jeVec3d::~jeVec3d()
+{
+}
 
 } // namespace jet3d

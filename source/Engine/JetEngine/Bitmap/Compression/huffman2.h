@@ -68,7 +68,8 @@
  *
  */
 
-#include "Utility.h"
+#include "BaseType.h"
+//#include "Utility.h"
 #include "MemPool.h"
 #include "lbitio.h"
 

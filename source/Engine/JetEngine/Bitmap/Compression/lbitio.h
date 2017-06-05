@@ -33,7 +33,9 @@
 #ifndef L_BIT_IO_H
 #define L_BIT_IO_H
 
-#include "Utility.h"
+#include "Basetype.h"
+
+//#include "Utility.h"
 
 struct LBitIOInfo
   {

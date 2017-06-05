@@ -65,9 +65,9 @@ typedef struct LightInfoCB_Struct {
 	int32		FieldFlag;
 } LightInfoCB_Struct;
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+//#ifdef __cplusplus
+//extern "C" {
+//#endif
 
 // CREATORS
 Light *				Light_Create( const char * const pszName, Group * pGroup, int32 nNumber, jeWorld * pWorld) ;
@@ -120,9 +120,9 @@ jeBoolean Light_ReattachCB( Light * pLight, void* lParam );
 jeProperty_List *	Light_GlobalPropertyList();
 void				Light_SetGlobalProperty( int DataId, int DataType, jeProperty_Data * pData );
 
-#ifdef __cplusplus
-}
-#endif
+//#ifdef __cplusplus
+//}
+//#endif
 
 #endif // Prevent multiple inclusion
 /* EOF: Light.h */

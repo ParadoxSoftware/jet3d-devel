@@ -123,11 +123,13 @@ Macros need to be updated to handle this case
  *
  */
 
+#include <string.h>
+#include "Ram.h"
 #include <limits.h>
-#include "Utility.h"
+//#include "Utility.h"
 #include "MemPool.h"
 #include "lbitio.h"
-#include "IntMath.h"
+//#include "IntMath.h"
 
 #pragma warning(disable : 4244)
 
@@ -137,8 +139,17 @@ Macros need to be updated to handle this case
 
 #include "huffman2.h"
 
-#define memclearFast(m,s) memclear(m,s*4)
-#define FreeMem(m,s)	destroy(m)
+#define memclearFast(m,s) memset(m,0,s*4)
+#define FreeMem(m,s)	{ jeRam_Free(m); m = nullptr; }
+
+static int intlog2(uint32 x) // !!! // <> do this in assembly for awesome speed
+{
+	float xf;
+	//jeCPU_PauseMMX();
+	xf = (float)x;
+	//jeCPU_ResumeMMX();
+	return ((*(int*)&xf) >> 23) - 127;
+}
 
 //protos:
 struct Huff2Info * Huff2_Init(long NumSymbols,struct LBitIOInfo * BII,long SortType);
@@ -268,8 +279,8 @@ if ( !HI->CodeNodeHunk ||	!HI->NodeWork || !HI->MadeNodeWork )
 		return(0);
 		}
 
-	HI->NodeWork = (struct Huff2CodeNode **)jeRam_Allocate(sizeofpointer*HI->NumSymbols);
-	HI->MadeNodeWork = (struct Huff2CodeNode **)jeRam_Allocate(sizeofpointer*2*HI->NumSymbols);
+	HI->NodeWork = (struct Huff2CodeNode **)jeRam_Allocate(sizeof(void*)*HI->NumSymbols);
+	HI->MadeNodeWork = (struct Huff2CodeNode **)jeRam_Allocate(sizeof(void*)*2*HI->NumSymbols);
 	HI->CodeNodeHunk = (struct Huff2CodeNode *)jeRam_Allocate(sizeof(struct Huff2CodeNode)*2*HI->NumSymbols);
 
 	if ( !HI->CodeNodeHunk ||	!HI->NodeWork ||	!HI->MadeNodeWork )
@@ -359,7 +370,7 @@ switch(HI->SortType)
 				{
 				return(0);
 				}
-			if ( (HI->SortWork = jeRam_Allocate(sizeofpointer*(HI->MaxCharCount + 1))) == NULL )
+			if ( (HI->SortWork = jeRam_Allocate(sizeof(void*)*(HI->MaxCharCount + 1))) == NULL )
 				{
 				return(0);
 				}
@@ -681,7 +692,7 @@ if ( HI->MaxCodeLen > 30 )
 if ( HI->EnDe_codeTable )
 	{
 	CharToCodeTable = (uint32 *) HI->EnDe_codeTable;
-	memclear((long *)CharToCodeTable,HI->EnDe_codeTableLen);
+	memset((long *)CharToCodeTable, 0, HI->EnDe_codeTableLen);
 	}
 else
 	{
@@ -747,7 +758,7 @@ if ( HI->MaxCodeLen > 30 )
 if ( HI->EnDe_codeTable )
 	{
 	DecodeTable = (uint16 *) HI->EnDe_codeTable;
-	memclear((long *)DecodeTable,HI->EnDe_codeTableLen);
+	memset((long *)DecodeTable,0,HI->EnDe_codeTableLen);
 	}
 else
 	{
@@ -843,8 +854,8 @@ if ( HI->EnDe_codeTable )
 	{
 	DecodeTable = (uint16 *)HI->EnDe_codeTable;
 	FastDecodeTable = (struct FastDecodeItem *) ( (char *)HI->EnDe_codeTable + DecodeTableLen );
-	memclear((long *)DecodeTable,DecodeTableLen);
-	memclear((long *)FastDecodeTable,FastDecodeTableLen);
+	memset((long *)DecodeTable,0,DecodeTableLen);
+	memset((long *)FastDecodeTable,0,FastDecodeTableLen);
 	}
 else
 	{
@@ -1249,7 +1260,7 @@ if ( HI->MaxCharCount != MaxVal && HI->SortType == HUFF2_SORT_RADIX &&
 	HI->SortWork = NULL;
 	}
 
-HI->MaxCharCount = min(MaxCharCount,MaxVal);
+HI->MaxCharCount = JE_MIN(MaxCharCount,MaxVal);
 
 }
 
@@ -1681,7 +1692,7 @@ long sign;
 
 BII = HI->BII;
 
-memclear((long *)HI->NumCodesOfLen,32*sizeof(long));
+memset((long *)HI->NumCodesOfLen,0,32*sizeof(long));
 
 #ifdef PACKCODES_TOPSYM
 LBitIO_ReadBit(BII,bit);
@@ -1849,7 +1860,8 @@ jeBoolean  Huff2RadixSort(struct Huff2CodeNode ** BucketArray,
 register struct Huff2CodeNode * CurNode;
 register long i,j;
 
-memclear((long *)BucketArray,sizeofpointer*(MaxCharCount+1));
+//memclear((long *)BucketArray,sizeof(void*)*(MaxCharCount+1));
+memset((long*)BucketArray, 0, sizeof(void*)*(MaxCharCount + 1));
 
 /* go backwards so that alphabetic order is preserved */
 for(i=(ArraySize-1);i>=0;i--)

@@ -23,10 +23,6 @@
 
 #include "BaseType.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 typedef struct jeVec2d
 {
 	jeFloat	X;
@@ -58,10 +54,6 @@ int		jeVec2d_SideX(const jeVec2d *pSeg1,const jeVec2d *pSeg2,const jeVec2d *pPoi
 			// this is not oriented, its absolte X-lower is left
 
 #define jeVec2d_LengthSquared(V)	jeVec2d_DotProduct(V,V)
-
-#ifdef __cplusplus
-}
-#endif
 
 #endif // Prevent Multiple Inclusion
 /* EOF: jeVec2d.h */

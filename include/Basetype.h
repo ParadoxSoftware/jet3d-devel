@@ -26,11 +26,6 @@
 	more specific data definitions
 */
  
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-
 //------------------------------ 
 // function types
 
@@ -119,6 +114,11 @@ __inline jeFloat jeFloat_RadToDeg(jeFloat r)
 #define JE_EPSILON										((jeFloat)0.000797f)
 #define JE_FLOATS_EQUAL(x,y)							( JE_ABS((x) - (y)) < JE_EPSILON )
 #define JE_FLOAT_ISZERO(x)								JE_FLOATS_EQUAL(x,0.0f)
+
+#define JE_MIN(a,b)										((a < b) ? (a) : (b))
+#define JE_MAX(a,b)										((a > b) ? (a) : (b))
+#define JE_MINMAX(x,lo,hi)								( (x)<(lo)?(lo):( (x)>(hi)?(hi):(x)) )
+#define JE_ISINRANGE(x,lo,hi)							( (x) >= (lo) && (x) <= (hi) )
 
 // you're right... inline funcs are more useful :^)
 static __inline jeFloat jeFloat_Sqr(jeFloat a)
@@ -210,10 +210,6 @@ public:
 #define JE_SAFE_DELETE_ARRAY(x)		{ if (x) delete []x; x = NULL; }
 #define JE_SAFE_RELEASE(x)			{ if (x) (x)->Release(); x = NULL; }
 
-#endif
-
-#ifdef __cplusplus
-}
 #endif
 
 #endif

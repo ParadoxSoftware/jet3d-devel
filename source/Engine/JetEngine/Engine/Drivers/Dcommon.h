@@ -36,10 +36,6 @@
 #include "jeChain.h"
 #include "jeLight.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 #pragma pack(push)
 #pragma pack(8)
 
@@ -92,8 +88,8 @@ typedef struct tagRECT
 	#define DllImport	__declspec( dllimport )
 	#define DllExport	__declspec( dllexport )
 #else
-	#define DllImport	extern "C" __declspec( dllimport )
-	#define DllExport	extern "C" __declspec( dllexport )
+	#define DllImport	__declspec( dllimport )
+	#define DllExport	__declspec( dllexport )
 #endif
 
 #define DRV_VERSION_MAJOR		200			// Jet 2.0
@@ -746,10 +742,6 @@ typedef enum
 	RENDER_MESHES,
 	RENDER_MODELS
 } DRV_RENDER_MODE;
-
-#ifdef __cplusplus
-}
-#endif
 
 #pragma pack(pop)
 

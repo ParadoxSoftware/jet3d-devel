@@ -23,10 +23,6 @@
 
 #include "BaseType.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 //--------
 
 jeBoolean jeCPU_GetInfo(void);
@@ -61,10 +57,6 @@ extern float	jeCPU_SecondsPerClock;	// == 1.0 / HZ
 extern float	jeCPU_PerformanceFreq;	// Number of QueryPerformanceCounter Ticks Per Second
 
 //--------
-
-#ifdef __cplusplus
-}
-#endif
 
 #endif // JE_CPU_H
 

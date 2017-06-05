@@ -26,11 +26,6 @@
 #include "Quatern.h"
 #include "VFile.h"
 
-#ifdef __cplusplus
-	extern "C" {
-#endif
-
-
 typedef struct _jePath jePath;
 
 #define JE_PATH_ROTATION_CHANNEL    1
@@ -145,10 +140,5 @@ JETAPI jePath* JETCC jePath_CreateFromFile(jeVFile *F);
 
 JETAPI jeBoolean JETCC jePath_WriteToFile(const jePath *P, jeVFile *F);
 	// dumps a path to a file
-
-#ifdef __cplusplus
-	}
-#endif
-
 
 #endif

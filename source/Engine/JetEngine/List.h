@@ -23,176 +23,175 @@
 
 #include "BaseType.h"
 
+#define LISTCALL	__fastcall
+
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-#define LISTCALL	__fastcall
+	/*******************************************/
+	/** you must wrap any calls to this module with these: **/
 
+	jeBoolean List_Start(void);
+	jeBoolean List_Stop(void);
 
-/*******************************************/
-/** you must wrap any calls to this module with these: **/
+	/*******************************************/
+	/** basic list types ****/
 
-jeBoolean List_Start(void);
-jeBoolean List_Stop(void);
+	typedef struct List List;
 
-/*******************************************/
-/** basic list types ****/
-
-typedef struct List List;
-
-extern List *	LISTCALL List_Create(void);
-extern void		LISTCALL List_Destroy(List * pList);
-extern List *	LISTCALL List_AddTail(List *pList,uint32 Data);
-extern List *	LISTCALL List_AddHead(List *pList,uint32 Data);
+	extern List *	LISTCALL List_Create(void);
+	extern void		LISTCALL List_Destroy(List * pList);
+	extern List *	LISTCALL List_AddTail(List *pList, uint32 Data);
+	extern List *	LISTCALL List_AddHead(List *pList, uint32 Data);
 	// returns a pointer to the node created
-extern uint32	LISTCALL List_CutHead(List *pList);
-extern uint32	LISTCALL List_CutTail(List *pList);
-extern uint32	LISTCALL List_PeekHead(List *pList);
-extern uint32	LISTCALL List_PeekTail(List *pList);
+	extern uint32	LISTCALL List_CutHead(List *pList);
+	extern uint32	LISTCALL List_CutTail(List *pList);
+	extern uint32	LISTCALL List_PeekHead(List *pList);
+	extern uint32	LISTCALL List_PeekTail(List *pList);
 
-extern List *	LISTCALL List_Next(List *pNode);
-extern List *	LISTCALL List_Prev(List *pNode);
+	extern List *	LISTCALL List_Next(List *pNode);
+	extern List *	LISTCALL List_Prev(List *pNode);
 
-extern int		LISTCALL List_Length(List *pList);
+	extern int		LISTCALL List_Length(List *pList);
 
-extern void		LISTCALL List_CutNode(List *pNode);
-extern void		LISTCALL List_DeleteNode(List *pNode);
-extern void		LISTCALL List_FreeNode(List *pNode);
-extern uint32	LISTCALL List_NodeData(List *pNode);
+	extern void		LISTCALL List_CutNode(List *pNode);
+	extern void		LISTCALL List_DeleteNode(List *pNode);
+	extern void		LISTCALL List_FreeNode(List *pNode);
+	extern uint32	LISTCALL List_NodeData(List *pNode);
 
-extern List *	List_Find(List *pList,uint32 Data);
+	extern List *	List_Find(List *pList, uint32 Data);
 
-/*******************************************/
+	/*******************************************/
 
-typedef struct Pool Pool;
+	typedef struct Pool Pool;
 
-extern Pool *	LISTCALL Pool_Create(void);
-extern void		LISTCALL Pool_Destroy(Pool * pPool);
-extern void		LISTCALL Pool_Add(Pool * Pool,		uint32 Data);
-extern void		LISTCALL Pool_Remove(Pool * Pool,	uint32 Data);
-extern uint32	LISTCALL Pool_GetNext(Pool * Pool,	uint32 Data);
+	extern Pool *	LISTCALL Pool_Create(void);
+	extern void		LISTCALL Pool_Destroy(Pool * pPool);
+	extern void		LISTCALL Pool_Add(Pool * Pool, uint32 Data);
+	extern void		LISTCALL Pool_Remove(Pool * Pool, uint32 Data);
+	extern uint32	LISTCALL Pool_GetNext(Pool * Pool, uint32 Data);
 
-/****
+	/****
 
-	Iterate on a list via :
+		Iterate on a list via :
 
-	List *pNode,*pList;
-	for( pNode = List_Next(pList); pNode != pList; pNode = List_Next(pNode) )
-	{
+		List *pNode,*pList;
+		for( pNode = List_Next(pList); pNode != pList; pNode = List_Next(pNode) )
+		{
 		//do stuff to pNode
-	}
+		}
 
-****/
+		****/
 
-typedef struct Stack Stack;
+	typedef struct Stack Stack;
 
-extern Stack * 	LISTCALL Stack_Create(void);
-extern void 	LISTCALL Stack_Destroy(Stack * pStack);
-extern void 	LISTCALL Stack_Reset(Stack * pStack);
-extern void 	LISTCALL Stack_Push_Func(Stack *pStack,void * Data);
-extern void * 	LISTCALL Stack_Pop_Func(Stack *pStack);
-extern int 		LISTCALL Stack_Extend(Stack *pStack);	// returns new length
+	extern Stack * 	LISTCALL Stack_Create(void);
+	extern void 	LISTCALL Stack_Destroy(Stack * pStack);
+	extern void 	LISTCALL Stack_Reset(Stack * pStack);
+	extern void 	LISTCALL Stack_Push_Func(Stack *pStack, void * Data);
+	extern void * 	LISTCALL Stack_Pop_Func(Stack *pStack);
+	extern int 		LISTCALL Stack_Extend(Stack *pStack);	// returns new length
 
-extern void		LISTCALL Stack_PushData(Stack *pStack,void *Data,int DataLen);
-extern int		LISTCALL Stack_PopData( Stack *pStack,void *Data,int DataLen); // returns GotData ?
+	extern void		LISTCALL Stack_PushData(Stack *pStack, void *Data, int DataLen);
+	extern int		LISTCALL Stack_PopData(Stack *pStack, void *Data, int DataLen); // returns GotData ?
 
 #ifdef _DEBUG
 #define Stack_Push	Stack_Push_Func
 #define Stack_Pop	Stack_Pop_Func
 #else
 
-struct Stack
-{
-	void ** Buffer, **End;
-	void ** Head;
-	int members;
-};
+	struct Stack
+	{
+		void ** Buffer, **End;
+		void ** Head;
+		int members;
+	};
 
-//#define Stack_Push(pStack,Data)	do { *((pStack)->Head)++ = (void *)(Data); if ( (pStack)->Head == (pStack)->End ) Stack_Extend(pStack); } while(0)
+	//#define Stack_Push(pStack,Data)	do { *((pStack)->Head)++ = (void *)(Data); if ( (pStack)->Head == (pStack)->End ) Stack_Extend(pStack); } while(0)
 #define Stack_Push(pStack,Data)	*((pStack)->Head)++ = (void *)(Data), ( (pStack)->Head != (pStack)->End ) || Stack_Extend(pStack)
 #define Stack_Pop(pStack)		( ((pStack)->Head == (pStack)->Buffer) ? NULL : *( -- ((pStack)->Head) ) )
 
 #endif
 
-typedef struct Link Link;
+	typedef struct Link Link;
 
-extern Link * 	LISTCALL Link_Create(void);
-extern void		LISTCALL Link_Destroy(Link * pLink);
-extern void		LISTCALL Link_Push(Link *pLink,void * Data);
-extern void *	LISTCALL Link_Pop( Link *pLink);
-extern void *	LISTCALL Link_Peek(Link *pLink);
-extern Link *	LISTCALL Link_Next(Link *pLink);
-extern void *	LISTCALL Link_Data(Link *pLink);
+	extern Link * 	LISTCALL Link_Create(void);
+	extern void		LISTCALL Link_Destroy(Link * pLink);
+	extern void		LISTCALL Link_Push(Link *pLink, void * Data);
+	extern void *	LISTCALL Link_Pop(Link *pLink);
+	extern void *	LISTCALL Link_Peek(Link *pLink);
+	extern Link *	LISTCALL Link_Next(Link *pLink);
+	extern void *	LISTCALL Link_Data(Link *pLink);
 
 
-typedef struct LinkNode LinkNode;
+	typedef struct LinkNode LinkNode;
 
-/************************************/
-/*** a radix of each type ****/
+	/************************************/
+	/*** a radix of each type ****/
 
-typedef struct RadixList RadixList;
+	typedef struct RadixList RadixList;
 
-extern RadixList * RadixList_Create(int RadixListMax);
-extern void RadixList_Destroy(RadixList * pRadixList);
-extern List * RadixList_Add(RadixList *pRadixList,uint32 Data,int Key);
+	extern RadixList * RadixList_Create(int RadixListMax);
+	extern void RadixList_Destroy(RadixList * pRadixList);
+	extern List * RadixList_Add(RadixList *pRadixList, uint32 Data, int Key);
 	// returns a pointer to the node created
-extern uint32 RadixList_CutMax(RadixList *pRadixList,int * pMaxKey);
-extern uint32 RadixList_CutMin(RadixList *pRadixList,int * pMinKey);
-extern uint32 RadixList_CutKey(RadixList *pRadixList,int Key);
+	extern uint32 RadixList_CutMax(RadixList *pRadixList, int * pMaxKey);
+	extern uint32 RadixList_CutMin(RadixList *pRadixList, int * pMinKey);
+	extern uint32 RadixList_CutKey(RadixList *pRadixList, int Key);
 
-typedef struct RadixLN RadixLN;
+	typedef struct RadixLN RadixLN;
 
-extern RadixLN * RadixLN_Create(int RadixLNMax);
-extern void RadixLN_Destroy(RadixLN * pRadixLN);
-extern void RadixLN_Reset(RadixLN * pRadixLN);
-extern void RadixLN_AddTail(RadixLN *pRadixLN,LinkNode * LN,int Key);
-extern void RadixLN_AddHead(RadixLN *pRadixLN,LinkNode * LN,int Key);
-extern LinkNode * RadixLN_CutMax(RadixLN *pRadixLN,int * pMaxKey);
-extern LinkNode * RadixLN_CutMin(RadixLN *pRadixLN,int * pMinKey);
-extern LinkNode * RadixLN_CutKey(RadixLN *pRadixLN,int Key);
-extern LinkNode * RadixLN_PeekMax(RadixLN *pRadixLN,int * pMaxKey);
-extern LinkNode * RadixLN_PeekMin(RadixLN *pRadixLN,int * pMinKey);
+	extern RadixLN * RadixLN_Create(int RadixLNMax);
+	extern void RadixLN_Destroy(RadixLN * pRadixLN);
+	extern void RadixLN_Reset(RadixLN * pRadixLN);
+	extern void RadixLN_AddTail(RadixLN *pRadixLN, LinkNode * LN, int Key);
+	extern void RadixLN_AddHead(RadixLN *pRadixLN, LinkNode * LN, int Key);
+	extern LinkNode * RadixLN_CutMax(RadixLN *pRadixLN, int * pMaxKey);
+	extern LinkNode * RadixLN_CutMin(RadixLN *pRadixLN, int * pMinKey);
+	extern LinkNode * RadixLN_CutKey(RadixLN *pRadixLN, int Key);
+	extern LinkNode * RadixLN_PeekMax(RadixLN *pRadixLN, int * pMaxKey);
+	extern LinkNode * RadixLN_PeekMin(RadixLN *pRadixLN, int * pMinKey);
 
-typedef struct RadixLink RadixLink;
+	typedef struct RadixLink RadixLink;
 
-extern			RadixLink * RadixLink_Create(int RadixLinkMax);
-extern void		RadixLink_Destroy(RadixLink * pRadixLink);
-extern void		RadixLink_Add(RadixLink *pRadixLink,void * Data,int Key);
-extern void *	RadixLink_CutMax(RadixLink *pRadixLink,int * pMaxKey);
-extern void *	RadixLink_CutMin(RadixLink *pRadixLink,int * pMinKey);
-extern void *	RadixLink_CutKey(RadixLink *pRadixLink,int Key);
-extern void		RadixLink_Grow(RadixLink *pRadixLink,int NewMax);
+	extern			RadixLink * RadixLink_Create(int RadixLinkMax);
+	extern void		RadixLink_Destroy(RadixLink * pRadixLink);
+	extern void		RadixLink_Add(RadixLink *pRadixLink, void * Data, int Key);
+	extern void *	RadixLink_CutMax(RadixLink *pRadixLink, int * pMaxKey);
+	extern void *	RadixLink_CutMin(RadixLink *pRadixLink, int * pMinKey);
+	extern void *	RadixLink_CutKey(RadixLink *pRadixLink, int Key);
+	extern void		RadixLink_Grow(RadixLink *pRadixLink, int NewMax);
 
-/******************************/
+	/******************************/
 
-typedef struct Hash Hash;
-typedef struct HashNode HashNode;
+	typedef struct Hash Hash;
+	typedef struct HashNode HashNode;
 
-extern Hash *	Hash_Create(void);
-extern void		Hash_Destroy(Hash *pHash);
-HashNode *	LISTCALL Hash_Add(Hash *pHash,uint32 Key,uint32 Data);
-void		LISTCALL Hash_DeleteNode(Hash *pHash,HashNode *pNode);
-HashNode *	LISTCALL Hash_Get(Hash *pHash,uint32 Key,uint32 *pData);
-							// pdata is optional
-HashNode *	LISTCALL Hash_WalkNext(Hash *pHash,HashNode *pCur);
-							//use pCur == NULL to start walking
+	extern Hash *	Hash_Create(void);
+	extern void		Hash_Destroy(Hash *pHash);
+	HashNode *	LISTCALL Hash_Add(Hash *pHash, uint32 Key, uint32 Data);
+	void		LISTCALL Hash_DeleteNode(Hash *pHash, HashNode *pNode);
+	HashNode *	LISTCALL Hash_Get(Hash *pHash, uint32 Key, uint32 *pData);
+	// pdata is optional
+	HashNode *	LISTCALL Hash_WalkNext(Hash *pHash, HashNode *pCur);
+	//use pCur == NULL to start walking
 
-int    	LISTCALL Hash_NumMembers(Hash *pHash);
+	int    	LISTCALL Hash_NumMembers(Hash *pHash);
 
-void	LISTCALL HashNode_SetData(HashNode *pNode,uint32 Data);
-void	LISTCALL HashNode_GetData(HashNode *pNode,uint32 *pKey,uint32 *pData);
-uint32	LISTCALL HashNode_Key(HashNode *pNode);
-uint32	LISTCALL HashNode_Data(HashNode *pNode);
+	void	LISTCALL HashNode_SetData(HashNode *pNode, uint32 Data);
+	void	LISTCALL HashNode_GetData(HashNode *pNode, uint32 *pKey, uint32 *pData);
+	uint32	LISTCALL HashNode_Key(HashNode *pNode);
+	uint32	LISTCALL HashNode_Data(HashNode *pNode);
 
-uint32	LISTCALL Hash_StringToKey(const char * String);
+	uint32	LISTCALL Hash_StringToKey(const char * String);
 
-/******************************/
+	/******************************/
 
-struct LinkNode 
-{
-	LinkNode *Next,*Prev;
-}; 
+	struct LinkNode
+	{
+		LinkNode *Next, *Prev;
+	};
 
 #define zLN_InitList(List)			do { (List)->Next = List; (List)->Prev = List; } while(0)
 #define zLN_Cut(Node)				do { (Node)->Prev->Next = (Node)->Next; (Node)->Next->Prev = (Node)->Prev; zLN_InitList(Node); } while(0)
@@ -209,17 +208,17 @@ struct LinkNode
 #define LN_AddAfter(Node,List)		zLN_AddAfter((LinkNode *)Node,(LinkNode *)List)
 #define LN_AddBefore(Node,List)		zLN_AddBefore((LinkNode *)Node,(LinkNode *)List)
 #define LN_Walk(Node,List)			zLN_Walk((LinkNode *)Node,(LinkNode *)List)
-#define LN_Walk_Editting(Node,List,Holder)			zLN_Walk_Editting((LinkNode *)Node,(LinkNode *)List,((LinkNode *)Holder))
+#define LN_Walk_Editting(Node,List,Holder)			zLN_Walk_Editting((LinkNode*)Node,(LinkNode*)List,((LinkNode*)Holder))
 #define LN_EmptyList(List)			zLN_EmptyList((LinkNode *)List)
 #define LN_Prev(Node)				(void *)(((LinkNode *)Node)->Prev)
 #define LN_Next(Node)				(void *)(((LinkNode *)Node)->Next)
 
 #define LN_Null(node)	LN_InitList(node)
 
-LinkNode *	LISTCALL LN_CutHead(LinkNode *pList);
-LinkNode *	LISTCALL LN_CutTail(LinkNode *pList);
+	LinkNode *	LISTCALL LN_CutHead(LinkNode *pList);
+	LinkNode *	LISTCALL LN_CutTail(LinkNode *pList);
 
-int LN_ListLen(LinkNode *pList);
+	int LN_ListLen(LinkNode *pList);
 
 #define LN_AddHead(list,node)	LN_AddAfter(node,list)
 #define LN_AddTail(list,node)	LN_AddBefore(node,list)
@@ -229,13 +228,13 @@ int LN_ListLen(LinkNode *pList);
 	/* use LN_Walk as :
 	*
 
-		void doStuffOnAllNodes(LinkNode *pList)
-		{
-			LinkNode *pNode;
-			LN_Walk(pNode,pList) {
-				doStuff(pNode);
-			}
-		}
+	void doStuffOnAllNodes(LinkNode *pList)
+	{
+	LinkNode *pNode;
+	LN_Walk(pNode,pList) {
+	doStuff(pNode);
+	}
+	}
 
 	*
 	*/

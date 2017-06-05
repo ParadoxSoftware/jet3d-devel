@@ -558,7 +558,7 @@ static	uint32			ClampOperationSize(const VFSFile *File, int Size)
 {
 	assert(!File->Directory);
 	assert(File->CurrentRelPos >= 0);
-	return min(File->Length - File->CurrentRelPos, Size);
+	return JE_MIN(File->Length - File->CurrentRelPos, Size);
 }
 
 static	void		JETCC UpdateFilePos(VFSFile *File)
@@ -747,11 +747,11 @@ static	jeBoolean	JETCC FSVFS_Read(void *Handle, void *Buff, uint32 Count)
 	CurRelPos = File->CurrentRelPos;
 #endif
 #ifdef _DEBUG
-	jeVFile_Tell(File->RWOps,&A);
+	jeVFile_Tell(File->RWOps,(long*)&A);
 #endif
 	Res = jeVFile_Read(File->RWOps, Buff, Count);
 #ifdef _DEBUG
-	jeVFile_Tell(File->RWOps,&B);
+	jeVFile_Tell(File->RWOps,(long*)&B);
 #endif
 
 	assert( B == (A + Count) );
@@ -1132,7 +1132,7 @@ static	jeBoolean	CopyVFile(jeVFile *Src, jeVFile *Dest)
 	{
 		long	Count;
 
-		Count = min((long)sizeof(Buff), Length);
+		Count = JE_MIN((long)sizeof(Buff), Length);
 		if	(jeVFile_Read(Src, Buff, Count) == JE_FALSE)
 			return JE_FALSE;
 		if	(jeVFile_Write(Dest, Buff, Count) == JE_FALSE)

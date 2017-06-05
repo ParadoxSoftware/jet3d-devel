@@ -29,8 +29,11 @@
 #define _LOG
 #endif
 
-#include "Utility.h"
-#include "IntMath.h"
+#include <assert.h>
+#include "BaseType.h"
+//#include "Utility.h"
+#include "Ram.h"
+//#include "IntMath.h"
 #include "huffa.h"
 #include "Log.h"
 #include <string.h>
@@ -38,6 +41,9 @@
 	// could be adaptive (!)
 #define bitsPerMatch 	(16)
 #define bitsPerLiteral	(7)
+
+#define getuint32(bptr) ( ((((uint8 *)(bptr))[0])<<24) + (((uint8 *)(bptr))[1]<<16) + (((uint8 *)(bptr))[2]<<8) + (((uint8 *)(bptr))[3]) )
+#define getuint16(bptr) ( (((uint8 *)(bptr))[0]<<8) + (((uint8 *)(bptr))[1]) )
 
 //consts:
 
@@ -149,10 +155,10 @@ if ( rawLen < MINIMUM_RAW_LEN )
 	return;
 }
 
-if ( (lookupTable = (struct lookupNode **)newarray(void *,HASHSIZE)) == NULL )
+if ( (lookupTable = (struct lookupNode **)jeRam_AllocateClear(HASHSIZE * sizeof(void*))) == NULL )
 	CleanUp("AllocMem failed!");
 
-if ( (lookupHunk = (struct lookupNode *)jeRam_Allocate(sizeof(struct lookupNode)*min(lookupHunkSize,rawLen+10))) == NULL )
+if ( (lookupHunk = (struct lookupNode *)jeRam_Allocate(sizeof(struct lookupNode)*JE_MIN(lookupHunkSize,rawLen+10))) == NULL )
 	CleanUp("AllocMem failed!");
 
 if ( (rawLZArray = (uint8*)jeRam_Allocate(rawLen)) == NULL )
@@ -257,16 +263,16 @@ static void lzhInit(int rawLen)
 
 codeMatchFlagInit();
 
-if ( (Lits = (uint8 *)malloc(rawLen)) == NULL )
+if ( (Lits = (uint8 *)jeRam_Allocate(rawLen)) == NULL )
 	CleanUp("malloc failed!");
 
-if ( (Lens = (uint8 *)malloc(rawLen)) == NULL )
+if ( (Lens = (uint8 *)jeRam_Allocate(rawLen)) == NULL )
 	CleanUp("malloc failed!");
 
-if ( (Offs = (uint8 *)malloc(rawLen)) == NULL )
+if ( (Offs = (uint8 *)jeRam_Allocate(rawLen)) == NULL )
 	CleanUp("malloc failed!");
 
-if ( (Mats = (uint8 *)malloc(rawLen/8)) == NULL )
+if ( (Mats = (uint8 *)jeRam_Allocate(rawLen/8)) == NULL )
 	CleanUp("malloc failed!");
 
 }
@@ -274,10 +280,10 @@ if ( (Mats = (uint8 *)malloc(rawLen/8)) == NULL )
 static void lzhFree(void)
 {
 
-free(Lits);
-free(Lens);
-free(Offs);
-free(Mats);
+jeRam_Free(Lits);
+jeRam_Free(Lens);
+jeRam_Free(Offs);
+jeRam_Free(Mats);
 
 }
 

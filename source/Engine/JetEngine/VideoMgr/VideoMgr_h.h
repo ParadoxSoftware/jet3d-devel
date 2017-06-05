@@ -20,10 +20,6 @@
 //nclude "Mp3Mgr.h"
 
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 //	DEFINES	AND DECLARATIONS ============================================
 #ifdef __cplusplus
 #define HELPER_RELEASE(x) { if (x) x->Release(); x = NULL; }
@@ -71,10 +67,6 @@ void		StopVideo();
 void		OnVideoAbortStop();
 void		OnGraphNotifyVideo();
 jeBoolean	VideoPlaying();
-
-#ifdef __cplusplus
-}
-#endif
 
 #endif
 

@@ -31,10 +31,6 @@
 #include "Engine.h"
 #include "jePtrMgr.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 //=======================================================================================
 //	
 //=======================================================================================
@@ -330,10 +326,5 @@ JETAPI jeBoolean			JETCC jeMaterial_ArraySetMaterialBitmap(jeMaterial_Array *Arr
 JETAPI jeMaterial			* JETCC jeMaterial_ArrayGetNextMaterial(jeMaterial_Array *Array, const jeMaterial *Start);
 JETAPI jeBoolean			JETCC jeMaterial_ArraySetMaterialSpec(jeMaterial_Array *Array, jeMaterial_ArrayIndex Index, jeMaterialSpec *MatSpec, const char *MatName);
 /*!@}*/
-
-
-#ifdef __cplusplus
-}
-#endif
 
 #endif

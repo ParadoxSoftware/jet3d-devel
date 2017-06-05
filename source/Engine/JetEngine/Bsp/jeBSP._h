@@ -54,10 +54,6 @@ extern void LogOut(const char *Str, ...);
 
 extern jeWorld_DebugInfo		g_WorldDebugInfo;
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 #define ZeroMem(a) memset(a, 0, sizeof(*a))
 #define ZeroMemArray(a, s) memset(a, 0, sizeof(*a)*s)
 
@@ -698,11 +694,8 @@ jeBoolean jeBSPNode_LightPatch_r(jeBSPNode *Node, jeBSP *BSP, jeBSPNode *RootNod
 jeBoolean jeBSPNode_LightUpdateFromPoint_r(jeBSPNode *Node, jeBSP *BSP, jeBSPNode *RootNode, const jeVec3d *Pos, jeFloat Radius);
 
 void DetermineSupportedLightmapFormat(jePixelFormat goalFormat, DRV_Driver *Driver);
-jeTexture * jeBitmap_CreateTHandle(DRV_Driver *Driver,int Width,int Height,int NumMipLevels,
-			jePixelFormat SeekFormat1,jePixelFormat SeekFormat2,jeBoolean SeekCK,jeBoolean SeekAlpha,jeBoolean SeekSeparates,uint32 DriverFlags);
+//jeTexture * jeBitmap_CreateTHandle(DRV_Driver *Driver,int Width,int Height,int NumMipLevels,
+//			jePixelFormat SeekFormat1,jePixelFormat SeekFormat2,jeBoolean SeekCK,jeBoolean SeekAlpha,jeBoolean SeekSeparates,uint32 DriverFlags);
 
-#ifdef __cplusplus
-}
-#endif
 
 #endif

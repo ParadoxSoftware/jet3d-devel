@@ -34,11 +34,6 @@
 #include "Engine.h"
 #include "jeWorld.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-
 typedef struct jePuppet jePuppet;
 
 //	[MacroArt::Begin]
@@ -111,10 +106,5 @@ void	  jePuppet_SetLightingOptions(jePuppet *P,
 	int PerBoneLighting);
 
 jeEngine* JETCF jePuppet_GetEngine(jePuppet *P);
-
-#ifdef __cplusplus
-}
-#endif
-
 
 #endif

@@ -112,7 +112,7 @@ JETAPI jeBoolean JETCC jeUVMap_Refraction(const jeXForm3d* pXForm, JE_LVertex* p
 	return JE_TRUE;
 }
 
-JETAPI jeBoolean JETCC jeUVMap_Projection(const jeXForm3d* pXForm, JE_LVertex* pVerts, const jeVec3d* pNormals, int nverts)
+JETAPI jeBoolean JETCC jeUVMap_Projection(const jeXForm3d* pXForm, jeLVertex* pVerts, const jeVec3d* pNormals, int nverts)
 {
 	int i;
 	jeVec3d vv;

@@ -25,11 +25,6 @@
 #include "VFile.h"
 #include <string.h>
 
-#ifdef	__cplusplus
-extern "C" {
-#endif
-
-
 // JET_PUBLIC_APIS
 
 typedef struct jeSound_System	jeSound_System;
@@ -78,10 +73,6 @@ JETAPI	int JETCC jeMp3_PlaySound(jeSound_System *SoundS, int song_number, long V
 
 
 // JET_PRIVATE_APIS
-
-#ifdef	__cplusplus
-}
-#endif
 
 #endif
 

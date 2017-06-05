@@ -23,17 +23,9 @@
 
 #include	"BaseType.h"
 
-#ifdef	__cplusplus
-extern "C" {
-#endif
-
 jeBoolean ThreadLog_Initialize(void);
 void		 ThreadLog_Printf(const char *Msg, ...);
 jeBoolean ThreadLog_Report(const char *FileName);
-
-#ifdef	__cplusplus
-}
-#endif
 
 #endif
 

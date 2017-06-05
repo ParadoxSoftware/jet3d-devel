@@ -29,9 +29,9 @@ for both internal editor objects and user objects.
 #ifndef CLASS_H
 #define CLASS_H
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+//#ifdef __cplusplus
+//extern "C" {
+//#endif
 
 #include "defs.h"
 #include "jeProperty.h"
@@ -46,9 +46,9 @@ int				Class_GetClassKind( Class * pClass );
 jeProperty_List *	Class_BuildDescriptor( Class * pClass );
 void
 				Class_SetProperty( Class * pClass, int DataId, int DataType, jeProperty_Data * pData, jeBoolean bUpdate );
-#ifdef __cplusplus
-}
-#endif
+//#ifdef __cplusplus
+//}
+//#endif
 
 
 #endif

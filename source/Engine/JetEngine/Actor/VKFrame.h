@@ -43,10 +43,6 @@
 #include "TKArray.h"
 #include "VFile.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 typedef enum
 {
 	VKFRAME_LINEAR,
@@ -122,9 +118,5 @@ jeTKArray *JETCC jeVKFrame_CreateFromFile(
 	jeVKFrame_InterpolationType *InterpolationType, 
 	int						  *Looping,
 	jeFloat					  CutInterval);	// intervals <= CutInterval are to be treated as discontinuous
-
-#ifdef __cplusplus
-}
-#endif
 
 #endif

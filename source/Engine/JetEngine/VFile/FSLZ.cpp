@@ -894,7 +894,7 @@ unsigned char C;
 return C;
 }
 
-static	jeBoolean	JETCC FSLZ_GetS(void *Handle, char *Buff, int MaxLen)
+static	jeBoolean	JETCC FSLZ_GetS(void *Handle, void *Buff, int MaxLen)
 {
 LZFile *	File;
 int C;
@@ -905,7 +905,7 @@ char * Ptr;
 	if ( ! File->Reading )
 		return JE_FALSE;
 
-	Ptr = Buff;
+	Ptr = (char*)Buff;
 	while( MaxLen > 1 && (C = FSLZ_GetC(File)) != -1 )
 	{	
 		*Ptr++ = C;

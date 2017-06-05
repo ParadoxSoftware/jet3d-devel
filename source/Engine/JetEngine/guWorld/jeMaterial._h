@@ -25,10 +25,6 @@
 #include "Engine.h"
 #include "XForm3d.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 #define JE_MATERIAL_MAX_LAYER	32
 
 typedef struct jeShader jeShader;
@@ -73,9 +69,5 @@ typedef struct jeMaterialSpec
 //	Function prototypes
 //=======================================================================================
 jeBoolean jeMaterial_ArraySetEngine(jeMaterial_Array *Array, jeEngine *Engine);
-
-#ifdef __cplusplus
-}
-#endif
 
 #endif

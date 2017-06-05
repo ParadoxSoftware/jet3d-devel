@@ -24,10 +24,6 @@
 #include "BaseType.h"	// jeBoolean
 #include "VFile.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 typedef struct jeStrBlock jeStrBlock;
 
 JETAPI jeStrBlock *JETCC jeStrBlock_Create(void);
@@ -46,9 +42,5 @@ JETAPI int JETCC jeStrBlock_GetChecksum(const jeStrBlock *SB);
 
 JETAPI jeStrBlock* JETCC jeStrBlock_CreateFromFile(jeVFile* pFile);
 JETAPI jeBoolean JETCC jeStrBlock_WriteToFile(const jeStrBlock *SB,jeVFile *pFile);
-
-#ifdef __cplusplus
-}
-#endif
 
 #endif

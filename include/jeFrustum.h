@@ -26,10 +26,6 @@
 #include "Camera.h"
 #include "jePlane.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 //================================================================================
 //================================================================================
 #define JE_FRUSTUM_MAX_PLANES		32	// 32 bits in uint32, sigh...
@@ -139,9 +135,5 @@ JETAPI jeBoolean JETCC jeFrustum_ClipVerts(const jeFrustum *Frustum, jeFrustum_C
 
 JETAPI jeBoolean JETCC jeFrustum_PointCollision(const jeFrustum *Frustum, const jeVec3d *Point, jeFloat Radius);
 //================================================================================
-
-#ifdef __cplusplus
-}
-#endif
 
 #endif

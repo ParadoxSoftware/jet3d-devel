@@ -37,10 +37,6 @@
 #include "jeChain.h"
 #include "jeResource.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 //========================================================================================
 
 typedef struct jeWorld jeWorld;
@@ -219,9 +215,5 @@ JETAPI char * JETCC jeWorld_GetNextCollisionExclusion(const jeWorld *World, cons
 JETAPI int32 JETCC jeWorld_GetCollisionLevel(const jeWorld* World);
 JETAPI void JETCC jeWorld_SetCollisionLevel(jeWorld* World, int32 Level);
 //========================================================================================
-
-#ifdef __cplusplus
-}
-#endif
 
 #endif

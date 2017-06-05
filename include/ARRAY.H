@@ -28,10 +28,6 @@
 #include "VFile.h"
 #include "jePtrMgr.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 //-----------------------------------------------------------------------
 // types
 
@@ -179,10 +175,6 @@ jeArray_Defragmenter * D;
 @endcode
 
 */
-
-#ifdef __cplusplus
-}
-#endif
 
 #endif /* ARRAY_H */
 

@@ -30,7 +30,7 @@
 #include "jePtrMgr.h"
 
 #ifdef __cplusplus
-extern "C" {
+//extern "C" {
 #endif
 
 typedef jeBoolean (*CameraListCB)( Camera *pCamera, void * pVoid ) ;
@@ -63,7 +63,7 @@ CameraList *			CameraList_CreateFromFile( jeVFile * pF, jePtrMgr *pPtrMgr  ) ;
 jeBoolean			CameraList_WriteToFile( CameraList * pList, jeVFile * pF, jePtrMgr *pPtrMgr ) ;
 
 #ifdef __cplusplus
-}
+//}
 #endif
 
 

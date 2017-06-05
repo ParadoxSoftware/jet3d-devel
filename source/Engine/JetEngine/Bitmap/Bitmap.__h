@@ -23,7 +23,7 @@
 
 #include "Bitmap.h"
 #include "Bitmap._h"
-#include "Wavelet.h"
+//#include "Wavelet.h"
 #include "ThreadQueue.h"
 
 // Hey ! 
@@ -96,12 +96,12 @@ typedef struct jeBitmap
 	jeFloat				DriverGammaLast;
 	jeBoolean			DriverGammaSet;
 
-	jeWavelet *			Wavelet;
-	int32				WaveletMipLock;
+	//jeWavelet *			Wavelet;
+	//int32				WaveletMipLock;
 		// if Format == Wavelet, this is valid and Data & Alpha are NULL
 		//  otherwise it is NULL
-	jeBoolean			HasWaveletOptions;
-	jeWavelet_Options	WaveletOptions;
+	//jeBoolean			HasWaveletOptions;
+	//jeWavelet_Options	WaveletOptions;
 	jeBitmap_StreamingStatus StreamingStatus;
 	jeBoolean			StreamingTHandle;
 

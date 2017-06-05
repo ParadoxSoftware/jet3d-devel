@@ -19,9 +19,13 @@
 /*                                                                                      */
 /****************************************************************************************/
 
+#include <assert.h>
 #include <stdlib.h>
 
-#include "Utility.h"
+#include "BaseType.h"
+#include "Ram.h"
+
+//#include "Utility.h"
 #include "arithc.h"
 #include "o0coder.h"
 #include "o1coder.h"
@@ -55,7 +59,7 @@ Ret->totMax = totMax;
 if ( (Ret->order0 = oZeroCreateMax(ari,numChars,totMax)) == NULL )
 	{ O1coder_CleanUp(Ret); return(NULL); }
 
-if ( (Ret->order1 = (context **)newarray(void *,numContexts)) == NULL )
+if ( (Ret->order1 = (context **)jeRam_AllocateClear(sizeof(void *) * numContexts)) == NULL )
 	{ O1coder_CleanUp(Ret); return(NULL); }
 
 return(Ret);
@@ -72,10 +76,10 @@ if ( O1I->order1 )
 	{
 	long i;
 	for(i=0;i<O1I->numContexts;i++) if ( O1I->order1[i] ) contextFree(O1I->order1[i]);
-	destroy(O1I->order1);
+	jeRam_Free(O1I->order1); O1I->order1 = nullptr;
 	}
 if ( O1I->order0 ) oZeroFree(O1I->order0);
-destroy(O1I);
+jeRam_Free(O1I); O1I = nullptr;
 }
 
 void O1coder_EncodeC(oOne * O1I,long sym,long context)

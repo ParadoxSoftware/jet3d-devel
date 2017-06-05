@@ -31,9 +31,9 @@
 
 typedef struct tagUserObj UserObj ;
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+//#ifdef __cplusplus
+//extern "C" {
+//#endif
 
 // CREATORS
 UserObj *			UserObj_Create( const char * const pszName, Group * pGroup, int32 nNumber, jeObject	* pgeObject) ;
@@ -88,9 +88,9 @@ void UserObj_RenderOrtho( const Ortho * pOrtho, UserObj *pUserObj, int32 hDC, je
 
 jeBoolean UserObj_AddToObject( UserObj * pUserObj, jeObject * pParent );
 
-#ifdef __cplusplus
-}
-#endif
+//#ifdef __cplusplus
+//}
+//#endif
 
 #endif // Prevent multiple inclusion
 /* EOF: UserObj.h */

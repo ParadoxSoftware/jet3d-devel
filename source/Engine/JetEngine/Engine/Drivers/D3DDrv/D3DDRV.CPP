@@ -383,7 +383,7 @@ static BOOL DriverHook(DRV_Driver **Driver)
 	return TRUE;
 }
 
-extern "C" JETAPI	void * JETCC jeEngine_D3DDriver(void)
+JETAPI void * JETCC jeEngine_D3DDriver(void)
 {
 	return (void *)DriverHook;
 }

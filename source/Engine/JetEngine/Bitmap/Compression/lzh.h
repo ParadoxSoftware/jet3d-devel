@@ -21,10 +21,6 @@
 #ifndef	JE_LZH_H
 #define JE_LZH_H
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 extern void lzhEncode(char *rawArray,int rawLen,
 						char ** compArrayPtr,int * compLenPtr);
 extern void lzhDecode(char *compArray,int compLen,
@@ -48,10 +44,6 @@ MemoryBuffer * lzhEncodeMemoryBuffer(MemoryBuffer *mbIn)
 
 *
 ********/
-
-#ifdef __cplusplus
-}
-#endif
 
 #endif
 

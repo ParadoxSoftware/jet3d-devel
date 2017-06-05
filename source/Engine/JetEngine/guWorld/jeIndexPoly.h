@@ -25,10 +25,6 @@
 #include "jeVertArray.h"
 #include "VFile.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 //========================================================================================
 //	Typedefs/#defines
 //========================================================================================
@@ -53,9 +49,5 @@ jeIndexPoly *jeIndexPoly_CreateFromFile(jeVFile *VFile);
 jeBoolean	jeIndexPoly_WriteToFile(const jeIndexPoly *Poly, jeVFile *VFile);
 void		jeIndexPoly_Destroy(jeIndexPoly **Poly);
 jeBoolean	jeIndexPoly_IsConvex(const jeIndexPoly *Poly, const jeVec3d *Normal, const jeVertArray *Array);
-
-#ifdef __cplusplus
-}
-#endif
 
 #endif

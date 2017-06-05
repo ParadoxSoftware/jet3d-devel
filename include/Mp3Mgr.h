@@ -7,11 +7,6 @@
 #include <windows.h>
 #include <string.h>
 
-
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 #define MAX_MP3			1024
 #define MP3_LOAD_SUCCESS	0
 #define MP3_LOAD_FAIL	1
@@ -35,10 +30,6 @@ typedef struct //the jeMp3Mgr holds info about the vids you wanna play. files[] 
 
 JETAPI jeMp3Mgr * JETCC jeMp3_CreateManager(HWND mainwindowhandle);
 JETAPI jeBoolean JETCC jeMp3_DestroyManager(jeMp3Mgr **Mp3Mgr);
-
-#ifdef __cplusplus
-}
-#endif
 
 #endif
 

@@ -32,10 +32,6 @@
 #include "Path.h"
 #include "VFile.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 // JET_PUBLIC_APIS
 typedef struct jeMotion jeMotion;
 
@@ -169,10 +165,5 @@ JETAPI jeBoolean JETCC jeMotion_GetEventExtents(const jeMotion *M,
 // JET_PRIVATE_APIS
 JETAPI jeMotion *JETCC jeMotion_CreateFromFile(jeVFile *f);
 JETAPI jeBoolean JETCC jeMotion_WriteToFile(const jeMotion *M,jeVFile *pFile);
-
-#ifdef __cplusplus
-}
-#endif
-
 
 #endif

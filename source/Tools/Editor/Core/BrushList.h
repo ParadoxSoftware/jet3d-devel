@@ -29,7 +29,7 @@
 #include "VFile.h"
 
 #ifdef __cplusplus
-extern "C" {
+//extern "C" {
 #endif
 
 typedef jeBoolean (*BrushListCB)( Brush *pBrush, void * pVoid ) ;
@@ -70,7 +70,7 @@ BrushList *			BrushList_CreateFromFile( jeVFile * pF, jePtrMgr * pPtrMgr ) ;
 jeBoolean			BrushList_Reattach( BrushList * pList, Model * pModel, jeWorld * pWorld ) ;
 
 #ifdef __cplusplus
-}
+//}
 #endif
 
 

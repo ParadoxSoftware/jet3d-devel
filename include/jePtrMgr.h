@@ -27,10 +27,6 @@
 #include "BaseType.h"
 #include "VFile.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 /*! @typedef jePtrMgr
 	@brief A instance of a resource pointer helper
 */
@@ -219,11 +215,6 @@ jeBoolean jeActor_WriteToFile(const jeActor *Actor, jeVFile *VFile, jePtrMgr *Pt
 }
 @endcode
 */
-
-
-#ifdef __cplusplus
-}
-#endif
 
 #endif
 

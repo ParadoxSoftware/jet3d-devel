@@ -26,10 +26,6 @@
 #include "VFile.h"
 #include "jePtrMgr.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 //========================================================================================
 //	Typedefs/#defines
 //========================================================================================
@@ -75,10 +71,6 @@ jeChain_Link *jeChain_LinkGetNext(const jeChain_Link *Link);
 jeChain_Link *jeChain_LinkGetPrev(const jeChain_Link *Link);
 
 uint32		jeChain_LinkDataGetIndex(const jeChain *Chain, void *LinkData);
-
-#ifdef __cplusplus
-}
-#endif
 
 #endif
 

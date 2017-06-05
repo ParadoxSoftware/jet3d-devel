@@ -25,10 +25,6 @@
 #include "BaseType.h"
 #include "jePlane.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 typedef struct		jePlaneArray		jePlaneArray;
 
 typedef uint32		jePlaneArray_Index;
@@ -51,9 +47,5 @@ void			jePlaneArray_RemovePlane(jePlaneArray *Array, jePlaneArray_Index *Index);
 jeBoolean		jePlaneArray_RefPlaneByIndex(jePlaneArray *Array, jePlaneArray_Index Index);
 
 const jePlane * PLANE_CC jePlaneArray_GetPlaneByIndex(const jePlaneArray *Array, jePlaneArray_Index Index);
-
-#ifdef __cplusplus
-}
-#endif
 
 #endif

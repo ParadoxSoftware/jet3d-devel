@@ -23,6 +23,7 @@
 #define CRB_STRUTIL_H
 
 #include <string.h>
+#include "BaseType.h"
 
 #ifdef __WATCOMC__
 #define IN_COMPILER
@@ -40,7 +41,7 @@
 #define IN_COMPILER
 #endif
 
-#include "Utility.h"
+//#include "Utility.h"
 
 char * getParam(char *arg,char *argv[],int *iPtr);
 

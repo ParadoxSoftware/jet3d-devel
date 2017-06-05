@@ -21,81 +21,20 @@
 	Copyright (C) 1996-1999 Eclipse Entertainment, L.L.C. All Rights Reserved           
 */
 #include <assert.h>
+#include <string.h>
+#include "Ram.h"
 #include "jeImageImpl.h"
-
-extern "C" {
-#include "FreeImage.h"
-}
-
 #include "ErrorLog.h"
-#include "debug_new.h"
-
-static unsigned free_image_read(void *buffer, unsigned size, unsigned count, fi_handle handle)
-{
-	jeVFile					*f = (jeVFile*)handle;
-	long					pos, newpos;
-
-	jeVFile_Tell(f, &pos);
-	jeVFile_Read(f, buffer, size * count);
-	jeVFile_Tell(f, &newpos);
-
-	return newpos - pos;
-}
-
-static unsigned free_image_write(void *buffer, unsigned size, unsigned count, fi_handle handle)
-{
-	jeVFile					*f = (jeVFile*)handle;
-	long					pos, newpos;
-
-	jeVFile_Tell(f, &pos);
-	jeVFile_Write(f, buffer, size * count);
-	jeVFile_Tell(f, &newpos);
-
-	return 1;
-}
-
-static int free_image_seek(fi_handle handle, long offset, int origin)
-{
-	jeVFile					*f = (jeVFile*)handle;
-	jeVFile_Whence			whence;
-
-	switch (origin)
-	{
-	case SEEK_SET:
-		{
-			whence = JE_VFILE_SEEKSET;
-			break;
-		}
-	case SEEK_CUR:
-		{
-			whence = JE_VFILE_SEEKCUR;
-			break;
-		}
-	case SEEK_END:
-		{
-			whence = JE_VFILE_SEEKEND;
-			break;
-		}
-	default:
-		return -1;
-	}
-
-	return jeVFile_Seek(f, offset, whence);
-}
-
-static long free_image_tell(fi_handle handle)
-{
-	jeVFile						*f = (jeVFile*)handle;
-	long						pos;
-
-	jeVFile_Tell(f, &pos);
-	return pos;
-}
+//#include "debug_new.h"
 
 jeImageImpl::jeImageImpl()
 {
-	m_pBitmap = NULL;
-	m_pTexture = NULL;
+	m_pData = nullptr;
+	m_pTexture = nullptr;
+	m_Width = 0;
+	m_Height = 0;
+	m_ByteDepth = 0;
+	m_ImageSize = 0;
 
 	m_iRefCount = 1;
 }
@@ -123,89 +62,84 @@ uint32 jeImageImpl::Release()
 	return m_iRefCount;
 }
 
-jeBoolean jeImageImpl::Create(int32 Width, int32 Height, int32 BPP)
+jeBoolean jeImageImpl::IsDirty()
 {
-	if (m_pBitmap != NULL)
-		return JE_FALSE;
-
-	m_pBitmap = FreeImage_Allocate(Width, Height, BPP);
-	if (!m_pBitmap)
-		return JE_FALSE;
-
-	return JE_TRUE;
+	return JE_FALSE;
 }
 
-jeBoolean jeImageImpl::CreateFromFile(jeVFile *File)
+const std::string &jeImageImpl::GetFileName()
 {
-	FreeImageIO io;
-	FREE_IMAGE_FORMAT fif;
-	char fileName[_MAX_PATH];
+	return m_strFileName;
+}
 
-	memset(&io, 0, sizeof(FreeImageIO));
+jet3d::jeResource *jeImageImpl::MakeCopy()
+{
+	jeImageImpl *pCopy = new jeImageImpl();
 
-	jeVFile_GetName(File, fileName, _MAX_PATH);
-	jeErrorLog_AddString(-1, fileName, NULL);
-
-	io.read_proc = (FI_ReadProc)free_image_read;
-	io.seek_proc = (FI_SeekProc)free_image_seek;
-	io.tell_proc = (FI_TellProc)free_image_tell;
-	io.write_proc = (FI_WriteProc)free_image_write;
-
-	fif = FreeImage_GetFileTypeFromHandle(&io, (fi_handle)File);
-	if (fif == FIF_UNKNOWN)
-		return NULL;
-
-	m_pBitmap = FreeImage_LoadFromHandle(fif, &io, (fi_handle)File);
-	if (!m_pBitmap)
-		return JE_FALSE;
-
-	// No more 8-Bit or 16-Bit bitmaps
-	if (FreeImage_GetBPP(m_pBitmap) < 24)
+	if (!pCopy->Create(m_Width, m_Height, m_ByteDepth))
 	{
-		FIBITMAP *conv = NULL;
-
-		conv = FreeImage_ConvertTo32Bits(m_pBitmap);
-		FreeImage_Unload(m_pBitmap);
-		m_pBitmap = conv;
+		JE_SAFE_DELETE(pCopy);
+		return nullptr;
 	}
 
-	FreeImage_FlipVertical(m_pBitmap);
-	
+	memcpy(pCopy->m_pData, m_pData, m_ImageSize);
+	pCopy->m_strFileName = m_strFileName;
+	return pCopy;
+}
+
+jeBoolean jeImageImpl::Create(int32 Width, int32 Height, int32 BPP)
+{
+	if (m_pData != nullptr)
+		JE_SAFE_DELETE_ARRAY(m_pData);
+
+	m_Width = Width;
+	m_Height = Height;
+	m_ByteDepth = BPP;
+	m_ImageSize = Width * Height * (BPP / 8);
+
+	m_pData = new uint8[m_ImageSize];
+	if (!m_pData)
+		return JE_FALSE;
+
 	return JE_TRUE;
 }
+
 
 void jeImageImpl::Destroy()
 {
-	m_pTexture = NULL;
-	FreeImage_Unload(m_pBitmap);
+	m_pTexture = nullptr;
+	JE_SAFE_DELETE_ARRAY(m_pData);
 }
 
 const int32 jeImageImpl::GetWidth() const
 {
-	assert(m_pBitmap);
-
-	return (int32)FreeImage_GetWidth(m_pBitmap);
+	return m_Width;
 }
 
 const int32 jeImageImpl::GetHeight() const
 {
-	assert(m_pBitmap);
-
-	return (int32)FreeImage_GetHeight(m_pBitmap);
+	return m_Height;
 }
 
 const int32 jeImageImpl::GetBPP() const
 {
-	assert(m_pBitmap);
+	return m_ByteDepth;
+}
 
-	return (int32)FreeImage_GetBPP(m_pBitmap);
+const int32 jeImageImpl::GetImageSize() const
+{
+	return m_ImageSize;
+}
+
+void jeImageImpl::SetBits(uint8 *pBits)
+{
+	memset(m_pData, 0, m_ImageSize);
+	memcpy(m_pData, pBits, m_ImageSize);
 }
 
 uint8 * jeImageImpl::GetBits()
 {
-	assert(m_pBitmap);
-
-	return (uint8*)FreeImage_GetBits(m_pBitmap);
+	return m_pData;
 }
 
 void jeImageImpl::SetTextureHandle(jeTexture *Texture)
@@ -216,4 +150,48 @@ void jeImageImpl::SetTextureHandle(jeTexture *Texture)
 jeTexture * jeImageImpl::GetTextureHandle()
 {
 	return m_pTexture;
+}
+
+jet3d::jeResource *jeImage_BMP::Load(jeVFile *pFile)
+{
+	jeImage_BMP::BitmapFileHeader bfh;
+	jeImage_BMP::BitmapInfoHeader bih;
+	uint8 *data = nullptr;
+
+	if (!pFile)
+		return nullptr;
+
+	// Read the bitmap file header
+	jeVFile_Read(pFile, &bfh, sizeof(jeImage_BMP::BitmapFileHeader));
+
+	// Make sure this is a bitmap
+	if (bfh.bfType != 0x4D42)
+		return nullptr;
+
+	// Read the info header
+	jeVFile_Read(pFile, &bih, sizeof(jeImage_BMP::BitmapInfoHeader));
+
+	// Create the image shell
+	jeImageImpl *pImage = new jeImageImpl();
+	pImage->Create(bih.biWidth, bih.biHeight, bih.biBitCount / 8);
+
+	// Allocate the bits
+	data = new uint8[pImage->GetImageSize()];
+
+	// Move to the bitmap bits
+	jeVFile_Seek(pFile, bfh.bfOffBits, JE_VFILE_SEEKSET);
+
+	// Read the bits
+	jeVFile_Read(pFile, data, pImage->GetImageSize());
+
+	// Set the image bits
+	pImage->SetBits(data);
+	JE_SAFE_DELETE_ARRAY(data);
+
+	return pImage;
+}
+
+jeBoolean jeImage_BMP::Save(jeVFile *pFile, jet3d::jeResource *pResource)
+{
+	return JE_TRUE;
 }

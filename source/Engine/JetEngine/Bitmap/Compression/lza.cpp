@@ -39,12 +39,16 @@ possible todos:
 1. optimal parsing encoder
 
 *********/
+#include <assert.h>
+#include "BaseType.h"
+#include "Ram.h"
+#include "ErrorLog.h"
 
-#include "Utility.h"
+//#include "Utility.h"
 #include "arithc.h"
 #include "o0coder.h"
 #include "o1coder.h"
-#include "IntMath.h"
+//#include "IntMath.h"
 #include <string.h>
 #include "lza.h"
 #include "rungae.h"	// rung ae is about 0.001 bpc off 
@@ -111,6 +115,9 @@ struct lookupNode {
 	uint8 *ptrPastHead;
 };
 
+#define getuint32(bptr) ( ((((uint8 *)(bptr))[0])<<24) + (((uint8 *)(bptr))[1]<<16) + (((uint8 *)(bptr))[2]<<8) + (((uint8 *)(bptr))[3]) )
+#define getuint16(bptr) ( (((uint8 *)(bptr))[0]<<8) + (((uint8 *)(bptr))[1]) )
+
 #define HASHSIZE	(1<<16)
 #define HASHFUNC(x) ( ( x ^ ( x >> 15 ) ) & 0x0000FFFF )
 
@@ -118,6 +125,15 @@ struct lookupNode {
 #define PutLit(c,ctx)	( Stats_LitsO1 ? oOneEncode(Stats_LitsO1,c,ctx) : ozeroEncode(Stats_LitsO0,c) )
 
 static const uint32 nonGreedy_ratioS10 = (((bitsPerMatch+bitsPerLiteral)<<10)/bitsPerMatch);
+
+static int intlog2(uint32 x) // !!! // <> do this in assembly for awesome speed
+{
+	float xf;
+	//jeCPU_PauseMMX();
+	xf = (float)x;
+	//jeCPU_ResumeMMX();
+	return ((*(int*)&xf) >> 23) - 127;
+}
 
 #ifdef AMORTIZED_HASHING
 #define nodesCheckedMax 100		// = 100 hurts about 0.01 bpp from infinity <> !
@@ -237,10 +253,10 @@ uint8 *compArray;
 		return;
 	}
 
-	if ( (lookupTable = (struct lookupNode **)newarray(void *,HASHSIZE)) == NULL )
+	if ( (lookupTable = (struct lookupNode **)jeRam_AllocateClear(sizeof(void *)*HASHSIZE)) == NULL )
 		CleanUp("AllocMem failed!");
 
-	if ( (lookupHunk = (struct lookupNode *)jeRam_Allocate(sizeof(struct lookupNode)*min(lookupHunkSize,rawLen+10))) == NULL )
+	if ( (lookupHunk = (struct lookupNode *)jeRam_Allocate(sizeof(struct lookupNode)*JE_MIN(lookupHunkSize,rawLen+10))) == NULL )
 		CleanUp("AllocMem failed!");
 
 	if ( (ari = arithInit()) == NULL )
@@ -393,7 +409,7 @@ uint32 stopLen;
 	}
 
 	Stream->CompLen += AddCompLen;
-	Stream->CompLen = min(Stream->CompLen,Stream->TotCompLen);
+	Stream->CompLen = JE_MIN(Stream->CompLen,Stream->TotCompLen);
 
 	ari = Stream->ari;
 
@@ -530,7 +546,7 @@ void lzaDecoder_Destroy(lzaDecoder ** pStream)
 		if ( Stream->Stats_Lens ) ozeroFree(Stream->Stats_Lens);
 		if ( Stream->Stats_OffsetBlock ) ozeroFree(Stream->Stats_OffsetBlock);
 
-		destroy(Stream);
+		jeRam_Free(Stream); Stream = nullptr;
 		*pStream = NULL;
 	}
 }
@@ -560,7 +576,7 @@ if ( (Stats_Lens = ozeroCreateMax(ari,matchLenEscape+1,TOTMAX_LENS)) == NULL )
 	CleanUp("Order1_Init ariled!");
 
 Stats_OffsetBlockAlphaBet = intlog2((rawLen>>8)+1) + 2;
-Stats_OffsetBlockAlphaBet = min(Stats_OffsetBlockAlphaBet,OFFSET_ALPHABET);
+Stats_OffsetBlockAlphaBet = JE_MIN(Stats_OffsetBlockAlphaBet,OFFSET_ALPHABET);
 
 if ( (Stats_OffsetBlock = ozeroCreateMax(ari,Stats_OffsetBlockAlphaBet,TOTMAX_OFFSETS)) == NULL )
 	CleanUp("ozeroCreate ariled!");

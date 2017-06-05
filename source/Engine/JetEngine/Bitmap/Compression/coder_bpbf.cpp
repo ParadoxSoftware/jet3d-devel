@@ -30,7 +30,11 @@ rung binary arith
 
 *****/
 
-#include "Utility.h"
+#include <assert.h>
+#include "Basetype.h"
+#include "Ram.h"
+
+//#include "Utility.h"
 #include "arithc.h"
 #include "Coder.h"
 
@@ -98,7 +102,7 @@ return JE_TRUE;
 void coderBPBFFree(coder *c)
 {
 	if ( c->data ) {
-		destroy(c->data);
+		jeRam_Free(c->data); c->data = nullptr;
 		c->data = NULL;
 	}
 }
@@ -146,7 +150,7 @@ int VD,donemask,nextmask,sign_context;
 			context = mcontext(&dp[x],pp[x>>1],x,y,fullw,
 							donemask,nextmask,&sign_context,&VD);
 
-			bit = (abs(dp[x])&bitmask)?1:0;
+			bit = (JE_ABS(dp[x])&bitmask)?1:0;
 			bitEnc(bit,ari,stats_p0[context],stats_pt[context]);
 
 			if ( bit && !VD ) 
@@ -229,17 +233,17 @@ static int __inline mcontext(int *dp,int pp,int x,int y,int fullw,
 int P,N,W;
 int context,VD,sign_context;
 
-	/** <> all these absolute values are painfully slow ***/
+	/** <> all these JE_ABSolute values are painfully slow ***/
 
-	VD	= abs(*dp)&donemask;	// current val already done
-	P	= abs( pp)&nextmask;
+	VD	= JE_ABS(*dp)&donemask;	// current val already done
+	P	= JE_ABS( pp)&nextmask;
 
 	sign_context = 0;
 
 	if ( y == 0 ) 
 	{
 		N = VD;
-		if ( x == 0 ) W = VD; else W = abs(dp[-1]) & nextmask;
+		if ( x == 0 ) W = VD; else W = JE_ABS(dp[-1]) & nextmask;
 		if ( W ) 
 		{
 			if ( isneg(dp[-1]) ) sign_context += 3;
@@ -249,7 +253,7 @@ int context,VD,sign_context;
 	else if ( x == 0 ) 
 	{
 		W = VD;
-		N  = abs(dp[-fullw])	& nextmask;
+		N  = JE_ABS(dp[-fullw])	& nextmask;
 		if ( N ) 
 		{
 			if ( isneg(dp[-fullw]) ) sign_context += 1;
@@ -258,8 +262,8 @@ int context,VD,sign_context;
 	} 
 	else 
 	{
-		N = abs(dp[-fullw])		& nextmask;
-		W = abs(dp[-1])			& nextmask;
+		N = JE_ABS(dp[-fullw])		& nextmask;
+		W = JE_ABS(dp[-1])			& nextmask;
 		if ( N ) 
 		{
 			if ( isneg(dp[-fullw]) ) sign_context += 1;
@@ -272,7 +276,7 @@ int context,VD,sign_context;
 		}
 	}
 
-	context = min(VAL_CONTEXT_MAX, ((VD + P + N + W)>>2));
+	context = JE_MIN(VAL_CONTEXT_MAX, ((VD + P + N + W)>>2));
 
 	if ( N > VD ) context += SHAPE(0); 
 	if ( W > VD ) context += SHAPE(1);

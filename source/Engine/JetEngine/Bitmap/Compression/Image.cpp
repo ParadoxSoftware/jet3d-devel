@@ -31,14 +31,17 @@
 // safe zone 3 : 1.045 bpp
 // safe zone 4 : 1.046 bpp
 
+#include <assert.h>
 #include <string.h>
 #include <math.h>
 
-#include "Utility.h"
+#include "BaseType.h"
+#include "Ram.h"
+//#include "Utility.h"
 #include "Image.h"
 #include "Log.h"
 #include "Cpu.h"
-#include "IntMath.h"
+//#include "IntMath.h"
 
 #ifdef _DEBUG
 #define DebugLog(x)	x
@@ -46,12 +49,23 @@
 #define DebugLog(x)
 #endif
 
+#define swapints(a,b)	do { (a) ^= (b); (b) ^= (a); (a) ^= (b); } while(0)
+
+static int intlog2(uint32 x) // !!! // <> do this in assembly for awesome speed
+{
+	float xf;
+	//jeCPU_PauseMMX();
+	xf = (float)x;
+	//jeCPU_ResumeMMX();
+	return ((*(int*)&xf) >> 23) - 127;
+}
+
 void transposeImage(image *im)
 {
 int p,x,y,l;
 int **rows,z;
 
-	l = max(im->width,im->height);
+	l = JE_MAX(im->width,im->height);
 
 	for(p=0;p<im->planes;p++) 
 	{
@@ -313,15 +327,15 @@ DebugLog(int zeroed = 0);
 
 				for(y=0;y<h;y++)
 				{
-					ay = max(0,(y-ZERO_SAFE_ZONE)) << s;
+					ay = JE_MAX(0,(y-ZERO_SAFE_ZONE)) << s;
 					row1 = rows[y] + w;
 					row2 = rows[y + h];
 					row3 = rows[y + h] + w;
 					for(x=0;x<w;x++)
 					{
 					int z;
-						ax = max(0,(x-ZERO_SAFE_ZONE)) << s;
-						z = min(min((ZERO_SAFE_ZONE+ZERO_SAFE_ZONE)<<s,(im->width - ax)),(im->height - ay));
+						ax = JE_MAX(0,(x-ZERO_SAFE_ZONE)) << s;
+						z = JE_MIN(JE_MIN((ZERO_SAFE_ZONE+ZERO_SAFE_ZONE)<<s,(im->width - ax)),(im->height - ay));
 						A = sample8(im->alpha,im->stride,ax,ay,z);
 						if ( A == 0 )
 						{
@@ -350,7 +364,7 @@ int len;
 
 	if ( (im = (image *)new(image)) == NULL ) return NULL;
 
-	len = max(width,height);
+	len = JE_MAX(width,height);
 
 #if 1 // @@
 	// changes UNT time from 0.85 to 0.78 !!
@@ -401,7 +415,7 @@ int len;
 	im->tot_bytes = im->plane_bytes * planes;
 	im->tot_size = im->plane_size * planes;
 
-	if ( (im->data = (int ***)newarray(int **,planes)) == NULL ) 
+	if ( (im->data = (int ***)jeRam_AllocateClear(sizeof(int **) * planes)) == NULL ) 
 	{
 		freeImage(im); return NULL;
 	}
@@ -409,7 +423,7 @@ int len;
 	for(p=0;p<planes;p++) 
 	{
 
-		if ( (im->data[p] = (int **)newarray(int *,len+2)) == NULL ) 
+		if ( (im->data[p] = (int **)jeRam_AllocateClear(sizeof(int *) * len+2)) == NULL ) 
 		{
 			freeImage(im); return NULL;
 		}
@@ -441,11 +455,11 @@ int p;
 
 	for(p=0;p<im->planes;p++) 
 	{
-		fastmemcpy((char *)newImage->data[p][0],(const char *)im->data[p][0],im->plane_bytes);
+		memcpy((char *)newImage->data[p][0],(const char *)im->data[p][0],im->plane_bytes);
 	}
 
 	if ( im->alpha )
-		fastmemcpy((char *)newImage->alpha,(const char *)im->alpha,im->plane_size);
+		memcpy((char *)newImage->alpha,(const char *)im->alpha,im->plane_size);
 
 return newImage;
 }
@@ -501,27 +515,27 @@ void freeImage(image *im)
 			}
 			jeRam_Free(im->data);
 		}
-		destroy( im->alpha );
+		jeRam_Free(im->alpha); im->alpha = nullptr;
 		jeRam_Free(im);
 	}
 }
 
 void zeroImage(image *im)
 {
-int p;
+	int p;
 
-	for(p=0;p<im->planes;p++)
-		fastmemclear((char *)im->data[p][0],im->plane_bytes);
+	for (p = 0; p < im->planes; p++)
+		memset((char *)im->data[p][0], 0, im->plane_bytes);
 
-	if ( im->alpha )
-		fastmemclear((char *)im->alpha,im->plane_size);
+	if (im->alpha)
+		memset((char *)im->alpha, 0, im->plane_size);
 }
 
 void insertImageAlpha(image *im,uint8 *alpha)
 {
 	if ( im->alpha )
 	{
-		fastmemcpy((char *)im->alpha,(const char *)alpha,im->plane_size);
+		memcpy((char *)im->alpha,(const char *)alpha,im->plane_size);
 	}
 }
 

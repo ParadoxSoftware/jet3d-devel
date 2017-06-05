@@ -22,7 +22,7 @@
 #define DRVLIST_H
 
 #ifdef __cplusplus
-extern "C" {
+//extern "C" {
 #endif
 
 #define DRVLIST_WINDOW		( 1 << 0 )
@@ -47,7 +47,7 @@ jeBoolean DrvList_GetDriverByName(
 								jeDriver_Mode	**Mode);
 
 #ifdef __cplusplus
-}
+//}
 #endif
 
 #endif // DRVLIST_H

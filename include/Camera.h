@@ -26,10 +26,6 @@
 #include "Xform3d.h"
 #include "jeTypes.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 //================================================================================
 //	Structure defines
 //================================================================================
@@ -170,9 +166,5 @@ JETAPI void JETCC jeCamera_TransformAndProjectAndClampL(const jeCamera *Camera,
 JETAPI jeVec3d *JETCC jeCamera_GetPov2(jeCamera *Camera);
 
 //-----------------------------------------------------
-
-#ifdef __cplusplus
-}
-#endif
 
 #endif

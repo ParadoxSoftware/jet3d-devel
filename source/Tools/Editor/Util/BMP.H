@@ -24,7 +24,7 @@
 #define BMP_H
 
 #ifdef __cplusplus
-extern "C" {
+//extern "C" {
 #endif
 
 #pragma warning(disable : 4201 4214 4115)
@@ -58,7 +58,7 @@ void EnlargeDataInt(BYTE *pInBuff,
 jeBoolean CreateThumbnails(jeBitmap* pBmps, jeMaterialSpec_Thumbnail* pThumb);
 
 #ifdef __cplusplus
-}
+//}
 #endif
 
 #endif // Prevent multiple inclusion

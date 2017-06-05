@@ -41,10 +41,6 @@
 #include "BaseType.h"
 #include "VFile.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 typedef jeFloat jeTKArray_TimeType;
 
 #define JE_TKA_TIME_TOLERANCE (0.00001f)
@@ -120,11 +116,5 @@ int JETCC jeTKArray_ElementSize(
 
 jeBoolean JETCC jeTKArray_SamplesAreTimeLinear(const jeTKArray *Array,jeFloat Tolerance);
 	// returns true if the samples are linear in time within a tolerance
-
-#ifdef __cplusplus
-}
-#endif
-
-
 
 #endif

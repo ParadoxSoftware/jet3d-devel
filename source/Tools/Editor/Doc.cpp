@@ -35,7 +35,8 @@
 
 #include "Draw.h"
 #include "Draw3d.h"
-#include "Jet.h"
+#include "jeProperty.h"
+#include "Vec3d.h"
 #include "JetView.h"
 #include "jeWorld.h"
 #include "jwe.h"

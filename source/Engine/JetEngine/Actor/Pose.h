@@ -47,11 +47,6 @@
 #include "Motion.h"
 #include "XFArray.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-
 #define JE_POSE_ROOT_JOINT (-1)
 
 typedef enum 
@@ -158,11 +153,6 @@ void JETCF jePose_ClearCoverage(jePose *P, int ClearTo);
 	// if QueryOnly is JE_FALSE, affected joints are tagged as 'covered', otherwise no changes
 	// are made to the joint coverage flags.
 int JETCF jePose_AccumulateCoverage(jePose *P, const jeMotion *M, jeBoolean QueryOnly);
-
-
-#ifdef __cplusplus
-}
-#endif
 
 
 #endif

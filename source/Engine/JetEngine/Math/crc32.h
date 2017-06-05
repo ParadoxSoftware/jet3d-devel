@@ -23,10 +23,6 @@
 
 #include "BaseType.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 extern uint32 CRC32_Array(const uint8 * buf,uint32 buflen);
 
 extern uint32 CRC32_Start(void);
@@ -35,9 +31,5 @@ extern uint32 CRC32_Finish(uint32 crc);
 extern uint32 CRC32_AddByte(uint32 crc,uint8 b);
 extern uint32 CRC32_AddWord(uint32 crc,uint16 w);
 extern uint32 CRC32_AddLong(uint32 crc,uint32 w);
-
-#ifdef __cplusplus
-}
-#endif
 
 #endif /* CRB_CRC32 */

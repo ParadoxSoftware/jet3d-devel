@@ -24,10 +24,6 @@
 #include "Vec3d.h"
 #include "XForm3d.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 typedef struct
 {
 	jeFloat x[3][4];
@@ -184,10 +180,6 @@ JETAPI jeBoolean JETCC jeObjectPos_IsValid(const jeObjectPos *APos);
 	#define jeObjectPos_SetMaximalAssertionMode(Enable )
 #else
 	JETAPI 	void JETCC jeObjectPos_SetMaximalAssertionMode( jeBoolean Enable );
-#endif
-
-#ifdef __cplusplus
-}
 #endif
 
 #endif

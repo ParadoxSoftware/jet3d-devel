@@ -23,10 +23,6 @@
 
 #include "BaseType.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 typedef struct lzaDecoder lzaDecoder;
 
 extern void lzaEncode(uint8 *rawArray,uint32 rawLen,uint8 **compArrayPtr,uint32 * compLenPtr);
@@ -53,10 +49,6 @@ MemoryBuffer * lzaEncodeMemoryBuffer(MemoryBuffer *mbIn)
 
 *
 ********/
-
-#ifdef __cplusplus
-}
-#endif
 
 #endif
 

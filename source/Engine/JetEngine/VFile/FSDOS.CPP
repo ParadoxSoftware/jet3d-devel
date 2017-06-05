@@ -153,11 +153,11 @@ static	void *	JETCC FSDos_FinderCreate(
 
 	assert(FileSpec != NULL);
 
-	File = Handle;
+	File = (DosFile*)Handle;
 
 	CHECK_HANDLE(File);
 
-	Finder = jeRam_Allocate(sizeof(*Finder));
+	Finder = (DosFinder*)jeRam_Allocate(sizeof(*Finder));
 	if	(!Finder)
 		return NULL;
 
@@ -184,7 +184,7 @@ static	jeBoolean	JETCC FSDos_FinderGetNextFile(void *Handle)
 {
 	DosFinder *	Finder;
 
-	Finder = Handle;
+	Finder = (DosFinder*)Handle;
 
 	CHECK_FINDER(Finder);
 
@@ -216,7 +216,7 @@ static	jeBoolean	JETCC FSDos_FinderGetProperties(void *Handle, jeVFile_Propertie
 
 	assert(Props);
 
-	Finder = Handle;
+	Finder = (DosFinder*)Handle;
 
 	CHECK_FINDER(Finder);
 
@@ -247,7 +247,7 @@ static	void JETCC FSDos_FinderDestroy(void *Handle)
 {
 	DosFinder *	Finder;
 
-	Finder = Handle;
+	Finder = (DosFinder*)Handle;
 
 	CHECK_FINDER(Finder);
 
@@ -310,12 +310,12 @@ static	void *	JETCC FSDos_Open(
 	int			Length;
 	char *		NamePtr;
 
-	DosFS = Handle;
+	DosFS = (DosFile*)Handle;
 
 	if	(DosFS && DosFS->IsDirectory != JE_TRUE)
 		return NULL;
 
-	NewFile = jeRam_Allocate(sizeof(*NewFile));
+	NewFile = (DosFile*)jeRam_Allocate(sizeof(*NewFile));
 	if	(!NewFile)
 		return NewFile;
 
@@ -325,7 +325,7 @@ static	void *	JETCC FSDos_Open(
 		goto fail;
 
 	Length = strlen(Buff);
-	NewFile->FullPath = jeRam_Allocate(Length + 1);
+	NewFile->FullPath = (char*)jeRam_Allocate(Length + 1);
 	if	(!NewFile->FullPath)
 		goto fail;
 
@@ -510,7 +510,7 @@ static	jeBoolean	JETCC FSDos_Close(void *Handle)
 
 	DosFile *	File;
 	
-	File = Handle;
+	File = (DosFile*)Handle;
 	
 	CHECK_HANDLE(File);
 
@@ -608,7 +608,7 @@ static	jeBoolean	JETCC FSDos_GetS(void *Handle, void *Buff, int MaxLen)
 	assert(Buff);
 	assert(MaxLen != 0);
 
-	File = Handle;
+	File = (DosFile*)Handle;
 
 	CHECK_HANDLE(File);
 
@@ -632,7 +632,7 @@ static	jeBoolean	JETCC FSDos_GetS(void *Handle, void *Buff, int MaxLen)
 	}
 
 	End = (char *)Buff + BytesRead;
-	p = Buff;
+	p = (char*)Buff;
 	while	(p < End)
 	{
 		/*
@@ -678,7 +678,7 @@ static	jeBoolean	JETCC FSDos_Tell(const void *Handle, long *Position)
 {
 	const DosFile *	File;
 
-	File = Handle;
+	File = (const DosFile*)Handle;
 
 	CHECK_HANDLE(File);
 
@@ -702,7 +702,7 @@ static	jeBoolean	JETCC FSDos_BytesAvailable(void *Handle, long *Count)
 	long		CurrentPos;
 	long		EndPos;
 
-	File = Handle;
+	File = (DosFile*)Handle;
 
 	CHECK_HANDLE(File);
 
@@ -738,7 +738,7 @@ static	jeBoolean	JETCC FSDos_Read(void *Handle, void *Buff, uint32 Count)
 	assert(Buff);
 	assert(Count != 0);
 
-	File = Handle;
+	File = (DosFile*)Handle;
 
 	CHECK_HANDLE(File);
 
@@ -775,7 +775,7 @@ static	jeBoolean	JETCC FSDos_Write(void *Handle, const void *Buff, int Count)
 	assert(Buff);
 	assert(Count != 0);
 
-	File = Handle;
+	File = (DosFile*)Handle;
 
 	CHECK_HANDLE(File);
 
@@ -808,7 +808,7 @@ static	jeBoolean	JETCC FSDos_Seek(void *Handle, int Where, jeVFile_Whence Whence
 	int			RTLWhence = FILE_BEGIN;
 	DosFile *	File;
 
-	File = Handle;
+	File = (DosFile*)Handle;
 
 	CHECK_HANDLE(File);
 
@@ -844,7 +844,7 @@ static	jeBoolean	JETCC FSDos_EOF(const void *Handle)
 	const DosFile *	File;
 	DWORD			CurPos;
 
-	File = Handle;
+	File = (const DosFile*)Handle;
 
 	CHECK_HANDLE(File);
 
@@ -866,7 +866,7 @@ static	jeBoolean	JETCC FSDos_Size(const void *Handle, long *Size)
 {
 	const DosFile *	File;
 
-	File = Handle;
+	File = (const DosFile*)Handle;
 
 	CHECK_HANDLE(File);
 
@@ -893,7 +893,7 @@ static	jeBoolean	JETCC FSDos_GetProperties(const void *Handle, jeVFile_Propertie
 
 	assert(Properties);
 
-	File = Handle;
+	File = (const DosFile*)Handle;
 
 	CHECK_HANDLE(File);
 
@@ -936,7 +936,7 @@ static	jeBoolean	JETCC FSDos_SetSize(void *Handle, long size)
 {
 	DosFile *	File;
 
-	File = Handle;
+	File = (DosFile*)Handle;
 
 	CHECK_HANDLE(File);
 
@@ -960,7 +960,7 @@ static	jeBoolean	JETCC FSDos_SetAttributes(void *Handle, jeVFile_Attributes Attr
 	DosFile *	File;
 	DWORD		Win32Attributes;
 
-	File = Handle;
+	File = (DosFile*)Handle;
 
 	CHECK_HANDLE(File);
 
@@ -985,7 +985,7 @@ static	jeBoolean	JETCC FSDos_SetTime(void *Handle, const jeVFile_Time *Time)
 	DosFile *	File;
 	FILETIME	Win32Time;
 
-	File = Handle;
+	File = (DosFile*)Handle;
 
 	CHECK_HANDLE(File);
 
@@ -1003,7 +1003,7 @@ static	jeVFile *	JETCC FSDos_GetHintsFile(void *Handle)
 {
 	DosFile *	File;
 
-	File = Handle;
+	File = (DosFile*)Handle;
 
 	CHECK_HANDLE(File);
 
@@ -1036,7 +1036,7 @@ static	jeBoolean	JETCC FSDos_FileExists(jeVFile *FS, void *Handle, const char *N
 	DosFile *	File;
 	char		Buff[_MAX_PATH];
 
-	File = Handle;
+	File = (DosFile*)Handle;
 
 	if	(File && File->IsDirectory == JE_FALSE)
 		return JE_FALSE;
@@ -1067,7 +1067,7 @@ static	jeBoolean	JETCC FSDos_DeleteFile(jeVFile *FS, void *Handle, const char *N
 	DosFile *	File;
 	char		Buff[_MAX_PATH];
 
-	File = Handle;
+	File = (DosFile*)Handle;
 
 	if	(File && File->IsDirectory == JE_FALSE)
 		return JE_FALSE;
@@ -1089,7 +1089,7 @@ static	jeBoolean	JETCC FSDos_RenameFile(jeVFile *FS, void *Handle, const char *N
 	char		Old[_MAX_PATH];
 	char		New[_MAX_PATH];
 
-	File = Handle;
+	File = (DosFile*)Handle;
 
 	if	(File && File->IsDirectory == JE_FALSE)
 		return JE_FALSE;

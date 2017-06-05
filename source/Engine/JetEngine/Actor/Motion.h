@@ -18,8 +18,7 @@
 /*  Copyright (C) 1996-1999 Eclipse Entertainment, L.L.C. All Rights Reserved           */
 /*                                                                                      */
 /****************************************************************************************/
-#ifndef JE_MOTION_H
-#define JE_MOTION_H
+#pragma once
 
 /*	motion
 
@@ -31,10 +30,6 @@
 #include "BaseType.h"
 #include "Path.h"
 #include "VFile.h"
-
-#ifdef __cplusplus
-extern "C" {
-#endif
 
 // JET_PUBLIC_APIS
 typedef struct jeMotion jeMotion;
@@ -170,9 +165,3 @@ JETAPI jeBoolean JETCC jeMotion_GetEventExtents(const jeMotion *M,
 JETAPI jeMotion *JETCC jeMotion_CreateFromFile(jeVFile *f);
 JETAPI jeBoolean JETCC jeMotion_WriteToFile(const jeMotion *M,jeVFile *pFile);
 
-#ifdef __cplusplus
-}
-#endif
-
-
-#endif

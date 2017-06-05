@@ -28,10 +28,6 @@
 #include "Camera.h"
 #include "jeProperty.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 typedef struct	jePortal			jePortal;
 
 typedef jeBoolean JETCC jePortal_RenderFunc(jePortal *Portal, const jePlane *Plane, const jeXForm3d *FaceXForm, void *Context, jeCamera *Camera, jeFrustum *Frustum);
@@ -49,9 +45,5 @@ JETAPI jePortal	* JETCC jePortal_Create();
 JETAPI jeBoolean	JETCC jePortal_CreateRef(jePortal *Portal);
 JETAPI void			JETCC jePortal_Destroy(jePortal **Portal);
 JETAPI jeBoolean	JETCC jePortal_IsValid(const jePortal *Portal);
-
-#ifdef __cplusplus
-}
-#endif
 
 #endif

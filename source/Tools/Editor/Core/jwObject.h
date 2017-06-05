@@ -26,7 +26,7 @@
 #define OBJECT_H
 
 #ifdef __cplusplus
-extern "C" {
+//extern "C" {
 #endif
 
 #include "BaseType.h"
@@ -117,7 +117,7 @@ Group		*	Object_IsMemberOfLockedGroup( const Object * pObject );
 jeBoolean		Object_WriteToFile( Object * pObject, jeVFile * pF );
 jeBoolean		Object_InitFromFile( jeVFile * pF , Object * pObject );
 #ifdef __cplusplus
-}
+//}
 #endif
 
 #endif // Prevent multiple inclusion

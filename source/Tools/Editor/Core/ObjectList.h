@@ -27,7 +27,7 @@
 #include "jwObject.h"
 
 #ifdef __cplusplus
-extern "C" {
+//extern "C" {
 #endif
 
 typedef jeBoolean (*ObjectListCB)( Object *pObject, void * pVoid );
@@ -68,7 +68,7 @@ int32			ObjectList_EnumObjects( ObjectList * pList, void * pVoid, ObjectListCB C
 void			ObjectList_DestroyCB( void * pObject ) ;
 
 #ifdef __cplusplus
-}
+//}
 #endif
 
 #endif // Prevent multiple inclusion

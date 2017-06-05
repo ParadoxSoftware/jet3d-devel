@@ -24,10 +24,6 @@
 #include "BaseType.h"
 #include "Vec3d.h"
 
-#ifdef __cplusplus
-	extern "C" {
-#endif
-
 typedef struct jeExtBox
 {
 	jeVec3d Min;
@@ -129,10 +125,6 @@ JETAPI jeBoolean JETCC jeExtBox_Collision(	const jeExtBox *B, const jeExtBox *Mo
 JETAPI jeBoolean JETCC jeExtBox_ChangeBoxCollision(	const jeExtBox *B, const jeVec3d *Pos,
 													const jeExtBox *StartBox, const jeExtBox *EndBox,
 													jeFloat *T, jeVec3d *Normal, jeVec3d *Point );
-
-#ifdef __cplusplus
-	}
-#endif
 
 #endif
 		

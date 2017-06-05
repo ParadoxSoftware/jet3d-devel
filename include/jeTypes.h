@@ -24,10 +24,6 @@
 #include "BaseType.h"
 #include "Vec3d.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 //
 //	Render flags for poly operations
 //
@@ -134,11 +130,5 @@ typedef struct jeHWVertex
 #define JE_Rect				jeRect	
 #define JE_LVertex			jeLVertex
 #define JE_TLVertex			jeTLVertex
-
-
-#ifdef __cplusplus
-}
-#endif
-
 
 #endif

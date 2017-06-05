@@ -22,10 +22,6 @@
 #ifndef PART_H
 #define PART_H
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 typedef enum
 {
 	JE_PARTICLE_FLAGS_NONE											= 1 << 0,
@@ -73,9 +69,5 @@ jeBoolean jeParticle_ClearAcc(jeParticle* part);
 jeBoolean jeParticle_AddForce(jeParticle* part, const jeVec3d* pForce);
 jeBoolean jeParticle_AddAcc(jeParticle* part, const jeVec3d* pAcc);
 jeBoolean jeParticle_UpdateTime(jeParticle* part, float dt);
-
-#ifdef __cplusplus
-}
-#endif
 
 #endif

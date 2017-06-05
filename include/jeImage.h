@@ -2,7 +2,7 @@
 	@file jeImage.h 
 	
 	@author Anthony Rufrano (paradoxnj)
-	@brief Replacement for jeBitmap using FreeImage
+	@brief Replacement for jeBitmap supporting more formats
 
 	@par Licence
 	The contents of this file are subject to the Jet3D Public License       
@@ -23,24 +23,28 @@
 #ifndef __JE_IMAGE_H__
 #define __JE_IMAGE_H__
 
+#include <string>
 #include "Basetype.h"
 #include "VFILE.H"
+#include "jeResourceMgr.h"
 
 typedef struct jeTexture					jeTexture;
 
-class jeImage : virtual public jeUnknown
+class jeImage : virtual public jet3d::jeResource
 {
 protected:
 	virtual ~jeImage(){}
 
 public:
 	virtual jeBoolean Create(int32 Width, int32 Height, int32 BPP) = 0;
-	virtual jeBoolean CreateFromFile(jeVFile *File) = 0;
 	virtual void Destroy() = 0;
 
 	virtual const int32 GetWidth() const = 0;
 	virtual const int32 GetHeight() const = 0;
 	virtual const int32 GetBPP() const = 0;
+	virtual const int32 GetImageSize() const = 0;
+	
+	virtual void SetBits(uint8 *pBits) = 0;
 	virtual uint8 * GetBits() = 0;
 
 	virtual void SetTextureHandle(jeTexture *Texture) = 0;

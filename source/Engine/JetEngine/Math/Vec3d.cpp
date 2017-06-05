@@ -21,7 +21,7 @@
 #include <math.h>
 #include <assert.h>
 
-#include "jeVec3d_Katmai.h"
+//#include "jeVec3d_Katmai.h"
 #include "Vec3d.h"
 #include "CPU.h"
 
@@ -89,8 +89,8 @@ JETAPI jeFloat JETCC	jeVec3d_DotProduct(const jeVec3d *V1, const jeVec3d *V2)
 	assert( jeVec3d_IsValid(V1) );
 	assert( jeVec3d_IsValid(V2) );
 	
-	if (jeCPU_Features & JE_CPU_HAS_KATMAI)
-		return jeVec3d_DotProduct_SSE(V1, V2);
+	//if (jeCPU_Features & JE_CPU_HAS_KATMAI)
+	//	return jeVec3d_DotProduct_SSE(V1, V2);
 		
 	return(V1->X*V2->X + V1->Y*V2->Y + V1->Z*V2->Z);
 }
@@ -105,9 +105,9 @@ JETAPI void JETCC jeVec3d_CrossProduct(const jeVec3d *V1, const jeVec3d *V2, jeV
 	assert( jeVec3d_IsValid(V1) );
 	assert( jeVec3d_IsValid(V2) );
 
-	if (jeCPU_Features & JE_CPU_HAS_KATMAI)
+	/*if (jeCPU_Features & JE_CPU_HAS_KATMAI)
 		jeVec3d_CrossProduct_SSE(V1, V2, VResult);
-	else
+	else*/
 	{
 		Result.X = V1->Y*V2->Z - V1->Z*V2->Y;
 		Result.Y = V1->Z*V2->X - V1->X*V2->Z;
@@ -137,14 +137,14 @@ JETAPI jeBoolean JETCC jeVec3d_Compare(const jeVec3d *V1, const jeVec3d *V2, jeF
 
 JETAPI jeFloat JETCC jeVec3d_Normalize(jeVec3d *V1)
 {
-	if (jeCPU_Features & JE_CPU_HAS_KATMAI)
+	/*if (jeCPU_Features & JE_CPU_HAS_KATMAI)
 	{
 		float len = jeVec3d_Length(V1);
 		jeVec3d_Normalize_SSE(V1);
 		
 		return len;
 	}
-	else
+	else*/
 	{
 		jeFloat OneOverDist;
 		jeFloat Dist;
@@ -183,9 +183,9 @@ JETAPI void JETCC jeVec3d_Scale(const jeVec3d *VSrc, jeFloat Scale, jeVec3d *VDs
 	assert ( VDst != NULL );
 	assert( jeVec3d_IsValid(VSrc) );
 
-	if (jeCPU_Features & JE_CPU_HAS_KATMAI)
+	/*if (jeCPU_Features & JE_CPU_HAS_KATMAI)
 		jeVec3d_Scale_SSE(VSrc, Scale, VDst);
-	else
+	else*/
 	{
 		VDst->X = VSrc->X * Scale;
 		VDst->Y = VSrc->Y * Scale;
@@ -204,9 +204,9 @@ JETAPI jeFloat JETCC jeVec3d_Length(const jeVec3d *V1)
 {	
 	assert( jeVec3d_IsValid(V1) );
 
-	if (jeCPU_Features & JE_CPU_HAS_KATMAI)
+	/*if (jeCPU_Features & JE_CPU_HAS_KATMAI)
 		return jeVec3d_Length_SSE(V1);
-	else
+	else*/
 		return jeFloat_Sqrt(jeVec3d_LengthSquared(V1));
 }
 
@@ -216,9 +216,9 @@ JETAPI void JETCC jeVec3d_Subtract(const jeVec3d *V1, const jeVec3d *V2, jeVec3d
 	assert( jeVec3d_IsValid(V2) );
 	assert ( V1MinusV2 != NULL );
 
-	if (jeCPU_Features & JE_CPU_HAS_KATMAI)
+	/*if (jeCPU_Features & JE_CPU_HAS_KATMAI)
 		jeVec3d_Subtract_SSE(V1, V2, V1MinusV2);
-	else
+	else*/
 	{
 		V1MinusV2->X = V1->X - V2->X;
 		V1MinusV2->Y = V1->Y - V2->Y;
@@ -232,9 +232,9 @@ JETAPI void JETCC jeVec3d_Add(const jeVec3d *V1, const jeVec3d *V2, jeVec3d *V1P
 	assert( jeVec3d_IsValid(V2) );
 	assert ( V1PlusV2 != NULL );
 	
-	if (jeCPU_Features & JE_CPU_HAS_KATMAI)
+	/*if (jeCPU_Features & JE_CPU_HAS_KATMAI)
 		jeVec3d_Add_SSE(V1, V2, V1PlusV2);
-	else
+	else*/
 	{
 		V1PlusV2->X = V1->X + V2->X;
 		V1PlusV2->Y = V1->Y + V2->Y;
@@ -259,9 +259,9 @@ JETAPI void JETCC jeVec3d_AddScaled(const jeVec3d *V1, const jeVec3d *V2, jeFloa
 	assert( jeVec3d_IsValid(V2) );
 	assert ( V1PlusV2Scaled != NULL );
 	
-	if (jeCPU_Features & JE_CPU_HAS_KATMAI)
+	/*if (jeCPU_Features & JE_CPU_HAS_KATMAI)
 		jeVec3d_AddScaled_SSE(V1, V2, Scale, V1PlusV2Scaled);
-	else
+	else*/
 	{
 		V1PlusV2Scaled->X = V1->X + V2->X*Scale;
 		V1PlusV2Scaled->Y = V1->Y + V2->Y*Scale;
@@ -309,8 +309,8 @@ return d;
 
 JETAPI jeFloat JETCC	jeVec3d_DistanceBetween(const jeVec3d *V1, const jeVec3d *V2)	// returns length of V1-V2	
 {
-	if (jeCPU_Features & JE_CPU_HAS_KATMAI)
+	/*if (jeCPU_Features & JE_CPU_HAS_KATMAI)
 		return jeVec3d_DistanceBetween_SSE(V1, V2);
-	else
+	else*/
 		return jeFloat_Sqrt( jeVec3d_DistanceBetweenSquared(V1,V2) );
 }

@@ -18,8 +18,8 @@
 /*  Copyright (C) 1996-1999 Eclipse Entertainment, L.L.C. All Rights Reserved           */
 /*                                                                                      */
 /****************************************************************************************/
-
-#include "Utility.h"
+#include <assert.h>
+//#include "Utility.h"
 
 /*****
 

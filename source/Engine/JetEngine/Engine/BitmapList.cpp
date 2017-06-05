@@ -58,10 +58,10 @@ jeBoolean BitmapList_IsValid(BitmapList *pList);
 BitmapList *BitmapList_Create(void)
 {
 BitmapList * pList;
-	pList = (BitmapList *)jeRam_Allocate(sizeof(*pList));
+	pList = (BitmapList *)jeRam_AllocateClear(sizeof(*pList));
 	if (! pList )
 		return NULL;
-	memset(pList,0,sizeof(*pList));
+	//memset(pList,0,sizeof(*pList));
 	pList->HashPtr = Hash_Create();
 	if ( ! pList->HashPtr )
 	{

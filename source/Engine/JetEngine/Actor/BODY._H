@@ -30,11 +30,6 @@
 #include "UVMap.h"
 #include "jeMaterial.h"
 
-
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 #define JE_BODY_INDEX_MAX (0xEFFF)
 
 #define JE_BODY_REALLY_BIG_NUMBER (9e9f)		// bigger than any skin point
@@ -146,12 +141,6 @@ typedef struct jeBody
 
 #if defined(DEBUG) || !defined(NDEBUG)
 JETAPI jeBoolean JETCC jeBody_SanityCheck(const jeBody *B);
-#endif
-
-
-
-#ifdef __cplusplus
-}
 #endif
 
 #endif

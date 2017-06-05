@@ -30,10 +30,6 @@
 #include "jePtrMgr.h"
 #include "jeBSP.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 //**********
 // Temporary, until we get this stuff in jeTypes.h, or Jet.h?
 
@@ -103,9 +99,5 @@ JETAPI jeBoolean	JETCC jeModel_ChangeBoxCollision(	const jeModel	*Model,
 
 JETAPI jeBoolean	JETCC jeModel_SetXForm(jeModel *Model, const jeXForm3d *XForm);
 JETAPI const		jeXForm3d * JETCC jeModel_GetXForm(jeModel *Model );
-
-#ifdef __cplusplus
-}
-#endif
 
 #endif

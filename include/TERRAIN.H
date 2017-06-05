@@ -34,11 +34,6 @@
 //#include "engine.h"  // for jeEngine
 typedef struct jeEngine	jeEngine;
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-
 typedef struct jeTerrain		jeTerrain;
 
 enum
@@ -154,10 +149,6 @@ JETAPI jeBoolean	JETCC jeTerrain_RegisterObjectDef(void);
     @see jeObject_SetRenderNextPass
 */
 JETAPI void			JETCC jeTerrain_SetRenderNextTime(void* T, jeBoolean RenderNext);
-
-#ifdef __cplusplus
-}
-#endif
 
 #endif // JE_TERRAIN_H
 

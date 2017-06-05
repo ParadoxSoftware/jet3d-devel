@@ -25,7 +25,7 @@
 #include "Point.h"
 
 #ifdef __cplusplus
-extern "C" {
+//extern "C" {
 #endif
 
 typedef struct jwePen jwePen;
@@ -40,7 +40,7 @@ jeBoolean	Pen_Polyline( int32 hDC, Point * pPoints, int32 nPoints ) ;
 
 
 #ifdef __cplusplus
-}
+//}
 #endif
 
 #endif //DRAWTOOL_DEFINE

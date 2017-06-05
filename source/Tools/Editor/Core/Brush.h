@@ -23,7 +23,6 @@
 #ifndef BRUSH_H
 #define BRUSH_H
 
-#include "Defs.h"
 #include "BaseType.h"
 #include "ExtBox.h"
 #include "jeBrush.h"
@@ -36,15 +35,16 @@
 #include "BrushTemplate.h"
 #include "Undo.h"
 #include "jeWorld.h"
+#include "Defs.h"
 
 typedef struct tagModel Model ;
 
 #define BRUSH_VERSION		(1)
 #define BRUSH_REATTACH_GOOD	((uint32)(-1))
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+//#ifdef __cplusplus
+//extern "C" {
+//#endif
 
 typedef struct tagBrush Brush ;
 
@@ -278,9 +278,9 @@ jeBoolean		    Brush_IsVisible( const Brush* pBrush );
 void                Brush_Show( Brush* pBrush, jeBoolean Visible );
 
 
-#ifdef __cplusplus
-}
-#endif
+//#ifdef __cplusplus
+//}
+//#endif
 
 #endif // Prevent multiple inclusion
 /* EOF: Brush.h */

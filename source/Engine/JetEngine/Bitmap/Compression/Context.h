@@ -24,10 +24,6 @@
 #include "BaseType.h"
 #include "arithc.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 typedef struct context context;
 
 extern context * contextCreate(arithInfo * arithinfo,int alphabet_size);
@@ -50,10 +46,6 @@ extern int contextGetProb(context *pContext,int symbol);
 
 extern jeBoolean contextEncodeCapped(context *pContext, int symbol,int cap);
 extern int contextDecodeCapped(context *pContext,int cap);
-
-#ifdef __cplusplus
-}
-#endif
 
 #endif
 

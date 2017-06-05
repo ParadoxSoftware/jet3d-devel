@@ -18,7 +18,11 @@
 /*  Copyright (C) 1996-1999 Eclipse Entertainment, L.L.C. All Rights Reserved           */
 /*                                                                                      */
 /****************************************************************************************/
-#include "Utility.h"
+//#include "Utility.h"
+#include <assert.h>
+#include "BaseType.h"
+#include "Ram.h"
+
 #include "lbitio.h"
 
 #pragma warning(disable : 4244)
@@ -78,7 +82,7 @@ return(BII);
  */
 void LBitIO_CleanUp(struct LBitIOInfo * BII)
 {
-destroy(BII);
+	jeRam_Free(BII); BII = nullptr;
 }
 
 /*

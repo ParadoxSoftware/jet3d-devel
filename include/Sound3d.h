@@ -31,10 +31,6 @@
 #include "Sound.h"
 #include "jeWorld.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 // JET_PUBLIC_APIS
 
 JETAPI	void JETCC jeSound3D_GetConfig(
@@ -48,9 +44,5 @@ JETAPI	void JETCC jeSound3D_GetConfig(
 			jeFloat *Frequency);
 
 // JET_PRIVATE_APIS
-
-#ifdef __cplusplus
-}
-#endif
 
 #endif

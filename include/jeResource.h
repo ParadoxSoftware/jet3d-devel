@@ -87,11 +87,6 @@
 
 #include "BaseType.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-
 /*! @name Resource kinds
 	@brief Possible value for Type parameter of jeResource_GetResource() */
 /*@{*/
@@ -303,9 +298,5 @@ JETAPI void JETCC jeResource_ExportResource(jeResourceMgr *ResourceMgr, int32 Ty
 	@return JE_TRUE when succeed
 */
 JETAPI jeBoolean JETCC jeResource_ReleaseResource(jeResourceMgr *ResourceMgr, int32 Type, char *Name);
-
-#ifdef __cplusplus
-}
-#endif
 
 #endif

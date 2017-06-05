@@ -22,10 +22,6 @@
 #ifndef SPRING_H
 #define SPRING_H
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 typedef struct jeSpring jeSpring;
 
 typedef jeBoolean (*jeSpring_ForceFunc)(jeSpring* pSpring, float dt);
@@ -58,9 +54,5 @@ jeBoolean jeSpring_SetForceFunc(jeSpring* pSpring, jeSpring_ForceFunc forceFunc)
 
 jeBoolean jeSpring_ForceFunc_ComputeDamped(jeSpring* pSpring);
 jeBoolean jeSpring_ForceFunc_ComputeCriticallyDamped(jeSpring* pSpring);
-
-#ifdef __cplusplus
-}
-#endif
 
 #endif

@@ -18,8 +18,8 @@
 /*  Copyright (C) 1996-1999 Eclipse Entertainment, L.L.C. All Rights Reserved           */
 /*                                                                                      */
 /****************************************************************************************/
-#include "Utility.h"
-
+//#include "Utility.h"
+#include <assert.h>
 /**
 
 These are *NOT* the original S+P parameters; we've tweaked them to

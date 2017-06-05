@@ -24,10 +24,6 @@
 
 #include "jeTypes.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 /**
 
 	built-in function pointers:
@@ -50,15 +46,13 @@ typedef jeBoolean (*jeUVMapVertex) (const jeXForm3d* pXForm,
 ///////////////////////////////////////////////////////////////////////////////////////
 // functions
 
-// these functions take an array of JE_LVertices and normals
-JETAPI jeBoolean JETCC jeUVMap_Reflection(const jeXForm3d* pXForm, jeLVertex* pVerts, const jeVec3d* pNormals, int nverts);
-									// xform is (transpose of) camera xform
-JETAPI jeBoolean JETCC jeUVMap_Refraction(const jeXForm3d* pXForm, jeLVertex* pVerts, const jeVec3d* pNormals, int nverts);
-JETAPI jeBoolean JETCC jeUVMap_Projection(const jeXForm3d* pXForm, jeLVertex* pVerts, const jeVec3d* pNormals, int nverts);
-
-#ifdef __cplusplus
+extern "C" {
+	// these functions take an array of JE_LVertices and normals
+	JETAPI jeBoolean JETCC jeUVMap_Reflection(const jeXForm3d* pXForm, jeLVertex* pVerts, const jeVec3d* pNormals, int nverts);
+	// xform is (transpose of) camera xform
+	JETAPI jeBoolean JETCC jeUVMap_Refraction(const jeXForm3d* pXForm, jeLVertex* pVerts, const jeVec3d* pNormals, int nverts);
+	JETAPI jeBoolean JETCC jeUVMap_Projection(const jeXForm3d* pXForm, jeLVertex* pVerts, const jeVec3d* pNormals, int nverts);
 }
-#endif
 
 #endif
 

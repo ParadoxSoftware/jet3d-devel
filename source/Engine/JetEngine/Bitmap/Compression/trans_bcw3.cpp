@@ -18,8 +18,9 @@
 /*  Copyright (C) 1996-1999 Eclipse Entertainment, L.L.C. All Rights Reserved           */
 /*                                                                                      */
 /****************************************************************************************/
+#include <assert.h>
 
-#include "Utility.h"
+//#include "Utility.h"
 
 #define SHIFT(x)		((x)>>15)
 

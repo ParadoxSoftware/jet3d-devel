@@ -275,7 +275,7 @@ jeBitmap_Palette * Pal;
 
 	readLeavesToPal(leaves,gotLeaves,palette,palEntries);
 
-	destroy(leaves);
+	jeRam_Free(leaves); leaves = nullptr;
 
 	showPopTSC("createPalFast");
 
@@ -293,10 +293,10 @@ jeBitmap_Palette * createPaletteGood(const jeBitmap_Info * Info,const void * Bit
 {
 	return createPaletteGoodSub(Info,Bits,NULL);
 }
-jeBitmap_Palette * createPaletteFromImage(const image *im)
+/*jeBitmap_Palette * createPaletteFromImage(const image *im)
 {
 	return createPaletteGoodSub(NULL,NULL,im);
-}
+}*/
 
 jeBitmap_Palette * createPaletteGoodSub(const jeBitmap_Info * Info,const void * Bits,const image *im)
 {
@@ -417,11 +417,11 @@ jeBoolean DoYUV;
 		}
 	}
 
-	destroy(radix);
+	jeRam_Free(radix); radix = nullptr;
 
 done:
 
-	destroy(leaves);
+	jeRam_Free(leaves); radix = nullptr;
 
 	showPopTSC("createPalGood");
 

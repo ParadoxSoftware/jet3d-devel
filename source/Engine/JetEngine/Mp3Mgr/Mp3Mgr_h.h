@@ -20,10 +20,6 @@
 #include "Errorlog.h"
 
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 typedef enum tagState {Uninitialized, Stopped, Paused, Playing } State;
 
 typedef struct tagMedia
@@ -58,10 +54,6 @@ jeBoolean	Mp3Playing();
   #define ASSERT( exp ) ((void)0)
 #else
 #define ASSERT( exp ) ((void)0)
-#endif
-
-#ifdef __cplusplus
-}
 #endif
 
 #endif

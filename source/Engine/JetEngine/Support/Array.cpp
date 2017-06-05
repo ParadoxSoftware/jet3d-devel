@@ -510,8 +510,11 @@ JETAPI jeArray * JETCC jeArray_CreateFromFile(jeVFile * File, uint16 lVersionSiz
 	if ( ! jeArray_Extend(Array,Array->IndexTableLen) )
 		goto fail;
 
-	MB = Array->MemList;
-	assert(MB->NumItems > (int)Array->MaxIndex );
+	if (Array->MemList != NULL)
+	{
+		MB = Array->MemList;
+		assert(MB->NumItems > (int)Array->MaxIndex);
+	}
 
 	// read in the array
 	// hook up the indextable

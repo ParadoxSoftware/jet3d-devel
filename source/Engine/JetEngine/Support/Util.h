@@ -23,10 +23,6 @@
 #ifndef UTIL_H
 #define UTIL_H
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 #define UTIL_MAX_RESOURCE_LENGTH	(128)
 #define FLOAT_NEAR_ZERO				(0.00001f)
 
@@ -37,10 +33,6 @@ char *		Util_LoadLocalRcString(unsigned int resid);  //allocates memory and fill
 char *		Util_LoadText( unsigned int resid );
 char *		Util_StrDup( const char * const psz ) ;
 int			Util_GetAppPath( char *Buf, int BufSize );
-
-#ifdef __cplusplus
-}
-#endif
 
 #endif // Prevent multiple inclusion
 /* EOF: Util.h */

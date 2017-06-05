@@ -1873,7 +1873,7 @@ static BOOL D3DMain_PickDevice(void)
 	return FALSE;
 }
 
-char * stristr(const char *StrBase,const char *SubBase)
+char * stristr_dx(const char *StrBase,const char *SubBase)
 {
 
 while ( *StrBase )
@@ -1953,7 +1953,7 @@ static BOOL D3DMain_CreateDevice(void)
 	}
 
 	// <> look in name for a 3dfx and set up a MaxSurfaces variable
-	if ( stristr(D3DInfo.DDName,"3dfx") )
+	if ( stristr_dx(D3DInfo.DDName,"3dfx") )
 	{
 		OutputDebugString("D3DDrv : found 3dfx card, using 1024 surfaces\n");
 		D3DMain_Log("D3DDrv : found 3dfx card, using 1024 surfaces\n");

@@ -32,10 +32,6 @@
 #include "BaseType.h"
 #include "VFile.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 typedef struct jeTKEvents jeTKEvents;
 typedef jeFloat jeTKEvents_TimeType;
 
@@ -85,11 +81,5 @@ JETAPI jeBoolean JETCC jeTKEvents_GetExtents(
 		jeTKEvents *Events,
 		jeTKEvents_TimeType *FirstEventTime,	// time of first event
 		jeTKEvents_TimeType *LastEventTime);	// time of last event
-
-#ifdef __cplusplus
-}
-#endif
-
-
 
 #endif

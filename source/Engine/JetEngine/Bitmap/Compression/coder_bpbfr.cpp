@@ -30,8 +30,10 @@ major places to speed up :
 fast abs()
 
 *****/
-
-#include "Utility.h"
+#include <assert.h>
+#include "Basetype.h"
+#include "Ram.h"
+//#include "Utility.h"
 #include "arithc.h"
 #include "Coder.h"
 #include "rungae.h"
@@ -93,8 +95,7 @@ return JE_TRUE;
 void coderBPBFRFree(coder *c)
 {
 	if ( c->data ) {
-		destroy(c->data);
-		c->data = NULL;
+		jeRam_Free(c->data); c->data = nullptr;
 	}
 }
 
@@ -261,20 +262,20 @@ static int __inline mcontext(int *dp,int pp,int x,int y,int fullw,int donemask,i
 int P,N,W;
 int context,VD,sign_context;
 
-	*pAbs = abs(*dp);
+	*pAbs = JE_ABS(*dp);
 	*pNeg = isneg(*dp);	
 
 	VD	= (*pAbs)&donemask;	// current val already done
 	*pVD = VD;
 
-	P	= abs(pp)&nextmask;
+	P	= JE_ABS(pp)&nextmask;
 
 	sign_context = 0;
 
 	if ( y == 0 ) 
 	{
 		N = VD;
-		if ( x == 0 ) W = VD; else W = abs(dp[-1]) & nextmask;
+		if ( x == 0 ) W = VD; else W = JE_ABS(dp[-1]) & nextmask;
 		if ( W ) 
 		{
 			if ( isneg(dp[-1]) ) sign_context += 3;
@@ -284,7 +285,7 @@ int context,VD,sign_context;
 	else if ( x == 0 ) 
 	{
 		W = VD;
-		N  = abs(dp[-fullw])	& nextmask;
+		N  = JE_ABS(dp[-fullw])	& nextmask;
 		if ( N ) 
 		{
 			if ( isneg(dp[-fullw]) ) sign_context += 1;
@@ -293,8 +294,8 @@ int context,VD,sign_context;
 	} 
 	else 
 	{
-		N = abs(dp[-fullw])		& nextmask;
-		W = abs(dp[-1])			& nextmask;
+		N = JE_ABS(dp[-fullw])		& nextmask;
+		W = JE_ABS(dp[-1])			& nextmask;
 		if ( N ) 
 		{
 			if ( isneg(dp[-fullw]) ) sign_context += 1;
@@ -307,7 +308,7 @@ int context,VD,sign_context;
 		}
 	}
 
-	context = min(VAL_CONTEXT_MAX, ((VD + P + N + W)>>2));
+	context = JE_MIN(VAL_CONTEXT_MAX, ((VD + P + N + W)>>2));
 
 	context += ( N > VD ) ? SHAPE(0) : 0; 
 	context += ( W > VD ) ? SHAPE(1) : 0;

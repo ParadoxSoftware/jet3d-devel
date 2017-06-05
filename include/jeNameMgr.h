@@ -26,10 +26,6 @@
 
 #ifdef NEWSAVE
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 typedef struct jeChain			jeChain;
 typedef struct jeChain_Link		jeChain_Link;
 
@@ -46,10 +42,6 @@ JETAPI void JETCC jeNameMgr_Destroy(jeNameMgr **NameMgr);
 JETAPI jeBoolean JETCC jeNameMgr_Write(jeNameMgr *NM, jeVFile *VFile, void *PtrToData, jeNameMgr_WriteToFileCallback CB_Write);
 JETAPI jeBoolean JETCC jeNameMgr_Read(jeNameMgr *NM, jeVFile *VFile, jeNameMgr_CreateFromFileCallback CB_Read, void **ReturnPointer);
 JETAPI jeBoolean JETCC jeNameMgr_WriteFlush(jeNameMgr *NM);
-
-#ifdef __cplusplus
-}
-#endif
 
 #endif
 

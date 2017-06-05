@@ -100,10 +100,6 @@
 #include "jeWorld.h"
 #include "Engine.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 #ifndef JE_ACTOR_ENUMS
 #define JE_ACTOR_ENUMS
 	
@@ -1270,10 +1266,5 @@ enum ActorObjectIndexProperties
 	// end marker
 	ACTOROBJ_LAST_INDEX
 };
-
-#ifdef __cplusplus
-}
-#endif
-
 
 #endif

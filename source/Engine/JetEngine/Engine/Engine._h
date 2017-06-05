@@ -24,6 +24,7 @@
 #include <stdlib.h>
 #include <string>
 #include <list>
+#include <map>
 
 #include "Engine.h"
 #include "Bitmap.h"
@@ -31,10 +32,7 @@
 #include "Dcommon.h"
 #include "jeChain.h"
 #include "jeFileLogger.h"
-
-#ifdef __cplusplus
-extern "C" {
-#endif
+#include "jeResourceMgr.h"
 
 #ifndef WINVER
 typedef double LONGLONG;
@@ -133,6 +131,8 @@ typedef struct
 //{} Hack:
 
 typedef struct BitmapList BitmapList;
+//typedef std::list<jeBitmap*>	BitmapList;
+//typedef BitmapList::iterator	BitmapListItr;
 
 typedef std::list<jeImage*> ImageList;
 typedef ImageList::iterator	ImageListItr;
@@ -175,6 +175,7 @@ struct jeEngine
 	std::string			DriverDirectory;
 
 	BitmapList			*AttachedBitmaps;
+	//BitmapList			AttachedBitmaps;
 
 	float				CurrentGamma;
 	float				BitmapGamma;
@@ -190,11 +191,9 @@ struct jeEngine
 	// jeImage to replace jeBitmap
 	ImageList			AttachedImages;
 
+	jet3d::jeResourceMgr	*ResourceMgr;
+
 	jeEngine			* MySelf2;
 };
-
-#ifdef __cplusplus
-}
-#endif
 
 #endif // JE_ENGINE_H

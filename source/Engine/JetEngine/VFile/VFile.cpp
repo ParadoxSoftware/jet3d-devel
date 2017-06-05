@@ -48,10 +48,10 @@
 #include	"FSMemory.h"
 #include	"FSVFS.h"
 #include	"FSLZ.h"
-#include	"fsfakenet.h"
+//#include	"fsfakenet.h"
 
 #ifndef NO_INET
-#include	"fsinet.h"
+//#include	"fsinet.h"
 #endif
 
 #ifdef LN_SEARCHLIST
@@ -162,18 +162,18 @@ static	jeBoolean jeVFile_Enter(void)
 	if	(Type != JE_VFILE_TYPE_LZ)
 		return JE_FALSE;
 
-	if	(jeVFile_RegisterFileSystemInternal(FSFakeNet_GetAPIs(), &Type) == JE_FALSE)
-		return JE_FALSE;
-	if	(Type != JE_VFILE_TYPE_FAKENET)
-		return JE_FALSE;
+	//if	(jeVFile_RegisterFileSystemInternal(FSFakeNet_GetAPIs(), &Type) == JE_FALSE)
+	//	return JE_FALSE;
+	//if	(Type != JE_VFILE_TYPE_FAKENET)
+	//	return JE_FALSE;
 
 	// INET must be last
 
 #ifndef NO_INET
-	if	(jeVFile_RegisterFileSystemInternal(FSINet_GetAPIs(), &Type) == JE_FALSE)
-		return JE_FALSE;
-	if	(Type != JE_VFILE_TYPE_INTERNET)
-		return JE_FALSE;
+	//if	(jeVFile_RegisterFileSystemInternal(FSINet_GetAPIs(), &Type) == JE_FALSE)
+	//	return JE_FALSE;
+	//if	(Type != JE_VFILE_TYPE_INTERNET)
+	//	return JE_FALSE;
 #endif
 
 	jeVFile_RefCount ++;
@@ -187,7 +187,7 @@ static void jeVFile_Leave(void)
 	if ( jeVFile_RefCount == 0 )
 	{
 		assert(RegisteredAPIs);
-		jeRam_Free((void *)RegisteredAPIs);
+		jeRam_Free(RegisteredAPIs);
 		
 		RegisteredAPIs = NULL;
 	}
@@ -1160,7 +1160,7 @@ char * SubStr;
 
 	assert(Path);
 
-	if ( (SubStr = strstr(Path,"//")) != NULL )
+	if ( (SubStr = (char*)strstr(Path,"//")) != NULL )
 	{
 		assert( SubStr[0] == '/' && SubStr[1] == '/' );
 		if ( SubStr[-1] != ':' )
@@ -1168,7 +1168,7 @@ char * SubStr;
 	}
 	if ( strstr(Path,"///") != NULL )
 		return JE_FALSE;
-	if ( (SubStr = strstr(Path,"\\\\")) != NULL )
+	if ( (SubStr = (char*)strstr(Path,"\\\\")) != NULL )
 	{
 		if ( SubStr != Path )
 			return JE_FALSE;

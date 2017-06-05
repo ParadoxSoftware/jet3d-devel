@@ -18,7 +18,9 @@
 /*  Copyright (C) 1996-1999 Eclipse Entertainment, L.L.C. All Rights Reserved           */
 /*                                                                                      */
 /****************************************************************************************/
-#include "Utility.h"
+#include <assert.h>
+#include "Basetype.h"
+//#include "Utility.h"
 #include "colorconv.h"
 #include <math.h>
 
@@ -104,8 +106,8 @@ U -= 127; V -= 127;
 
 ******/
 
-#define max3(a,b,c) max(max(a,b),c)
-#define min3(a,b,c) min(min(a,b),c)
+#define max3(a,b,c) JE_MAX(JE_MAX(a,b),c)
+#define min3(a,b,c) JE_MIN(JE_MIN(a,b),c)
 
 #define H_RANGE	(256)
 #define H_SCALE	(H_RANGE/6)
@@ -252,8 +254,8 @@ double x,y,z;
 	*B  = 16.683870   *x -58.624094 *y + 296.940501*z ;
 *******/
 
-	putminmax(*R,0,0xFF);
-	putminmax(*G,0,0xFF);
-	putminmax(*B,0,0xFF);
+	*R = JE_MINMAX(*R,0,0xFF);
+	*G = JE_MINMAX(*G,0,0xFF);
+	*B = JE_MINMAX(*B,0,0xFF);
 }
 
