@@ -59,7 +59,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>.\;..\..\..\include;..\..\Tools\Editor;World;Engine;Particle;Engine\Drivers;Actor;Pool;BSP;Math;Entities;Support;Physics;VFile;Bitmap;Bitmap\Compression;guWorld;Mp3Mgr;..\External\VorbisSDK\include;..\External\EAXSDK\include;..\External\DXSDK_81\include;..\External\nvwa;..\External\FreeImage\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.\;..\..\..\include;..\..\Tools\Editor;World;Engine;Particle;Engine\Drivers;Actor;Pool;BSP;Math;Entities;Support;Physics;VFile;Bitmap;Bitmap\Compression;guWorld;Mp3Mgr;..\External\VorbisSDK\include;..\External\EAXSDK\include;..\External\DXSDK_81\include;..\External\nvwa;..\External\FreeImage\include;..\External\zzip\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_CRT_SECURE_NO_DEPRECATE;_CRT_SECURE_NO_WARNINGS;_DEBUG;WIN32;_WINDOWS;_USRDLL;JETENGINE_EXPORTS;JET_VERSION_2;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -78,7 +78,7 @@
       <AdditionalOptions>/MACHINE:I386 %(AdditionalOptions)</AdditionalOptions>
       <AdditionalDependencies>amstrmid.lib;oldnames.lib;urlmon.lib;winmm.lib;quartz.lib;dxguid.lib;ddraw.lib;vorbis_static_d.lib;vorbisfile_static_d.lib;ogg_static_d.lib;FreeImage.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SuppressStartupBanner>true</SuppressStartupBanner>
-      <AdditionalLibraryDirectories>..\..\..\lib;..\External\VorbisSDK\lib;..\External\EAXSDK\lib;..\External\DXSDK_81\lib;..\External\FreeImage\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\..\..\lib;..\External\VorbisSDK\lib;..\External\EAXSDK\lib;..\External\DXSDK_81\lib;..\External\FreeImage\lib;..\External\zzip\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <GenerateMapFile>true</GenerateMapFile>
@@ -295,6 +295,7 @@
     <ClCompile Include="Terrain\Terrain.cpp" />
     <ClCompile Include="Particle\jeParticle.cpp" />
     <ClCompile Include="Mp3Mgr\Mp3Mgr.cpp" />
+    <ClCompile Include="VFile\FSZip.cpp" />
     <ClCompile Include="VFile\VFile.cpp" />
     <ClCompile Include="VideoMgr\VideoMgr.cpp" />
   </ItemGroup>
@@ -454,6 +455,7 @@
     <ClInclude Include="..\..\..\include\Mp3Mgr.h" />
     <ClInclude Include="Mp3Mgr\Mp3Mgr_h.h" />
     <ClInclude Include="..\..\..\include\VideoMgr.h" />
+    <ClInclude Include="VFile\FSZip.h" />
     <ClInclude Include="VideoMgr\VideoMgr_h.h" />
     <ClInclude Include="..\..\..\include\jeCamera.h" />
     <ClInclude Include="..\..\..\include\jeEngine.h" />

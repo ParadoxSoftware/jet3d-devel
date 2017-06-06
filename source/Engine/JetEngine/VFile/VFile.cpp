@@ -48,6 +48,13 @@
 #include	"FSMemory.h"
 #include	"FSVFS.h"
 #include	"FSLZ.h"
+
+/*
+	Implement Zip file system - paradoxnj
+	https://github.com/ParadoxSoftware/jet3d-devel/issues/1
+*/
+#include "FSZip.h"
+
 //#include	"fsfakenet.h"
 
 #ifndef NO_INET
@@ -160,6 +167,14 @@ static	jeBoolean jeVFile_Enter(void)
 	if	(jeVFile_RegisterFileSystemInternal(FSLZ_GetAPIs(), &Type) == JE_FALSE)
 		return JE_FALSE;
 	if	(Type != JE_VFILE_TYPE_LZ)
+		return JE_FALSE;
+	/*
+		Implement Zip file system - paradoxnj
+		https://github.com/ParadoxSoftware/jet3d-devel/issues/1
+	*/
+	if (jeVFile_RegisterFileSystemInternal(FSZip_GetAPIs(), &Type) == JE_FALSE)
+		return JE_FALSE;
+	if (Type != JE_VFILE_TYPE_ZIP)
 		return JE_FALSE;
 
 	//if	(jeVFile_RegisterFileSystemInternal(FSFakeNet_GetAPIs(), &Type) == JE_FALSE)

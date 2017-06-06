@@ -436,6 +436,9 @@
     <ClCompile Include="Support\jeResourceMgrImpl.cpp">
       <Filter>Support</Filter>
     </ClCompile>
+    <ClCompile Include="VFile\FSZip.cpp">
+      <Filter>VFS</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -909,6 +912,9 @@
     </ClInclude>
     <ClInclude Include="Engine\jeImageImpl.h">
       <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="VFile\FSZip.h">
+      <Filter>VFS</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

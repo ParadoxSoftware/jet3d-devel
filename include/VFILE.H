@@ -117,6 +117,13 @@ extern "C" {
 		JE_VFILE_TYPE_MEMORY,
 		JE_VFILE_TYPE_VIRTUAL,
 		JE_VFILE_TYPE_LZ,
+
+		/*
+			Implement Zip file system - paradoxnj
+			https://github.com/ParadoxSoftware/jet3d-devel/issues/1
+		*/
+		JE_VFILE_TYPE_ZIP,
+
 		//	JE_VFILE_TYPE_FAKENET,
 		//	JE_VFILE_TYPE_INTERNET,
 		JE_VFILE_TYPE_COUNT
