@@ -1,6 +1,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+VisualStudioVersion = 12.0.40629.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "jDesignerClassic7", "source\Tools\Editor\jwe_2013.vcxproj", "{C9D22404-B2F5-4775-B35D-264E0D8AE53E}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -281,6 +281,8 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Direct3D9Driver_2013", "source\Drivers\Direct3D9Driver\Direct3D9Driver_2013.vcxproj", "{62A25711-77E3-4C77-B276-076FC67AEDAF}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "OpenGLDriver_2013", "source\Drivers\OpenGLDriver\OpenGLDriver_2013.vcxproj", "{5ADDB82B-5E5C-425E-B091-A4288FE057DE}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ActorStudio2", "source\Tools\ActorStudio2\ActorStudio2.vcxproj", "{6908E9FE-06A0-410C-B33A-9EF4E26F02F5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -609,6 +611,20 @@ Global
 		{5ADDB82B-5E5C-425E-B091-A4288FE057DE}.Release|Win32.Build.0 = Release|Win32
 		{5ADDB82B-5E5C-425E-B091-A4288FE057DE}.Template|Win32.ActiveCfg = Release|Win32
 		{5ADDB82B-5E5C-425E-B091-A4288FE057DE}.Template|Win32.Build.0 = Release|Win32
+		{6908E9FE-06A0-410C-B33A-9EF4E26F02F5}.Debug|Win32.ActiveCfg = Debug|Win32
+		{6908E9FE-06A0-410C-B33A-9EF4E26F02F5}.Debug|Win32.Build.0 = Debug|Win32
+		{6908E9FE-06A0-410C-B33A-9EF4E26F02F5}.KEY Hybrid|Win32.ActiveCfg = Release|Win32
+		{6908E9FE-06A0-410C-B33A-9EF4E26F02F5}.KEY Hybrid|Win32.Build.0 = Release|Win32
+		{6908E9FE-06A0-410C-B33A-9EF4E26F02F5}.KEY Release|Win32.ActiveCfg = Release|Win32
+		{6908E9FE-06A0-410C-B33A-9EF4E26F02F5}.KEY Release|Win32.Build.0 = Release|Win32
+		{6908E9FE-06A0-410C-B33A-9EF4E26F02F5}.NFO Hybrid|Win32.ActiveCfg = Release|Win32
+		{6908E9FE-06A0-410C-B33A-9EF4E26F02F5}.NFO Hybrid|Win32.Build.0 = Release|Win32
+		{6908E9FE-06A0-410C-B33A-9EF4E26F02F5}.NFO Release|Win32.ActiveCfg = Release|Win32
+		{6908E9FE-06A0-410C-B33A-9EF4E26F02F5}.NFO Release|Win32.Build.0 = Release|Win32
+		{6908E9FE-06A0-410C-B33A-9EF4E26F02F5}.Release|Win32.ActiveCfg = Release|Win32
+		{6908E9FE-06A0-410C-B33A-9EF4E26F02F5}.Release|Win32.Build.0 = Release|Win32
+		{6908E9FE-06A0-410C-B33A-9EF4E26F02F5}.Template|Win32.ActiveCfg = Release|Win32
+		{6908E9FE-06A0-410C-B33A-9EF4E26F02F5}.Template|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
