@@ -415,7 +415,7 @@ static	jeVFile_SystemAPIs	FSZip_APIs =
 
 };
 
-const jeVFile_SystemAPIs *JETCC FSDos_GetAPIs(void)
+const jeVFile_SystemAPIs *JETCC FSZip_GetAPIs(void)
 {
 	return &FSZip_APIs;
 }
