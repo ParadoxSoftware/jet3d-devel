@@ -73,7 +73,7 @@ typedef struct jeEngine_ChangeDriverCB
 
 //=====================================================================================
 //=====================================================================================
-static jeBoolean Engine_EnumSubDrivers(Engine_DriverInfo *DriverInfo, const char *DriverDirectory);
+static jeBoolean Engine_EnumSubDrivers(jeEngine *Engine, Engine_DriverInfo *DriverInfo, const char *DriverDirectory);
 static jeBoolean Engine_EnumSubDriversCB(int32 DriverId, char *Name, void *Context);
 static jeBoolean Engine_EnumModesCB(int32 ModeId, char *Name, int32 Width, int32 Height, int32 Bpp, void *Context);
 
@@ -166,7 +166,7 @@ JETAPI jeEngine * JETCC jeEngine_Create(HWND hWnd, const char *AppName, const ch
 	// Be flexible if they didn't want us to load any driver DLLs
 	if	(DriverDirectory)
 	{
-		if (!Engine_EnumSubDrivers(&Engine->DriverInfo, DriverDirectory))
+		if (!Engine_EnumSubDrivers(Engine, &Engine->DriverInfo, DriverDirectory))
 		{
 			Engine->EngineLog->logMessage(jet3d::jeLogger::LogError, "Could not enumerate drivers!!");
 			goto ExitWithError;
@@ -2649,7 +2649,7 @@ static jeBoolean Engine_EnumModesCB(int32 ModeId, char *Name, int32 Width, int32
 //===================================================================================
 //	EnumSubDrivers
 //===================================================================================
-static jeBoolean Engine_EnumSubDrivers(Engine_DriverInfo *DriverInfo, const char *DriverDirectory)
+static jeBoolean Engine_EnumSubDrivers(jeEngine *Engine, Engine_DriverInfo *DriverInfo, const char *DriverDirectory)
 {
 	DRV_Hook	*		DriverHook;
 	HINSTANCE			Handle;
@@ -2684,7 +2684,7 @@ static jeBoolean Engine_EnumSubDrivers(Engine_DriverInfo *DriverInfo, const char
 			continue;
 
 		strcpy(DriverInfo->CurFileName, Properties.Name);
-
+		
 		DriverHook = (DRV_Hook*)GetProcAddress((HINSTANCE)(Handle), "DriverHook");
 		if (!DriverHook)
 		{
@@ -2714,6 +2714,11 @@ static jeBoolean Engine_EnumSubDrivers(Engine_DriverInfo *DriverInfo, const char
 			continue;		// Should we return FALSE, or just continue?
 							// if you change your mind and decide to return, be sure to destroy the finder.
 		}
+
+		std::string msg = "Loaded driver ";
+		msg += Properties.Name;
+
+		Engine->EngineLog->logMessage(jet3d::jeLogger::LogInfo, msg);
 
 		DriverInfo->RDriver = NULL;		// clear out the RDriver pointer!
 

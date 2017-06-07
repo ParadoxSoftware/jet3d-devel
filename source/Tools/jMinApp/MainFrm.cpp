@@ -160,7 +160,8 @@ m_strGameName = _T("Jet3D_MinApp");
 #endif
 
 #ifdef _DEBUG
-	m_strDriverName = _T("D3D");
+	//m_strDriverName = _T("D3D");
+	m_strDriverName = _T("OpenGL");
 //	m_strDriverName = _T("Direct3D 9");
 #endif
 
@@ -574,13 +575,13 @@ bool	CMainFrame::InitializeJet3D()
 			AfxMessageBox("Could not open image file!!");
 		}
 
-		if (!m_pImage->CreateFromFile(File))
+/*		if (!m_pImage->CreateFromFile(File))
 		{
 			AfxMessageBox("Could not load image!!");
 			m_pImage->Release();
 			m_pImage = NULL;
 		}
-
+*/
 		jeVFile_Close(File);
 		
 		if (m_pImage)
