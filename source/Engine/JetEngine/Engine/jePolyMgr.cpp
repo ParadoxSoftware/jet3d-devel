@@ -142,7 +142,7 @@ void jePolyMgr_Destroy(jePolyMgr **Mgr)
 	(*Mgr)->RefCount--;
 
 	if ((*Mgr)->RefCount == 0)
-		jeRam_Free(*Mgr);
+		JE_RAM_FREE(*Mgr);
 
 	*Mgr = NULL;
 }

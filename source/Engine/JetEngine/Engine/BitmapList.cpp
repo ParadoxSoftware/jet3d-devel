@@ -58,14 +58,14 @@ jeBoolean BitmapList_IsValid(BitmapList *pList);
 BitmapList *BitmapList_Create(void)
 {
 BitmapList * pList;
-	pList = (BitmapList *)jeRam_AllocateClear(sizeof(*pList));
+	pList = (BitmapList *)JE_RAM_ALLOCATE_CLEAR(sizeof(*pList));
 	if (! pList )
 		return NULL;
 	//memset(pList,0,sizeof(*pList));
 	pList->HashPtr = Hash_Create();
 	if ( ! pList->HashPtr )
 	{
-		jeRam_Free(pList);
+		JE_RAM_FREE(pList);
 		return NULL;
 	}
 	#ifdef _DEBUG
@@ -117,7 +117,7 @@ jeBoolean	Ret = JE_TRUE;
 		Hash_Destroy(pList->HashPtr);
 	}
 
-	jeRam_Free(pList);
+	JE_RAM_FREE(pList);
 
 	return Ret;
 }

@@ -124,7 +124,7 @@ JETAPI jeStaticMesh * JETCC jeStaticMesh_Create(const char *MeshName, jeResource
 
 	jeBody_GetGeometryStats(Body, 0, &NumVerts, &NumFaces, &NumNormals);
 
-	Mesh = (jeStaticMesh*)jeRam_AllocateClear(sizeof(jeStaticMesh));
+	Mesh = (jeStaticMesh*)JE_RAM_ALLOCATE_CLEAR(sizeof(jeStaticMesh));
 	if (!Mesh)
 	{
 		jeActor_DefDestroy(&ActorDef);
@@ -205,7 +205,7 @@ JETAPI uint32 JETCC jeStaticMesh_Destroy(jeStaticMesh **Mesh)
 		(*Mesh)->Vertices.clear();
 		(*Mesh)->Materials.clear();
 
-		jeRam_Free((*Mesh));
+		JE_RAM_FREE((*Mesh));
 		(*Mesh) = NULL;
 
 		return 0;

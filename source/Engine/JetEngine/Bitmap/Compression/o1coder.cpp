@@ -59,7 +59,7 @@ Ret->totMax = totMax;
 if ( (Ret->order0 = oZeroCreateMax(ari,numChars,totMax)) == NULL )
 	{ O1coder_CleanUp(Ret); return(NULL); }
 
-if ( (Ret->order1 = (context **)jeRam_AllocateClear(sizeof(void *) * numContexts)) == NULL )
+if ( (Ret->order1 = (context **)JE_RAM_ALLOCATE_CLEAR(sizeof(void *) * numContexts)) == NULL )
 	{ O1coder_CleanUp(Ret); return(NULL); }
 
 return(Ret);
@@ -76,10 +76,10 @@ if ( O1I->order1 )
 	{
 	long i;
 	for(i=0;i<O1I->numContexts;i++) if ( O1I->order1[i] ) contextFree(O1I->order1[i]);
-	jeRam_Free(O1I->order1); O1I->order1 = nullptr;
+	JE_RAM_FREE(O1I->order1); //O1I->order1 = nullptr;
 	}
 if ( O1I->order0 ) oZeroFree(O1I->order0);
-jeRam_Free(O1I); O1I = nullptr;
+JE_RAM_FREE(O1I); //O1I = nullptr;
 }
 
 void O1coder_EncodeC(oOne * O1I,long sym,long context)

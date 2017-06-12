@@ -154,7 +154,7 @@ jeTClip_StaticsType * TCI;
 			return JE_FALSE;
 	}
 
-	TCI = (jeTClip_StaticsType *)jeRam_Allocate(sizeof(jeTClip_StaticsType));
+	TCI = (jeTClip_StaticsType *)JE_RAM_ALLOCATE(sizeof(jeTClip_StaticsType));
 	if ( ! TCI )
 		return JE_FALSE;
 	memcpy(TCI,&jeTClip_Statics,sizeof(jeTClip_StaticsType));
@@ -173,7 +173,7 @@ jeTClip_StaticsType * TCI;
 	if ( ! TCI )
 		return JE_FALSE;
 	memcpy(&jeTClip_Statics,TCI,sizeof(jeTClip_StaticsType));
-	jeRam_Free(TCI);
+	JE_RAM_FREE(TCI);
 
 	if ( ! Link_Peek(jeTClip_Link) )
 	{

@@ -192,7 +192,7 @@ BOOL CAboutDlg::OnInitDialog()
 	{
 		UpdateData( true );
 		m_AboutText = AboutText;
-		jeRam_Free( AboutText );
+		JE_RAM_FREE( AboutText );
 		m_BuildInfoText = _T(BUILD_TYPE "   " BUILD_NUMBER);
 		UpdateData( false );
 	}
@@ -293,7 +293,7 @@ BOOL CJweApp::InitObjects( char * DllPath)
 
 
 				// save dll full name
-				FullName = (char*)jeRam_Allocate( strlen( DllPath ) + strlen( Properties.Name ) + 2 );
+				FullName = (char*)JE_RAM_ALLOCATE( strlen( DllPath ) + strlen( Properties.Name ) + 2 );
 				if ( FullName == NULL )
 				{
 					jeErrorLog_AddString( JE_ERR_MEMORY_RESOURCE, "InitObjects: Unable to allocate dll full name.", NULL );
@@ -308,7 +308,7 @@ BOOL CJweApp::InitObjects( char * DllPath)
 				if ( DllHandle == NULL )
 				{
 					jeErrorLog_AddString( JE_ERR_FILEIO_READ, "InitObjects: Unable to load object dll.", Properties.Name );
-					jeRam_Free( FullName );
+					JE_RAM_FREE( FullName );
 					continue;
 				}
 
@@ -316,10 +316,10 @@ BOOL CJweApp::InitObjects( char * DllPath)
 				if ( RegisterObject( DllHandle ) == JE_FALSE )
 				{
 					jeErrorLog_AddString( JE_ERR_INTERNAL_RESOURCE, "InitObjects: failed to find get functions for object dll.", Properties.Name  );
-					jeRam_Free( FullName );
+					JE_RAM_FREE( FullName );
 					continue;
 				}
-				jeRam_Free( FullName );
+				JE_RAM_FREE( FullName );
 
 			}
 

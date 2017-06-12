@@ -53,7 +53,7 @@ jeBSP_Brush *jeBSP_BrushCreate(int32 NumSides)
 	c = BRUSH_SIZE(NumSides);
 
 	// Allocate the brush
-	Brush = (jeBSP_Brush*)jeRam_Allocate(c);
+	Brush = (jeBSP_Brush*)JE_RAM_ALLOCATE(c);
 
 	if (!Brush)
 		return NULL;
@@ -127,7 +127,7 @@ void jeBSP_BrushDestroy(jeBSP_Brush **Brush)
 			jePoly_Destroy(&pBrush->Sides[i].Poly);
 	}
 
-	jeRam_Free(pBrush);
+	JE_RAM_FREE(pBrush);
 
 	*Brush = NULL;
 

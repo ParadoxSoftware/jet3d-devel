@@ -217,7 +217,7 @@ static char * Util_StrDup(
 {
 
 	// copy string
-	char * p = (char *)jeRam_Allocate( strlen( psz ) + 1 );
+	char * p = (char *)JE_RAM_ALLOCATE( strlen( psz ) + 1 );
 	if ( p ) 
 	{
 		strcpy( p, psz );
@@ -254,7 +254,7 @@ static void Util_RecreateCurBitmapsList(
 	{
 		if( CurBitmaps.Name[i] != NULL )
 		{
-			jeRam_Free( CurBitmaps.Name[i] );
+			JE_RAM_FREE( CurBitmaps.Name[i] );
 			CurBitmaps.Name[i] = NULL;
 		}
 	}
@@ -641,26 +641,26 @@ static void Util_DestroyBitmapList(
 		{
 			if ( List->Name[i] != NULL )
 			{
-				jeRam_Free( List->Name[i] );
+				JE_RAM_FREE( List->Name[i] );
 			}
 		}
-		jeRam_Free( List->Name );
+		JE_RAM_FREE( List->Name );
 	}
 
 	// destroy width and height lists
 	if ( List->Width != NULL )
 	{
-		jeRam_Free( List->Width );
+		JE_RAM_FREE( List->Width );
 	}
 	if ( List->Height != NULL )
 	{
-		jeRam_Free( List->Height );
+		JE_RAM_FREE( List->Height );
 	}
 
 	// destroy numeric sizes list
 	if ( List->NumericSizes != NULL )
 	{
-		jeRam_Free( List->NumericSizes );
+		JE_RAM_FREE( List->NumericSizes );
 	}
 
 	// destroy string sizes list
@@ -669,12 +669,12 @@ static void Util_DestroyBitmapList(
 		for ( i = 0; i < List->SizesListSize; i++ )
 		{
 			assert( List->StringSizes[i] != NULL );
-			jeRam_Free( List->StringSizes[i] );
+			JE_RAM_FREE( List->StringSizes[i] );
 		}
 	}
 
 	// free bitmaplist struct
-	jeRam_Free( List );
+	JE_RAM_FREE( List );
 
 	// zap pointer
 	*DeadList = NULL;
@@ -706,7 +706,7 @@ static BitmapList * Util_CreateBitmapList(
 	assert( FileFilter != NULL );
 
 	// allocate bitmaplist struct
-	Bmps = (BitmapList *)jeRam_AllocateClear( sizeof( *Bmps ) );
+	Bmps = (BitmapList *)JE_RAM_ALLOCATE_CLEAR( sizeof( *Bmps ) );
 	if ( Bmps == NULL )
 	{
 		jeErrorLog_Add( JE_ERR_MEMORY_RESOURCE, NULL );
@@ -741,7 +741,7 @@ static BitmapList * Util_CreateBitmapList(
 	Finder = NULL;
 
 	// allocate name list
-	Bmps->Name = (char **)jeRam_AllocateClear( sizeof( char * ) * Bmps->Total );
+	Bmps->Name = (char **)JE_RAM_ALLOCATE_CLEAR( sizeof( char * ) * Bmps->Total );
 	if ( Bmps->Name == NULL )
 	{
 		jeErrorLog_Add( JE_ERR_MEMORY_RESOURCE, NULL );
@@ -749,7 +749,7 @@ static BitmapList * Util_CreateBitmapList(
 	}
 
 	// allocate width list
-	Bmps->Width = (int *)jeRam_AllocateClear( sizeof( int * ) * Bmps->Total );
+	Bmps->Width = (int *)JE_RAM_ALLOCATE_CLEAR( sizeof( int * ) * Bmps->Total );
 	if ( Bmps->Width == NULL )
 	{
 		jeErrorLog_Add( JE_ERR_MEMORY_RESOURCE, NULL );
@@ -757,7 +757,7 @@ static BitmapList * Util_CreateBitmapList(
 	}
 
 	// allocate height list
-	Bmps->Height = (int *)jeRam_AllocateClear( sizeof( int * ) * Bmps->Total );
+	Bmps->Height = (int *)JE_RAM_ALLOCATE_CLEAR( sizeof( int * ) * Bmps->Total );
 	if ( Bmps->Height == NULL )
 	{
 		jeErrorLog_Add( JE_ERR_MEMORY_RESOURCE, NULL );
@@ -765,7 +765,7 @@ static BitmapList * Util_CreateBitmapList(
 	}
 
 	// allocate numeric sizes list
-	Bmps->NumericSizes = (int *)jeRam_AllocateClear( sizeof( int * ) * Bmps->Total );
+	Bmps->NumericSizes = (int *)JE_RAM_ALLOCATE_CLEAR( sizeof( int * ) * Bmps->Total );
 	if ( Bmps->NumericSizes == NULL )
 	{
 		jeErrorLog_Add( JE_ERR_MEMORY_RESOURCE, NULL );
@@ -773,7 +773,7 @@ static BitmapList * Util_CreateBitmapList(
 	}
 
 	// allocate string sizes list
-	Bmps->StringSizes = (char **)jeRam_AllocateClear( sizeof( char * ) * Bmps->Total );
+	Bmps->StringSizes = (char **)JE_RAM_ALLOCATE_CLEAR( sizeof( char * ) * Bmps->Total );
 	if ( Bmps->StringSizes == NULL )
 	{
 		jeErrorLog_Add( JE_ERR_MEMORY_RESOURCE, NULL );
@@ -962,7 +962,7 @@ static char * Util_LoadLibraryString(
 	}
 
 	// copy resource string
-	NewString = (char*)jeRam_Allocate( Size + 1 );
+	NewString = (char*)JE_RAM_ALLOCATE( Size + 1 );
 	if ( NewString == NULL )
 	{
 		jeErrorLog_Add( JE_ERR_MEMORY_RESOURCE, NULL );
@@ -1344,10 +1344,10 @@ void DeInit_Class(
 		{
 			if ( CurBitmaps.Name[i] != NULL )
 			{
-				jeRam_Free( CurBitmaps.Name[i] );
+				JE_RAM_FREE( CurBitmaps.Name[i] );
 			}
 		}
-		jeRam_Free( CurBitmaps.Name );
+		JE_RAM_FREE( CurBitmaps.Name );
 	}
 
 	// zap instance pointer
@@ -1370,7 +1370,7 @@ void * JETCC CreateInstance(
 	Spout	*Object;
 
 	// allocate struct
-	Object = (Spout *)jeRam_AllocateClear( sizeof( *Object ) );
+	Object = (Spout *)JE_RAM_ALLOCATE_CLEAR( sizeof( *Object ) );
 	if ( Object == NULL )
 	{
 		jeErrorLog_Add( JE_ERR_MEMORY_RESOURCE, NULL );
@@ -1382,7 +1382,7 @@ void * JETCC CreateInstance(
 	if ( Object->Ps == NULL )
 	{
 		jeErrorLog_Add( JE_ERR_SUBSYSTEM_FAILURE, NULL );
-		jeRam_Free( Object );
+		JE_RAM_FREE( Object );
 		return NULL;
 	}
 
@@ -1503,7 +1503,7 @@ jeBoolean JETCC Destroy(
 	assert( Object->AlphaName == NULL );
 
 	// free struct
-	jeRam_Free( Object );
+	JE_RAM_FREE( Object );
 
 	// zap pointer
 	*Instance = NULL;
@@ -1606,7 +1606,7 @@ jeBoolean JETCC AttachWorld(
 		}
 
 		// init current list
-		CurBitmaps.Name = (char **)jeRam_AllocateClear( sizeof( char * ) * Bitmaps->Total );
+		CurBitmaps.Name = (char **)JE_RAM_ALLOCATE_CLEAR( sizeof( char * ) * Bitmaps->Total );
 		CurBitmaps.Total = 0;
 	}
 
@@ -1702,7 +1702,7 @@ jeBoolean JETCC AttachEngine(
 			// set property
 			Data.String = Util_StrDup( Object->BitmapName );
 			Result = SetProperty( Object, SPOUT_BITMAPLIST_ID, PROPERTY_COMBO_TYPE, &Data );
-			jeRam_Free( Data.String );
+			JE_RAM_FREE( Data.String );
 		}
 
 		// set alpha name property
@@ -1716,7 +1716,7 @@ jeBoolean JETCC AttachEngine(
 			// set property
 			Data.String = Util_StrDup( Object->AlphaName );
 			Result = SetProperty( Object, SPOUT_ALPHALIST_ID, PROPERTY_COMBO_TYPE, &Data );
-			jeRam_Free( Data.String );
+			JE_RAM_FREE( Data.String );
 		}
 	}
 
@@ -1757,17 +1757,17 @@ jeBoolean JETCC DettachEngine(
 	// destroy bitmap names
 	if ( Object->AlphaName != NULL )
 	{
-		jeRam_Free( Object->AlphaName );
+		JE_RAM_FREE( Object->AlphaName );
 		Object->AlphaName = NULL;
 	}
 	if ( Object->BitmapName != NULL )
 	{
-		jeRam_Free( Object->BitmapName );
+		JE_RAM_FREE( Object->BitmapName );
 		Object->BitmapName = NULL;
 	}
 	if ( Object->ArtName != NULL )
 	{
-		jeRam_Free( Object->ArtName );
+		JE_RAM_FREE( Object->ArtName );
 		Object->ArtName = NULL;
 	}
 
@@ -1929,7 +1929,7 @@ void * JETCC CreateFromFile(
 	Result &= jeVFile_Read( File, &( Size ), sizeof( Size ) );
 	if ( ( Size > 0 ) && ( Result == JE_TRUE ) )
 	{
-		Object->ArtName = jeRam_Allocate( Size );
+		Object->ArtName = JE_RAM_ALLOCATE( Size );
 		if ( Object->ArtName == NULL )
 		{
 			jeErrorLog_Add( JE_ERR_MEMORY_RESOURCE, NULL );
@@ -1942,7 +1942,7 @@ void * JETCC CreateFromFile(
 	Result &= jeVFile_Read( File, &( Size ), sizeof( Size ) );
 	if ( ( Size > 0 ) && ( Result == JE_TRUE ) )
 	{
-		Object->BitmapName = jeRam_Allocate( Size );
+		Object->BitmapName = JE_RAM_ALLOCATE( Size );
 		if ( Object->BitmapName == NULL )
 		{
 			jeErrorLog_Add( JE_ERR_MEMORY_RESOURCE, NULL );
@@ -1955,7 +1955,7 @@ void * JETCC CreateFromFile(
 	Result &= jeVFile_Read( File, &( Size ), sizeof( Size ) );
 	if ( ( Size > 0 ) && ( Result == JE_TRUE ) )
 	{
-		Object->AlphaName = jeRam_Allocate( Size );
+		Object->AlphaName = JE_RAM_ALLOCATE( Size );
 		if ( Object->AlphaName == NULL )
 		{
 			jeErrorLog_Add( JE_ERR_MEMORY_RESOURCE, NULL );
@@ -2020,19 +2020,19 @@ void * JETCC CreateFromFile(
 	// free all strings
 	if ( Object->ArtName != NULL )
 	{
-		jeRam_Free( Object->ArtName );
+		JE_RAM_FREE( Object->ArtName );
 	}
 	if ( Object->BitmapName != NULL )
 	{
-		jeRam_Free( Object->BitmapName );
+		JE_RAM_FREE( Object->BitmapName );
 	}
 	if ( Object->AlphaName != NULL )
 	{
-		jeRam_Free( Object->AlphaName );
+		JE_RAM_FREE( Object->AlphaName );
 	}
 
 	// free object
-	jeRam_Free( Object );
+	JE_RAM_FREE( Object );
 
 	// return error
 	return NULL;
@@ -2093,7 +2093,7 @@ void * JETCC CreateFromFile(
 	    Result &= jeVFile_Read( File, &( Size ), sizeof( Size ) );
 	    if ( ( Size > 0 ) && ( Result == JE_TRUE ) )
 		{
-		    Object->ArtName = (char *)jeRam_Allocate( Size );
+		    Object->ArtName = (char *)JE_RAM_ALLOCATE( Size );
 		    if ( Object->ArtName == NULL )
 			{
 			    jeErrorLog_Add( JE_ERR_MEMORY_RESOURCE, NULL );
@@ -2106,7 +2106,7 @@ void * JETCC CreateFromFile(
 	    Result &= jeVFile_Read( File, &( Size ), sizeof( Size ) );
 	    if ( ( Size > 0 ) && ( Result == JE_TRUE ) )
 		{
-		    Object->BitmapName = (char *)jeRam_Allocate( Size );
+		    Object->BitmapName = (char *)JE_RAM_ALLOCATE( Size );
 		    if ( Object->BitmapName == NULL )
 			{
 			    jeErrorLog_Add( JE_ERR_MEMORY_RESOURCE, NULL );
@@ -2119,7 +2119,7 @@ void * JETCC CreateFromFile(
 	    Result &= jeVFile_Read( File, &( Size ), sizeof( Size ) );
 	    if ( ( Size > 0 ) && ( Result == JE_TRUE ) )
 		{
-		    Object->AlphaName = (char *)jeRam_Allocate( Size );
+		    Object->AlphaName = (char *)JE_RAM_ALLOCATE( Size );
 		    if ( Object->AlphaName == NULL )
 			{
 			    jeErrorLog_Add( JE_ERR_MEMORY_RESOURCE, NULL );
@@ -2186,19 +2186,19 @@ void * JETCC CreateFromFile(
 	// free all strings
 	if ( Object->ArtName != NULL )
 	{
-		jeRam_Free( Object->ArtName );
+		JE_RAM_FREE( Object->ArtName );
 	}
 	if ( Object->BitmapName != NULL )
 	{
-		jeRam_Free( Object->BitmapName );
+		JE_RAM_FREE( Object->BitmapName );
 	}
 	if ( Object->AlphaName != NULL )
 	{
-		jeRam_Free( Object->AlphaName );
+		JE_RAM_FREE( Object->AlphaName );
 	}
 
 	// free object
-	jeRam_Free( Object );
+	JE_RAM_FREE( Object );
 
 	// return error
 	return NULL;
@@ -2833,17 +2833,17 @@ jeBoolean JETCC SetProperty(
 				// zap all art names
 				if ( Object->BitmapName != NULL )
 				{
-					jeRam_Free( Object->BitmapName );
+					JE_RAM_FREE( Object->BitmapName );
 				}
 				Object->BitmapName = Util_StrDup( NoSelection );
 				if ( Object->AlphaName != NULL )
 				{
-					jeRam_Free( Object->AlphaName );
+					JE_RAM_FREE( Object->AlphaName );
 				}
 				Object->AlphaName = Util_StrDup( NoSelection );
 				if ( Object->ArtName != NULL )
 				{
-					jeRam_Free( Object->ArtName );
+					JE_RAM_FREE( Object->ArtName );
 					Object->ArtName = NULL;
 				}
 			}
@@ -2875,7 +2875,7 @@ jeBoolean JETCC SetProperty(
 			{
 				if ( Object->BitmapName != NULL )
 				{
-					jeRam_Free( Object->BitmapName );
+					JE_RAM_FREE( Object->BitmapName );
 				}
 				Object->BitmapName = Util_StrDup( pData->String );
 			}
@@ -2884,7 +2884,7 @@ jeBoolean JETCC SetProperty(
 			{
 				if ( Object->AlphaName != NULL )
 				{
-					jeRam_Free( Object->AlphaName );
+					JE_RAM_FREE( Object->AlphaName );
 				}
 				Object->AlphaName = Util_StrDup( pData->String );
 			}
@@ -2892,7 +2892,7 @@ jeBoolean JETCC SetProperty(
 			// zap art name
 			if ( Object->ArtName != NULL )
 			{
-				jeRam_Free( Object->ArtName );
+				JE_RAM_FREE( Object->ArtName );
 			}
 
 			// do nothing further if no main bitmap is provided
@@ -2907,7 +2907,7 @@ jeBoolean JETCC SetProperty(
 			{
 				Size += strlen( Object->AlphaName );
 			}
-			Object->ArtName = (char *)jeRam_Allocate( Size );
+			Object->ArtName = (char *)JE_RAM_ALLOCATE( Size );
 			if ( Object->ArtName == NULL )
 			{
 				jeErrorLog_Add( JE_ERR_MEMORY_RESOURCE, NULL );

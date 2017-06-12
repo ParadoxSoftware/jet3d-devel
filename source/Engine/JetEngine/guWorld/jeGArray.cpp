@@ -122,10 +122,10 @@ jeGArray *jeGArray_Create(int32 StartElements, int32 ElementSize)
 		if (Array)
 		{
 			if (Array->Elements)
-				jeRam_Free(Array->Elements);
+				JE_RAM_FREE(Array->Elements);
 			if (Array->RefCounts)
-				jeRam_Free(Array->RefCounts);
-			jeRam_Free(Array);
+				JE_RAM_FREE(Array->RefCounts);
+			JE_RAM_FREE(Array);
 		}
 
 		return NULL;
@@ -270,10 +270,10 @@ jeGArray *jeGArray_CreateFromFile(jeVFile *VFile, jeGArray_IOFunc *IOFunc, void 
 		if (Array)
 		{
 			if (Array->Elements)
-				jeRam_Free(Array->Elements);
+				JE_RAM_FREE(Array->Elements);
 			if (Array->RefCounts)
-				jeRam_Free(Array->RefCounts);
-			jeRam_Free(Array);
+				JE_RAM_FREE(Array->RefCounts);
+			JE_RAM_FREE(Array);
 		}
 
 		return NULL;
@@ -407,8 +407,8 @@ void jeGArray_Destroy(jeGArray **Array)
 			}
 			#endif
 
-			jeRam_Free((*Array)->Elements);
-			jeRam_Free((*Array)->RefCounts);
+			JE_RAM_FREE((*Array)->Elements);
+			JE_RAM_FREE((*Array)->RefCounts);
 		}
 		else
 		{
@@ -416,7 +416,7 @@ void jeGArray_Destroy(jeGArray **Array)
 			assert(!(*Array)->RefCounts);
 		}
 
-		jeRam_Free(*Array);				// Finally, free the Array itself
+		JE_RAM_FREE(*Array);				// Finally, free the Array itself
 	}
 
 	*Array = NULL;
@@ -460,16 +460,16 @@ static jeBoolean jeGArray_Extend(jeGArray *Array)
 			return JE_FALSE;			// Out of index space
 	}
 	
-	Array->Elements = (uint8 *)jeRam_Realloc(Array->Elements, NewSize*Array->ElementSize);
+	Array->Elements = (uint8 *)JE_RAM_REALLOC(Array->Elements, NewSize*Array->ElementSize);
 
 	if (!Array->Elements)
 		return JE_FALSE;
 
-	Array->RefCounts = (jeGArray_RefType *)jeRam_Realloc(Array->RefCounts, NewSize*sizeof(jeGArray_RefType));
+	Array->RefCounts = (jeGArray_RefType *)JE_RAM_REALLOC(Array->RefCounts, NewSize*sizeof(jeGArray_RefType));
 
 	if (!Array->RefCounts)
 	{
-		jeRam_Free(Array->Elements);
+		JE_RAM_FREE(Array->Elements);
 		return JE_FALSE;
 	}
 

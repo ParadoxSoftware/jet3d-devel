@@ -49,7 +49,7 @@ void Object_Free( Object ** ppObject )
 		return;
 
 	if( (*ppObject)->pszName != NULL )
-		jeRam_Free( (*ppObject)->pszName ) ;
+		JE_RAM_FREE( (*ppObject)->pszName ) ;
 
 	switch( (*ppObject)->ObjectKind )
 	{
@@ -252,7 +252,7 @@ char * Object_GetNameAndTag( const Object * pObject )
 	assert( pObject->pszName );
 
 	sprintf( NumBuff, "%d", pObject->nNumber );
-	NameTag = (char*)jeRam_Allocate( strlen( pObject->pszName ) + strlen( NumBuff ) + 1 );
+	NameTag = (char*)JE_RAM_ALLOCATE( strlen( pObject->pszName ) + strlen( NumBuff ) + 1 );
 	if( NameTag == NULL )
 		return( NULL );
 	strcpy( NameTag, pObject->pszName );
@@ -663,7 +663,7 @@ jeBoolean Object_SetName( Object * pObject, const char * Name, int32 nNumber )
 {
 	pObject->nNumber = nNumber;
 	if( pObject->pszName )
-		jeRam_Free(pObject->pszName );
+		JE_RAM_FREE(pObject->pszName );
 	pObject->pszName = Util_StrDup( Name );
 	if( pObject->pszName == NULL )
 		return( JE_FALSE );

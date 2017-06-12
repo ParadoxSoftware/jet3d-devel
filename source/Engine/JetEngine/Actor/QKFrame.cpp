@@ -630,7 +630,7 @@ jeTKArray *JETCC jeQKFrame_CreateFromFile(
 			return NULL;
 		}
 			
-	Block = (char *)jeRam_AllocateClear(BlockSize);
+	Block = (char *)JE_RAM_ALLOCATE_CLEAR(BlockSize);
 	if(jeVFile_Read(pFile, Block, BlockSize) == JE_FALSE)
 		{
 			jeErrorLog_Add(JE_ERR_FILEIO_READ,"jeQKFrame_CreateFromFile.");
@@ -644,7 +644,7 @@ jeTKArray *JETCC jeQKFrame_CreateFromFile(
 	
 	if (Compression > 0xFF)
 		{
-			jeRam_Free(Block);	
+			JE_RAM_FREE(Block);	
 			jeErrorLog_Add(JE_ERR_FILEIO_VERSION,"jeQKFrame_CreateFromFile: Bad Compression Flag.");
 			return NULL;
 		}
@@ -660,7 +660,7 @@ jeTKArray *JETCC jeQKFrame_CreateFromFile(
 				FieldSize = sizeof(jeQKFrame_Squad);
 				break;
 			default:
-				jeRam_Free(Block);
+				JE_RAM_FREE(Block);
 				jeErrorLog_Add(JE_ERR_FILEIO_VERSION,"jeQKFrame_CreateFromFile: Bad InterpolationType");
 				return NULL;
 		}
@@ -668,7 +668,7 @@ jeTKArray *JETCC jeQKFrame_CreateFromFile(
 	KeyList = jeTKArray_CreateEmpty(FieldSize,Count);
 	if (KeyList == NULL)
 		{
-			jeRam_Free(Block);	
+			JE_RAM_FREE(Block);	
 			jeErrorLog_Add(JE_ERR_SUBSYSTEM_FAILURE, "jeQKFrame_CreateFromFile.");
 			return NULL;
 		}
@@ -739,7 +739,7 @@ jeTKArray *JETCC jeQKFrame_CreateFromFile(
 			default:
 				assert(0);
 		}
-	jeRam_Free(Block);	
+	JE_RAM_FREE(Block);	
 	return KeyList;						
 }
 

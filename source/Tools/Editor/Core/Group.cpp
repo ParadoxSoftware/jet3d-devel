@@ -83,7 +83,7 @@ Group * Group_Create( const char * const pszName )
 	
 GC_FAILURE :
 	if( pGroup->pszName != NULL )
-		jeRam_Free( pGroup->pszName ) ;
+		JE_RAM_FREE( pGroup->pszName ) ;
 
 	if( pGroup->pObjects != NULL )
 		ObjectList_Destroy( &pGroup->pObjects, NULL );
@@ -108,13 +108,13 @@ void Group_Destroy( Group ** ppGroup )
 	assert( SIGNATURE == (*ppGroup)->nSignature ) ;
 
 	if( (*ppGroup)->pszName != NULL )
-	jeRam_Free( (*ppGroup)->pszName ) ;
+	JE_RAM_FREE( (*ppGroup)->pszName ) ;
 
 	if( (*ppGroup)->pObjects != NULL )
 		ObjectList_Destroy( &(*ppGroup)->pObjects, Group_ObjectDestroy );
 
 	assert( ((*ppGroup)->nSignature = 0) == 0 ) ;	// CLEAR
-	jeRam_Free( *ppGroup ) ;
+	JE_RAM_FREE( *ppGroup ) ;
 
 }// Group_Destroy
 
@@ -435,7 +435,7 @@ jeBoolean Group_EnumBrushTextureCB(Object* pObj, void* pParam)
 					strcpy(pMaterialIdent->MaterialName, szName);
 					strcpy(pMaterialIdent->BitmapName, jeMaterial_GetBitmapName(pMaterial));
 					if (MaterialIdentList_Append(pList, pMaterialIdent) == NULL) {
-						jeRam_Free(pMaterialIdent);
+						JE_RAM_FREE(pMaterialIdent);
 					}
 				}
 			}

@@ -435,7 +435,7 @@ jeTKArray *JETCC jeVKFrame_CreateFromFile(	jeVFile *pFile,
 			return NULL;
 		}
 			
-	Block = (char *)jeRam_AllocateClear(BlockSize);
+	Block = (char *)JE_RAM_ALLOCATE_CLEAR(BlockSize);
 	if(jeVFile_Read(pFile, Block, BlockSize) == JE_FALSE)
 		{
 			jeErrorLog_Add(JE_ERR_FILEIO_READ,"jeVKFrame_CreateFromFile: Failed to read header block.");
@@ -449,7 +449,7 @@ jeTKArray *JETCC jeVKFrame_CreateFromFile(	jeVFile *pFile,
 	
 	if (Compression > 0xFF)
 		{
-			jeRam_Free(Block);	
+			JE_RAM_FREE(Block);	
 			jeErrorLog_Add(JE_ERR_FILEIO_VERSION,"jeVKFrame_CreateFromFile: Bad Compression Flag");
 			return NULL;
 		}
@@ -463,7 +463,7 @@ jeTKArray *JETCC jeVKFrame_CreateFromFile(	jeVFile *pFile,
 					FieldSize = sizeof(jeVKFrame_Hermite);
 					break;
 			default:
-					jeRam_Free(Block);	
+					JE_RAM_FREE(Block);	
 					jeErrorLog_Add(JE_ERR_FILEIO_VERSION,"jeVKFrame_CreateFromFile: Bad InterpolationType");
 					return NULL;
 		}
@@ -471,7 +471,7 @@ jeTKArray *JETCC jeVKFrame_CreateFromFile(	jeVFile *pFile,
 	KeyList = jeTKArray_CreateEmpty(FieldSize,Count);
 	if (KeyList == NULL)
 		{
-			jeRam_Free(Block);	
+			JE_RAM_FREE(Block);	
 			jeErrorLog_Add(JE_ERR_MEMORY_RESOURCE,"jeVKFrame_CreateFromFile.");
 			return NULL;
 		}
@@ -526,7 +526,7 @@ jeTKArray *JETCC jeVKFrame_CreateFromFile(	jeVFile *pFile,
 			default:
 				assert(0);
 		}
-	jeRam_Free(Block);
+	JE_RAM_FREE(Block);
 	return KeyList;	
 
 }

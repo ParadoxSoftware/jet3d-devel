@@ -100,7 +100,7 @@ struct jeVisObjectList
 jeVisObjectList *	jeVisObjectList_Create(void)
 {
 jeVisObjectList * List;
-	List = (jeVisObjectList *)jeRam_AllocateClear(sizeof(*List));
+	List = (jeVisObjectList *)JE_RAM_ALLOCATE_CLEAR(sizeof(*List));
 	if ( ! List )	
 		return NULL;
 
@@ -155,7 +155,7 @@ jeVisObject * VO;
 	if ( List->VisObjectPool )
 		MemPool_Destroy(&(List->VisObjectPool));
 
-	jeRam_Free(List);
+	JE_RAM_FREE(List);
 }
 
 jeVisObject * jeVisObjectList_CreateObject(	jeVisObjectList * List,jeObject *Obj)

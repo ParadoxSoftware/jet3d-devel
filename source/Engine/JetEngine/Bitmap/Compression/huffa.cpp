@@ -230,7 +230,7 @@ uint8 *runArray;
 uint32 runLen;
 jeBoolean ret;
 
-	if ( (runArray = (uint8*)jeRam_Allocate(rawLen + (rawLen>>3) + 1024)) == NULL )
+	if ( (runArray = (uint8*)JE_RAM_ALLOCATE(rawLen + (rawLen>>3) + 1024)) == NULL )
 		return JE_FALSE;
 
 	if ( cFlag ) {
@@ -255,7 +255,7 @@ jeBoolean ret;
 		}
 	}
 
-	jeRam_Free(runArray); runArray = nullptr;
+	JE_RAM_FREE(runArray); runArray = nullptr;
 
 return ret;
 }
@@ -281,14 +281,14 @@ else
 		long MaxCount,i;
 		long * CharCounts = NULL;
 
-		if ( (CharCounts = (long *)jeRam_Allocate(256*sizeof(long))) == NULL )
+		if ( (CharCounts = (long *)JE_RAM_ALLOCATE(256*sizeof(long))) == NULL )
 			{ //BrandoError("jeRam_Allocate failed!"); 
 				return(0); }
 
 		memset(CharCounts,0,256*sizeof(long));
 		for(i=0;i<RawLen;i++) CharCounts[RawArray[i]] ++;
 		MaxCount = CharCounts[MaxIn(CharCounts,256)];
-		jeRam_Free(CharCounts); CharCounts = nullptr;
+		JE_RAM_FREE(CharCounts); CharCounts = nullptr;
 
 		if ( (MaxCount*DOBLOCK_DIVISOR) >= RawLen ) doblock = 1;
 		else doblock = 0;
@@ -360,7 +360,7 @@ else //Encode
 	{
 	long i;
 
-	if ( (CharCounts = (long *)jeRam_Allocate(256*sizeof(long))) == NULL )
+	if ( (CharCounts = (long *)JE_RAM_ALLOCATE(256*sizeof(long))) == NULL )
 		CleanUp("jeRam_Allocate failed!");
 
 	memset(CharCounts,0,256*sizeof(long));
@@ -397,7 +397,7 @@ else
 	}
 #endif
 
-jeRam_Free(CharCounts); CharCounts = nullptr;
+JE_RAM_FREE(CharCounts); CharCounts = nullptr;
 if ( HI ) Huff2_CleanUp(HI);
 
 if ( HuffExitMess )
@@ -423,7 +423,7 @@ uint8 MPS0,MPS1,MPS2;
 if ( RawLen == 0 ) return JE_TRUE;
 
 BlockLen = ((RawLen-1)/4) + 1;
-if ( (BlockArray = (uint8*)jeRam_Allocate(BlockLen)) == NULL )
+if ( (BlockArray = (uint8*)JE_RAM_ALLOCATE(BlockLen)) == NULL )
 	CleanUp("block jeRam_Allocate failed");
 
 if ( ! CompressFlag )
@@ -450,7 +450,7 @@ if ( ! CompressFlag )
 
 	if ( NumLits > 0 )
 		{
-		if ( (LitArray = (uint8*)jeRam_Allocate(NumLits)) == NULL )
+		if ( (LitArray = (uint8*)JE_RAM_ALLOCATE(NumLits)) == NULL )
 			CleanUp("lits jeRam_Allocate failed");
 
 		if (! O0HuffArrayBII_noblock(LitArray,NumLits,BII,0) )
@@ -484,10 +484,10 @@ else //Encode
 	{
 	long bi,bcnt,v,li,ri,c;
 
-	if ( (LitArray = (uint8*)jeRam_Allocate(RawLen)) == NULL )
+	if ( (LitArray = (uint8*)JE_RAM_ALLOCATE(RawLen)) == NULL )
 		CleanUp("jeRam_Allocate failed");
 
-	if ( (CharCounts = (long *)jeRam_AllocateClear(256*sizeof(long))) == NULL )
+	if ( (CharCounts = (long *)JE_RAM_ALLOCATE_CLEAR(256*sizeof(long))) == NULL )
 		CleanUp("jeRam_Allocate failed!");
 
 	for(ri=0;ri<RawLen;ri++) CharCounts[RawArray[ri]] ++;
@@ -532,9 +532,9 @@ CleanUp(NULL);
 
 EndOfFunc:
 
-jeRam_Free(LitArray); LitArray = nullptr;
-jeRam_Free(BlockArray); BlockArray = nullptr;
-jeRam_Free(CharCounts); CharCounts = nullptr;
+JE_RAM_FREE(LitArray); LitArray = nullptr;
+JE_RAM_FREE(BlockArray); BlockArray = nullptr;
+JE_RAM_FREE(CharCounts); CharCounts = nullptr;
 
 if ( HuffExitMess )
   {
@@ -630,14 +630,14 @@ if ( RawLen == 0 ) return JE_TRUE;
 if ( (BII = LBitIO_Init(HuffArray)) == NULL )
 	CleanUp("LBitIO_Init failed!");
 
-if ( (o1Arrays = (uint8**)jeRam_Allocate(257*sizeof(void*))) == NULL )
+if ( (o1Arrays = (uint8**)JE_RAM_ALLOCATE(257*sizeof(void*))) == NULL )
 	CleanUp("jeRam_Allocate failed!");
 for(lc=0;lc<257;lc++) o1Arrays[lc] = NULL;
 
-if ( (o1ArrayPtrs = (uint8**)jeRam_Allocate(257*sizeof(void*))) == NULL )
+if ( (o1ArrayPtrs = (uint8**)JE_RAM_ALLOCATE(257*sizeof(void*))) == NULL )
 	CleanUp("jeRam_Allocate failed!");
 
-if ( (o1ArrayLens = (uint32*)jeRam_Allocate(257*sizeof(uint32))) == NULL )
+if ( (o1ArrayLens = (uint32*)JE_RAM_ALLOCATE(257*sizeof(uint32))) == NULL )
 	CleanUp("jeRam_Allocate failed!");
 
 for(lc=0;lc<257;lc++) o1ArrayLens[lc] = 0;
@@ -655,7 +655,7 @@ if ( ! CompressFlag )
 			{
 			if ( lc != 256 ) totlen += len;
 
-			if ( (o1Arrays[lc] = (uint8*)jeRam_Allocate(len)) == NULL )
+			if ( (o1Arrays[lc] = (uint8*)JE_RAM_ALLOCATE(len)) == NULL )
 				CleanUp("jeRam_Allocate failed!");
 			o1ArrayPtrs[lc] = o1Arrays[lc];
 
@@ -705,7 +705,7 @@ else //Encode
 		{
 		if ( o1ArrayLens[lc] > 0 )
 			{
-			if ( (o1Arrays[lc] = (uint8*)jeRam_Allocate(o1ArrayLens[lc])) == NULL )
+			if ( (o1Arrays[lc] = (uint8*)JE_RAM_ALLOCATE(o1ArrayLens[lc])) == NULL )
 				CleanUp("jeRam_Allocate failed!");
 			}
 		o1ArrayPtrs[lc] = o1Arrays[lc];
@@ -742,14 +742,14 @@ CleanUp(NULL);
 
 EndOfFunc:
 
-jeRam_Free(o1ArrayLens); o1ArrayLens = nullptr;
-jeRam_Free(o1ArrayPtrs); o1ArrayPtrs = nullptr;
+JE_RAM_FREE(o1ArrayLens); o1ArrayLens = nullptr;
+JE_RAM_FREE(o1ArrayPtrs); o1ArrayPtrs = nullptr;
 if ( o1Arrays )
 	{
 		for (lc = 0; lc < 257; lc++) {
-			jeRam_Free(o1Arrays[lc]); o1Arrays[lc] = nullptr;
+			JE_RAM_FREE(o1Arrays[lc]); o1Arrays[lc] = nullptr;
 		}
-		jeRam_Free(o1Arrays); o1Arrays = nullptr;
+		JE_RAM_FREE(o1Arrays); o1Arrays = nullptr;
 	}
 if ( BII ) LBitIO_CleanUp(BII);
 

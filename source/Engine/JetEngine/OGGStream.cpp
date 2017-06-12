@@ -112,7 +112,7 @@ jeOGGStream *jeOGGStream_Create(jeVFile *FS, const char *filename)
 
 	if (!ogg->File)
 	{
-		jeRam_Free(ogg);
+		JE_RAM_FREE(ogg);
 		ogg = NULL;
 		return NULL;
 	}
@@ -127,7 +127,7 @@ jeOGGStream *jeOGGStream_Create(jeVFile *FS, const char *filename)
 		jeVFile_Close(ogg->File);
 		ogg->File = NULL;
 
-		jeRam_Free(ogg);
+		JE_RAM_FREE(ogg);
 		ogg = NULL;
 		
 		return NULL;
@@ -162,7 +162,7 @@ void jeOGGStream_Destroy(jeOGGStream **OGG)
 	if ((*OGG)->File)
 		jeVFile_Close((*OGG)->File);
 
-	jeRam_Free((*OGG));
+	JE_RAM_FREE((*OGG));
 	(*OGG) = NULL;
 }
 

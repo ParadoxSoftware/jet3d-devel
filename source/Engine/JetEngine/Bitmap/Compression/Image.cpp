@@ -51,6 +51,8 @@
 
 #define swapints(a,b)	do { (a) ^= (b); (b) ^= (a); (a) ^= (b); } while(0)
 
+#define new(type)		JE_RAM_ALLOCATE_CLEAR(sizeof(type))
+
 static int intlog2(uint32 x) // !!! // <> do this in assembly for awesome speed
 {
 	float xf;
@@ -415,7 +417,7 @@ int len;
 	im->tot_bytes = im->plane_bytes * planes;
 	im->tot_size = im->plane_size * planes;
 
-	if ( (im->data = (int ***)jeRam_AllocateClear(sizeof(int **) * planes)) == NULL ) 
+	if ( (im->data = (int ***)JE_RAM_ALLOCATE_CLEAR(sizeof(int **) * planes)) == NULL ) 
 	{
 		freeImage(im); return NULL;
 	}
@@ -423,7 +425,7 @@ int len;
 	for(p=0;p<planes;p++) 
 	{
 
-		if ( (im->data[p] = (int **)jeRam_AllocateClear(sizeof(int *) * len+2)) == NULL ) 
+		if ( (im->data[p] = (int **)JE_RAM_ALLOCATE_CLEAR(sizeof(int *) * len+2)) == NULL ) 
 		{
 			freeImage(im); return NULL;
 		}
@@ -431,7 +433,7 @@ int len;
 		im->data[p] = &(im->data[p][1]);
 		rows = im->data[p];
 
-		if ( (rows[0] = (int *)jeRam_Allocate(im->plane_bytes + 2*len*sizeof(int))) == NULL )
+		if ( (rows[0] = (int *)JE_RAM_ALLOCATE(im->plane_bytes + 2*len*sizeof(int))) == NULL )
 		{
 			freeImage(im); return NULL;
 		}
@@ -469,7 +471,7 @@ image * newImageAlpha(int width, int height,int planes,jeBoolean alphaIsBoolean)
 image * im;
 	if ( (im = newImage(width,height,planes)) == NULL ) 
 		return NULL;
-	if ( (im->alpha = (uint8*)jeRam_Allocate(im->plane_size)) == NULL )
+	if ( (im->alpha = (uint8*)JE_RAM_ALLOCATE(im->plane_size)) == NULL )
 	{
 		freeImage(im);
 		return NULL;
@@ -508,15 +510,15 @@ void freeImage(image *im)
 				if ( im->data[p] ) 
 				{
 					if (im->data[p][0] )
-						jeRam_Free(im->data[p][0]);
+						JE_RAM_FREE(im->data[p][0]);
 					im->data[p] = &(im->data[p][-1]);
-					jeRam_Free(im->data[p]);
+					JE_RAM_FREE(im->data[p]);
 				}
 			}
-			jeRam_Free(im->data);
+			JE_RAM_FREE(im->data);
 		}
-		jeRam_Free(im->alpha); im->alpha = nullptr;
-		jeRam_Free(im);
+		JE_RAM_FREE(im->alpha); im->alpha = nullptr;
+		JE_RAM_FREE(im);
 	}
 }
 

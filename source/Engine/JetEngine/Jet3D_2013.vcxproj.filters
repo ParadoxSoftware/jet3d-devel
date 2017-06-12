@@ -151,9 +151,6 @@
     <ClCompile Include="Support\jeChain.cpp">
       <Filter>Support</Filter>
     </ClCompile>
-    <ClCompile Include="Bitmap\Compression\Context.cpp">
-      <Filter>VFS</Filter>
-    </ClCompile>
     <ClCompile Include="guWorld\jeFaceInfo.cpp">
       <Filter>World</Filter>
     </ClCompile>
@@ -439,6 +436,9 @@
     <ClCompile Include="VFile\FSZip.cpp">
       <Filter>VFS</Filter>
     </ClCompile>
+    <ClCompile Include="Bitmap\Compression\Context.cpp">
+      <Filter>Bitmap\Compression</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -609,9 +609,6 @@
     </ClInclude>
     <ClInclude Include="..\..\..\include\jeChain.h">
       <Filter>Support</Filter>
-    </ClInclude>
-    <ClInclude Include="Bitmap\Compression\context.h">
-      <Filter>VFS</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\jeEngine.h">
       <Filter>Interface Headers</Filter>
@@ -915,6 +912,9 @@
     </ClInclude>
     <ClInclude Include="VFile\FSZip.h">
       <Filter>VFS</Filter>
+    </ClInclude>
+    <ClInclude Include="Bitmap\Compression\context.h">
+      <Filter>Bitmap\Compression</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -77,7 +77,7 @@ static	char *	DuplicateString(const char *String)
 	char *	NewString;
 
 	Length = strlen(String) + 1;
-	NewString = (char *)jeRam_Allocate(Length);
+	NewString = (char *)JE_RAM_ALLOCATE(Length);
 	if	(NewString)
 		memcpy(NewString, String, Length);
 	return NewString;
@@ -87,7 +87,7 @@ DirTree *DirTree_Create(void)
 {
 	DirTree *	Tree;
 
-	Tree = (DirTree *)jeRam_Allocate(sizeof(*Tree));
+	Tree = (DirTree *)JE_RAM_ALLOCATE(sizeof(*Tree));
 	if	(!Tree)
 		return Tree;
 
@@ -95,7 +95,7 @@ DirTree *DirTree_Create(void)
 	Tree->Name = DuplicateString("");
 	if	(!Tree->Name)
 	{
-		jeRam_Free(Tree);
+		JE_RAM_FREE(Tree);
 		return NULL;
 	}
 
@@ -119,12 +119,12 @@ void	DirTree_Destroy(DirTree *Tree)
 		jeVFile_Close(Tree->HintsFile);
 
 	if ( Tree->Name )
-		jeRam_Free(Tree->Name);
+		JE_RAM_FREE(Tree->Name);
 
 	if ( Tree->Hints.HintData != NULL)
-		jeRam_Free(Tree->Hints.HintData);
+		JE_RAM_FREE(Tree->Hints.HintData);
 
-	jeRam_Free(Tree);
+	JE_RAM_FREE(Tree);
 }
 
 typedef	struct	DirTree_Header
@@ -359,7 +359,7 @@ DirTree *	Tree = NULL;
 		goto fail;
 	}
 
-	Tree = (DirTree *)jeRam_AllocateClear(sizeof(*Tree));
+	Tree = (DirTree *)JE_RAM_ALLOCATE_CLEAR(sizeof(*Tree));
 	if	(!Tree)
 	{
 		jeErrorLog_AddString(-1,"ReadTree : Ram",NULL);
@@ -374,7 +374,7 @@ DirTree *	Tree = NULL;
 	}
 
 	assert(Length > 0 && Length <= (_MAX_PATH + _MAX_PATH));
-	Tree->Name = (char *)jeRam_Allocate(Length+1);
+	Tree->Name = (char *)JE_RAM_ALLOCATE(Length+1);
 	if	(!Tree->Name)
 	{
 		jeErrorLog_AddString(-1,"ReadTree : Ram",NULL);
@@ -424,7 +424,7 @@ DirTree *	Tree = NULL;
 
 	if	(Tree->Hints.HintDataLength != 0)
 	{
-		Tree->Hints.HintData = jeRam_Allocate(Tree->Hints.HintDataLength);
+		Tree->Hints.HintData = JE_RAM_ALLOCATE(Tree->Hints.HintDataLength);
 		if	(!Tree->Hints.HintData)
 		{
 			jeErrorLog_AddString(-1,"ReadTree : Ram",Tree->Name);
@@ -619,7 +619,7 @@ DirTree * DirTree_AddFile(DirTree *Tree, const char *Path, jeBoolean IsDirectory
 		Path = LeftOvers;
 	}
 
-	NewEntry = (DirTree *)jeRam_Allocate(sizeof(*NewEntry));
+	NewEntry = (DirTree *)JE_RAM_ALLOCATE(sizeof(*NewEntry));
 	if	(!NewEntry)
 		return NULL;
 
@@ -627,8 +627,8 @@ DirTree * DirTree_AddFile(DirTree *Tree, const char *Path, jeBoolean IsDirectory
 	NewEntry->Name = DuplicateString(Path);
 	if	(!NewEntry->Name)
 	{
-		jeRam_Free(NewEntry->Name);
-		jeRam_Free(NewEntry);
+		JE_RAM_FREE(NewEntry->Name);
+		JE_RAM_FREE(NewEntry);
 		return NULL;
 	}
 
@@ -842,14 +842,14 @@ DirTree_Finder * DirTree_CreateFinder(DirTree *Tree, const char *Path)
 	if	(!SubTree)
 		return NULL;
 
-	Finder = (DirTree_Finder *)jeRam_Allocate(sizeof(*Finder));
+	Finder = (DirTree_Finder *)JE_RAM_ALLOCATE(sizeof(*Finder));
 	if	(!Finder)
 		return Finder;
 
 	Finder->MatchName = DuplicateString(Name);
 	if	(!Finder->MatchName)
 	{
-		jeRam_Free(Finder);
+		JE_RAM_FREE(Finder);
 		return NULL;
 	}
 
@@ -861,8 +861,8 @@ DirTree_Finder * DirTree_CreateFinder(DirTree *Tree, const char *Path)
 
 	if	(!Finder->MatchExt)
 	{
-		jeRam_Free(Finder->MatchName);
-		jeRam_Free(Finder);
+		JE_RAM_FREE(Finder->MatchName);
+		JE_RAM_FREE(Finder);
 		return NULL;
 	}
 
@@ -877,9 +877,9 @@ void DirTree_DestroyFinder(DirTree_Finder *Finder)
 	assert(Finder->MatchName);
 	assert(Finder->MatchExt);
 
-	jeRam_Free(Finder->MatchName);
-	jeRam_Free(Finder->MatchExt);
-	jeRam_Free(Finder);
+	JE_RAM_FREE(Finder->MatchName);
+	JE_RAM_FREE(Finder->MatchExt);
+	JE_RAM_FREE(Finder);
 }
 
 static jeBoolean	MatchPattern(const char *Source, const char *Pattern)

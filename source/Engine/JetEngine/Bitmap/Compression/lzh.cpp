@@ -141,7 +141,7 @@ numLits = numLens = numOffs = numMats = 0;
 
 assert( (((uint32)rawArray)&3) == 0 );
 
-if ( (compArray = (uint8*)jeRam_Allocate(rawLen + 16384)) == NULL )
+if ( (compArray = (uint8*)JE_RAM_ALLOCATE(rawLen + 16384)) == NULL )
 	CleanUp("AllocMem failed!");
 
 *compArrayPtr = compArray;
@@ -155,13 +155,13 @@ if ( rawLen < MINIMUM_RAW_LEN )
 	return;
 }
 
-if ( (lookupTable = (struct lookupNode **)jeRam_AllocateClear(HASHSIZE * sizeof(void*))) == NULL )
+if ( (lookupTable = (struct lookupNode **)JE_RAM_ALLOCATE_CLEAR(HASHSIZE * sizeof(void*))) == NULL )
 	CleanUp("AllocMem failed!");
 
-if ( (lookupHunk = (struct lookupNode *)jeRam_Allocate(sizeof(struct lookupNode)*JE_MIN(lookupHunkSize,rawLen+10))) == NULL )
+if ( (lookupHunk = (struct lookupNode *)JE_RAM_ALLOCATE(sizeof(struct lookupNode)*JE_MIN(lookupHunkSize,rawLen+10))) == NULL )
 	CleanUp("AllocMem failed!");
 
-if ( (rawLZArray = (uint8*)jeRam_Allocate(rawLen)) == NULL )
+if ( (rawLZArray = (uint8*)JE_RAM_ALLOCATE(rawLen)) == NULL )
 	CleanUp("AllocMem failed!");
 
 lzhInit(rawLen);
@@ -197,9 +197,9 @@ memcpy(huffPtr,rawLZArray,rawOutLen); huffPtr += rawOutLen;
 
 lzhFree();
 
-jeRam_Free(lookupTable);
-jeRam_Free(lookupHunk);
-jeRam_Free(rawLZArray);
+JE_RAM_FREE(lookupTable);
+JE_RAM_FREE(lookupHunk);
+JE_RAM_FREE(rawLZArray);
 
 }
 
@@ -217,7 +217,7 @@ rawLen = *((uint32 *)huffPtr); huffPtr += 4;
 
 *rawLenPtr = rawLen;
 
-if ( (rawArray = (uint8*)jeRam_Allocate(rawLen+1024)) == NULL )
+if ( (rawArray = (uint8*)JE_RAM_ALLOCATE(rawLen+1024)) == NULL )
 	CleanUp("AllocMem failed!");
 *rawArrayPtr = rawArray;
 
@@ -263,16 +263,16 @@ static void lzhInit(int rawLen)
 
 codeMatchFlagInit();
 
-if ( (Lits = (uint8 *)jeRam_Allocate(rawLen)) == NULL )
+if ( (Lits = (uint8 *)JE_RAM_ALLOCATE(rawLen)) == NULL )
 	CleanUp("malloc failed!");
 
-if ( (Lens = (uint8 *)jeRam_Allocate(rawLen)) == NULL )
+if ( (Lens = (uint8 *)JE_RAM_ALLOCATE(rawLen)) == NULL )
 	CleanUp("malloc failed!");
 
-if ( (Offs = (uint8 *)jeRam_Allocate(rawLen)) == NULL )
+if ( (Offs = (uint8 *)JE_RAM_ALLOCATE(rawLen)) == NULL )
 	CleanUp("malloc failed!");
 
-if ( (Mats = (uint8 *)jeRam_Allocate(rawLen/8)) == NULL )
+if ( (Mats = (uint8 *)JE_RAM_ALLOCATE(rawLen/8)) == NULL )
 	CleanUp("malloc failed!");
 
 }
@@ -280,10 +280,10 @@ if ( (Mats = (uint8 *)jeRam_Allocate(rawLen/8)) == NULL )
 static void lzhFree(void)
 {
 
-jeRam_Free(Lits);
-jeRam_Free(Lens);
-jeRam_Free(Offs);
-jeRam_Free(Mats);
+JE_RAM_FREE(Lits);
+JE_RAM_FREE(Lens);
+JE_RAM_FREE(Offs);
+JE_RAM_FREE(Mats);
 
 }
 

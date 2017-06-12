@@ -171,7 +171,7 @@ Terrain *	Terrain_Create( jeWorld	* pWorld, Group * pGroup, const char * const p
 	if( !Object_Init( &pTerrain->ObjectData, pGroup, KIND_TERRAIN, pszName, nNumber ) )
 	{
 		jeErrorLog_Add( JE_ERR_INTERNAL_RESOURCE, "Trace" );
-		jeRam_Free( pTerrain );
+		JE_RAM_FREE( pTerrain );
 		return( NULL );
 	}
 	pTerrain->pWorld = pWorld;
@@ -184,7 +184,7 @@ Terrain *	Terrain_Create( jeWorld	* pWorld, Group * pGroup, const char * const p
 	if( pTerrain->TerrainData == NULL )
 	{
 		jeErrorLog_Add( JE_ERR_INTERNAL_RESOURCE, "Trace" );
-		jeRam_Free( pTerrain );
+		JE_RAM_FREE( pTerrain );
 		return( NULL );
 	}
 	//jeTerrain_SetTextures( pTerrain->TerrainData,&TerrainMap, 1);
@@ -217,7 +217,7 @@ Terrain *	Terrain_Copy( Terrain *	pTerrain, int32 nNumber )
 	if( !Object_Init( &pNewTerrain->ObjectData, pTerrain->ObjectData.pGroup, KIND_TERRAIN, pTerrain->ObjectData.pszName, nNumber ) )
 	{
 		jeErrorLog_Add( JE_ERR_INTERNAL_RESOURCE, "Trace" );
-		jeRam_Free( pNewTerrain );
+		JE_RAM_FREE( pNewTerrain );
 		return( NULL );
 	}
 	pNewTerrain->pWorld = pTerrain->pWorld;
@@ -232,7 +232,7 @@ Terrain *	Terrain_Copy( Terrain *	pTerrain, int32 nNumber )
 	if( pNewTerrain->TerrainData == NULL )
 	{
 		jeErrorLog_Add( JE_ERR_INTERNAL_RESOURCE, "Trace" );
-		jeRam_Free( pNewTerrain );
+		JE_RAM_FREE( pNewTerrain );
 		return( NULL );
 	}
 
@@ -259,7 +259,7 @@ Terrain *	Terrain_FromTemplate( char * pszName, Group * pGroup, Terrain *	pTerra
 	}
 	if( pNewTerrain->ObjectData.pszName != NULL )
 	{
-		jeRam_Free( pNewTerrain->ObjectData.pszName );
+		JE_RAM_FREE( pNewTerrain->ObjectData.pszName );
 	}
 	pNewTerrain->ObjectData.pszName = pszName;
 	pNewTerrain->ObjectData.pGroup = pGroup ;
@@ -282,7 +282,7 @@ Terrain * Terrain_CreateTemplate( jeWorld * pWorld )
 	if( !Object_Init( &pTerrain->ObjectData, NULL, KIND_TERRAIN, "Terrain", 0 ) )
 	{
 		jeErrorLog_Add( JE_ERR_INTERNAL_RESOURCE, "Terrain_CreateTemplate:Object_Init" );
-		jeRam_Free( pTerrain );
+		JE_RAM_FREE( pTerrain );
 		return( NULL );
 	}
 	pTerrain->pWorld = pWorld;
@@ -321,7 +321,7 @@ void Terrain_Destroy( Terrain ** ppTerrain )
 		jeBitmap_Destroy( &(*ppTerrain)->HeightMap );
 	if( (*ppTerrain)->TerrainData  != NULL )
 		jeTerrain_Destroy(&(*ppTerrain)->TerrainData);
-	jeRam_Free( (*ppTerrain) );
+	JE_RAM_FREE( (*ppTerrain) );
 }// Terrain_Destroy
 
 

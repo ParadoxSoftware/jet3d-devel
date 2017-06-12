@@ -70,7 +70,7 @@ void jeBSPNode_PortalDestroy(jeBSPNode_Portal **Portal, jeBSP *BSP)
 
 	//jeBSPNode_PortalResetTopSide(*Portal);
 
-	jeRam_Free(*Portal);
+	JE_RAM_FREE(*Portal);
 
 	ActivePortals--;
 

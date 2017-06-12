@@ -153,7 +153,7 @@ JETAPI jeBrush* JETCC jeBrush_Create(int32 EstimatedVerts)
 			if (Brush->VertArray)
 				jeVertArray_Destroy(&Brush->VertArray);
 
-			jeRam_Free(Brush);
+			JE_RAM_FREE(Brush);
 		}
 		return NULL;
 	}
@@ -225,7 +225,7 @@ JETAPI jeBrush * JETCC jeBrush_CreateFromFile(jeVFile *VFile, jePtrMgr *PtrMgr)
 			if (Brush->VertArray)
 				jeVertArray_Destroy(&Brush->VertArray);
 
-			jeRam_Free(Brush);
+			JE_RAM_FREE(Brush);
 		}
 		return NULL;
 	}
@@ -327,7 +327,7 @@ JETAPI void JETCC jeBrush_Destroy(jeBrush **Brush)
 
 		jeVertArray_Destroy(&(*Brush)->VertArray);
 
-		jeRam_Free(*Brush);
+		JE_RAM_FREE(*Brush);
 	}
 
 	*Brush = NULL;
@@ -593,9 +593,9 @@ JETAPI jeBrush_Face * JETCC jeBrush_CreateFace(jeBrush *Brush, int32 NumVerts)
 				jeIndexPoly_Destroy(&Face->Poly);
 
 			if (Face->FaceInfo)
-				jeRam_Free(Face->FaceInfo);
+				JE_RAM_FREE(Face->FaceInfo);
 
-			jeRam_Free(Face);
+			JE_RAM_FREE(Face);
 		}
 
 		return NULL;
@@ -656,9 +656,9 @@ JETAPI jeBrush_Face * JETCC jeBrush_CreateFaceFromFile(jeBrush *Brush, jeVFile *
 				jeIndexPoly_Destroy(&Face->Poly);
 
 			if (Face->FaceInfo)
-				jeRam_Free(Face->FaceInfo);
+				JE_RAM_FREE(Face->FaceInfo);
 
-			jeRam_Free(Face);
+			JE_RAM_FREE(Face);
 		}
 
 		return NULL;
@@ -734,7 +734,7 @@ JETAPI void JETCC jeBrush_DestroyFace(jeBrush *Brush, jeBrush_Face **Face)
 	if (pFace->FaceInfo)
 	{
 		assert(pFace->FaceInfoIndex == JE_FACEINFO_ARRAY_NULL_INDEX);
-		jeRam_Free(pFace->FaceInfo);
+		JE_RAM_FREE(pFace->FaceInfo);
 	}
 	else
 	{
@@ -744,7 +744,7 @@ JETAPI void JETCC jeBrush_DestroyFace(jeBrush *Brush, jeBrush_Face **Face)
 		jeFaceInfo_ArrayRemoveFaceInfo(Brush->FaceInfoArray, &pFace->FaceInfoIndex);
 	}
 
-	jeRam_Free(pFace);
+	JE_RAM_FREE(pFace);
 
 	*Face = NULL;
 			
@@ -1335,7 +1335,7 @@ static jeBoolean AttachFaceInfoArray(jeBrush *Brush, jeFaceInfo_Array *Array)
 			return JE_FALSE;
 
 		// Free the faceinfo
-		jeRam_Free(Face->FaceInfo);
+		JE_RAM_FREE(Face->FaceInfo);
 		Face->FaceInfo = NULL;
 	}
 

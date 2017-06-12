@@ -91,7 +91,7 @@ static	jeBoolean	JETCC TestForExpansion(MemoryFile *File, int Size)
 		char *	NewBlock;
 
 		NewSize = ((File->AllocatedSize + Size + (MEMORY_FILE_GROW - 1)) / MEMORY_FILE_GROW) * MEMORY_FILE_GROW;
-		NewBlock = (char *)jeRam_Realloc(File->Memory, NewSize);
+		NewBlock = (char *)JE_RAM_REALLOC(File->Memory, NewSize);
 		if	(!NewBlock)
 			return JE_FALSE;
 		File->Memory = NewBlock;
@@ -167,7 +167,7 @@ static	void *	JETCC FSMemory_OpenNewSystem(
 	if	(OpenModeFlags & JE_VFILE_OPEN_DIRECTORY)
 		return NULL;
 
-	NewFS = (MemoryFile *)jeRam_Allocate(sizeof(*NewFS));
+	NewFS = (MemoryFile *)JE_RAM_ALLOCATE(sizeof(*NewFS));
 	if	(!NewFS)
 		return NewFS;
 	memset(NewFS, 0, sizeof(*NewFS));
@@ -193,7 +193,7 @@ static	void *	JETCC FSMemory_OpenNewSystem(
 			if	((uint32)HintsHeader->HintDataLength + sizeof(*HintsHeader) > (uint32)NewFS->Size)
 			{
 				//  Oops.  Something is wrong with this file
-				jeRam_Free(NewFS);
+				JE_RAM_FREE(NewFS);
 				return NULL;
 			}
 			MemoryContext.Data = (void *)(HintsHeader + 1);
@@ -279,12 +279,12 @@ static	jeBoolean	JETCC FSMemory_Close(void *Handle)
 	CHECK_HANDLE(File);
 
 	if	(File->WeOwnMemory == JE_TRUE && File->Memory)
-		jeRam_Free(File->Memory);
+		JE_RAM_FREE(File->Memory);
 
 	if	(File->HintsFile)
 		jeVFile_Close(File->HintsFile);
 
-	jeRam_Free(File);
+	JE_RAM_FREE(File);
 
 	return JE_TRUE;
 }

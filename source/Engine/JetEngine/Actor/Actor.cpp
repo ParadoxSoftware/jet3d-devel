@@ -288,13 +288,13 @@ JETAPI jeBoolean JETCC jeActor_DefDestroy(jeActor_Def **pActorDefinition)
 			}
 			Ad->MotionArray[i] = NULL;
 		}
-		jeRam_Free( Ad->MotionArray );
+		JE_RAM_FREE( Ad->MotionArray );
 		Ad->MotionArray = NULL;
 	}
 				
 	Ad->MotionCount = 0;
 
-	jeRam_Free(*pActorDefinition);
+	JE_RAM_FREE(*pActorDefinition);
 	*pActorDefinition = NULL;
 	jeActor_DefCount--;
 	return JE_TRUE;
@@ -346,9 +346,9 @@ JETAPI jeBoolean JETCC jeActor_Destroy(jeActor **pA)
 			if(Bone)
 			{
 				free(Bone->BoneName);
-				jeRam_Free(Bone->CurrExtBox);
-				jeRam_Free(Bone->PrevExtBox);
-				jeRam_Free(Bone);
+				JE_RAM_FREE(Bone->CurrExtBox);
+				JE_RAM_FREE(Bone->PrevExtBox);
+				JE_RAM_FREE(Bone);
 			}
 		}
 
@@ -365,7 +365,7 @@ JETAPI jeBoolean JETCC jeActor_Destroy(jeActor **pA)
 
 	if(A->Object != NULL)
 	{
-		jeRam_Free(A->Object);
+		JE_RAM_FREE(A->Object);
 		A->Object = NULL;
 	}
 
@@ -374,7 +374,7 @@ JETAPI jeBoolean JETCC jeActor_Destroy(jeActor **pA)
 	if(A->CanFree == JE_TRUE)
 	{
 		jeActor_Count--;
-		jeRam_Free(*pA);	
+		JE_RAM_FREE(*pA);	
 		*pA = NULL;
 	}
 
@@ -477,7 +477,7 @@ ActorCreateFailure:
 			jePose_Destroy(&(A->Pose));
 		if (A->CueMotion != NULL)
 			jeMotion_Destroy(&(A->CueMotion));
-		jeRam_Free( A );
+		JE_RAM_FREE( A );
 	}
 }
 
@@ -2467,9 +2467,9 @@ JETAPI void JETCC jeActor_RemoveCollisionBone(jeActor *Actor, const char* BoneNa
 				Actor->LastUsedCollisionBoneName=NULL;
 			}
 			free(LinkBone->BoneName);
-			jeRam_Free(LinkBone->CurrExtBox);
-			jeRam_Free(LinkBone->PrevExtBox);
-			jeRam_Free(LinkBone);
+			JE_RAM_FREE(LinkBone->CurrExtBox);
+			JE_RAM_FREE(LinkBone->PrevExtBox);
+			JE_RAM_FREE(LinkBone);
 			jeChain_RemoveLink(Actor->BoneCollisionChain, Link);
 			return;
 		}

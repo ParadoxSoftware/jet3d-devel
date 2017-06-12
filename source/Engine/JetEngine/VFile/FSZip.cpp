@@ -69,7 +69,7 @@ static void * JETCC FSZip_OpenNewSystem(jeVFile *FS, const char *Name, void *Con
 	assert(Name != NULL);
 	assert(OpenModeFlags & JE_VFILE_OPEN_DIRECTORY);
 
-	pFile = static_cast<ZipFile*>(jeRam_AllocateClear(sizeof(ZipFile)));
+	pFile = static_cast<ZipFile*>(JE_RAM_ALLOCATE_CLEAR(sizeof(ZipFile)));
 	if (!pFile)
 		return NULL;
 
@@ -77,7 +77,7 @@ static void * JETCC FSZip_OpenNewSystem(jeVFile *FS, const char *Name, void *Con
 	pFile->pZipFile = zzip_dir_open(Name, &zzipError);
 	if (!pFile->pZipFile)
 	{
-		jeRam_Free(pFile);
+		JE_RAM_FREE(pFile);
 		pFile = nullptr;
 
 		return nullptr;
@@ -94,7 +94,7 @@ static void * JETCC FSZip_Open(jeVFile *FS, void *Handle, const char *Name, void
 
 	assert(Name != NULL);
 
-	pNewFile = static_cast<ZipFile*>(jeRam_AllocateClear(sizeof(ZipFile)));
+	pNewFile = static_cast<ZipFile*>(JE_RAM_ALLOCATE_CLEAR(sizeof(ZipFile)));
 	if (!pNewFile)
 		return nullptr;
 
@@ -106,7 +106,7 @@ static void * JETCC FSZip_Open(jeVFile *FS, void *Handle, const char *Name, void
 		pFile->pZipFile = zzip_dir_open(Name, &zzipError);
 		if (!pFile->pZipFile)
 		{
-			jeRam_Free(pFile);
+			JE_RAM_FREE(pFile);
 			pFile = nullptr;
 
 			return nullptr;
@@ -121,7 +121,7 @@ static void * JETCC FSZip_Open(jeVFile *FS, void *Handle, const char *Name, void
 		pNewFile->pFile = zzip_file_open(pFile->pZipFile, Name, ZZIP_ONLYZIP | ZZIP_CASELESS);
 		if (!pNewFile->pFile)
 		{
-			jeRam_Free(pNewFile);
+			JE_RAM_FREE(pNewFile);
 			pNewFile = nullptr;
 
 			return nullptr;
@@ -157,7 +157,7 @@ static jeBoolean JETCC FSZip_Close(void *Handle)
 		return JE_FALSE;
 	}
 
-	jeRam_Free(pFile);
+	JE_RAM_FREE(pFile);
 	pFile = nullptr;
 
 	return JE_TRUE;

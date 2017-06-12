@@ -32,7 +32,7 @@
 
 #ifdef	__BORLANDC__
 #define jeRam_Allocate malloc
-#define jeRam_Free free
+#define JE_RAM_FREE free
 #else
 #include	"ram.h"
 #endif
@@ -199,7 +199,7 @@ jeBoolean ThreadPool_Destroy(ThreadPool *Pool)
 	}
 
 	DeleteCriticalSection(&Pool->CS);
-	jeRam_Free(Pool);
+	JE_RAM_FREE(Pool);
 
 	return JE_TRUE;
 }
@@ -230,7 +230,7 @@ ThreadPool *	ThreadPool_Create(void)
 {
 ThreadPool *	Pool;
 
-	Pool = (ThreadPool*)jeRam_AllocateClear(sizeof(*Pool));
+	Pool = (ThreadPool*)JE_RAM_ALLOCATE_CLEAR(sizeof(*Pool));
 	if	(!Pool)
 		return Pool;
 
@@ -514,7 +514,7 @@ JETAPI jeThreadQueue_Job *	JETCC jeThreadQueue_JobCreate(
 
 #pragma message("ThreadQueue : use MemPool for Jobs (?)")
 
-	Job = (jeThreadQueue_Job*)jeRam_AllocateClear(sizeof(*Job));
+	Job = (jeThreadQueue_Job*)JE_RAM_ALLOCATE_CLEAR(sizeof(*Job));
 	if	(!Job)
 		return Job;
 
@@ -575,7 +575,7 @@ JETAPI	void JETCC jeThreadQueue_JobDestroy(jeThreadQueue_Job **pJob)
 	assert(Job->Signature == JOB_SIGNATURE);
 	assert(Job->Status == JE_THREADQUEUE_STATUS_COMPLETED);
 
-	jeRam_Free(Job);
+	JE_RAM_FREE(Job);
 
 	*pJob = NULL;
 }

@@ -145,11 +145,11 @@ static jeBoolean Util_StrDupManagePtr(char **dest, char *src, int min_size)
 			return JE_TRUE;
 			}
 
-		jeRam_Free(*dest);
+		JE_RAM_FREE(*dest);
 		*dest = NULL;
 		}
 
-	*dest = (char*)jeRam_Allocate(__max(min_size, len));
+	*dest = (char*)JE_RAM_ALLOCATE(__max(min_size, len));
 	if (*dest == NULL)
 		{
 		jeErrorLog_Add( JE_ERR_MEMORY_RESOURCE, NULL );
@@ -469,7 +469,7 @@ void Destroy_Class( void )
 		{
 		if (NameList[i])
 			{
-			jeRam_Free(NameList[i]);
+			JE_RAM_FREE(NameList[i]);
 			NameList[i] = NULL;
 			}
 		}
@@ -516,7 +516,7 @@ void * JETCC CreateInstance( void )
 	
 
 CI_ERROR:
-	jeRam_Free( pAmbObj );
+	JE_RAM_FREE( pAmbObj );
 	return( NULL );
 	*/
 	//---
@@ -569,7 +569,7 @@ jeBoolean JETCC Destroy(void **pInstance)
 			jeUserPoly_Destroy(&pAmbObj->Poly);
 			}
 
-		jeRam_Free( pAmbObj );
+		JE_RAM_FREE( pAmbObj );
 	}
 
 	return JE_TRUE;
@@ -837,7 +837,7 @@ void *	JETCC CreateFromFile(jeVFile * File, jePtrMgr *PtrMgr)
 
 CFF_ERROR:
 
-	jeRam_Free( pAmbObj );
+	JE_RAM_FREE( pAmbObj );
 	return( NULL );
 	PtrMgr;
 }
@@ -1128,7 +1128,7 @@ void * JETCC DuplicateInstance(void * Instance)
 	jePtrMgr *ptrMgr = NULL;
 
 
-	vfsmemctx.Data = jeRam_Allocate(OBJ_PERSIST_SIZE); //"I dunno, 100K sounds good."
+	vfsmemctx.Data = JE_RAM_ALLOCATE(OBJ_PERSIST_SIZE); //"I dunno, 100K sounds good."
 	vfsmemctx.DataLength = OBJ_PERSIST_SIZE;
 
 	if (!vfsmemctx.Data) {
@@ -1147,7 +1147,7 @@ void * JETCC DuplicateInstance(void * Instance)
 
 	if (!ramdisk) {
 		jeErrorLog_AddString(JE_ERR_SUBSYSTEM_FAILURE, "Unable to create a VFile Memory Directory", NULL);
-		jeRam_Free(vfsmemctx.Data);
+		JE_RAM_FREE(vfsmemctx.Data);
 		return NULL;
 	}
 
@@ -1156,7 +1156,7 @@ void * JETCC DuplicateInstance(void * Instance)
 	if (!ramfile) {
 		jeErrorLog_AddString(JE_ERR_SUBSYSTEM_FAILURE, "Unable to create a VFile Memory File", NULL);
 		jeVFile_Close(ramdisk);
-		jeRam_Free(vfsmemctx.Data);
+		JE_RAM_FREE(vfsmemctx.Data);
 		return NULL;
 	}
 	ptrMgr = jePtrMgr_Create();
@@ -1165,7 +1165,7 @@ void * JETCC DuplicateInstance(void * Instance)
 		jeErrorLog_AddString(JE_ERR_SUBSYSTEM_FAILURE, "Unable to create a Pointer Manager", NULL);
 		jeVFile_Close(ramfile);
 		jeVFile_Close(ramdisk);
-		jeRam_Free(vfsmemctx.Data);
+		JE_RAM_FREE(vfsmemctx.Data);
 		return NULL;
 	}
 
@@ -1173,7 +1173,7 @@ void * JETCC DuplicateInstance(void * Instance)
 		jeErrorLog_AddString(JE_ERR_SUBSYSTEM_FAILURE, "Unable to write the object to a temp VFile Memory File", NULL);
 		jeVFile_Close(ramfile);
 		jeVFile_Close(ramdisk);
-		jeRam_Free(vfsmemctx.Data);
+		JE_RAM_FREE(vfsmemctx.Data);
 		return NULL;
 	}
 
@@ -1181,7 +1181,7 @@ void * JETCC DuplicateInstance(void * Instance)
 		jeErrorLog_AddString(JE_ERR_SUBSYSTEM_FAILURE, "Unable to rewind the temp VFile Memory File", NULL);
 		jeVFile_Close(ramfile);
 		jeVFile_Close(ramdisk);
-		jeRam_Free(vfsmemctx.Data);
+		JE_RAM_FREE(vfsmemctx.Data);
 		return NULL;
 	}
 
@@ -1190,14 +1190,14 @@ void * JETCC DuplicateInstance(void * Instance)
 		jeErrorLog_AddString(JE_ERR_SUBSYSTEM_FAILURE, "Unable to reade the object back from a temp VFile Memory File", NULL);
 		jeVFile_Close(ramfile);
 		jeVFile_Close(ramdisk);
-		jeRam_Free(vfsmemctx.Data);
+		JE_RAM_FREE(vfsmemctx.Data);
 		return NULL;
 	}
 
 	jeVFile_Close(ramfile);
 	jeVFile_Close(ramdisk);
 
-	jeRam_Free(vfsmemctx.Data);
+	JE_RAM_FREE(vfsmemctx.Data);
 
 	return( newAmbObj );
 }

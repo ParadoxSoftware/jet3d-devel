@@ -288,7 +288,7 @@ static char * Util_LoadLibraryString(
 	}
 
 	// copy resource string
-	NewString = (char*)jeRam_Allocate( Size + 1 );
+	NewString = (char*)JE_RAM_ALLOCATE( Size + 1 );
 	if ( NewString == NULL )
 	{
 		jeErrorLog_Add( JE_ERR_MEMORY_RESOURCE, NULL );
@@ -688,7 +688,7 @@ void * JETCC CreateInstance(
 	PulsingLight	*pObject = NULL;
 
 	// allocate struct
-	pObject = (PulsingLight *)jeRam_AllocateClear( sizeof( *pObject ) );
+	pObject = (PulsingLight *)JE_RAM_ALLOCATE_CLEAR( sizeof( *pObject ) );
 	if ( pObject == NULL )
 	{
 		jeErrorLog_Add( JE_ERR_MEMORY_RESOURCE, NULL );
@@ -791,7 +791,7 @@ jeBoolean JETCC Destroy(
 		assert( pObject->pLight == NULL );
 
 		// free struct
-		jeRam_Free( pObject );
+		JE_RAM_FREE( pObject );
 
 		// zap pointer
 		*Instance = NULL;
@@ -1244,7 +1244,7 @@ void * JETCC CreateFromFile(
 	assert( File != NULL );
 
 	// allocate struct
-	Object = jeRam_AllocateClear( sizeof( *Object ) );
+	Object = JE_RAM_ALLOCATE_CLEAR( sizeof( *Object ) );
 	if ( Object == NULL )
 	{
 		jeErrorLog_Add( JE_ERR_MEMORY_RESOURCE, NULL );
@@ -1319,7 +1319,7 @@ void * JETCC CreateFromFile(
 	ERROR_CreateFromFile:
 
 	// free object
-	jeRam_Free( Object );
+	JE_RAM_FREE( Object );
 
 	// return error
 	return NULL;
@@ -1349,7 +1349,7 @@ void * JETCC CreateFromFile(
 	assert( File != NULL );
 
 	// allocate struct
-	Object = (PulsingLight *)jeRam_AllocateClear( sizeof( *Object ) );
+	Object = (PulsingLight *)JE_RAM_ALLOCATE_CLEAR( sizeof( *Object ) );
 	if ( Object == NULL )
 	{
 		jeErrorLog_Add( JE_ERR_MEMORY_RESOURCE, NULL );
@@ -1450,7 +1450,7 @@ void * JETCC CreateFromFile(
 	ERROR_CreateFromFile:
 
 	// free object
-	jeRam_Free( Object );
+	JE_RAM_FREE( Object );
 
 	// return error
 	return NULL;
@@ -2077,7 +2077,7 @@ void * JETCC DuplicateInstance(void * Instance)
 	jeObject* newDLight = NULL;
 	jePtrMgr *ptrMgr = NULL;
 
-	vfsmemctx.Data = jeRam_Allocate(OBJ_PERSIST_SIZE); //"I dunno, 100K sounds good."
+	vfsmemctx.Data = JE_RAM_ALLOCATE(OBJ_PERSIST_SIZE); //"I dunno, 100K sounds good."
 	vfsmemctx.DataLength = OBJ_PERSIST_SIZE;
 
 	if (!vfsmemctx.Data) {
@@ -2096,7 +2096,7 @@ void * JETCC DuplicateInstance(void * Instance)
 
 	if (!ramdisk) {
 		jeErrorLog_AddString(JE_ERR_SUBSYSTEM_FAILURE, "Unable to create a VFile Memory Directory", NULL);
-		jeRam_Free(vfsmemctx.Data);
+		JE_RAM_FREE(vfsmemctx.Data);
 		return NULL;
 	}
 
@@ -2105,7 +2105,7 @@ void * JETCC DuplicateInstance(void * Instance)
 	if (!ramfile) {
 		jeErrorLog_AddString(JE_ERR_SUBSYSTEM_FAILURE, "Unable to create a VFile Memory File", NULL);
 		jeVFile_Close(ramdisk);
-		jeRam_Free(vfsmemctx.Data);
+		JE_RAM_FREE(vfsmemctx.Data);
 		return NULL;
 	}
 	ptrMgr = jePtrMgr_Create();
@@ -2114,7 +2114,7 @@ void * JETCC DuplicateInstance(void * Instance)
 		jeErrorLog_AddString(JE_ERR_SUBSYSTEM_FAILURE, "Unable to create a Pointer Manager", NULL);
 		jeVFile_Close(ramfile);
 		jeVFile_Close(ramdisk);
-		jeRam_Free(vfsmemctx.Data);
+		JE_RAM_FREE(vfsmemctx.Data);
 		return NULL;
 	}
 
@@ -2122,7 +2122,7 @@ void * JETCC DuplicateInstance(void * Instance)
 		jeErrorLog_AddString(JE_ERR_SUBSYSTEM_FAILURE, "Unable to write the object to a temp VFile Memory File", NULL);
 		jeVFile_Close(ramfile);
 		jeVFile_Close(ramdisk);
-		jeRam_Free(vfsmemctx.Data);
+		JE_RAM_FREE(vfsmemctx.Data);
 		return NULL;
 	}
 
@@ -2130,7 +2130,7 @@ void * JETCC DuplicateInstance(void * Instance)
 		jeErrorLog_AddString(JE_ERR_SUBSYSTEM_FAILURE, "Unable to rewind the temp VFile Memory File", NULL);
 		jeVFile_Close(ramfile);
 		jeVFile_Close(ramdisk);
-		jeRam_Free(vfsmemctx.Data);
+		JE_RAM_FREE(vfsmemctx.Data);
 		return NULL;
 	}
 
@@ -2139,14 +2139,14 @@ void * JETCC DuplicateInstance(void * Instance)
 		jeErrorLog_AddString(JE_ERR_SUBSYSTEM_FAILURE, "Unable to reade the object back from a temp VFile Memory File", NULL);
 		jeVFile_Close(ramfile);
 		jeVFile_Close(ramdisk);
-		jeRam_Free(vfsmemctx.Data);
+		JE_RAM_FREE(vfsmemctx.Data);
 		return NULL;
 	}
 
 	jeVFile_Close(ramfile);
 	jeVFile_Close(ramdisk);
 
-	jeRam_Free(vfsmemctx.Data);
+	JE_RAM_FREE(vfsmemctx.Data);
 
 	return( newDLight );
 }

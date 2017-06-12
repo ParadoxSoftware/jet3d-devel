@@ -76,7 +76,7 @@ JETAPI void JETCC jePortal_Destroy(jePortal **Portal)
 	if ((*Portal)->RefCount > 0)
 		return;
 
-	jeRam_Free(*Portal);
+	JE_RAM_FREE(*Portal);
 	*Portal = NULL;
 }
 

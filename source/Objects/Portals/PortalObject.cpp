@@ -364,7 +364,7 @@ static char * Util_LoadLibraryString(
 	}
 
 	// copy resource string
-	NewString = (char*)jeRam_Allocate( Size + 1 );
+	NewString = (char*)JE_RAM_ALLOCATE( Size + 1 );
 	if ( NewString == NULL )
 	{
 		jeErrorLog_Add( JE_ERR_MEMORY_RESOURCE, NULL );
@@ -487,7 +487,7 @@ jeBoolean JETCC Destroy(void **pInstance)
 	if( pPortalObj->RefCnt == 0 )
 	{
 		jePortal_Destroy(&pPortalObj->Portal);
-		jeRam_Free( pPortalObj );
+		JE_RAM_FREE( pPortalObj );
 	}
 	else
 		return( JE_FALSE );
@@ -640,7 +640,7 @@ void *	JETCC CreateFromFile(jeVFile * File, jePtrMgr *PtrMgr)
 	return( pPortalObj );
 
 CFF_ERROR:
-	jeRam_Free( pPortalObj );
+	JE_RAM_FREE( pPortalObj );
 	return( NULL );
 	PtrMgr;
 }

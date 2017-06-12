@@ -49,7 +49,7 @@ jePoly *jePoly_Create(int32 NumVerts)
 
 	if (!Poly->Verts)
 	{
-		jeRam_Free(Poly);
+		JE_RAM_FREE(Poly);
 		return NULL;
 	}
 	
@@ -155,14 +155,14 @@ void jePoly_Destroy(jePoly **Poly)
 	if (pPoly->Verts)
 	{
 		assert(pPoly->NumVerts > 0);
-		jeRam_Free(pPoly->Verts);
+		JE_RAM_FREE(pPoly->Verts);
 	}
 	else
 	{
 		assert(pPoly->NumVerts == 0);
 	}
 
-	jeRam_Free(pPoly);
+	JE_RAM_FREE(pPoly);
 
 	*Poly = NULL;
 }

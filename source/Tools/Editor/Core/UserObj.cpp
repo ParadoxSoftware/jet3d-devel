@@ -127,7 +127,7 @@ UserObj *	UserObj_Create( const char * const pszName, Group * pGroup, int32 nNum
 	if( !Object_Init( &pUserObj->ObjectData, pGroup, KIND_USEROBJ, pszName, nNumber ) )
 	{
 		jeErrorLog_Add( JE_ERR_INTERNAL_RESOURCE, "Trace" );
-		jeRam_Free( pUserObj );
+		JE_RAM_FREE( pUserObj );
 		return( NULL );
 	}
 
@@ -135,7 +135,7 @@ UserObj *	UserObj_Create( const char * const pszName, Group * pGroup, int32 nNum
 	if( pUserObj->pgeObject == NULL )
 	{
 		jeErrorLog_Add( JE_ERR_INTERNAL_RESOURCE, "UserObj_Create:jeUserObj_Create" );
-		jeRam_Free( pUserObj );
+		JE_RAM_FREE( pUserObj );
 		return( NULL );
 	}
 
@@ -149,7 +149,7 @@ UserObj *	UserObj_Create( const char * const pszName, Group * pGroup, int32 nNum
 	CombName = Object_GetNameAndTag( &pUserObj->ObjectData );
 
 	jeObject_SetName( pgeObject, CombName );
-	jeRam_Free( CombName );
+	JE_RAM_FREE( CombName );
 
 	return( pUserObj );
 }// UserObj_Create
@@ -212,7 +212,7 @@ void UserObj_Destroy( UserObj ** ppUserObj )
 		Brush_SetGeBrush( (*ppUserObj)->pDrawBrush, (BRUSH_KIND)KIND_BRUSH, NULL );
 		Brush_Destroy( &(*ppUserObj)->pDrawBrush );
 	}
-	jeRam_Free( (*ppUserObj) );
+	JE_RAM_FREE( (*ppUserObj) );
 }// UserObj_Destroy
 
 
@@ -560,10 +560,10 @@ jeBoolean UserObj_FillPositionDescriptor( UserObj * pUserObj, jeProperty_List * 
 	jeProperty_FillVec3dGroup( &Property, Name, &XForm.Translation,	OBJECT_POSITION_FIELD  );
 	if( !jeProperty_Append( pArray,  &Property ) )
 	{
-		jeRam_Free( Name );
+		JE_RAM_FREE( Name );
 		return( JE_FALSE );
 	}
-	jeRam_Free( Name );
+	JE_RAM_FREE( Name );
 
 	Name = Util_LoadLocalRcString( IDS_POSITIONX_FIELD );
 	if( Name == NULL )
@@ -571,10 +571,10 @@ jeBoolean UserObj_FillPositionDescriptor( UserObj * pUserObj, jeProperty_List * 
 	jeProperty_FillFloat(  &Property, Name, XForm.Translation.X, OBJECT_POSITION_FIELDX, -FLT_MAX, FLT_MAX, 1.0f );
 	if( !jeProperty_Append( pArray,  &Property ) )
 	{
-		jeRam_Free( Name );
+		JE_RAM_FREE( Name );
 		return( JE_FALSE );
 	}
-	jeRam_Free( Name );
+	JE_RAM_FREE( Name );
 
 	Name = Util_LoadLocalRcString( IDS_POSITIONY_FIELD );
 	if( Name == NULL )
@@ -582,10 +582,10 @@ jeBoolean UserObj_FillPositionDescriptor( UserObj * pUserObj, jeProperty_List * 
 	jeProperty_FillFloat(  &Property, Name, XForm.Translation.Y,	OBJECT_POSITION_FIELDY, -FLT_MAX, FLT_MAX, 1.0f );
 	if( !jeProperty_Append( pArray, &Property ) )
 	{
-		jeRam_Free( Name );
+		JE_RAM_FREE( Name );
 		return( JE_FALSE );
 	}
-	jeRam_Free( Name );
+	JE_RAM_FREE( Name );
 
 	Name = Util_LoadLocalRcString( IDS_POSITIONZ_FIELD );
 	if( Name == NULL )
@@ -593,10 +593,10 @@ jeBoolean UserObj_FillPositionDescriptor( UserObj * pUserObj, jeProperty_List * 
 	jeProperty_FillFloat( &Property, Name, XForm.Translation.Z, OBJECT_POSITION_FIELDZ, -FLT_MAX, FLT_MAX, 1.0f );
 	if( !jeProperty_Append( pArray, &Property ) )
 	{
-		jeRam_Free( Name );
+		JE_RAM_FREE( Name );
 		return( JE_FALSE );
 	}
-	jeRam_Free( Name );
+	JE_RAM_FREE( Name );
 
 	jeProperty_FillGroupEnd( &Property, OBJECT_POSITION_FIELD_END );
 	if( !jeProperty_Append( pArray, &Property ) )
@@ -621,10 +621,10 @@ jeProperty_List *	UserObj_BuildDescriptor( UserObj * pUserObj )
 	if( Name == NULL )
 		goto UOBD_ERROR;
 	jeProperty_FillString( &Property, Name, pUserObj->ObjectData.pszName, OBJECT_NAME_FIELD );
-	jeRam_Free( Name );
+	JE_RAM_FREE( Name );
 	if( !jeProperty_Append( pObjectArray,  &Property ) )
 	{
-		jeRam_Free( Name );
+		JE_RAM_FREE( Name );
 		return( NULL );
 	}
 	
@@ -685,7 +685,7 @@ void UserObj_SetProperty( UserObj * pUserObj, int DataId, int DataType, jeProper
 		CombName = Object_GetNameAndTag( &pUserObj->ObjectData );
 
 		jeObject_SetName( pUserObj->pgeObject, CombName );
-		jeRam_Free( CombName );
+		JE_RAM_FREE( CombName );
 		return;
 	}
 

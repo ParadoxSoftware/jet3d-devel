@@ -1400,11 +1400,11 @@ jeBoolean Make_Actor_ACT_OutOfDate( AProject *Prj, jeBoolean *OutOfDate, MkUtil_
 	
 	if (Make_AnyMotion_MOT_OutOfDate( Prj, MotionCount, MotionIndexArray, OutOfDate, Printf )==JE_FALSE)
 		{
-			jeRam_Free(MotionIndexArray);
+			JE_RAM_FREE(MotionIndexArray);
 			return JE_FALSE;
 		}
 
-	jeRam_Free(MotionIndexArray);
+	JE_RAM_FREE(MotionIndexArray);
 
 	return JE_TRUE;
 }
@@ -1427,7 +1427,7 @@ jeBoolean Make_Motion(AProject *Prj, AOptions *Options,
 					MotionCount, MotionIndexArray, Printf ) == JE_FALSE)
 		{
 			Printf("Error: unable to complete 3DS MAX script and export step for Make_Actor\n");
-			jeRam_Free(MotionIndexArray);
+			JE_RAM_FREE(MotionIndexArray);
 			return JE_FALSE;
 		}
 
@@ -1536,7 +1536,7 @@ jeBoolean Make_Actor(AProject *Prj, AOptions *Options, MkUtil_Printf Printf)
 						MotionCount, MotionIndexArray, Printf ) == JE_FALSE)
 		{
 			Printf("Error: unable to complete 3DS MAX script and export step for Make_Actor\n");
-			jeRam_Free(MotionIndexArray);
+			JE_RAM_FREE(MotionIndexArray);
 			return JE_FALSE;
 		}
 	
@@ -1544,7 +1544,7 @@ jeBoolean Make_Actor(AProject *Prj, AOptions *Options, MkUtil_Printf Printf)
 	if (Make_Body(Prj,Options,Printf)==JE_FALSE)
 		{
 			Printf("Error: Failed to build body.  Unable to make Actor.\n");
-			jeRam_Free(MotionIndexArray);
+			JE_RAM_FREE(MotionIndexArray);
 			return JE_FALSE;
 		}
 
@@ -1552,11 +1552,11 @@ jeBoolean Make_Actor(AProject *Prj, AOptions *Options, MkUtil_Printf Printf)
 	if (Make_Motion(Prj, Options, MotionCount, MotionIndexArray, Printf)==JE_FALSE)
 		{
 			Printf("Error: Failed to build motions.  Unable to make Actor.\n");
-			jeRam_Free(MotionIndexArray);
+			JE_RAM_FREE(MotionIndexArray);
 			return JE_FALSE;
 		}
 
-	jeRam_Free(MotionIndexArray);
+	JE_RAM_FREE(MotionIndexArray);
 
 	Printf("\tCombining components into final Actor...\n");
 	{

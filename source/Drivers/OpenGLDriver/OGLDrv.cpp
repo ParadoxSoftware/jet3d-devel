@@ -7,6 +7,8 @@
 #include "OglDrv.h"
 #include "OglTextures.h"
 
+#include "jeFileLogger.h"
+
 HWND							hWnd = NULL;
 HDC								hDC = NULL;
 HGLRC							hglRC = NULL;

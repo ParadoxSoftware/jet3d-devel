@@ -59,7 +59,7 @@ void MaterialList_Destroy( MaterialList_Struct **hMaterialList )
 	if( (*hMaterialList)->pList != NULL )
 		List_Destroy ( &(*hMaterialList)->pList, (List_DestroyCallback) Materials_Destroy );
 
-	jeRam_Free( (*hMaterialList) );
+	JE_RAM_FREE( (*hMaterialList) );
 }
 
 int32 MaterialList_GetNumItems( const MaterialList_Struct * pMaterials )

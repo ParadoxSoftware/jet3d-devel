@@ -60,7 +60,7 @@ HBITMAP CBitmapResize::ScaleBitmapInt(HBITMAP hBmp,
 	
 	::GetDIBits(hDC, hBmp, 0, bmp.bmHeight, pData, pbi, DIB_RGB_COLORS);
 	
-	jeRam_Free(pbi);
+	JE_RAM_FREE(pbi);
 	pbi = NULL;
 	
 	pbi = PrepareRGBBitmapInfo(wNewWidth, wNewHeight);
@@ -98,7 +98,7 @@ HBITMAP CBitmapResize::ScaleBitmapInt(HBITMAP hBmp,
 	
 	::ReleaseDC(NULL, hDC);
 	
-	jeRam_Free(pbi);
+	JE_RAM_FREE(pbi);
 	pbi = NULL;
 	delete pData2;
 	pData2 = NULL;

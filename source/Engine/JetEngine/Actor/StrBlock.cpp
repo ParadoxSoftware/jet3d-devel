@@ -96,7 +96,7 @@ JETAPI void JETCC jeStrBlock_Destroy(jeStrBlock **SB)
 	assert( (*SB)->SanityCheck == (*SB) );
 	assert(  SB != NULL );
 	assert( *SB != NULL );	
-	jeRam_Free( *SB );
+	JE_RAM_FREE( *SB );
 	*SB = NULL;
 }
 
@@ -165,7 +165,7 @@ JETAPI void JETCC jeStrBlock_Delete(jeStrBlock **ppSB,int Nth)
 	{
 		jeStrBlock * NewjeStrBlock;
 
-		NewjeStrBlock = (jeStrBlock *)jeRam_Realloc( *ppSB, 
+		NewjeStrBlock = (jeStrBlock *)JE_RAM_REALLOC( *ppSB, 
 			BlockSize				// size of data block
 			+ sizeof(jeStrBlock)		// size of strblock structure
 			- StringLen				// size of dying string
@@ -226,7 +226,7 @@ JETAPI jeBoolean JETCC jeStrBlock_Append(jeStrBlock **ppSB,const char *String)
 	{
 		jeStrBlock * NewjeStrBlock;
 
-		NewjeStrBlock = (jeStrBlock*)jeRam_Realloc( *ppSB, 
+		NewjeStrBlock = (jeStrBlock*)JE_RAM_REALLOC( *ppSB, 
 			BlockSize				// size of data block
 			+ sizeof(jeStrBlock)		// size of strblock structure
 			+ strlen(String) + 1		// size of new string
@@ -312,7 +312,7 @@ JETAPI jeStrBlock* JETCC jeStrBlock_CreateFromFile(jeVFile* pFile)
 			return NULL;
 		}
 	
-	SB = (jeStrBlock *)jeRam_AllocateClear( sizeof(jeStrBlock) + Header.Size );
+	SB = (jeStrBlock *)JE_RAM_ALLOCATE_CLEAR( sizeof(jeStrBlock) + Header.Size );
 	if( SB == NULL )
 		{
 			jeErrorLog_Add(JE_ERR_MEMORY_RESOURCE, "jeStrBlock_CreateFromFile.");

@@ -24,6 +24,8 @@
 #include "rungo1.h"
 #include "rungae.h"
 
+#define new(type)		JE_RAM_ALLOCATE_CLEAR(sizeof(type))
+
 struct rungO1
 {
 	int numContexts;
@@ -43,9 +45,9 @@ int i;
 
 	ro1->numContexts = nc;
 	ro1->ari = ari;
-	ro1->rungs = (rung_t *)jeRam_AllocateClear(sizeof(rung_t) * nc);
+	ro1->rungs = (rung_t *)JE_RAM_ALLOCATE_CLEAR(sizeof(rung_t) * nc);
 	if ( ! ro1->rungs ) {
-		jeRam_Free(ro1); ro1 = nullptr;
+		JE_RAM_FREE(ro1); ro1 = nullptr;
 		return NULL;
 	}
 
@@ -60,8 +62,8 @@ return ro1;
 void		rungO1Destroy(rungO1 * ro1)
 {
 	assert(ro1 && ro1->rungs);
-	jeRam_Free(ro1->rungs); ro1->rungs = nullptr;
-	jeRam_Free(ro1); ro1 = nullptr;
+	JE_RAM_FREE(ro1->rungs); ro1->rungs = nullptr;
+	JE_RAM_FREE(ro1); ro1 = nullptr;
 }
 
 void	rungO1Encode(rungO1 * ro1, int context, jeBoolean bit)

@@ -135,7 +135,7 @@ JETAPI jeLight * JETCC jeLight_CreateFromFile(jeVFile *VFile, jePtrMgr *PtrMgr)
 	ExitWithError:
 	{
 		if (Light)
-			jeRam_Free(Light);
+			JE_RAM_FREE(Light);
 
 		return NULL;
 	}
@@ -233,7 +233,7 @@ JETAPI void JETCC jeLight_Destroy(jeLight **Light)
 	(*Light)->RefCount --;
 
 	if ((*Light)->RefCount == 0)
-		jeRam_Free(*Light);
+		JE_RAM_FREE(*Light);
 
 	*Light = NULL;
 }

@@ -817,7 +817,7 @@ jeBoolean JETCC SetProperty(
 
 				// free old bone name
 				assert( Object->LightReferenceBoneName != NULL );
-				jeRam_Free( Object->LightReferenceBoneName );
+				JE_RAM_FREE( Object->LightReferenceBoneName );
 
 				// save new bone name
 				Object->LightReferenceBoneName = Util_StrDup( Object->BoneList[0] );
@@ -1014,7 +1014,7 @@ jeBoolean JETCC SetProperty(
 			// save new actor def name
 			if ( Object->ActorDefName != NULL )
 			{
-				jeRam_Free( Object->ActorDefName );
+				JE_RAM_FREE( Object->ActorDefName );
 			}
 
 			// Save old parameters
@@ -1197,7 +1197,7 @@ jeBoolean JETCC SetProperty(
 			// save new motion name
 			if ( Object->MotionName != NULL )
 			{
-				jeRam_Free( Object->MotionName );
+				JE_RAM_FREE( Object->MotionName );
 				Object->MotionName = NULL;
 			}
 			Object->MotionName = Util_StrDup( pData->String );
@@ -1234,7 +1234,7 @@ jeBoolean JETCC SetProperty(
 
 			// save new bone name
 			assert( Object->LightReferenceBoneName != NULL );
-			jeRam_Free( Object->LightReferenceBoneName );
+			JE_RAM_FREE( Object->LightReferenceBoneName );
 			Object->LightReferenceBoneName = Util_StrDup( pData->String );
 
 			// do nothing more if no selection is made

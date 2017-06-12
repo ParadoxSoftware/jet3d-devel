@@ -470,7 +470,7 @@ jeBrush	*BrushTemplate_CreateSphereBrush (const SphereTemplate *pTemplate,   jeF
 		jeErrorLog_Add( JE_ERR_INTERNAL_RESOURCE, "Unable to create jeBrush" );
 		goto SPHERE_ERR;
 	}
-	sv			=(jeVec3d *)jeRam_Allocate(sizeof(jeVec3d) * (((pTemplate->HorizontalBands-1) * pTemplate->VerticalBands)+2));
+	sv			=(jeVec3d *)JE_RAM_ALLOCATE(sizeof(jeVec3d) * (((pTemplate->HorizontalBands-1) * pTemplate->VerticalBands)+2));
 	r			=pTemplate->Radius;
 	vcnt		=0;
 	jeVec3d_Set (&sv[vcnt], 0.0f, pTemplate->Radius, 0.0f);
@@ -534,7 +534,7 @@ jeBrush	*BrushTemplate_CreateSphereBrush (const SphereTemplate *pTemplate,   jeF
 			
 		}
 	}
-	jeRam_Free(sv);
+	JE_RAM_FREE(sv);
 
 	return	Brush;
 
@@ -542,7 +542,7 @@ SPHERE_ERR:
 	if( Brush != NULL )
 		jeBrush_Destroy( &Brush);
 	if( sv != NULL )
-		jeRam_Free(sv);
+		JE_RAM_FREE(sv);
 	return( NULL );
 }
 
@@ -565,13 +565,13 @@ jeBrush *BrushTemplate_CreateCylinderBrush (const CylinderTemplate *pTemplate,  
 
 	assert (NumVerticalBands >= 3);
 
-	Verts		=(jeVec3d *)jeRam_Allocate(sizeof(jeVec3d)*NumVerticalBands * 2);
+	Verts		=(jeVec3d *)JE_RAM_ALLOCATE(sizeof(jeVec3d)*NumVerticalBands * 2);
 	if(Verts == NULL )
 	{
 		jeErrorLog_Add( JE_ERR_MEMORY_RESOURCE, "Unable to allocate Verts" );
 		goto CYLND_ERR;
 	}
-	TopPoints	=(jeVec3d *)jeRam_Allocate(sizeof(jeVec3d)*NumVerticalBands);
+	TopPoints	=(jeVec3d *)JE_RAM_ALLOCATE(sizeof(jeVec3d)*NumVerticalBands);
 	if(TopPoints == NULL )
 	{
 		jeErrorLog_Add( JE_ERR_MEMORY_RESOURCE, "Unable to allocate TopPoints" );
@@ -683,15 +683,15 @@ jeBrush *BrushTemplate_CreateCylinderBrush (const CylinderTemplate *pTemplate,  
 			}
 		}
 	}
-	jeRam_Free(Verts);
-	jeRam_Free(TopPoints);
+	JE_RAM_FREE(Verts);
+	JE_RAM_FREE(TopPoints);
 	return( Brush );
 
 CYLND_ERR:
 	if( Verts != NULL )
-		jeRam_Free(Verts);
+		JE_RAM_FREE(Verts);
 	if( TopPoints != NULL )
-		jeRam_Free(TopPoints);
+		JE_RAM_FREE(TopPoints);
 	if( Brush != NULL )
 		jeBrush_Destroy( &Brush );
 	return	NULL;
@@ -1026,7 +1026,7 @@ jeBoolean BrushTemplate_FillBoxDescriptor( BoxTemplate * pBoxTemplate, jePropert
 	if( Name == NULL )
 		return( JE_FALSE );
 	jeProperty_FillFloat( &Property, Name, pBoxTemplate->XSizeTop/pBoxTemplate->XSizeBot,	TEMPLATE_BOXXRATIO_FIELD, 0.1f, FLT_MAX, 0.1f );
-	jeRam_Free( Name );
+	JE_RAM_FREE( Name );
 	if( !jeProperty_Append( pPropertyList, &Property ) )
 	{
 		return( JE_FALSE );
@@ -1036,7 +1036,7 @@ jeBoolean BrushTemplate_FillBoxDescriptor( BoxTemplate * pBoxTemplate, jePropert
 	if( Name == NULL )
 		return( JE_FALSE );
 	jeProperty_FillFloat( &Property, Name, pBoxTemplate->ZSizeTop/pBoxTemplate->ZSizeBot,	TEMPLATE_BOXZRATIO_FIELD, 0.1f, FLT_MAX, 0.1f );
-	jeRam_Free( Name );
+	JE_RAM_FREE( Name );
 	if( !jeProperty_Append( pPropertyList, &Property ) )
 	{
 		return( JE_FALSE );
@@ -1103,7 +1103,7 @@ jeBoolean BrushTemplate_FillSphereDescriptor( SphereTemplate * pSphereTemplate, 
 	if( Name == NULL )
 		return( JE_FALSE );
 	jeProperty_FillInt( &Property, Name, pSphereTemplate->HorizontalBands,	TEMPLATE_HBANDS_FIELD, 2.0f, 12.0f, 1.0f );
-	jeRam_Free( Name );
+	JE_RAM_FREE( Name );
 	if( !jeProperty_Append( pPropertyList, &Property ) )
 	{
 		return( JE_FALSE );
@@ -1113,7 +1113,7 @@ jeBoolean BrushTemplate_FillSphereDescriptor( SphereTemplate * pSphereTemplate, 
 	if( Name == NULL )
 		return( JE_FALSE );
 	jeProperty_FillInt( &Property, Name, pSphereTemplate->VerticalBands,	TEMPLATE_VBANDS_FIELD, 4.0f, 12.0f, 1.0f );
-	jeRam_Free( Name );
+	JE_RAM_FREE( Name );
 	if( !jeProperty_Append( pPropertyList, &Property ) )
 	{
 		return( JE_FALSE );
@@ -1171,7 +1171,7 @@ jeBoolean BrushTemplate_FillCylinderDescriptor( CylinderTemplate * pCylinderTemp
 	if( Name == NULL )
 		return( JE_FALSE );
 	jeProperty_FillFloat( &Property, Name, pCylinderTemplate->TopXSize/pCylinderTemplate->BotXSize,	TEMPLATE_CYLDXRATIO_FIELD, 0.1f, FLT_MAX, 0.1f );
-	jeRam_Free( Name );
+	JE_RAM_FREE( Name );
 	if( !jeProperty_Append( pPropertyList, &Property ) )
 	{
 		return( JE_FALSE );
@@ -1181,7 +1181,7 @@ jeBoolean BrushTemplate_FillCylinderDescriptor( CylinderTemplate * pCylinderTemp
 	if( Name == NULL )
 		return( JE_FALSE );
 	jeProperty_FillFloat( &Property, Name, pCylinderTemplate->TopZSize/pCylinderTemplate->BotZSize,	TEMPLATE_CYLDZRATIO_FIELD, 0.1f, FLT_MAX, 0.1f );
-	jeRam_Free( Name );
+	JE_RAM_FREE( Name );
 	if( !jeProperty_Append( pPropertyList, &Property ) )
 	{
 		return( JE_FALSE );
@@ -1191,7 +1191,7 @@ jeBoolean BrushTemplate_FillCylinderDescriptor( CylinderTemplate * pCylinderTemp
 	if( Name == NULL )
 		return( JE_FALSE );
 	jeProperty_FillInt( &Property, Name, pCylinderTemplate->VerticalStripes,	TEMPLATE_STRIPES_FIELD, 4.0f, 12.0f, 1.0f );
-	jeRam_Free( Name );
+	JE_RAM_FREE( Name );
 	if( !jeProperty_Append( pPropertyList, &Property ) )
 	{
 		return( JE_FALSE );
@@ -1254,7 +1254,7 @@ jeBoolean BrushTemplate_FillArchDescriptor(ArchTemplate *pTemplate, jeProperty_L
 		return JE_FALSE;
 
 	jeProperty_FillFloat(&Property, Name, pTemplate->StartAngle, TEMPLATE_ARCH_STARTANGLE_FIELD, 0.0f, 180.0f, 1.0f);
-	jeRam_Free(Name);
+	JE_RAM_FREE(Name);
 	jeProperty_Append(PropList, &Property);
 
 	Name = Util_LoadLocalRcString(IDS_ARCH_ENDANGLE);
@@ -1262,7 +1262,7 @@ jeBoolean BrushTemplate_FillArchDescriptor(ArchTemplate *pTemplate, jeProperty_L
 		return JE_FALSE;
 
 	jeProperty_FillFloat(&Property, Name, pTemplate->EndAngle, TEMPLATE_ARCH_ENDANGLE_FIELD, 1.0f, 180.0f, 1.0f);
-	jeRam_Free(Name);
+	JE_RAM_FREE(Name);
 	jeProperty_Append(PropList, &Property);
 
 	Name = Util_LoadLocalRcString(IDS_ARCH_THICKNESS);
@@ -1270,7 +1270,7 @@ jeBoolean BrushTemplate_FillArchDescriptor(ArchTemplate *pTemplate, jeProperty_L
 		return JE_FALSE;
 
 	jeProperty_FillFloat(&Property, Name, pTemplate->Thickness, TEMPLATE_ARCH_THICKNESS_FIELD, 1.0f, 100.0f, 1.0f);
-	jeRam_Free(Name);
+	JE_RAM_FREE(Name);
 	jeProperty_Append(PropList, &Property);
 
 	Name = Util_LoadLocalRcString(IDS_ARCH_WIDTH);
@@ -1278,7 +1278,7 @@ jeBoolean BrushTemplate_FillArchDescriptor(ArchTemplate *pTemplate, jeProperty_L
 		return JE_FALSE;
 
 	jeProperty_FillFloat(&Property, Name, pTemplate->Width, TEMPLATE_ARCH_WIDTH_FIELD, 1.0f, 100.0f, 1.0f);
-	jeRam_Free(Name);
+	JE_RAM_FREE(Name);
 	jeProperty_Append(PropList, &Property);
 
 	Name = Util_LoadLocalRcString(IDS_ARCH_INNERRADIUS);
@@ -1286,7 +1286,7 @@ jeBoolean BrushTemplate_FillArchDescriptor(ArchTemplate *pTemplate, jeProperty_L
 		return JE_FALSE;
 
 	jeProperty_FillFloat(&Property, Name, pTemplate->Radius, TEMPLATE_ARCH_INNERRADIUS_FIELD, 1.0f, 360.0f, 1.0f);
-	jeRam_Free(Name);
+	JE_RAM_FREE(Name);
 	jeProperty_Append(PropList, &Property);
 
 	Name = Util_LoadLocalRcString(IDS_ARCH_HOLLOWWALLSIZE);
@@ -1294,7 +1294,7 @@ jeBoolean BrushTemplate_FillArchDescriptor(ArchTemplate *pTemplate, jeProperty_L
 		return JE_FALSE;
 
 	jeProperty_FillFloat(&Property, Name, pTemplate->WallSize, TEMPLATE_ARCH_HOLLOWWALLSIZE_FIELD, 1.0f, 100.0f, 1.0f);
-	jeRam_Free(Name);
+	JE_RAM_FREE(Name);
 	jeProperty_Append(PropList, &Property);
 
 	Name = Util_LoadLocalRcString(IDS_ARCH_NUMCROSSSECTIONS);
@@ -1302,7 +1302,7 @@ jeBoolean BrushTemplate_FillArchDescriptor(ArchTemplate *pTemplate, jeProperty_L
 		return JE_FALSE;
 
 	jeProperty_FillInt(&Property, Name, pTemplate->NumSlits, TEMPLATE_ARCH_NUMCROSSSECTIONS_FIELD, 1.0f, 100.0f, 1.0f);
-	jeRam_Free(Name);
+	JE_RAM_FREE(Name);
 	jeProperty_Append(PropList, &Property);
 
 	return JE_TRUE;
@@ -1356,7 +1356,7 @@ void BrushTemplate_Destroy( BrushTemplate ** hBrushTemplate )
 	assert( hBrushTemplate );
 	assert( *hBrushTemplate );
 
-	jeRam_Free( (*hBrushTemplate) );
+	JE_RAM_FREE( (*hBrushTemplate) );
 }
 
 //ACCESSOR
@@ -1444,27 +1444,27 @@ BrushTemplate *   BrushTemplate_Copy( BrushTemplate * pTemplate )
 	switch( pTemplate->Kind )
 	{
 	case BRUSH_BOX:
-		pNewTemplate = (BrushTemplate *)jeRam_Allocate( sizeof( BoxTemplate) );
+		pNewTemplate = (BrushTemplate *)JE_RAM_ALLOCATE( sizeof( BoxTemplate) );
 		memcpy( pNewTemplate, pTemplate, sizeof( BoxTemplate) );
 		break;
 
 	case BRUSH_SPHERE:
-		pNewTemplate = (BrushTemplate *)jeRam_Allocate( sizeof( SphereTemplate) );
+		pNewTemplate = (BrushTemplate *)JE_RAM_ALLOCATE( sizeof( SphereTemplate) );
 		memcpy( pNewTemplate, pTemplate, sizeof( SphereTemplate) );
 		break;
 
 	case BRUSH_CYLINDER:
-		pNewTemplate = (BrushTemplate *)jeRam_Allocate( sizeof( CylinderTemplate) );
+		pNewTemplate = (BrushTemplate *)JE_RAM_ALLOCATE( sizeof( CylinderTemplate) );
 		memcpy( pNewTemplate, pTemplate, sizeof( CylinderTemplate) );
 		break;
 
 	case BRUSH_SHEET:
-		pNewTemplate = (BrushTemplate *)jeRam_Allocate( sizeof( SheetTemplate) );
+		pNewTemplate = (BrushTemplate *)JE_RAM_ALLOCATE( sizeof( SheetTemplate) );
 		memcpy( pNewTemplate, pTemplate, sizeof( SheetTemplate) );
 		break;
 
 	case BRUSH_ARCH:
-		pNewTemplate = (BrushTemplate*)jeRam_Allocate(sizeof(ArchTemplate));
+		pNewTemplate = (BrushTemplate*)JE_RAM_ALLOCATE(sizeof(ArchTemplate));
 		memcpy(pNewTemplate, pTemplate, sizeof(ArchTemplate));
 
 	default:
@@ -1520,7 +1520,7 @@ jeBoolean BrushTemplate_FillTemplateDescriptor( BrushTemplate * pTemplate, jePro
 	if( Name == NULL )
 		return( JE_FALSE );
 	jeProperty_FillGroup( &Property, Name, TEMPLATE_GROUP );
-	jeRam_Free( Name );
+	JE_RAM_FREE( Name );
 	if( !jeProperty_Append( pPropertyList, &Property ) )
 	{
 		return( JE_FALSE );
@@ -1561,10 +1561,10 @@ jeBoolean BrushTemplate_FillTemplateDescriptor( BrushTemplate * pTemplate, jePro
 		return( JE_FALSE );
 	TypeString = Util_LoadLocalRcString(TypeStringId);
 	TemplateString = pGroupProperty->FieldName;
-	pGroupProperty->FieldName = (char*)jeRam_Allocate( strlen( TypeString) + strlen( TemplateString) +4 );
+	pGroupProperty->FieldName = (char*)JE_RAM_ALLOCATE( strlen( TypeString) + strlen( TemplateString) +4 );
 	sprintf( pGroupProperty->FieldName, "%s %s", TemplateString, TypeString );
-	jeRam_Free( TypeString );
-	jeRam_Free( TemplateString );
+	JE_RAM_FREE( TypeString );
+	JE_RAM_FREE( TemplateString );
 
 	jeProperty_FillGroupEnd( &Property, TEMPLATE_GROUP_END );
 	if( !jeProperty_Append( pPropertyList, &Property ) )
@@ -1818,7 +1818,7 @@ BrushTemplate * BrushTemplate_CreateFromFile( jeVFile * pF )
 
 BTCFF_FAILURE:
 	if( pTemplate != NULL )
-		jeRam_Free( pTemplate );
+		JE_RAM_FREE( pTemplate );
 	return( NULL );
 }
 

@@ -68,7 +68,7 @@ void ActBuild_OptionsDestroy (ActBuild_Options** ppOptions)
 	p = *ppOptions;
 	assert (p != NULL);
 
-	jeRam_Free (*ppOptions);
+	JE_RAM_FREE (*ppOptions);
 	*ppOptions = NULL;
 }
 

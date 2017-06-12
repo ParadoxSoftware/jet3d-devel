@@ -63,7 +63,7 @@ jeBoolean SaveCallbackData(jeNameMgr *NM,
 	assert(PointerText);
 	assert(DataPtr);
 
-    RWData = (ReadWriteData *)jeRam_Allocate(sizeof(ReadWriteData));
+    RWData = (ReadWriteData *)JE_RAM_ALLOCATE(sizeof(ReadWriteData));
 
 	if (!RWData)
 		return JE_FALSE;
@@ -75,7 +75,7 @@ jeBoolean SaveCallbackData(jeNameMgr *NM,
 
     if (!jeChain_AddLinkData(NM->List, RWData))
 		{
-		jeRam_Free(RWData);
+		JE_RAM_FREE(RWData);
 		return JE_FALSE;
 		}
 
@@ -172,7 +172,7 @@ JETAPI jeNameMgr * JETCC jeNameMgr_Create(jeVFile *System, int32 CreateFlags)
 
 	if (!NM->List)
 		{
-		jeRam_Free(NM);
+		JE_RAM_FREE(NM);
 		return NULL;
 		}
 
@@ -214,13 +214,13 @@ JETAPI void JETCC jeNameMgr_Destroy(jeNameMgr **NameMgr)
 
 			// get data pointer
 			RWData = (ReadWriteData *)jeChain_LinkGetLinkData( Link );
-            jeRam_Free(RWData);
+            JE_RAM_FREE(RWData);
 		}
 
         // destroy the list
         jeChain_Destroy(&(*NameMgr)->List);
 
-		jeRam_Free(*NameMgr);
+		JE_RAM_FREE(*NameMgr);
 	}
 
 	*NameMgr = NULL;
@@ -400,7 +400,7 @@ jeActor *jeActor_CreateFromFile(jeVFile *VFile)
 	ExitWithError:
 	{
 		if (Actor)
-			jeRam_Free(Actor);
+			JE_RAM_FREE(Actor);
 
 		return NULL;
 	}

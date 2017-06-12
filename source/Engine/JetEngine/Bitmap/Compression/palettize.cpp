@@ -47,10 +47,10 @@ we palettize ("inverse colormap") using an octree lookup system
 
 /*******/
 
-#define new(type)		jeRam_AllocateClear(sizeof(type))
-#define allocate(ptr)	ptr = jeRam_AllocateClear(sizeof(*ptr))
+#define new(type)		JE_RAM_ALLOCATE_CLEAR(sizeof(type))
+#define allocate(ptr)	ptr = JE_RAM_ALLOCATE_CLEAR(sizeof(*ptr))
 #define clear(ptr)		memset(ptr,0,sizeof(*ptr))
-#define destroy(ptr)	if ( ptr ) { jeRam_Free(ptr); (ptr) = NULL; } else
+#define destroy(ptr)	if ( ptr ) { JE_RAM_FREE(ptr); (ptr) = NULL; } else
 
 /*******/
 

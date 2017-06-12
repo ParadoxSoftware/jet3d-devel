@@ -91,7 +91,7 @@ why this isn't exactly optimal:
 
 /*******/
 
-#define allocate(ptr)	ptr = jeRam_AllocateClear(sizeof(*ptr))
+#define allocate(ptr)	ptr = JE_RAM_ALLOCATE_CLEAR(sizeof(*ptr))
 #define clear(ptr)		memset(ptr,0,sizeof(*ptr))
 
 /*}{*************************************************/
@@ -252,7 +252,7 @@ jeBitmap_Palette * Pal;
 	assert(root);
 	nLeaves = createOctTree(root,Info,Bits,JE_FALSE);
 
-	leaves = (octNode **)jeRam_AllocateClear(sizeof(octNode *)*nLeaves);
+	leaves = (octNode **)JE_RAM_ALLOCATE_CLEAR(sizeof(octNode *)*nLeaves);
 	assert(leaves);
 	
 	// gather leaves into a linear array
@@ -275,7 +275,7 @@ jeBitmap_Palette * Pal;
 
 	readLeavesToPal(leaves,gotLeaves,palette,palEntries);
 
-	jeRam_Free(leaves); leaves = nullptr;
+	JE_RAM_FREE(leaves); leaves = nullptr;
 
 	showPopTSC("createPalFast");
 
@@ -335,7 +335,7 @@ jeBoolean DoYUV;
 	else
 		nLeaves = createOctTree(root,Info,Bits,DoYUV);
 
-	leaves = (octNode **)jeRam_AllocateClear(sizeof(octNode *)*nLeaves);
+	leaves = (octNode **)JE_RAM_ALLOCATE_CLEAR(sizeof(octNode *)*nLeaves);
 	assert(leaves);
 
 	computeOctRGBs(root);
@@ -360,7 +360,7 @@ jeBoolean DoYUV;
 	// sort the leaves by cutCost
 	// radix sort instead of qsort
 
-	radix = (octNode *)jeRam_AllocateClear(sizeof(octNode)*RADIX_SIZE);
+	radix = (octNode *)JE_RAM_ALLOCATE_CLEAR(sizeof(octNode)*RADIX_SIZE);
 	assert(radix);
 
 	for(i=0;i<RADIX_SIZE;i++)
@@ -417,11 +417,11 @@ jeBoolean DoYUV;
 		}
 	}
 
-	jeRam_Free(radix); radix = nullptr;
+	JE_RAM_FREE(radix); radix = nullptr;
 
 done:
 
-	jeRam_Free(leaves); radix = nullptr;
+	JE_RAM_FREE(leaves); radix = nullptr;
 
 	showPopTSC("createPalGood");
 

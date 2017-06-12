@@ -62,10 +62,10 @@ WindowRegister *WndReg_Create()
 
 WRC_FAILURE:
 	if( pWindowRegister->EntryArray != NULL )
-		jeRam_Free( pWindowRegister->EntryArray );
+		JE_RAM_FREE( pWindowRegister->EntryArray );
 
 	if( pWindowRegister != NULL )
-		jeRam_Free( pWindowRegister );
+		JE_RAM_FREE( pWindowRegister );
 	return( NULL );
 
 }
@@ -73,9 +73,9 @@ WRC_FAILURE:
 void WndReg_Destroy( WindowRegister **hWndReg )
 {
 	if( (*hWndReg)->EntryArray != NULL )
-		jeRam_Free( (*hWndReg)->EntryArray );
+		JE_RAM_FREE( (*hWndReg)->EntryArray );
 
-	jeRam_Free( (*hWndReg) );
+	JE_RAM_FREE( (*hWndReg) );
 }
 
 jeBoolean WndReg_EnlargeArray( WindowRegister *pWndReg )

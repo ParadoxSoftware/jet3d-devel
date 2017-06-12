@@ -75,14 +75,14 @@ Camera * Camera_Create( const char * const pszName, Group * pGroup, int32 nNumbe
 	if( !Object_Init( &pCamera->ObjectData, pGroup, KIND_CAMERA, pszName, nNumber ) )
 	{
 		jeErrorLog_Add( JE_ERR_SUBSYSTEM_FAILURE, "Camera_Create:Object_Init" );
-		jeRam_Free( pCamera );
+		JE_RAM_FREE( pCamera );
 		return( NULL );
 	}
 	pCamera->pgeObject = jeObject_Create( "Camera" );
 	if( pCamera->pgeObject  == NULL )
 	{
 		jeErrorLog_Add( JE_ERR_SUBSYSTEM_FAILURE, "Camera_Create:jeObject_Create" );
-		jeRam_Free( pCamera );
+		JE_RAM_FREE( pCamera );
 		return( NULL );
 	}
 	if( jeObject_SendMessage( pCamera->pgeObject, JETEDITOR_GET_JEBRUSH, &pgeBrush ) )
@@ -92,7 +92,7 @@ Camera * Camera_Create( const char * const pszName, Group * pGroup, int32 nNumbe
 	if( Name )
 	{
 		jeObject_SetName( pCamera->pgeObject, Name );
-		jeRam_Free( Name );
+		JE_RAM_FREE( Name );
 	}
 	pCamera->XRotation = 0.0f;
 	pCamera->YRotation = 0.0f;
@@ -119,14 +119,14 @@ Camera *	Camera_Copy( Camera *	pCamera, int32 nNumber )
 	if( !Object_Init( &pNewCamera->ObjectData, pCamera->ObjectData.pGroup, KIND_CAMERA, pCamera->ObjectData.pszName, nNumber ) )
 	{
 		jeErrorLog_Add( JE_ERR_SUBSYSTEM_FAILURE, "Camera_Copy:Object_Init" );
-		jeRam_Free( pCamera );
+		JE_RAM_FREE( pCamera );
 		return( NULL );
 	}
 	pNewCamera->pgeObject = jeObject_Duplicate( pCamera->pgeObject );
 	if( pNewCamera->pgeObject  == NULL )
 	{
 		jeErrorLog_Add( JE_ERR_SUBSYSTEM_FAILURE, "Camera_Copy:jeObject_Create" );
-		jeRam_Free( pCamera );
+		JE_RAM_FREE( pCamera );
 		return( NULL );
 	}
 	if( jeObject_SendMessage( pNewCamera->pgeObject, JETEDITOR_GET_JEBRUSH, &pgeBrush ) )
@@ -135,7 +135,7 @@ Camera *	Camera_Copy( Camera *	pCamera, int32 nNumber )
 	if( Name )
 	{
 		jeObject_SetName( pCamera->pgeObject, Name );
-		jeRam_Free( Name );
+		JE_RAM_FREE( Name );
 	}
 	pNewCamera->Flags |= CAMERA_FLAG_WBOUNDSDIRTY;
 	pNewCamera->XRotation = pCamera->XRotation;
@@ -160,7 +160,7 @@ void Camera_Destroy( Camera ** ppCamera )
 		Brush_SetGeBrush( (*ppCamera)->pCamBrush, (BRUSH_KIND)KIND_BRUSH, NULL );
 		Brush_Destroy( &(*ppCamera)->pCamBrush );
 	}
-	jeRam_Free( (*ppCamera) );
+	JE_RAM_FREE( (*ppCamera) );
 }// Camera_Destroy
 
 
@@ -402,10 +402,10 @@ jeBoolean Camera_FillPositionDescriptor( Camera * pCamera, jeProperty_List * pAr
 	jeProperty_FillVec3dGroup( &Property, Name, &XForm.Translation,	OBJECT_POSITION_FIELD  );
 	if( !jeProperty_Append( pArray,  &Property ) )
 	{
-		jeRam_Free( Name );
+		JE_RAM_FREE( Name );
 		return( JE_FALSE );
 	}
-	jeRam_Free( Name );
+	JE_RAM_FREE( Name );
 
 	Name = Util_LoadLocalRcString( IDS_POSITIONX_FIELD );
 	if( Name == NULL )
@@ -413,10 +413,10 @@ jeBoolean Camera_FillPositionDescriptor( Camera * pCamera, jeProperty_List * pAr
 	jeProperty_FillFloat(  &Property, Name, XForm.Translation.X, OBJECT_POSITION_FIELDX, -FLT_MAX, FLT_MAX, 1.0f );
 	if( !jeProperty_Append( pArray,  &Property ) )
 	{
-		jeRam_Free( Name );
+		JE_RAM_FREE( Name );
 		return( JE_FALSE );
 	}
-	jeRam_Free( Name );
+	JE_RAM_FREE( Name );
 
 	Name = Util_LoadLocalRcString( IDS_POSITIONY_FIELD );
 	if( Name == NULL )
@@ -424,10 +424,10 @@ jeBoolean Camera_FillPositionDescriptor( Camera * pCamera, jeProperty_List * pAr
 	jeProperty_FillFloat(  &Property, Name, XForm.Translation.Y,	OBJECT_POSITION_FIELDY, -FLT_MAX, FLT_MAX, 1.0f );
 	if( !jeProperty_Append( pArray, &Property ) )
 	{
-		jeRam_Free( Name );
+		JE_RAM_FREE( Name );
 		return( JE_FALSE );
 	}
-	jeRam_Free( Name );
+	JE_RAM_FREE( Name );
 
 	Name = Util_LoadLocalRcString( IDS_POSITIONZ_FIELD );
 	if( Name == NULL )
@@ -435,10 +435,10 @@ jeBoolean Camera_FillPositionDescriptor( Camera * pCamera, jeProperty_List * pAr
 	jeProperty_FillFloat( &Property, Name, XForm.Translation.Z, OBJECT_POSITION_FIELDZ, -FLT_MAX, FLT_MAX, 1.0f );
 	if( !jeProperty_Append( pArray, &Property ) )
 	{
-		jeRam_Free( Name );
+		JE_RAM_FREE( Name );
 		return( JE_FALSE );
 	}
-	jeRam_Free( Name );
+	JE_RAM_FREE( Name );
 
 	jeProperty_FillGroupEnd( &Property, OBJECT_POSITION_FIELD_END );
 	if( !jeProperty_Append( pArray, &Property ) )
@@ -463,10 +463,10 @@ jeProperty_List *	Camera_BuildDescriptor( Camera * pCamera )
 	if( Name == NULL )
 		goto UOBD_ERROR;
 	jeProperty_FillString( &Property, Name, pCamera->ObjectData.pszName, OBJECT_POSITION_FIELD );
-	jeRam_Free( Name );
+	JE_RAM_FREE( Name );
 	if( !jeProperty_Append( pObjectArray,  &Property ) )
 	{
-		jeRam_Free( Name );
+		JE_RAM_FREE( Name );
 		return( NULL );
 	}
 	

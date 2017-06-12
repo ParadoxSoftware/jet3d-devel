@@ -157,7 +157,7 @@ static	void *	JETCC FSDos_FinderCreate(
 
 	CHECK_HANDLE(File);
 
-	Finder = (DosFinder*)jeRam_Allocate(sizeof(*Finder));
+	Finder = (DosFinder*)JE_RAM_ALLOCATE(sizeof(*Finder));
 	if	(!Finder)
 		return NULL;
 
@@ -165,7 +165,7 @@ static	void *	JETCC FSDos_FinderCreate(
 
 	if	(BuildFileName(File, FileSpec, Buff, &NamePtr, sizeof(Buff)) == JE_FALSE)
 	{
-		jeRam_Free(Finder);
+		JE_RAM_FREE(Finder);
 		return NULL;
 	}
 
@@ -255,7 +255,7 @@ static	void JETCC FSDos_FinderDestroy(void *Handle)
 		FindClose(Finder->FindHandle);
 
 	Finder->Signature = 0;
-	jeRam_Free(Finder);
+	JE_RAM_FREE(Finder);
 }
 
 static	jeBoolean	IsRootDirectory(char *Path)
@@ -315,7 +315,7 @@ static	void *	JETCC FSDos_Open(
 	if	(DosFS && DosFS->IsDirectory != JE_TRUE)
 		return NULL;
 
-	NewFile = (DosFile*)jeRam_Allocate(sizeof(*NewFile));
+	NewFile = (DosFile*)JE_RAM_ALLOCATE(sizeof(*NewFile));
 	if	(!NewFile)
 		return NewFile;
 
@@ -325,7 +325,7 @@ static	void *	JETCC FSDos_Open(
 		goto fail;
 
 	Length = strlen(Buff);
-	NewFile->FullPath = (char*)jeRam_Allocate(Length + 1);
+	NewFile->FullPath = (char*)JE_RAM_ALLOCATE(Length + 1);
 	if	(!NewFile->FullPath)
 		goto fail;
 
@@ -478,8 +478,8 @@ fail:
 	if	(NewFile->HintsFile)
 		jeVFile_Close(NewFile->HintsFile);
 	if	(NewFile->FullPath)
-		jeRam_Free(NewFile->FullPath);
-	jeRam_Free(NewFile);
+		JE_RAM_FREE(NewFile->FullPath);
+	JE_RAM_FREE(NewFile);
 	return NULL;
 }
 #pragma warning (default:4100)
@@ -532,7 +532,7 @@ static	jeBoolean	JETCC FSDos_Close(void *Handle)
 
 			SetFilePointer(File->FileHandle, 0, NULL, FILE_END);
 			FileSize = SetFilePointer(File->FileHandle, 0, NULL, FILE_CURRENT);
-			CopyBuff = jeRam_Allocate(FileSize);
+			CopyBuff = JE_RAM_ALLOCATE(FileSize);
 			if	(CopyBuff)
 			{
 				DWORD	BytesRead;
@@ -578,7 +578,7 @@ static	jeBoolean	JETCC FSDos_Close(void *Handle)
 					}
 				}
 
-				jeRam_Free(CopyBuff);
+				JE_RAM_FREE(CopyBuff);
 			}
 		}
 
@@ -591,8 +591,8 @@ static	jeBoolean	JETCC FSDos_Close(void *Handle)
 	assert(File->FullPath);
 	File->Signature = 0;
 
-	jeRam_Free(File->FullPath);
-	jeRam_Free(File);
+	JE_RAM_FREE(File->FullPath);
+	JE_RAM_FREE(File);
 
 	return Result;
 }

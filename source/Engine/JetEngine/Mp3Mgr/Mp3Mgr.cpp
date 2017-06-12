@@ -87,7 +87,7 @@ JETAPI jeBoolean JETCC jeMp3_DestroyManager(jeMp3Mgr **Mp3Mgr)
 			}
 		}
 
-		jeRam_Free(mp3);
+		JE_RAM_FREE(mp3);
 
 		return JE_TRUE;
 

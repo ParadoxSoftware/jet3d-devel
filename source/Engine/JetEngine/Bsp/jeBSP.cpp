@@ -159,7 +159,7 @@ jeBSP *jeBSP_Create(void)
 			if (BSPTree->BSPObjectChain)
 				jeChain_Destroy(&BSPTree->BSPObjectChain);
 
-			jeRam_Free(BSPTree);
+			JE_RAM_FREE(BSPTree);
 		}
 
 		return NULL;
@@ -350,7 +350,7 @@ void jeBSP_Destroy(jeBSP **BSPTree)
 			jeObject_Destroy(&BSPObject->Object);
 
 			// [MLB-ICE]
-			jeRam_Free(BSPObject);	// Icestorm: "Container" should be freed!
+			JE_RAM_FREE(BSPObject);	// Icestorm: "Container" should be freed!
 			// [MLB-ICE] EOB
 
 		}
@@ -359,7 +359,7 @@ void jeBSP_Destroy(jeBSP **BSPTree)
 	}
 
 	// Free the bsp structure
-	jeRam_Free(*BSPTree);
+	JE_RAM_FREE(*BSPTree);
 
 	// NULL out their pointer
 	*BSPTree = NULL;
@@ -712,7 +712,7 @@ jeBoolean jeBSP_RemoveObject(jeBSP *BSP, jeObject *Object)
 		jeChain_RemoveLinkData(BSP->BSPObjectChain, BSPObject);
 
 		// Free the bsp object
-		jeRam_Free(BSPObject);
+		JE_RAM_FREE(BSPObject);
 
 		return JE_TRUE;
 	}

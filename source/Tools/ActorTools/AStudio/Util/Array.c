@@ -39,7 +39,7 @@ jeBoolean Array_Init (Array *pArray, int InitialSize, int ItemSize)
 	}
 	else
 	{
-		pArray->Items = jeRam_Allocate (InitialSize * ItemSize);
+		pArray->Items = JE_RAM_ALLOCATE (InitialSize * ItemSize);
 		if (pArray->Items == NULL)
 		{
 			return JE_FALSE;
@@ -55,7 +55,7 @@ void Array_Uninit (Array *pArray)
 
 	if (pArray->Items != NULL)
 	{
-		jeRam_Free (pArray->Items);
+		JE_RAM_FREE (pArray->Items);
 		pArray->Items = NULL;
 	}
 	pArray->ItemsAllocated = 0;
@@ -70,7 +70,7 @@ Array *Array_Create (int InitialSize, int ItemSize)
 	assert (InitialSize >= 0);
 	assert (ItemSize > 0);
 
-	pArray = jeRam_Allocate (sizeof (Array));
+	pArray = JE_RAM_ALLOCATE (sizeof (Array));
 	if (pArray != NULL)
 	{
 		if (Array_Init (pArray, InitialSize, ItemSize) == JE_FALSE)
@@ -89,7 +89,7 @@ void Array_Destroy (Array **ppArray)
 	assert (*ppArray != NULL);
 
 	Array_Uninit (*ppArray);
-	jeRam_Free (*ppArray);
+	JE_RAM_FREE (*ppArray);
 	*ppArray = NULL;
 }
 
@@ -104,7 +104,7 @@ int Array_Resize (Array *pArray, int NewSize)
 	assert (pArray != NULL);
 	assert (NewSize >= 0);
 
-	NewItems = jeRam_Realloc (pArray->Items, (NewSize * pArray->ItemSize));
+	NewItems = JE_RAM_REALLOC (pArray->Items, (NewSize * pArray->ItemSize));
 
 	// realloc returns NULL in two cases:
 	//   1) It was unable to allocate memory

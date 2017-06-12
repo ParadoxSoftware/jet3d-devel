@@ -46,7 +46,7 @@ jeXFArray *JETCC jeXFArray_Create(int Size)
 	if (XFA->TransformArray == NULL)
 		{
 			jeErrorLog_Add( JE_ERR_MEMORY_RESOURCE , "jeXFArray_Create.");
-			jeRam_Free( XFA );
+			JE_RAM_FREE( XFA );
 			return NULL;
 		}
 	XFA->TransformCount = Size;
@@ -66,9 +66,9 @@ void JETCC jeXFArray_Destroy( jeXFArray **XFA )
 	assert( (*XFA)->TransformArray != NULL );
 	
 	(*XFA)->TransformCount = -1;
-	jeRam_Free( (*XFA)->TransformArray);
+	JE_RAM_FREE( (*XFA)->TransformArray);
 	(*XFA)->TransformArray = NULL;
-	jeRam_Free( (*XFA) );
+	JE_RAM_FREE( (*XFA) );
 	(*XFA) = NULL;
 }
 

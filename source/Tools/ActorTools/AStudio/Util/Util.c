@@ -32,7 +32,7 @@ char *Util_Strdup (const char *s)
 
 	assert (s != NULL);
 
-	rslt = (char *)(jeRam_Allocate (strlen (s) + 1));
+	rslt = (char *)(JE_RAM_ALLOCATE (strlen (s) + 1));
 	if (rslt != NULL)
 	{
 		strcpy (rslt, s);
@@ -58,7 +58,7 @@ jeBoolean Util_SetString (char **ppString, const char *NewValue)
 	}
 	if (*ppString != NULL)
 	{
-		jeRam_Free (*ppString);
+		JE_RAM_FREE (*ppString);
 	}
 	*ppString = pNewString;
 

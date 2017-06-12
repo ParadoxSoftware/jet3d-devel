@@ -121,9 +121,9 @@ CODE STUFF :
 /*}{******************************************************/
 //	Protos & Macros
 
-#define allocate(ptr)	ptr = jeRam_AllocateClear(sizeof(*ptr))
+#define allocate(ptr)	ptr = JE_RAM_ALLOCATE_CLEAR(sizeof(*ptr))
 #define clear(ptr)		memset(ptr,0,sizeof(*ptr))
-#define destroy(ptr)	if ( ptr ) { jeRam_Free(ptr); (ptr) = NULL; } else
+#define destroy(ptr)	if ( ptr ) { JE_RAM_FREE(ptr); (ptr) = NULL; } else
 #define max3(a,b,c) max(max(a,b),c)
 #define min3(a,b,c) min(min(a,b),c)
 
@@ -177,7 +177,7 @@ JETAPI void * JETCC jeTerrain_Create(void)
 jeTerrain * T = NULL;
 jeBoolean ret;
 
-	T = (jeTerrain *)jeRam_AllocateClear(sizeof(jeTerrain));
+	T = (jeTerrain *)JE_RAM_ALLOCATE_CLEAR(sizeof(jeTerrain));
 	if ( ! T )
 		return NULL;
 
@@ -365,7 +365,7 @@ int w,h;
 		QuadTree_Destroy(&(T->QT));
 
 	if ( T->HM )
-		jeRam_Free(T->HM);
+		JE_RAM_FREE(T->HM);
 
 	if ( T->Heightmap )
 		jeBitmap_Destroy(&(T->Heightmap));
@@ -400,7 +400,7 @@ int w,h;
 		T->CubeSize.Y = 1.0f / T->InvCubeSize.Y;
 		T->CubeSize.Z = 1.0f / T->InvCubeSize.Z;
 
-		if ( (T->HM = (float *)jeRam_Allocate(T->HMWidth*T->HMHeight*sizeof(float))) == NULL )
+		if ( (T->HM = (float *)JE_RAM_ALLOCATE(T->HMWidth*T->HMHeight*sizeof(float))) == NULL )
 			goto fail;
 		
 		bptr = (uint8 *)jeBitmap_GetBits(Lock);
@@ -512,7 +512,7 @@ int i;
 	}
 
 	if ( T->HM )
-		jeRam_Free(T->HM);
+		JE_RAM_FREE(T->HM);
 
 	if ( T->Heightmap )
 		jeBitmap_Destroy(&(T->Heightmap));

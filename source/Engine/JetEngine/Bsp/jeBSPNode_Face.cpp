@@ -90,7 +90,7 @@ jeBSPNode_Face *jeBSPNode_FaceCreateFromPortal(jeBSPNode_Portal *p, int32 s)
 
 	if (!Face->Poly)
 	{
-		jeRam_Free(Face);
+		JE_RAM_FREE(Face);
 		return NULL;
 	}
 
@@ -108,7 +108,7 @@ void jeBSPNode_FaceDestroy(jeBSPNode_Face **Face)
 	if ((*Face)->Poly)
 		jePoly_Destroy(&(*Face)->Poly);
 
-	jeRam_Free(*Face);
+	JE_RAM_FREE(*Face);
 
 	g_ActiveFaces--;
 

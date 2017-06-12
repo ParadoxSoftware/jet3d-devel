@@ -33,19 +33,7 @@ CJet3DView::CJet3DView()
 
 CJet3DView::~CJet3DView()
 {
-	JE_SAFE_RELEASE(m_pImage);
-
-	if (m_pActorObject)
-	{
-		if (m_pActorDef)
-			jeActor_DefDestroy(&m_pActorDef);
-
-		if (m_pActor)
-			m_pActor = NULL;
-
-		jeObject_DettachEngine(m_pActorObject, m_pEngine);
-		jeObject_Destroy(&m_pActorObject);
-	}
+	//JE_SAFE_RELEASE(m_pImage);
 
 	if (m_pWorld)
 		jeWorld_Destroy(&m_pWorld);
@@ -90,8 +78,8 @@ void CJet3DView::OnDraw(CDC* pDC)
 			jeActor_ClearPose(m_pActor, &temp);
 			jeActor_Render(m_pActor, m_pEngine, m_pWorld, m_pCamera);
 
-			if (m_pImage)
-				jeEngine_DrawImage(m_pEngine, m_pImage, NULL, 0, 0);
+			//if (m_pImage)
+			//	jeEngine_DrawImage(m_pEngine, m_pImage, NULL, 0, 0);
 		}
 
 		if (!jeEngine_EndFrame(m_pEngine))
@@ -199,13 +187,13 @@ void CJet3DView::OnInitialUpdate()
 	if (!InitWorld())
 		return;
     
-	m_pImage = jeEngine_CreateImage();
-	jeVFile *File = jeVFile_OpenNewSystem(NULL, JE_VFILE_TYPE_DOS, "GlobalMaterials\\Central.bmp", NULL, JE_VFILE_OPEN_READONLY);
-	if (!File)
-		AfxMessageBox("Could not open image file!!");
+	//m_pImage = jeEngine_CreateImage();
+	//jeVFile *File = jeVFile_OpenNewSystem(NULL, JE_VFILE_TYPE_DOS, "GlobalMaterials\\Central.bmp", NULL, JE_VFILE_OPEN_READONLY);
+	//if (!File)
+	//	AfxMessageBox("Could not open image file!!");
 
-	if (!m_pImage->CreateFromFile(File))
-		AfxMessageBox("Could not create image from file!!");
+	//if (!m_pImage->CreateFromFile(File))
+	//	AfxMessageBox("Could not create image from file!!");
 
 	this->SetTimer(TIMER_ID, TIMER_INTERVAL, NULL);
 	m_bInitialized = JE_TRUE;

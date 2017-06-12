@@ -40,7 +40,7 @@ void log_close(log_type **log)
 {
 	assert(log);
 	assert(*log);
-	jeRam_Free(*log);
+	JE_RAM_FREE(*log);
 	*log=NULL;
 }
  
@@ -56,7 +56,7 @@ static void log_file_reset(log_type *log)
 log_type *log_open(const char *filename)
 {
 	log_type *log;
-	log = jeRam_Allocate(sizeof(log_type));
+	log = JE_RAM_ALLOCATE(sizeof(log_type));
 	assert(log);
 	strcpy(log->filename, filename);
 	

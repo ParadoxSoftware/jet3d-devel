@@ -44,7 +44,7 @@ DescriptorArray * DescriptorArray_Create( int FieldN )
 	if( pDescriptor == NULL )
 	{
 		jeErrorLog_Add( JE_ERR_MEMORY_RESOURCE, "Descriptor" );
-		jeRam_Free( pArray );
+		JE_RAM_FREE( pArray );
 		return( NULL );
 	}
 	pArray->pDescriptor = pDescriptor;
@@ -203,11 +203,11 @@ void DescriptorArray_Destroy( DescriptorArray *pArray )
 		for( i = 0; i < pArray->DescriptorN; i++ )
 		{
 			if( pArray->pDescriptor[i].FieldName != NULL )
-				jeRam_Free( pArray->pDescriptor[i].FieldName );
+				JE_RAM_FREE( pArray->pDescriptor[i].FieldName );
 		}
-		jeRam_Free( pArray->pDescriptor );
+		JE_RAM_FREE( pArray->pDescriptor );
 	}
-	jeRam_Free( pArray );
+	JE_RAM_FREE( pArray );
 }
 
 DescriptorArray *DescriptorArray_Merge( DescriptorArray *pArray, DescriptorArray *pArray2, int bSameType )

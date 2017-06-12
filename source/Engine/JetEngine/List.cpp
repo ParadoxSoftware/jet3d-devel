@@ -59,8 +59,8 @@ TIMER_VARS(List_RadixInit);
 #define DebugAlert()
 #endif
 
-#define MemAlloc(size)	jeRam_AllocateClear(size)
-#define MemFree(mem)	jeRam_Free(mem)
+#define MemAlloc(size)	JE_RAM_ALLOCATE_CLEAR(size)
+#define MemFree(mem)	JE_RAM_FREE(mem)
 
 #ifdef DO_TIMER // {
 #undef new
@@ -1035,11 +1035,11 @@ HashNode * hn;
 		H->NodeArrayLen = H->NodeCount + 100;
 		if ( H->NodeArray )
 		{
-			H->NodeArray = jeRam_Realloc(H->NodeArray,H->NodeArrayLen*sizeof(HashNode *));
+			H->NodeArray = JE_RAM_REALLOC(H->NodeArray,H->NodeArrayLen*sizeof(HashNode *));
 		}
 		else
 		{
-			H->NodeArray = jeRam_Allocate(H->NodeArrayLen*sizeof(HashNode *));
+			H->NodeArray = JE_RAM_ALLOCATE(H->NodeArrayLen*sizeof(HashNode *));
 		}
 		assert(H->NodeArray);
 	}

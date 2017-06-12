@@ -55,7 +55,7 @@ Class *			Class_Create( const char * const pszName, int Kind)
 
 void Class_Destroy( Class ** ppClass ) 
 {
-	jeRam_Free( *ppClass );
+	JE_RAM_FREE( *ppClass );
 }
 int	Class_GetClassKind( Class * pClass )
 {

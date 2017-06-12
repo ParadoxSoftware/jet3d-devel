@@ -105,7 +105,7 @@ palNode *nodes,*start_node;
 	if ( ! readOutPal(start_node,size,rgb_colors,permutation) ) {
 		//BrandoError("bad linked list");
 		//destroy(nodes);
-		jeRam_Free(nodes);
+		JE_RAM_FREE(nodes);
 		nodes = nullptr;
 		return JE_FALSE;
 	}
@@ -113,7 +113,7 @@ palNode *nodes,*start_node;
 	reportTotLen(start_node,usage);
 
 	//destroy(nodes);
-	jeRam_Free(nodes);
+	JE_RAM_FREE(nodes);
 	nodes = nullptr;
 
 return JE_TRUE;
@@ -372,7 +372,7 @@ palNode * initPal(uint8 * rgb_colors,int size)
 int i;
 palNode *nodes;
 
-	if ( (nodes = (palNode *)jeRam_AllocateClear(sizeof(palNode) * size)) == NULL ) {
+	if ( (nodes = (palNode *)JE_RAM_ALLOCATE_CLEAR(sizeof(palNode) * size)) == NULL ) {
 		//BrandoError("node malloc failed");
 		return NULL;
 	}

@@ -83,7 +83,7 @@ Material_Struct *Materials_Load( jeEngine* pEngine, jeResourceMgr* pResMgr, char
 
 	// Build full path to material
 	//allocate enough for path, back slash, file name, terminating char
-	Material->PrimaryMaterialPath = (char*)jeRam_Allocate( strlen( DirPath ) + strlen( Name ) + 2 );
+	Material->PrimaryMaterialPath = (char*)JE_RAM_ALLOCATE( strlen( DirPath ) + strlen( Name ) + 2 );
 	if( Material->PrimaryMaterialPath == NULL )
 	{
 		jeErrorLog_Add( JE_ERR_MEMORY_RESOURCE, NULL );
@@ -166,7 +166,7 @@ Material_Struct *Materials_ConvertToJMAT( jeEngine* pEngine, jeResourceMgr* pRes
 
 	// Build full path to material
 	//allocate enough for path, back slash, file name, terminating char
-	Material->PrimaryMaterialPath = (char*)jeRam_Allocate( strlen( DirPath ) + strlen( Name ) + 4 );
+	Material->PrimaryMaterialPath = (char*)JE_RAM_ALLOCATE( strlen( DirPath ) + strlen( Name ) + 4 );
 	if( Material->PrimaryMaterialPath == NULL )
 	{
 		jeErrorLog_Add( JE_ERR_MEMORY_RESOURCE, NULL );
@@ -218,7 +218,7 @@ Material_Struct *Materials_ConvertToJMAT( jeEngine* pEngine, jeResourceMgr* pRes
 	    jeMaterialSpec_SetThumbnail(Material->MaterialSpec, &tumbs);
 
 	jeBitmap_Destroy( &pBmps );
-	jeRam_Free(tumbs.contents);
+	JE_RAM_FREE(tumbs.contents);
 
 	jeVFile_Close( MaterialFile );
 
@@ -275,7 +275,7 @@ Material_Struct *Materials_LoadEx( jeEngine* pEngine, jeResourceMgr* pResMgr, ch
 
 	// Build full path to material
 	//allocate enough for path, back slash, file name, terminating char
-	Material->PrimaryMaterialPath = (char*)jeRam_Allocate( strlen( DirPath ) + strlen( Name ) + 2 );
+	Material->PrimaryMaterialPath = (char*)JE_RAM_ALLOCATE( strlen( DirPath ) + strlen( Name ) + 2 );
 	if( Material->PrimaryMaterialPath == NULL )
 	{
 		jeErrorLog_Add( JE_ERR_MEMORY_RESOURCE, NULL );
@@ -340,10 +340,10 @@ void Materials_Destroy( Material_Struct* Material )
 	assert( Material );
 
 	if( Material->Name != NULL )
-		jeRam_Free( Material->Name );
+		JE_RAM_FREE( Material->Name );
 
 	if( Material->PrimaryMaterialPath != NULL )
-		jeRam_Free( Material->PrimaryMaterialPath );
+		JE_RAM_FREE( Material->PrimaryMaterialPath );
 #ifdef _USE_BITMAPS
 	if( Material->PrimaryMaterial != NULL )
 		jeBitmap_Destroy( &Material->PrimaryMaterial );
@@ -352,7 +352,7 @@ void Materials_Destroy( Material_Struct* Material )
 		jeMaterialSpec_Destroy(&Material->MaterialSpec);
 	}
 #endif
-	jeRam_Free( Material );
+	JE_RAM_FREE( Material );
 }
 	
 

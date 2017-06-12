@@ -107,7 +107,7 @@ static void Undo_DeleteSubTransactionCB( void* Data )
 	UndoSubTransaction *pSubTransaction = (UndoSubTransaction*)Data;
 
 	Object_Free( &pSubTransaction->pObject );
-	jeRam_Free( pSubTransaction );
+	JE_RAM_FREE( pSubTransaction );
 }
 
 static jeBoolean Undo_DestroyContext(void *pData, void *lParam)
@@ -133,7 +133,7 @@ void Undo_DeleteTransaction( Undo* pUndo, int32 TransIdx )
 	pTransaction = pUndo->pUndoStack[TransIdx ];
 	List_ForEach( pTransaction->SubTransactions, Undo_DestroyContext, pUndo );
 	List_Destroy (&pTransaction->SubTransactions, Undo_DeleteSubTransactionCB );
-	jeRam_Free( pTransaction );
+	JE_RAM_FREE( pTransaction );
 	pUndo->pUndoStack[TransIdx ] = NULL;
 
 }
@@ -158,7 +158,7 @@ jeBoolean Undo_Push( Undo *pUndo, UNDO_TYPES Type )
 	pTransaction->SubTransactions = List_Create();
 	if( pTransaction->SubTransactions == NULL )
 	{
-		jeRam_Free( pTransaction );
+		JE_RAM_FREE( pTransaction );
 		return( JE_FALSE ) ;
 	}
 	if( pUndo->StackTop == INVALID_TRANSACTION )
@@ -340,8 +340,8 @@ void Undo_Destroy( Undo ** ppUndo )
 			if( pUndo->pUndoStack[i] != NULL )
 				Undo_DeleteTransaction( pUndo, i );
 		}
-		jeRam_Free( pUndo->pUndoStack );
+		JE_RAM_FREE( pUndo->pUndoStack );
 	}
 
-	jeRam_Free( pUndo ) ;
+	JE_RAM_FREE( pUndo ) ;
 }// Undo_Destroy

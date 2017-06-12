@@ -95,7 +95,7 @@ jeTKArray *JETCC jeTKArray_Create(
 	// first item in each element must be the time key
 	assert( ElementSize >= sizeof(jeTKArray_TimeType) );
 
-	A = (jeTKArray *)jeRam_AllocateClear(TK_ARRAYSIZE);
+	A = (jeTKArray *)JE_RAM_ALLOCATE_CLEAR(TK_ARRAYSIZE);
 	if ( A == NULL)
 	{
 		jeErrorLog_Add(JE_ERR_MEMORY_RESOURCE, "jeTKArray_Create.");
@@ -117,7 +117,7 @@ jeTKArray *JETCC jeTKArray_CreateEmpty(
 {
 	jeTKArray *A;
 	int32 size = TK_ARRAYSIZE + ElementCount * ElementSize;
-	A = (jeTKArray*)jeRam_AllocateClear(size);
+	A = (jeTKArray*)JE_RAM_ALLOCATE_CLEAR(size);
 	if( A == NULL )
 	{
 		jeErrorLog_Add(JE_ERR_MEMORY_RESOURCE,"jeTKArray_CreateEmpty.");
@@ -146,7 +146,7 @@ jeTKArray* JETCC jeTKArray_CreateFromFile(
 	}
 
 	size = TK_ARRAYSIZE + Header.NumElements * Header.ElementSize;
-	A = (jeTKArray*)jeRam_AllocateClear(size);
+	A = (jeTKArray*)JE_RAM_ALLOCATE_CLEAR(size);
 	if( A == NULL )
 	{
 		jeErrorLog_Add(JE_ERR_FILEIO_READ,"jeTKArray_CreateFromFile.");
@@ -156,7 +156,7 @@ jeTKArray* JETCC jeTKArray_CreateFromFile(
 
 	if(jeVFile_Read(pFile, A->Elements, size - sizeof(jeTKArray_FileHeader)) == JE_FALSE)
 		{
-			jeRam_Free(A);
+			JE_RAM_FREE(A);
 			jeErrorLog_Add(JE_ERR_FILEIO_READ,"jeTKArray_CreateFromFile.");
 			return NULL;
 		}
@@ -218,7 +218,7 @@ void JETCC jeTKArray_Destroy(jeTKArray **PA)
 	assert( PA  != NULL );
 	TK_ASSERT_VALID(*PA);
 
-	jeRam_Free(*PA);
+	JE_RAM_FREE(*PA);
 	*PA = NULL;
 }
 
@@ -311,7 +311,7 @@ jeBoolean JETCC jeTKArray_Insert(
 		return JE_FALSE;
 	}
 
-	ChangedA = (jeTKArray *)jeRam_Realloc(A, 
+	ChangedA = (jeTKArray *)JE_RAM_REALLOC(A, 
 				TK_ARRAYSIZE + (A->NumElements + 1) * A->ElementSize);
 
 	if ( ChangedA == NULL )
@@ -361,7 +361,7 @@ jeBoolean JETCC jeTKArray_DeleteElement(
 			 ((A->NumElements) - (N+1))* (A->ElementSize) );
 
 	A->NumElements--;
-	ChangedA = (jeTKArray *)jeRam_Realloc(A, 
+	ChangedA = (jeTKArray *)JE_RAM_REALLOC(A, 
 				TK_ARRAYSIZE + A->NumElements * A->ElementSize);
 	if ( ChangedA != NULL ) 
 	{	

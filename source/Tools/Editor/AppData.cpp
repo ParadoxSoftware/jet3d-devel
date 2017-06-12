@@ -153,7 +153,7 @@ void AppData_Destroy( AppData ** ppAppData )
 	if( pAppData->hBMSelectedVertex != NULL )
 		DeleteBitmap( pAppData->hBMSelectedVertex ) ;
 
-	jeRam_Free( *ppAppData ) ;
+	JE_RAM_FREE( *ppAppData ) ;
 
 }// AppData_Destroy
 

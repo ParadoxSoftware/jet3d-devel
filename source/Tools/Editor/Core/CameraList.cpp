@@ -65,7 +65,7 @@ CameraList * CameraList_Create(  )
 	if( pCameraList->pList == NULL )
 	{
 		jeErrorLog_Add( JE_ERR_INTERNAL_RESOURCE, "Trace" );
-		jeRam_Free( pCameraList );
+		JE_RAM_FREE( pCameraList );
 		return( NULL );
 	}
 
@@ -76,7 +76,7 @@ CameraList * CameraList_Create(  )
 void CameraList_Destroy( CameraList **ppCameraList )
 {
 	List_Destroy( &(*ppCameraList)->pList, CameraList_DestroyCameraCB ) ;
-	jeRam_Free( (*ppCameraList) );
+	JE_RAM_FREE( (*ppCameraList) );
 }// CameraList_Destroy
 
 //

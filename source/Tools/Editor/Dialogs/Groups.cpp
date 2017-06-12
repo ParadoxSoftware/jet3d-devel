@@ -194,7 +194,7 @@ jeBoolean CGroups::AddObject( Object* pObject )
 			default: break;
 			}
 			hObjectItem	= m_List.InsertItem( pszDisplayName, imageIdx, imageIdx, hItem, TVI_SORT );
-			jeRam_Free( pszDisplayName );
+			JE_RAM_FREE( pszDisplayName );
 			if( hObjectItem == NULL )
 				return( JE_FALSE );
 			m_List.SetItemData( hObjectItem, (DWORD)pObject ) ;
@@ -220,7 +220,7 @@ void CGroups::RenameObject( Object *pObject )
 	if( pszDisplayName != NULL )
 	{
 		m_List.SetItemText( hItem, pszDisplayName );
-		jeRam_Free( pszDisplayName ) ;
+		JE_RAM_FREE( pszDisplayName ) ;
 	}
 
 }
@@ -291,7 +291,7 @@ jeBoolean CGroups::ObjectCB( Object *pObject, void *lParam)
 			pGroupInfo->pList->SetItemData( hItem, (DWORD)pObject ) ;
 			Object_AddRef( pObject );
 		}
-		jeRam_Free( pszDisplayName ) ;
+		JE_RAM_FREE( pszDisplayName ) ;
 	}
 	return ( hItem == NULL ) ? JE_FALSE : JE_TRUE ;
 }// ObjectCB
@@ -326,7 +326,7 @@ jeBoolean CGroups::AddSelectionCB(Object *pObject, void *lParam)
 			default: break;
 			}
 			hObjectItem	= pList->InsertItem( pszDisplayName, imageIdx, imageIdx, hItem, TVI_SORT );
-			jeRam_Free( pszDisplayName );
+			JE_RAM_FREE( pszDisplayName );
 			if( hObjectItem == NULL )
 				return( JE_FALSE );
 			pList->SetItemData( hObjectItem, (DWORD)pObject ) ;
@@ -878,7 +878,7 @@ jeBoolean CGroups::AddObjectCB( Object *pObject, void *lParam)
 			pMainFrm->AddObjectEx(pObject, MAINFRM_ADDOBJECT_LIST|MAINFRM_ADDOBJECT_MODEL) ;
 		
 		}
-		jeRam_Free( pszDisplayName ) ;
+		JE_RAM_FREE( pszDisplayName ) ;
 	}
 	return ( hItem == NULL ) ? JE_FALSE : JE_TRUE ;
 }

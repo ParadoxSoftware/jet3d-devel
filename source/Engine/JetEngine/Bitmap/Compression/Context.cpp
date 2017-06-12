@@ -30,6 +30,8 @@
 #define BACK(i)			((i) & ((i) - 1))	
 #define FORW(i)			((i) + ((i) & - (i)))
 
+#define new(type)		JE_RAM_ALLOCATE_CLEAR(sizeof(type))
+
 typedef struct context {
 	arithInfo * arith;
 	int tree_size;		/* length of tree and current length */
@@ -71,9 +73,9 @@ while (size < length)	size += size;
 
     /* malloc context structure and array for frequencies */
 if ((pContext = (context *) new(context)) == NULL) return(NULL);
-if ((pContext->tree = (uint16 *) jeRam_Allocate((size+1)*sizeof(uint16))) == NULL)
+if ((pContext->tree = (uint16 *) JE_RAM_ALLOCATE((size+1)*sizeof(uint16))) == NULL)
 {
-	jeRam_Free(pContext); pContext = nullptr; return(NULL);
+	JE_RAM_FREE(pContext); return(NULL);
 }
 
 pContext->arith = arithinfo;
@@ -465,7 +467,7 @@ void contextFree(context *pContext)
 {
 	if ( ! pContext ) return;
 
-	jeRam_Free(pContext->tree); pContext->tree = nullptr;
-	jeRam_Free(pContext); pContext = nullptr;
+	JE_RAM_FREE(pContext->tree);
+	JE_RAM_FREE(pContext);
 }
 

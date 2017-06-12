@@ -379,7 +379,7 @@ void MopShell_OptionsDestroy(MopShell_Options** ppOptions)
 
 	p = *ppOptions;
 
-	jeRam_Free(*ppOptions);
+	JE_RAM_FREE(*ppOptions);
 
 	*ppOptions = NULL;
 }

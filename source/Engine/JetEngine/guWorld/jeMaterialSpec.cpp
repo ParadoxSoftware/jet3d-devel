@@ -105,14 +105,14 @@ JETAPI void JETCC jeMaterialSpec_Destroy(jeMaterialSpec **MaterialSpec)
 					jeResource_ReleaseResource(jeResourceMgr_GetSingleton(), pMatSpec->pLayers[idx]->Kind, pMatSpec->pLayers[idx]->Name);
 				}
 
-				jeRam_Free(pMatSpec->pLayers[idx]);
+				JE_RAM_FREE(pMatSpec->pLayers[idx]);
 			}
 		}
 
 		// destroy the shader
 
 		// free the resource
-		jeRam_Free(*MaterialSpec);
+		JE_RAM_FREE(*MaterialSpec);
 
 		*MaterialSpec = NULL;
 	}
@@ -276,7 +276,7 @@ JETAPI jeMaterialSpec* JETCC jeMaterialSpec_CreateFromFile(jeVFile *VFile, jeEng
 			goto ExitInError;
 		}
 		Tag = MaterialSpec->pThumbnail->width*MaterialSpec->pThumbnail->height*3;
-		MaterialSpec->pThumbnail->contents = (uint8 *)jeRam_Allocate(Tag);
+		MaterialSpec->pThumbnail->contents = (uint8 *)JE_RAM_ALLOCATE(Tag);
 		if (!jeVFile_Read(VFile, MaterialSpec->pThumbnail->contents, Tag)) {
 			goto ExitInError;
 		}
@@ -496,7 +496,7 @@ JETAPI jeBoolean JETCC jeMaterialSpec_RemoveLayer(jeMaterialSpec* MatSpec, int32
 		}
 
 		// Free the slot
-		jeRam_Free(MatSpec->pLayers[layerIndex]);
+		JE_RAM_FREE(MatSpec->pLayers[layerIndex]);
 		MatSpec->pLayers[layerIndex] = NULL;
 
 		// Modify the counter
@@ -694,7 +694,7 @@ JETAPI jeBoolean JETCC jeMaterialSpec_SetThumbnail(jeMaterialSpec* MatSpec, jeMa
 	}
 
 	ThumbSize = pThumb->width*pThumb->height*3;
-	MatSpec->pThumbnail->contents = (uint8 *) jeRam_Allocate(ThumbSize);
+	MatSpec->pThumbnail->contents = (uint8 *) JE_RAM_ALLOCATE(ThumbSize);
 	if (MatSpec->pThumbnail->contents == NULL) {
 		return JE_FALSE;
 	}
@@ -772,7 +772,7 @@ JETAPI jeBoolean JETCC jeMaterialSpec_AddLayerFromFile(jeMaterialSpec* MatSpec, 
 		jeEngine_AddBitmap(MatSpec->pEngine, bmp, JE_ENGINE_BITMAP_TYPE_3D);
 	}
 	if (MatSpec->pLayers[layerIndex]->pTexture==NULL) {
-		jeRam_Free(MatSpec->pLayers[layerIndex]);
+		JE_RAM_FREE(MatSpec->pLayers[layerIndex]);
 		return JE_FALSE;
 	}
 
@@ -796,7 +796,7 @@ JETAPI jeBoolean JETCC jeMaterialSpec_AddLayerFromBitmap(jeMaterialSpec* MatSpec
 	MatSpec->pLayers[layerIndex]->Kind = JE_RESOURCE_BITMAP;
     // if trying to create a Material with a NULL bitmap
 	if (MatSpec->pLayers[layerIndex]->pTexture==NULL) {
-		jeRam_Free(MatSpec->pLayers[layerIndex]);
+		JE_RAM_FREE(MatSpec->pLayers[layerIndex]);
 		return JE_FALSE;
 	}
 

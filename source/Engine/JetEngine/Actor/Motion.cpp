@@ -107,7 +107,7 @@ JETAPI jeBoolean JETCC jeMotion_SetName(jeMotion *M, const char *Name)
 	assert( M != NULL );
 	assert( jeMotion_IsValid(M) != JE_FALSE );
 
-	NewName = (char *)jeRam_Allocate( strlen(Name)+1 );
+	NewName = (char *)JE_RAM_ALLOCATE( strlen(Name)+1 );
 	if (NewName == NULL )
 		{
 			jeErrorLog_Add(JE_ERR_MEMORY_RESOURCE, "jeMotion_SetName.");
@@ -115,7 +115,7 @@ JETAPI jeBoolean JETCC jeMotion_SetName(jeMotion *M, const char *Name)
 		}
 	if (M->Name!=NULL)
 		{
-			jeRam_Free(M->Name);
+			JE_RAM_FREE(M->Name);
 		}
 	M->Name = NewName;
 	strcpy(M->Name, Name);
@@ -250,7 +250,7 @@ JETAPI void JETCC jeMotion_Destroy(jeMotion **PM)
 
 	if (M->Name != NULL)
 		{
-			jeRam_Free(M->Name);
+			JE_RAM_FREE(M->Name);
 			M->Name = NULL;
 		}
 
@@ -274,7 +274,7 @@ JETAPI void JETCC jeMotion_Destroy(jeMotion **PM)
 					}
 				if (M->Branch.MixerArray != NULL)
 					{
-						jeRam_Free(M->Branch.MixerArray);
+						JE_RAM_FREE(M->Branch.MixerArray);
 						M->Branch.MixerArray = NULL;
 					}
 				M->Branch.MixerCount = 0;
@@ -295,7 +295,7 @@ JETAPI void JETCC jeMotion_Destroy(jeMotion **PM)
 					}
 				if (M->Leaf.PathArray!=NULL)
 					{
-						jeRam_Free(M->Leaf.PathArray);
+						JE_RAM_FREE(M->Leaf.PathArray);
 						M->Leaf.PathArray = NULL;
 					}
 				M->Leaf.PathCount = 0;
@@ -308,7 +308,7 @@ JETAPI void JETCC jeMotion_Destroy(jeMotion **PM)
 				assert(0);
 		}
 	M->NodeType = MOTION_NODE_UNDECIDED;
-	jeRam_Free( *PM );
+	JE_RAM_FREE( *PM );
 	*PM = NULL;
 }
 
@@ -353,7 +353,7 @@ JETAPI jeBoolean JETCC jeMotion_AddPath(jeMotion *M,
 	{
 		jePath **NewPathArray;
 
-		NewPathArray = (jePath**)jeRam_Realloc(M->Leaf.PathArray, (1+PathCount) * sizeof(jePath*) );
+		NewPathArray = (jePath**)JE_RAM_REALLOC(M->Leaf.PathArray, (1+PathCount) * sizeof(jePath*) );
 
 		if ( NewPathArray == NULL )
 			{	
@@ -932,7 +932,7 @@ JETAPI jeBoolean JETCC jeMotion_AddSubMotion(jeMotion *ParentMotion,
 		}
 			
 	Count = ParentMotion->Branch.MixerCount;
-	NewMixerArray = (jeMotion_Mixer *)jeRam_Realloc(ParentMotion->Branch.MixerArray, (1+Count) * sizeof(jeMotion_Mixer) );
+	NewMixerArray = (jeMotion_Mixer *)JE_RAM_REALLOC(ParentMotion->Branch.MixerArray, (1+Count) * sizeof(jeMotion_Mixer) );
 	if ( NewMixerArray == NULL )
 		{	
 			jeErrorLog_Add(JE_ERR_MEMORY_RESOURCE, "jeMotion_AddSubMotion.");
@@ -1021,12 +1021,12 @@ JETAPI jeMotion * JETCC jeMotion_RemoveSubMotion(jeMotion *ParentMotion, int Sub
 		jeMotion_Mixer *NewMixerArray;
 		if (ParentMotion->Branch.MixerCount == 0)
 			{
-				jeRam_Free(ParentMotion->Branch.MixerArray);
+				JE_RAM_FREE(ParentMotion->Branch.MixerArray);
 				ParentMotion->Branch.MixerArray = NULL;
 			}
 		else
 			{
-				NewMixerArray = (jeMotion_Mixer *)jeRam_Realloc(ParentMotion->Branch.MixerArray, 
+				NewMixerArray = (jeMotion_Mixer *)JE_RAM_REALLOC(ParentMotion->Branch.MixerArray, 
 									(ParentMotion->Branch.MixerCount) * sizeof(jeMotion_Mixer) );
 				if ( NewMixerArray != NULL )
 					{	
@@ -1542,7 +1542,7 @@ static jeBoolean JETCF jeMotion_ReadLeaf(jeMotion *M, jeVFile *pFile)
 		}
 
 	M->Leaf.PathCount = 0;
-	M->Leaf.PathArray = (jePath **)jeRam_Allocate( Header.PathCount * sizeof(jePath*) );
+	M->Leaf.PathArray = (jePath **)JE_RAM_ALLOCATE( Header.PathCount * sizeof(jePath*) );
 
 	if ( M->Leaf.PathArray == NULL )
 		{	
@@ -1620,7 +1620,7 @@ JETAPI jeMotion* JETCC jeMotion_CreateFromFile(jeVFile* pFile)
 		}
 	if (NameLength>0)
 		{
-			M->Name = (char *)jeRam_Allocate(NameLength);
+			M->Name = (char *)JE_RAM_ALLOCATE(NameLength);
 			if ( M->Name == NULL )
 				{
 					jeErrorLog_Add(JE_ERR_MEMORY_RESOURCE, "jeMotion_CreateFromFile.");

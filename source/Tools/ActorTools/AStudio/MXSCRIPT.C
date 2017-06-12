@@ -132,7 +132,7 @@ StartScriptError:
 	if (M->File != NULL)
 		fclose(M->File);
 	if (M != NULL)
-		jeRam_Free(M);
+		JE_RAM_FREE(M);
 	return NULL;
 }
 	
@@ -174,7 +174,7 @@ void MXScript_Destroy( MXScript *Script )
 			Script->File = NULL;
 		}
 	Script->Error = 999;
-	jeRam_Free(Script);
+	JE_RAM_FREE(Script);
 }
 	
 

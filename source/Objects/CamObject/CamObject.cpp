@@ -346,7 +346,7 @@ static char * Util_LoadLibraryString(
 	}
 
 	// copy resource string
-	NewString = (char*)jeRam_Allocate( Size + 1 );
+	NewString = (char*)JE_RAM_ALLOCATE( Size + 1 );
 	if ( NewString == NULL )
 	{
 		jeErrorLog_Add( JE_ERR_MEMORY_RESOURCE, NULL );
@@ -398,7 +398,7 @@ void Init_Class( HINSTANCE hInstance )
 	if( FieldName )
 	{
 		jeProperty_FillFloat( &CamProperties[CAMREA_FOV_INDEX],FieldName,  1.0f, CAMREA_FOV_ID, 0.1f, 4.0f, 0.1f );
-		jeRam_Free( FieldName );
+		JE_RAM_FREE( FieldName );
 	}
 
 	// BEGIN - Far clip plane box - paradoxnj 3/9/2005
@@ -406,14 +406,14 @@ void Init_Class( HINSTANCE hInstance )
 	if (FieldName)
 	{
 		jeProperty_FillFloat( &CamProperties[CAMREA_FARCLIP_INDEX], FieldName, 10000.0f, CAMREA_FARCLIP_ID, 1.0f, 99999.0f, 1.0f);
-		jeRam_Free(FieldName);
+		JE_RAM_FREE(FieldName);
 	}
 
 	FieldName = Util_LoadLibraryString(hInstance, IDS_FARCLIPENABLED);
 	if (FieldName)
 	{
 		jeProperty_FillCheck(&CamProperties[CAMREA_FARCLIPENABLED_INDEX], FieldName, JE_TRUE, CAMREA_FARCLIPENABLE_ID);
-		jeRam_Free(FieldName);
+		JE_RAM_FREE(FieldName);
 	}
 	// END - Far clip plane box - paradoxnj 3/9/2005
 }
@@ -477,7 +477,7 @@ jeBoolean JETCC Destroy(void **pInstance)
 	pCamObj->RefCnt--;
 	if( pCamObj->RefCnt == 0 )
 	{
-		jeRam_Free( pCamObj );
+		JE_RAM_FREE( pCamObj );
 	}
 	else
 		return( JE_FALSE );
@@ -639,7 +639,7 @@ void *	JETCC CreateFromFile(jeVFile * File, jePtrMgr *PtrMgr)
 
 CFF_ERROR:
 
-	jeRam_Free( pCamObj );
+	JE_RAM_FREE( pCamObj );
 	return( NULL );
 }
 

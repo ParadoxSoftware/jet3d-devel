@@ -90,7 +90,7 @@ JETAPI jeParticle_System * JETCC jeParticle_SystemCreate(
 	}
 
 	// allocate struct
-	ps = (jeParticle_System *)jeRam_AllocateClear( sizeof( *ps ) );
+	ps = (jeParticle_System *)JE_RAM_ALLOCATE_CLEAR( sizeof( *ps ) );
 	if ( ps == NULL )
 	{
 		return ps;
@@ -122,7 +122,7 @@ static void jeParticle_Destroy(
 	}
 
 	// free the struct
-	jeRam_Free( p );
+	JE_RAM_FREE( p );
 
 } // jeParticle_Destroy()
 
@@ -175,7 +175,7 @@ static jeParticle * jeParticle_Create(
 	jeParticle	*ptcl;
 
 	// allocate struct
-	ptcl = (jeParticle *)jeRam_AllocateClear( sizeof( *ptcl ) );
+	ptcl = (jeParticle *)JE_RAM_ALLOCATE_CLEAR( sizeof( *ptcl ) );
 	if ( ptcl == NULL )
 	{
 		return ptcl;
@@ -227,7 +227,7 @@ JETAPI void JETCC jeParticle_SystemDestroy(
 	}
 
 	// free particle system
-	jeRam_Free( ps );
+	JE_RAM_FREE( ps );
 
 } // jeParticle_SystemDestroy()
 

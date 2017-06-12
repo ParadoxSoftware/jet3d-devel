@@ -140,7 +140,7 @@ Macros need to be updated to handle this case
 #include "huffman2.h"
 
 #define memclearFast(m,s) memset(m,0,s*4)
-#define FreeMem(m,s)	{ jeRam_Free(m); m = nullptr; }
+#define FreeMem(m,s)	{ JE_RAM_FREE(m); m = nullptr; }
 
 static int intlog2(uint32 x) // !!! // <> do this in assembly for awesome speed
 {
@@ -192,7 +192,7 @@ struct Huff2Info * Huff2_Init(long NumSymbols,struct LBitIOInfo * BII,long SortT
 {
 struct Huff2Info * HI;
 
-if ( (HI = (struct Huff2Info *)jeRam_AllocateClear(sizeof(struct Huff2Info))) == NULL )
+if ( (HI = (struct Huff2Info *)JE_RAM_ALLOCATE_CLEAR(sizeof(struct Huff2Info))) == NULL )
 	return(NULL);
 
 HI->GotNumSymbols = 0;
@@ -202,19 +202,19 @@ HI->BII = BII;
 HI->SortType = SortType;
 HI->CodeNodeHunkI = 0;
 
-if ( (HI->CodeLenTable = (long *)jeRam_AllocateClear(HI->NumSymbols*sizeof(long))) == NULL )
+if ( (HI->CodeLenTable = (long *)JE_RAM_ALLOCATE_CLEAR(HI->NumSymbols*sizeof(long))) == NULL )
 	{
 	Huff2_CleanUp(HI);
 	return(NULL);
 	}
 
-if ( (HI->NumCodesOfLen = (long *)jeRam_AllocateClear(32*sizeof(long))) == NULL )
+if ( (HI->NumCodesOfLen = (long *)JE_RAM_ALLOCATE_CLEAR(32*sizeof(long))) == NULL )
 	{
 	Huff2_CleanUp(HI);
 	return(NULL);
 	}
 
-if ( (HI->CodePrefixByLen = (uint32 *)jeRam_AllocateClear(32*sizeof(uint32))) == NULL )
+if ( (HI->CodePrefixByLen = (uint32 *)JE_RAM_ALLOCATE_CLEAR(32*sizeof(uint32))) == NULL )
 	{
 	Huff2_CleanUp(HI);
 	return(NULL);
@@ -279,9 +279,9 @@ if ( !HI->CodeNodeHunk ||	!HI->NodeWork || !HI->MadeNodeWork )
 		return(0);
 		}
 
-	HI->NodeWork = (struct Huff2CodeNode **)jeRam_Allocate(sizeof(void*)*HI->NumSymbols);
-	HI->MadeNodeWork = (struct Huff2CodeNode **)jeRam_Allocate(sizeof(void*)*2*HI->NumSymbols);
-	HI->CodeNodeHunk = (struct Huff2CodeNode *)jeRam_Allocate(sizeof(struct Huff2CodeNode)*2*HI->NumSymbols);
+	HI->NodeWork = (struct Huff2CodeNode **)JE_RAM_ALLOCATE(sizeof(void*)*HI->NumSymbols);
+	HI->MadeNodeWork = (struct Huff2CodeNode **)JE_RAM_ALLOCATE(sizeof(void*)*2*HI->NumSymbols);
+	HI->CodeNodeHunk = (struct Huff2CodeNode *)JE_RAM_ALLOCATE(sizeof(struct Huff2CodeNode)*2*HI->NumSymbols);
 
 	if ( !HI->CodeNodeHunk ||	!HI->NodeWork ||	!HI->MadeNodeWork )
 		{
@@ -370,7 +370,7 @@ switch(HI->SortType)
 				{
 				return(0);
 				}
-			if ( (HI->SortWork = jeRam_Allocate(sizeof(void*)*(HI->MaxCharCount + 1))) == NULL )
+			if ( (HI->SortWork = JE_RAM_ALLOCATE(sizeof(void*)*(HI->MaxCharCount + 1))) == NULL )
 				{
 				return(0);
 				}
@@ -583,7 +583,7 @@ if ( HI->NodeBase == NULL )
 	
 	if ( ! HI->StackArray )
 		{
-		if ( (HI->StackArray = (uint32 *)jeRam_Allocate(2*(HI->NumSymbols)*sizeof(uint32))) == NULL )
+		if ( (HI->StackArray = (uint32 *)JE_RAM_ALLOCATE(2*(HI->NumSymbols)*sizeof(uint32))) == NULL )
 			return(0);
 		}
 	
@@ -696,7 +696,7 @@ if ( HI->EnDe_codeTable )
 	}
 else
 	{
-	if ( (CharToCodeTable = (uint32 *)jeRam_AllocateClear(NumSymbols*sizeof(uint32))) == NULL )
+	if ( (CharToCodeTable = (uint32 *)JE_RAM_ALLOCATE_CLEAR(NumSymbols*sizeof(uint32))) == NULL )
 		return(0);
 
 	HI->EnDe_codeTable = (void *) CharToCodeTable;
@@ -763,7 +763,7 @@ if ( HI->EnDe_codeTable )
 else
 	{
 	HI->EnDe_codeTableLen = 2*NumSymbols*sizeof(uint16);
-	if ( (DecodeTable = (uint16 *)jeRam_AllocateClear(HI->EnDe_codeTableLen)) == NULL )
+	if ( (DecodeTable = (uint16 *)JE_RAM_ALLOCATE_CLEAR(HI->EnDe_codeTableLen)) == NULL )
 		return(0);
 
 	HI->EnDe_codeTable = (void *) DecodeTable;
@@ -860,7 +860,7 @@ if ( HI->EnDe_codeTable )
 else
 	{
 	HI->EnDe_codeTableLen = DecodeTableLen + FastDecodeTableLen;
-	if ( (HI->EnDe_codeTable = jeRam_AllocateClear(HI->EnDe_codeTableLen)) == NULL )
+	if ( (HI->EnDe_codeTable = JE_RAM_ALLOCATE_CLEAR(HI->EnDe_codeTableLen)) == NULL )
 		return(0);
 
 	DecodeTable = (uint16 *)HI->EnDe_codeTable;

@@ -46,7 +46,7 @@ char * ObjUtil_StrDup(
 {
 
 	// copy string
-	char * p = (char *)jeRam_Allocate( strlen( psz ) + 1 );
+	char * p = (char *)JE_RAM_ALLOCATE( strlen( psz ) + 1 );
 	if ( p ) 
 	{
 		strcpy( p, psz );
@@ -92,7 +92,7 @@ char * ObjUtil_LoadLibraryString(
 	}
 
 	// copy resource string
-	NewString = (char*)jeRam_Allocate( Size + 1 );
+	NewString = (char*)JE_RAM_ALLOCATE( Size + 1 );
 	if ( NewString == NULL )
 	{
 		jeErrorLog_Add( JE_ERR_MEMORY_RESOURCE, "Failed to allocate string memory" );
@@ -200,7 +200,7 @@ jeBoolean ObjUtil_ReadString(
 	Result &= jeVFile_Read( File, &( Size ), sizeof( Size ) );
 	if ( ( Size > 0 ) && ( Result == JE_TRUE ) )
 	{
-		*String = (char*)jeRam_Allocate( Size );
+		*String = (char*)JE_RAM_ALLOCATE( Size );
 		if ( *String == NULL )
 		{
 			return JE_FALSE;
@@ -359,26 +359,26 @@ void ObjUtil_DestroyBitmapList(
 		{
 			if ( List->Name[i] != NULL )
 			{
-				jeRam_Free( List->Name[i] );
+				JE_RAM_FREE( List->Name[i] );
 			}
 		}
-		jeRam_Free( List->Name );
+		JE_RAM_FREE( List->Name );
 	}
 
 	// destroy width and height lists
 	if ( List->Width != NULL )
 	{
-		jeRam_Free( List->Width );
+		JE_RAM_FREE( List->Width );
 	}
 	if ( List->Height != NULL )
 	{
-		jeRam_Free( List->Height );
+		JE_RAM_FREE( List->Height );
 	}
 
 	// destroy numeric sizes list
 	if ( List->NumericSizes != NULL )
 	{
-		jeRam_Free( List->NumericSizes );
+		JE_RAM_FREE( List->NumericSizes );
 	}
 
 	// destroy string sizes list
@@ -387,18 +387,18 @@ void ObjUtil_DestroyBitmapList(
 		for ( i = 0; i < List->SizesListSize; i++ )
 		{
 			assert( List->StringSizes[i] != NULL );
-			jeRam_Free( List->StringSizes[i] );
+			JE_RAM_FREE( List->StringSizes[i] );
 		}
 	}
 
 	// destroy active list
 	if ( List->ActiveList != NULL )
 	{
-		jeRam_Free( List->ActiveList );
+		JE_RAM_FREE( List->ActiveList );
 	}
 
 	// free bitmaplist struct
-	jeRam_Free( List );
+	JE_RAM_FREE( List );
 
 	// zap pointer
 	*DeadList = NULL;
@@ -470,7 +470,7 @@ BitmapList * ObjUtil_CreateBitmapList(
 	assert( FileFilter != NULL );
 
 	// allocate bitmaplist struct
-	Bmps = (BitmapList*)jeRam_AllocateClear( sizeof( *Bmps ) );
+	Bmps = (BitmapList*)JE_RAM_ALLOCATE_CLEAR( sizeof( *Bmps ) );
 	if ( Bmps == NULL )
 	{
 		jeErrorLog_Add( JE_ERR_MEMORY_RESOURCE, NULL );
@@ -505,7 +505,7 @@ BitmapList * ObjUtil_CreateBitmapList(
 	Finder = NULL;
 
 	// allocate name list
-	Bmps->Name = (char**)jeRam_AllocateClear( sizeof( char * ) * Bmps->Total );
+	Bmps->Name = (char**)JE_RAM_ALLOCATE_CLEAR( sizeof( char * ) * Bmps->Total );
 	if ( Bmps->Name == NULL )
 	{
 		jeErrorLog_Add( JE_ERR_MEMORY_RESOURCE, NULL );
@@ -513,7 +513,7 @@ BitmapList * ObjUtil_CreateBitmapList(
 	}
 
 	// allocate width list
-	Bmps->Width = (int*)jeRam_AllocateClear( sizeof( int * ) * Bmps->Total );
+	Bmps->Width = (int*)JE_RAM_ALLOCATE_CLEAR( sizeof( int * ) * Bmps->Total );
 	if ( Bmps->Width == NULL )
 	{
 		jeErrorLog_Add( JE_ERR_MEMORY_RESOURCE, NULL );
@@ -521,7 +521,7 @@ BitmapList * ObjUtil_CreateBitmapList(
 	}
 
 	// allocate height list
-	Bmps->Height = (int*)jeRam_AllocateClear( sizeof( int * ) * Bmps->Total );
+	Bmps->Height = (int*)JE_RAM_ALLOCATE_CLEAR( sizeof( int * ) * Bmps->Total );
 	if ( Bmps->Height == NULL )
 	{
 		jeErrorLog_Add( JE_ERR_MEMORY_RESOURCE, NULL );
@@ -529,7 +529,7 @@ BitmapList * ObjUtil_CreateBitmapList(
 	}
 
 	// allocate numeric sizes list
-	Bmps->NumericSizes = (int*)jeRam_AllocateClear( sizeof( int * ) * Bmps->Total );
+	Bmps->NumericSizes = (int*)JE_RAM_ALLOCATE_CLEAR( sizeof( int * ) * Bmps->Total );
 	if ( Bmps->NumericSizes == NULL )
 	{
 		jeErrorLog_Add( JE_ERR_MEMORY_RESOURCE, NULL );
@@ -537,7 +537,7 @@ BitmapList * ObjUtil_CreateBitmapList(
 	}
 
 	// allocate string sizes list
-	Bmps->StringSizes = (char**)jeRam_AllocateClear( sizeof( char * ) * Bmps->Total );
+	Bmps->StringSizes = (char**)JE_RAM_ALLOCATE_CLEAR( sizeof( char * ) * Bmps->Total );
 	if ( Bmps->StringSizes == NULL )
 	{
 		jeErrorLog_Add( JE_ERR_MEMORY_RESOURCE, NULL );
@@ -671,7 +671,7 @@ BitmapList * ObjUtil_CreateBitmapList(
 	{
 
 		// allocate list
-		Bmps->ActiveList = (char**)jeRam_AllocateClear( sizeof( char * ) * Bmps->Total );
+		Bmps->ActiveList = (char**)JE_RAM_ALLOCATE_CLEAR( sizeof( char * ) * Bmps->Total );
 		if ( Bmps->ActiveList == NULL )
 		{
 			jeErrorLog_Add( JE_ERR_MEMORY_RESOURCE, NULL );
@@ -819,7 +819,7 @@ void ObjUtil_TextureGroupSetSize(
 		*SaveArt = NULL;
 
 		// free old art name
-		jeRam_Free( *SaveArtName );
+		JE_RAM_FREE( *SaveArtName );
 		*SaveArtName = NULL;
 	}
 
@@ -868,7 +868,7 @@ jeBoolean ObjUtil_TextureGroupSetArt(
 		*SaveArt = NULL;
 
 		// free old art name
-		jeRam_Free( *SaveArtName );
+		JE_RAM_FREE( *SaveArtName );
 		*SaveArtName = NULL;
 	}
 
@@ -904,7 +904,7 @@ jeBoolean ObjUtil_TextureGroupSetArt(
 		}
 
 		// create full artname
-		*SaveArtName = (char*)jeRam_Allocate( Size );
+		*SaveArtName = (char*)JE_RAM_ALLOCATE( Size );
 		if ( *SaveArtName == NULL )
 		{
 			jeErrorLog_Add( JE_ERR_MEMORY_RESOURCE, "Failed to allocate full art name" );
@@ -977,7 +977,7 @@ jeBoolean ObjUtil_TextureGroupSetArt(
 	// free full art name
 	if ( *SaveArtName != NULL )
 	{
-		jeRam_Free( *SaveArtName );
+		JE_RAM_FREE( *SaveArtName );
 		*SaveArtName = NULL;
 	}
 

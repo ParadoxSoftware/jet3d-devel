@@ -83,13 +83,13 @@ void List_Destroy
 		{
 			DestroyFcn (p->Data);
 		}
-		jeRam_Free( p ) ;
+		JE_RAM_FREE( p ) ;
 		--(pList->nItems);
 		p = pNext;
 	}
 	assert( pList->nItems == 0 ) ;
 
-	jeRam_Free( *ppList ) ;
+	JE_RAM_FREE( *ppList ) ;
 	*ppList = NULL;
 }// List_Destroy
 
@@ -290,7 +290,7 @@ jeBoolean List_Remove
 	}
 
 	// and deallocate the node
-	jeRam_Free( pli ) ;
+	JE_RAM_FREE( pli ) ;
 
 	--(pList->nItems);
 
@@ -508,7 +508,7 @@ static jeBoolean StringSearchFcn (void *p1, void *lParam)
 static void StringDestroyFcn (void *p1)
 {
 	assert (p1 != NULL);
-	jeRam_Free( p1 ) ;
+	JE_RAM_FREE( p1 ) ;
 }
 
 /*

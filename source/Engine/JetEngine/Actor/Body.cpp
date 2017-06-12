@@ -186,12 +186,12 @@ static void JETCF jeBody_DestroyPossiblyIncompleteBody( jeBody **PB )
 	B->IsValid = NULL;
 	if (B->XSkinVertexArray != NULL)
 		{
-			jeRam_Free( B->XSkinVertexArray );
+			JE_RAM_FREE( B->XSkinVertexArray );
 			B->XSkinVertexArray = NULL;
 		}
 	if (B->SkinNormalArray != NULL)
 		{
-			jeRam_Free( B->SkinNormalArray );
+			JE_RAM_FREE( B->SkinNormalArray );
 			B->SkinNormalArray = NULL;
 		}
 	if (B->BoneNames != NULL)
@@ -201,7 +201,7 @@ static void JETCF jeBody_DestroyPossiblyIncompleteBody( jeBody **PB )
 		}
 	if (B->BoneArray != NULL)
 		{	
-			jeRam_Free(B->BoneArray);
+			JE_RAM_FREE(B->BoneArray);
 			B->BoneArray = NULL;
 		}
 	if (B->MaterialArray != NULL)
@@ -217,7 +217,7 @@ static void JETCF jeBody_DestroyPossiblyIncompleteBody( jeBody **PB )
 						jeMaterialSpec_Destroy(&(B->MaterialArray[i].MatSpec));
 					B->MaterialArray[i].MatSpec = NULL;
 				}
-			jeRam_Free( B->MaterialArray );
+			JE_RAM_FREE( B->MaterialArray );
 			B->MaterialArray = NULL;
 		}
 	if (B->MaterialNames != NULL)
@@ -230,18 +230,18 @@ static void JETCF jeBody_DestroyPossiblyIncompleteBody( jeBody **PB )
 		{
 			if (B->SkinFaces[i].FaceArray != NULL)
 				{
-					jeRam_Free(B->SkinFaces[i].FaceArray);
+					JE_RAM_FREE(B->SkinFaces[i].FaceArray);
 					B->SkinFaces[i].FaceArray = NULL;
 				}
 		}
 
 	if (B->blendDataArray != NULL)
 	{
-		jeRam_Free(B->blendDataArray);
+		JE_RAM_FREE(B->blendDataArray);
 		B->blendDataArray = NULL;
 	}
 
-	jeRam_Free(*PB);
+	JE_RAM_FREE(*PB);
 	*PB = NULL;
 }
 
@@ -531,7 +531,7 @@ static jeBoolean JETCF jeBody_SortSkinVertices( jeBody *B )
 	if (VertexMap == NULL)
 		{
 			jeErrorLog_AddString(JE_ERR_MEMORY_RESOURCE,"jeBody_SortSkinVertices: failed to allocate copy of vertex array",NULL);
-			jeRam_Free(VertexMap);
+			JE_RAM_FREE(VertexMap);
 			return JE_FALSE;
 		}
 	for (i=0; i<Count; i++)
@@ -563,8 +563,8 @@ static jeBoolean JETCF jeBody_SortSkinVertices( jeBody *B )
 				}
 		}
 
-	jeRam_Free(VertexMap);
-	jeRam_Free(VertexCopy);
+	JE_RAM_FREE(VertexMap);
+	JE_RAM_FREE(VertexCopy);
 	return JE_TRUE;
 
 #if 0
@@ -854,7 +854,7 @@ jeBoolean jeBody_AddBlendData(jeBody* pBody, jeFloat weight, const jeVec3d* pLoc
 	assert(pNormal != NULL);
 	assert(boneIndex >= 0 && boneIndex < pBody->BoneCount);
 
-	pBD = (jeBody_BlendData*)jeRam_Realloc(pBody->blendDataArray, (pBody->blendDataCount + 1) * sizeof(jeBody_BlendData));
+	pBD = (jeBody_BlendData*)JE_RAM_REALLOC(pBody->blendDataArray, (pBody->blendDataCount + 1) * sizeof(jeBody_BlendData));
 	if(pBD == NULL)
 	{
 		jeErrorLog_Add(JE_ERR_MEMORY_RESOURCE, "jeBody_AddBlendData");
@@ -1087,7 +1087,7 @@ jeBoolean jeBody_AddBlendDataArrayWithRedundancyCheck(jeBody* pBody,
 	assert(num > 0);
 	assert(pNumActualBlends != NULL);
 
-	pVisitedIndices = (jeBoolean*)jeRam_Allocate(num * sizeof(jeBoolean));
+	pVisitedIndices = (jeBoolean*)JE_RAM_ALLOCATE(num * sizeof(jeBoolean));
 	assert(pVisitedIndices != NULL);
 
 	for (i = 0; i < num; i ++)
@@ -1138,7 +1138,7 @@ jeBoolean jeBody_AddBlendDataArrayWithRedundancyCheck(jeBody* pBody,
 		}
 	}
 
-	jeRam_Free(pVisitedIndices);
+	JE_RAM_FREE(pVisitedIndices);
 
 	return JE_TRUE;
 }
@@ -1712,7 +1712,7 @@ static jeBoolean JETCF jeBody_ReadGeometry(jeBody *B, jeVFile *pFile)
 	if (B->XSkinVertexCount>0)
 		{
 			u = sizeof(jeBody_XSkinVertex) * B->XSkinVertexCount;
-			B->XSkinVertexArray = (jeBody_XSkinVertex *)jeRam_Allocate(u);
+			B->XSkinVertexArray = (jeBody_XSkinVertex *)JE_RAM_ALLOCATE(u);
 			if (B->XSkinVertexArray == NULL)
 				{	jeErrorLog_Add( JE_ERR_MEMORY_RESOURCE , "jeBody_ReadGeometry: Failed to allocate vertex array.");   return JE_FALSE;  }
 			if(jeVFile_Read(pFile, B->XSkinVertexArray, u) == JE_FALSE)
@@ -1725,7 +1725,7 @@ static jeBoolean JETCF jeBody_ReadGeometry(jeBody *B, jeVFile *pFile)
 	if (B->SkinNormalCount>0)
 		{
 			u = sizeof(jeBody_Normal) * B->SkinNormalCount;
-			B->SkinNormalArray = (jeBody_Normal *)jeRam_Allocate(u);
+			B->SkinNormalArray = (jeBody_Normal *)JE_RAM_ALLOCATE(u);
 			if (B->SkinNormalArray == NULL)
 				{	jeErrorLog_Add( JE_ERR_MEMORY_RESOURCE , "jeBody_ReadGeometry: Failed to allocate normal array.");   return JE_FALSE;  }
 			if(jeVFile_Read(pFile, B->SkinNormalArray, u) == JE_FALSE)
@@ -1738,7 +1738,7 @@ static jeBoolean JETCF jeBody_ReadGeometry(jeBody *B, jeVFile *pFile)
 	if (B->blendDataCount>0)
 		{
 			u = sizeof(jeBody_BlendData) * B->blendDataCount;
-			B->blendDataArray = (jeBody_BlendData *)jeRam_Allocate(u);
+			B->blendDataArray = (jeBody_BlendData *)JE_RAM_ALLOCATE(u);
 			if (B->blendDataArray == NULL)
 				{	jeErrorLog_Add( JE_ERR_MEMORY_RESOURCE , "jeBody_ReadGeometry: Failed to allocate blend array.");   return JE_FALSE;  }
 			if(jeVFile_Read(pFile, B->blendDataArray, u) == JE_FALSE)
@@ -1751,7 +1751,7 @@ static jeBoolean JETCF jeBody_ReadGeometry(jeBody *B, jeVFile *pFile)
 	if (B->BoneCount>0)
 		{
 			u = sizeof(jeBody_Bone) * B->BoneCount;
-			B->BoneArray = (jeBody_Bone *)jeRam_Allocate(u);
+			B->BoneArray = (jeBody_Bone *)JE_RAM_ALLOCATE(u);
 			if (B->BoneArray == NULL)
 				{	jeErrorLog_Add( JE_ERR_MEMORY_RESOURCE , "jeBody_ReadGeometry: Failed to allocate bone array.");   return JE_FALSE;  }
 			if(jeVFile_Read(pFile, B->BoneArray, u) == JE_FALSE)
@@ -1769,7 +1769,7 @@ static jeBoolean JETCF jeBody_ReadGeometry(jeBody *B, jeVFile *pFile)
 	{
 		// reserve mem for B->MaterialArray as per normal
 		u = sizeof(jeBody_Material) * B->MaterialCount;
-		B->MaterialArray = (jeBody_Material *)jeRam_Allocate(u);
+		B->MaterialArray = (jeBody_Material *)JE_RAM_ALLOCATE(u);
 		if (B->MaterialArray == NULL)
 			{	jeErrorLog_Add( JE_ERR_MEMORY_RESOURCE , "jeBody_ReadGeometry: Failed to allocate material array");   return JE_FALSE;  }
 
@@ -1807,7 +1807,7 @@ static jeBoolean JETCF jeBody_ReadGeometry(jeBody *B, jeVFile *pFile)
 			if (u>0)
 				{
 					u = sizeof(jeBody_Triangle) * u;
-					B->SkinFaces[i].FaceArray = (jeBody_Triangle *)jeRam_Allocate(u);
+					B->SkinFaces[i].FaceArray = (jeBody_Triangle *)JE_RAM_ALLOCATE(u);
 					if (B->SkinFaces[i].FaceArray == NULL)
 						{	jeErrorLog_Add( JE_ERR_MEMORY_RESOURCE , "jeBody_ReadGeometry: Failed to allocate face array.");   return JE_FALSE;  }
 					if(jeVFile_Read(pFile, B->SkinFaces[i].FaceArray, u) == JE_FALSE)

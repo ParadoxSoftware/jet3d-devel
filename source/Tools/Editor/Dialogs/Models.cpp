@@ -126,7 +126,7 @@ void CModel::SetCurrentDocument(CJweDoc *pDoc)
 		if( Name )
 		{
 			ComboItem = m_CBList.SelectString( 0, Name );
-			jeRam_Free( Name );
+			JE_RAM_FREE( Name );
 		}
 		UpdateData( true ) ;
 		m_Lock= Model_IsLocked( pModel );
@@ -150,7 +150,7 @@ jeBoolean CModel::BrushCB( Brush *pBrush, void *lParam)
 			pModelInfo->pList->SetItemData( hItem, (DWORD)(Object*)pBrush ) ;
 			Object_AddRef( (Object*)pBrush );
 		}
-		jeRam_Free( pszDisplayName ) ;
+		JE_RAM_FREE( pszDisplayName ) ;
 	}
 	return ( hItem == NULL ) ? JE_FALSE : JE_TRUE ;
 }// BrushCB
@@ -176,7 +176,7 @@ jeBoolean CModel::ModelListCB( Model *pModel, void *lParam)
 			if( Model_EnumBrushes( pModel, &ModelInfoData, CModel::BrushCB ) == JE_FALSE )
 				hItem = NULL ;
 		}
-		jeRam_Free( pszDisplayName );
+		JE_RAM_FREE( pszDisplayName );
 	}
 	return ( hItem == NULL ) ? JE_FALSE : JE_TRUE ;
 }// ModelListCB
@@ -195,7 +195,7 @@ jeBoolean CModel::ModelComboCB( Model *pModel, void *lParam)
 		nIndex = pCBList->FindString( 0, pszDisplayName );
 		if( nIndex != CB_ERR )
 			pCBList->SetItemDataPtr( nIndex, pModel );
-		jeRam_Free( pszDisplayName );
+		JE_RAM_FREE( pszDisplayName );
 
 	}
 	return ( nIndex != CB_ERR ) ? JE_FALSE : JE_TRUE ;
@@ -227,7 +227,7 @@ jeBoolean CModel::AddObject( Object* pObject )
 			if( pszDisplayName == NULL )
 				return( JE_FALSE );
 			hObjectItem	= m_List.InsertItem( pszDisplayName, hItem, TVI_SORT );
-			jeRam_Free( pszDisplayName );
+			JE_RAM_FREE( pszDisplayName );
 			if( hObjectItem == NULL )
 				return( JE_FALSE );
 			m_List.SetItemData( hObjectItem, (DWORD)pBrush ) ;
@@ -297,7 +297,7 @@ void CModel::RenameObject( Object *pObject )
 	if( pszDisplayName != NULL )
 	{
 		m_List.SetItemText( hItem, pszDisplayName );
-		jeRam_Free( pszDisplayName ) ;
+		JE_RAM_FREE( pszDisplayName ) ;
 	}
 
 }
@@ -330,7 +330,7 @@ jeBoolean CModel::AddSelectionCB(Object *pObject, void *lParam)
 			if( pszDisplayName == NULL )
 				return( JE_FALSE );
 			hObjectItem	= pList->InsertItem( pszDisplayName, hItem, TVI_SORT );
-			jeRam_Free( pszDisplayName );
+			JE_RAM_FREE( pszDisplayName );
 			if( hObjectItem == NULL )
 				return( JE_FALSE );
 			pList->SetItemData( hObjectItem, (DWORD)pObject ) ;
@@ -365,7 +365,7 @@ void CModel::UpdateCurModel()
 		if( pName )
 		{
 			m_CBList.SelectString( 0, pName );
-			jeRam_Free( pName );
+			JE_RAM_FREE( pName );
 		}
 	}
 }
@@ -410,7 +410,7 @@ void CModel::RemoveDeleted( )
 				index = m_CBList.FindString( -1, Name );
 				if( index >=0 )
 					m_CBList.DeleteString( index );
-				jeRam_Free( Name );
+				JE_RAM_FREE( Name );
 			}
 		}
 		hGroupItem = hNextGroupItem;
@@ -617,7 +617,7 @@ void CModel::OnAddmodel()
 			if( Name )
 			{
 				hItem = m_List.InsertItem( Name, TVI_ROOT, TVI_SORT ) ;
-				jeRam_Free( Name );
+				JE_RAM_FREE( Name );
 
 				Object_AddRef( (Object*)pModel );
 				if( hItem != NULL )

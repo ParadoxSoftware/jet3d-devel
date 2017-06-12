@@ -100,7 +100,7 @@ jeTKEvents* JETCC jeTKEvents_Create(void)
 	if(!pEvents->pTimeKeys)
 	{
 		jeErrorLog_Add(JE_ERR_MEMORY_RESOURCE, "jeTKEvents_Create.");
-		jeRam_Free(pEvents);
+		JE_RAM_FREE(pEvents);
 		return NULL;
 	}
 
@@ -125,14 +125,14 @@ void JETCC jeTKEvents_Destroy(jeTKEvents** ppEvents)
 
 	if( pE->pEventData != NULL )
 		{
-			jeRam_Free(pE->pEventData);
+			JE_RAM_FREE(pE->pEventData);
 		}
 	
 	if (pE->pTimeKeys != NULL)
 		{
 			jeTKArray_Destroy(&pE->pTimeKeys);
 		}
-	jeRam_Free(*ppEvents);
+	JE_RAM_FREE(*ppEvents);
 	*ppEvents = NULL;
 }
 
@@ -159,7 +159,7 @@ jeBoolean JETCC jeTKEvents_Insert(jeTKEvents* pEvents, jeTKEvents_TimeType tKey,
 	DataLength = strlen(pEventData) + 1;
 
 	// Resize data to add new stuff
-	pNewData = (char *)jeRam_Realloc(pEvents->pEventData, pEvents->DataSize + DataLength);
+	pNewData = (char *)JE_RAM_REALLOC(pEvents->pEventData, pEvents->DataSize + DataLength);
 	if(!pNewData)
 	{
 		jeErrorLog_Add(JE_ERR_MEMORY_RESOURCE, "jeTKEvents_Insert.");
@@ -270,12 +270,12 @@ jeBoolean JETCC jeTKEvents_Delete(jeTKEvents* pEvents, jeTKEvents_TimeType tKey)
 	pEvents->DataSize -= DataSize;
 	if (pEvents->DataSize == 0)
 	{
-		jeRam_Free (pEvents->pEventData);
+		JE_RAM_FREE (pEvents->pEventData);
 		pEvents->pEventData = NULL;
 	}
 	else
 	{
-		pNewData = (char *)jeRam_Realloc(pEvents->pEventData, pEvents->DataSize);
+		pNewData = (char *)JE_RAM_REALLOC(pEvents->pEventData, pEvents->DataSize);
 		// If the reallocation failed, it doesn't really hurt.  However, it is a 
 		// sign of problems ahead.
 		if(pNewData)
@@ -355,7 +355,7 @@ jeTKEvents* JETCC jeTKEvents_CreateFromFile(
 						return NULL;
 					}
 
-				pEvents->pEventData = (char *)jeRam_AllocateClear(pEvents->DataSize);
+				pEvents->pEventData = (char *)JE_RAM_ALLOCATE_CLEAR(pEvents->DataSize);
 				if(!pEvents->pEventData)
 					{
 						jeErrorLog_Add(JE_ERR_MEMORY_RESOURCE, "jeTKEvents_CreateFromFile.");

@@ -182,7 +182,7 @@ JETAPI jeObject *	JETCC jeObject_Create( const char * TypeName )
 	if( Index == INVALID_INDEX )
 		return NULL;
 
-	Object = (jeObject *)jeRam_AllocateClear(sizeof(jeObject)); // <> MemPool
+	Object = (jeObject *)JE_RAM_ALLOCATE_CLEAR(sizeof(jeObject)); // <> MemPool
 
 	if( Object == NULL )
 		return( NULL );
@@ -223,7 +223,7 @@ JETAPI jeObject *	JETCC jeObject_Create( const char * TypeName )
 			if (Object->Children)
 				jeChain_Destroy(&Object->Children);
 
-			jeRam_Free(Object);
+			JE_RAM_FREE(Object);
 		}
 		return NULL;
 	}
@@ -243,7 +243,7 @@ JETAPI jeObject *	JETCC jeObject_Duplicate( jeObject *pObject )
 	if( Index == INVALID_INDEX )
 		return NULL;
 
-	pObjectCopy = (jeObject *)jeRam_AllocateClear(sizeof(jeObject)); // <> MemPool
+	pObjectCopy = (jeObject *)JE_RAM_ALLOCATE_CLEAR(sizeof(jeObject)); // <> MemPool
 	if( pObjectCopy == NULL )
 		return( NULL );
 
@@ -257,7 +257,7 @@ JETAPI jeObject *	JETCC jeObject_Duplicate( jeObject *pObject )
 	pObjectCopy->Instance = pObject->Methods->DuplicateInstance(pObject->Instance);
 	if( pObjectCopy->Instance == NULL )
 	{
-		jeRam_Free( pObjectCopy );
+		JE_RAM_FREE( pObjectCopy );
 		return( NULL );
 	}
 	return pObjectCopy;
@@ -288,13 +288,13 @@ JETAPI void		JETCC jeObject_Destroy(jeObject ** pObject)
 			jeChain_Destroy(&Object->Children);
 
 		if( Object->Name != NULL )
-			jeRam_Free(Object->Name); // <> MemPool
+			JE_RAM_FREE(Object->Name); // <> MemPool
 
 		// Free the instance
 		if( Object->Instance != NULL ) // Krouer: do not crash if object has failed to load
 			jeObject_Free(Object); 
 
-		jeRam_Free(Object); // <> MemPool
+		JE_RAM_FREE(Object); // <> MemPool
 	}
 
 	*pObject = NULL;
@@ -308,7 +308,7 @@ JETAPI void			JETCC jeObject_SetName( jeObject * pObject, const char * Name )
 	assert( Name );
 
 	if( pObject->Name != NULL )
-		jeRam_Free( pObject->Name );
+		JE_RAM_FREE( pObject->Name );
 	pObject->Name = Util_StrDup( Name );
 }
 
@@ -349,7 +349,7 @@ JETAPI jeObject *	JETCC jeObject_CreateFromFile(jeVFile * File, jePtrMgr *PtrMgr
 	if ( ! jeVFile_Tell(HintsFile,&StartPos))
 		goto fail;
 
-	Object = (jeObject *)jeRam_AllocateClear(sizeof(jeObject)); // <> MemPool
+	Object = (jeObject *)JE_RAM_ALLOCATE_CLEAR(sizeof(jeObject)); // <> MemPool
 	if ( ! Object )
 		goto fail;
 
@@ -398,7 +398,7 @@ JETAPI jeObject *	JETCC jeObject_CreateFromFile(jeVFile * File, jePtrMgr *PtrMgr
 
 	if( NameLng )
 	{
-		Object->Name = (char *)jeRam_Allocate( NameLng );
+		Object->Name = (char *)JE_RAM_ALLOCATE( NameLng );
 		if ( ! jeVFile_Read(File, Object->Name, NameLng) )
 			goto fail;
 	}

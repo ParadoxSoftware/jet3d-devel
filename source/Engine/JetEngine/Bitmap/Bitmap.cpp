@@ -100,7 +100,7 @@ see {} for notes/long-term-todos
 #include	"Timer.h"
 #endif
 
-#define allocate(ptr)	ptr = jeRam_Allocate(sizeof(*ptr))
+#define allocate(ptr)	ptr = JE_RAM_ALLOCATE(sizeof(*ptr))
 #define clear(ptr)		memset(ptr,0,sizeof(*ptr))
 
 #define SHIFT_R_ROUNDUP(val,shift)	(((val)+(1<<(shift)) - 1)>>(shift))
@@ -318,7 +318,7 @@ jeBitmap *	Bitmap;
 				for	(i = Bitmap->Info.MinimumMip; i <= Bitmap->Info.MaximumMip; i++)
 				{
 					if	(Bitmap->Data[i])
-						jeRam_Free(Bitmap->Data[i]);
+						JE_RAM_FREE(Bitmap->Data[i]);
 				}
 
 				/*if ( Bitmap->Wavelet )
@@ -403,7 +403,7 @@ jeBoolean jeBitmap_AllocSystemMip(jeBitmap *Bmp,int32 mip)
 			Bmp->Data[mip] = NULL;
 			return JE_TRUE;
 		}
-		Bmp->Data[mip] = jeRam_Allocate( bytes );
+		Bmp->Data[mip] = JE_RAM_ALLOCATE( bytes );
 	}
 
 return (Bmp->Data[mip]) ? JE_TRUE : JE_FALSE;
@@ -3212,7 +3212,7 @@ DRV_Driver * Driver;
 	{
 		if ( Bmp->Data[mip] )
 		{
-			jeRam_Free( Bmp->Data[mip] );
+			JE_RAM_FREE( Bmp->Data[mip] );
 			Bmp->Data[mip] = NULL;
 		}
 	}
@@ -3653,7 +3653,7 @@ JETAPI jeBoolean JETCC jeBitmap_SetFormat(jeBitmap *Bmp,
 
 		if ( Bmp->Data[0] )
 		{
-			jeRam_Free(Bmp->Data[0]);
+			JE_RAM_FREE(Bmp->Data[0]);
 			Bmp->Data[0] = NULL;
 		}
 		
@@ -3840,7 +3840,7 @@ JETAPI jeBoolean JETCC jeBitmap_SetFormat(jeBitmap *Bmp,
 
 			if ( OldBmp.Data[0] )
 			{
-				jeRam_Free(OldBmp.Data[0]);
+				JE_RAM_FREE(OldBmp.Data[0]);
 				OldBmp.Data[0] = NULL;
 			}
 			// ok, now delete wavelet
@@ -4733,7 +4733,7 @@ jeVFile * HF;
 				int32 w,h,s,y;
 				uint8 * fptr,*tptr;
 				
-					if ( ! (MipData = (uint8*)jeRam_Allocate(MipDataLen) ) )
+					if ( ! (MipData = (uint8*)JE_RAM_ALLOCATE(MipDataLen) ) )
 					{
 						jeErrorLog_AddString(-1,"Bitmap_WriteToFile : Ram_Alloc failed!",NULL);
 						return JE_FALSE;
@@ -4770,7 +4770,7 @@ jeVFile * HF;
 				if ( ! LzF )
 				{
 					if ( MipDataAlloced )
-						jeRam_Free(MipData);
+						JE_RAM_FREE(MipData);
 					jeErrorLog_AddString(-1,"Bitmap_WriteToFile : LZ File Open failed",NULL);
 					return JE_FALSE;
 				}
@@ -4783,14 +4783,14 @@ jeVFile * HF;
 					if ( ! jeVFile_Close(LzF) )
 					{
 						if ( MipDataAlloced )
-							jeRam_Free(MipData);
+							JE_RAM_FREE(MipData);
 						jeErrorLog_AddString(-1,"Bitmap_WriteToFile : LZ File Close failed",NULL);
 						return JE_FALSE;
 					}
 				}
 
 				if ( MipDataAlloced )
-					jeRam_Free(MipData);
+					JE_RAM_FREE(MipData);
 			}
 		}
 		
@@ -5366,15 +5366,15 @@ const jePixelFormat_Operations * ops;
 		return NULL;
 	}
 
-	P = (jeBitmap_Palette *)jeRam_Allocate(sizeof(jeBitmap_Palette));
+	P = (jeBitmap_Palette *)JE_RAM_ALLOCATE(sizeof(jeBitmap_Palette));
 	if ( ! P ) return NULL;
 	clear(P);
 
 	P->Size = Size;
 	P->Format = Format;
-	if ( ! (P->Data = jeRam_Allocate(DataBytes)) )
+	if ( ! (P->Data = JE_RAM_ALLOCATE(DataBytes)) )
 	{
-		jeRam_Free(P);
+		JE_RAM_FREE(P);
 		return NULL;
 	}
 
@@ -5416,7 +5416,7 @@ jeTexture_Info TInfo;
 
 	assert(Driver);
 
-	P = (jeBitmap_Palette *)jeRam_Allocate(sizeof(jeBitmap_Palette));
+	P = (jeBitmap_Palette *)JE_RAM_ALLOCATE(sizeof(jeBitmap_Palette));
 
 	if ( ! P ) return NULL;
 	clear(P);
@@ -5434,7 +5434,7 @@ jeTexture_Info TInfo;
 	if ( ! P->DriverHandle )
 	{
 		jeErrorLog_AddString(-1,"Palette_CreateFromDriver : CreateTHandle", NULL);	
-		jeRam_Free(P);
+		JE_RAM_FREE(P);
 		return NULL;
 	}
 
@@ -5489,13 +5489,13 @@ jeBitmap_Palette * Palette;
 		if ( Palette->RefCount <= 0 )
 		{
 			if ( Palette->Data )
-				jeRam_Free(Palette->Data);
+				JE_RAM_FREE(Palette->Data);
 			if ( Palette->DriverHandle )
 			{
 				Palette->Driver->THandle_Destroy(Palette->DriverHandle);
 				Palette->DriverHandle = NULL;
 			}
-			jeRam_Free(Palette);
+			JE_RAM_FREE(Palette);
 		}
 	}
 	*ppPalette = NULL;
@@ -5619,17 +5619,17 @@ void * NewData;
 	if ( Format == P->Format )
 		return JE_TRUE;
 
-	NewData = jeRam_Allocate( jePixelFormat_BytesPerPel(Format) * P->Size );
+	NewData = JE_RAM_ALLOCATE( jePixelFormat_BytesPerPel(Format) * P->Size );
 	if ( ! NewData )
 		return JE_FALSE;
 
 	if ( ! jeBitmap_Palette_BlitData(P->Format,P->Data,NULL,Format,NewData,NULL,P->Size) )
 	{
-		jeRam_Free(NewData);
+		JE_RAM_FREE(NewData);
 		return JE_FALSE;
 	}
 
-	jeRam_Free(P->Data);
+	JE_RAM_FREE(P->Data);
 	P->Data = NewData;
 	P->Format = Format;
 
@@ -5930,7 +5930,7 @@ jeVFile * HF;
 	{
 		if ( ! jeVFile_Read(F, P->Data, jePixelFormat_BytesPerPel(P->Format) * P->Size) )
 		{
-			jeRam_Free(P);
+			JE_RAM_FREE(P);
 			return NULL;
 		}
 	}

@@ -160,8 +160,8 @@ m_strGameName = _T("Jet3D_MinApp");
 #endif
 
 #ifdef _DEBUG
-	//m_strDriverName = _T("D3D");
-	m_strDriverName = _T("OpenGL");
+	m_strDriverName = _T("D3D");
+	//m_strDriverName = _T("OpenGL");
 //	m_strDriverName = _T("Direct3D 9");
 #endif
 

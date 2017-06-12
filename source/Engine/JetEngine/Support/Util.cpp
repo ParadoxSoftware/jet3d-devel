@@ -89,7 +89,7 @@ static char *Util_LoadLibraryString(HINSTANCE libhinst, UINT resid)
 	//
  
 	// Allocate memory for the string
-	rcbuffer = (char*)jeRam_Allocate(strlen(stringbuffer) + 1);
+	rcbuffer = (char*)JE_RAM_ALLOCATE(strlen(stringbuffer) + 1);
 	strcpy(rcbuffer, stringbuffer);
  
 #ifndef NDEBUG
@@ -119,7 +119,7 @@ char * Util_LoadText( unsigned int resid )
 	if( pTextRes  == NULL )
 		return( NULL );
 	ResSize = SizeofResource( hResources, hTextInfo );
-	pTextString = (char*)jeRam_Allocate( ResSize + 1 );
+	pTextString = (char*)JE_RAM_ALLOCATE( ResSize + 1 );
 	if( pTextString == NULL )
 		return( NULL );
 	memcpy( pTextString, pTextRes, ResSize );
@@ -169,7 +169,7 @@ char *Util_LoadLocalRcString(unsigned int resid)
 
 char * Util_StrDup( const char * const psz )
 {
-	char * p = (char *)jeRam_Allocate( strlen( psz ) + 1 ) ;
+	char * p = (char *)JE_RAM_ALLOCATE( strlen( psz ) + 1 ) ;
 	if( p ) 
 	{
 		strcpy( p, psz ) ;

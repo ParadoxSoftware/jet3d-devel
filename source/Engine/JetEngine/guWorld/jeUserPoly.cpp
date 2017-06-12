@@ -265,7 +265,7 @@ JETAPI void JETCC jeUserPoly_Destroy(jeUserPoly **Poly)
 	(*Poly)->RefCount--;
 
 	if ((*Poly)->RefCount == 0)
-		jeRam_Free(*Poly);
+		JE_RAM_FREE(*Poly);
 
 	*Poly = NULL;
 }

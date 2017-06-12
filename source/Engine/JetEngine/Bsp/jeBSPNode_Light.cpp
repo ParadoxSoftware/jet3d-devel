@@ -226,9 +226,9 @@ jeBSPNode_Lightmap *jeBSPNode_LightmapCreate(jeBSP *BSP, const jeTexVert *TVerts
 		if (Lightmap)
 		{
 			if (Lightmap->Points)
-				jeRam_Free(Lightmap->Points);
+				JE_RAM_FREE(Lightmap->Points);
 
-			jeRam_Free(Lightmap);
+			JE_RAM_FREE(Lightmap);
 		}
 		return NULL;
 	}
@@ -245,7 +245,7 @@ void jeBSPNode_LightmapDestroy(jeBSPNode_Lightmap **Lightmap, jeBSP *BSP)
 	assert(*Lightmap);
 
 	if ((*Lightmap)->Points)
-		jeRam_Free((*Lightmap)->Points);
+		JE_RAM_FREE((*Lightmap)->Points);
 
 	if ((*Lightmap)->THandle)
 	{
@@ -256,10 +256,10 @@ void jeBSPNode_LightmapDestroy(jeBSPNode_Lightmap **Lightmap, jeBSP *BSP)
 	for (i=0; i< JE_LIGHTMAP_MAX_STYLES; i++)
 	{
 		if ((*Lightmap)->RGBData[i])
-			jeRam_Free((*Lightmap)->RGBData[i]);
+			JE_RAM_FREE((*Lightmap)->RGBData[i]);
 	}
 	
-	jeRam_Free(*Lightmap);
+	JE_RAM_FREE(*Lightmap);
 
 	*Lightmap = NULL;
 }

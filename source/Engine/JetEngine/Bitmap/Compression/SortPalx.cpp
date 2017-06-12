@@ -93,13 +93,13 @@ jeBoolean didStuff;
 
 	if ( ! readOutPal(start,ncolors,palette,permutation) ) {
 		//BrandoError("bad linked list");
-		jeRam_Free(nodes); nodes = nullptr;
+		JE_RAM_FREE(nodes); nodes = nullptr;
 		return JE_FALSE;
 	}
 
 	*ncolors_ptr = ncolors;
 
-	jeRam_Free(nodes); nodes = nullptr;
+	JE_RAM_FREE(nodes); nodes = nullptr;
 
 return JE_TRUE;
 }
@@ -153,13 +153,13 @@ palNode *cur,*found,*start,*nodes,*freenodes,*foundnext;
 
 	if ( ! readOutPal(start,ncolors,palette,permutation) ) {
 		//BrandoError("bad linked list");
-		jeRam_Free(nodes); nodes = nullptr;
+		JE_RAM_FREE(nodes); nodes = nullptr;
 		return JE_FALSE;
 	}
 
 	*ncolors_ptr = ncolors;
 
-	jeRam_Free(nodes); nodes = nullptr;
+	JE_RAM_FREE(nodes); nodes = nullptr;
 
 return JE_TRUE;
 }

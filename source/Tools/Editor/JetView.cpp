@@ -631,7 +631,7 @@ void CJetView::OnDraw(CDC* pDC)
 	nOldMode = pDC->SetBkMode( TRANSPARENT ) ;
 	pDC->ExtTextOut( 4, 4, 0,  NULL, pszViewName, strlen( pszViewName ), NULL );
 	pDC->SetBkMode( nOldMode ) ;
-	jeRam_Free( pszViewName );
+	JE_RAM_FREE( pszViewName );
 */
     int32 mkfaces = 0, mgfaces = 0, subfaces = 0, drawfaces = 0;
     CMainFrame* pMainFrame = (CMainFrame*) AfxGetMainWnd();

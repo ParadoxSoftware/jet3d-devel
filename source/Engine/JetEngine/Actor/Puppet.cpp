@@ -220,7 +220,7 @@ static jeBoolean JETCF jePuppet_FetchTextures(jePuppet *P, const jeBody *B)
 			if ( ! jeEngine_AddBitmap(P->pEngine,Bitmap, JE_ENGINE_BITMAP_TYPE_3D) )
 			{
 				jeErrorLog_AddString(JE_ERR_SUBSYSTEM_FAILURE,"jePuppet_FetchTextures : Engine_AddBitmap", NULL);
-				jeRam_Free(P->MaterialArray);
+				JE_RAM_FREE(P->MaterialArray);
 				P->MaterialArray = NULL;
 				P->MaterialCount = 0;
 				return JE_FALSE;
@@ -370,7 +370,7 @@ jePuppet* JETCF jePuppet_Create(jeVFile *TextureFS, const jeBody *B, jeEngine *p
 				
 	if (jePuppet_FetchTextures(P,B)==JE_FALSE)
 	{
-		jeRam_Free(P);
+		JE_RAM_FREE(P);
 		return NULL;
 	}
 
@@ -413,7 +413,7 @@ void JETCF jePuppet_Destroy(jePuppet **P)
 		}
 
 
-		jeRam_Free( (*P)->MaterialArray );
+		JE_RAM_FREE( (*P)->MaterialArray );
 		(*P)->BodyInstance = NULL;
 	}
 	if ( (*P)->ShadowMap )
@@ -424,10 +424,10 @@ void JETCF jePuppet_Destroy(jePuppet **P)
 
 	if ( (*P)->BoneLightArray!=NULL)
 		{
-			jeRam_Free((*P)->BoneLightArray);
+			JE_RAM_FREE((*P)->BoneLightArray);
 		}
 
-	jeRam_Free( (*P) );
+	JE_RAM_FREE( (*P) );
 	*P = NULL;
 
 	// clean up any shared resources.
@@ -436,7 +436,7 @@ void JETCF jePuppet_Destroy(jePuppet **P)
 	{
 		/*
 		if (jePuppet_StaticBoneLightArray!=NULL)
-			jeRam_Free(jePuppet_StaticBoneLightArray);
+			JE_RAM_FREE(jePuppet_StaticBoneLightArray);
 		jePuppet_StaticBoneLightArray=NULL;
 		jePuppet_StaticBoneLightArraySize = 0;
 		*/
@@ -1353,7 +1353,7 @@ jeBoolean jePuppet_RenderThroughFrustum(const jePuppet		*P,
 						// realloc light array to correct size
 						jePuppet_BoneLight *LG;
 
-						LG = (jePuppet_BoneLight *)jeRam_Realloc(P->BoneLightArray, sizeof(jePuppet_BoneLight) * BoneCount);
+						LG = (jePuppet_BoneLight *)JE_RAM_REALLOC(P->BoneLightArray, sizeof(jePuppet_BoneLight) * BoneCount);
 						if (LG==NULL)
 						{
 							jeErrorLog_Add(JE_ERR_SUBSYSTEM_FAILURE,"jePuppet_Render: Failed to allocate space for bone lighting info cache");
@@ -1399,7 +1399,7 @@ jeBoolean jePuppet_RenderThroughFrustum(const jePuppet		*P,
 							// realloc light array to correct size
 							jePuppet_BoneLight *LG = NULL;
 
-							LG = (jePuppet_BoneLight *)jeRam_Realloc(P->BoneLightArray, sizeof(jePuppet_BoneLight) * BoneCount);
+							LG = (jePuppet_BoneLight *)JE_RAM_REALLOC(P->BoneLightArray, sizeof(jePuppet_BoneLight) * BoneCount);
 							if (LG==NULL)
 							{
 								jeErrorLog_Add(JE_ERR_SUBSYSTEM_FAILURE,"jePuppet_Render: Failed to allocate space for bone lighting info cache");
@@ -1836,7 +1836,7 @@ jeBoolean	jePuppet_Render(const jePuppet	*P,
 						// realloc light array to correct size
 						jePuppet_BoneLight *LG;
 				
-						LG = (jePuppet_BoneLight *)jeRam_Realloc(P->BoneLightArray, sizeof(jePuppet_BoneLight) * BoneCount);
+						LG = (jePuppet_BoneLight *)JE_RAM_REALLOC(P->BoneLightArray, sizeof(jePuppet_BoneLight) * BoneCount);
 						if (LG==NULL)
 						{
 							jeErrorLog_Add(JE_ERR_SUBSYSTEM_FAILURE,"jePuppet_Render: Failed to allocate space for bone lighting info cache");
@@ -1882,7 +1882,7 @@ jeBoolean	jePuppet_Render(const jePuppet	*P,
 							// realloc light array to correct size
 							jePuppet_BoneLight *LG;
 					
-							LG = (jePuppet_BoneLight *)jeRam_Realloc(P->BoneLightArray, sizeof(jePuppet_BoneLight) * BoneCount);
+							LG = (jePuppet_BoneLight *)JE_RAM_REALLOC(P->BoneLightArray, sizeof(jePuppet_BoneLight) * BoneCount);
 							if (LG==NULL)
 							{
 								jeErrorLog_Add(JE_ERR_SUBSYSTEM_FAILURE,"jePuppet_Render: Failed to allocate space for bone lighting info cache");

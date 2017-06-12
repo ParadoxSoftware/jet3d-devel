@@ -320,13 +320,12 @@ void Brush_Destroy( Brush ** ppBrush )
 	if( pBrush->pTemplate )
 		BrushTemplate_Destroy( &(pBrush->pTemplate) );
 	if( pBrush->ObjectData.pszName )
-		jeRam_Free( pBrush->ObjectData.pszName );
+		JE_RAM_FREE( pBrush->ObjectData.pszName );
 	// [MLB-ICE] EOB
 
 	assert( ((*ppBrush)->nSignature = 0) == 0 ) ;	// CLEAR
 	pBrush->ObjectData.ObjectKind = KIND_INVALID ;
-	jeRam_Free( *ppBrush ) ;
-
+	JE_RAM_FREE( *ppBrush ) ;
 }// Brush_Destroy
 
 
@@ -1435,10 +1434,10 @@ jeBoolean Brush_FillPositionDescriptor( Brush *pBrush, jeProperty_List * pArray 
 	jeProperty_FillVec3dGroup( &Property, Name, &XForm.Translation,	OBJECT_POSITION_FIELD  );
 	if( !jeProperty_Append( pArray,  &Property ) )
 	{
-		jeRam_Free( Name );
+		JE_RAM_FREE( Name );
 		return( JE_FALSE );
 	}
-	jeRam_Free( Name );
+	JE_RAM_FREE( Name );
 
 	Name = Util_LoadLocalRcString( IDS_POSITIONX_FIELD );
 	if( Name == NULL )
@@ -1446,10 +1445,10 @@ jeBoolean Brush_FillPositionDescriptor( Brush *pBrush, jeProperty_List * pArray 
 	jeProperty_FillFloat(  &Property, Name, XForm.Translation.X, OBJECT_POSITION_FIELDX, -FLT_MAX, FLT_MAX, 1.0f );
 	if( !jeProperty_Append( pArray,  &Property ) )
 	{
-		jeRam_Free( Name );
+		JE_RAM_FREE( Name );
 		return( JE_FALSE );
 	}
-	jeRam_Free( Name );
+	JE_RAM_FREE( Name );
 
 	Name = Util_LoadLocalRcString( IDS_POSITIONY_FIELD );
 	if( Name == NULL )
@@ -1457,10 +1456,10 @@ jeBoolean Brush_FillPositionDescriptor( Brush *pBrush, jeProperty_List * pArray 
 	jeProperty_FillFloat(  &Property, Name, XForm.Translation.Y,	OBJECT_POSITION_FIELDY, -FLT_MAX, FLT_MAX, 1.0f );
 	if( !jeProperty_Append( pArray, &Property ) )
 	{
-		jeRam_Free( Name );
+		JE_RAM_FREE( Name );
 		return( JE_FALSE );
 	}
-	jeRam_Free( Name );
+	JE_RAM_FREE( Name );
 
 	Name = Util_LoadLocalRcString( IDS_POSITIONZ_FIELD );
 	if( Name == NULL )
@@ -1468,10 +1467,10 @@ jeBoolean Brush_FillPositionDescriptor( Brush *pBrush, jeProperty_List * pArray 
 	jeProperty_FillFloat( &Property, Name, XForm.Translation.Z, OBJECT_POSITION_FIELDZ, -FLT_MAX, FLT_MAX, 1.0f );
 	if( !jeProperty_Append( pArray, &Property ) )
 	{
-		jeRam_Free( Name );
+		JE_RAM_FREE( Name );
 		return( JE_FALSE );
 	}
-	jeRam_Free( Name );
+	JE_RAM_FREE( Name );
 
 	jeProperty_FillGroupEnd( &Property, OBJECT_POSITION_FIELD_END );
 	if( !jeProperty_Append( pArray, &Property ) )
@@ -1581,7 +1580,7 @@ jeBoolean Brush_FillFaceInfoDescriptor( Brush *pBrush, jeProperty_List * pArray 
 	if( Name == NULL )
 		return( JE_FALSE );
 	jeProperty_FillGroup( &Property, Name,	BRUSH_FACEINFO_FIELD  );
-	jeRam_Free( Name );
+	JE_RAM_FREE( Name );
 	if( !jeProperty_Append( pArray, &Property  ) )
 	{
 		return( JE_FALSE );
@@ -1593,7 +1592,7 @@ jeBoolean Brush_FillFaceInfoDescriptor( Brush *pBrush, jeProperty_List * pArray 
 	if( Name == NULL )
 		return( JE_FALSE );
 	jeProperty_FillCheck( &Property, Name, Bool, BRUSH_GOURAND_FIELD );
-	jeRam_Free( Name );
+	JE_RAM_FREE( Name );
 	if( FaceInfoData.FieldFlag & FACE_FIELD_GOURAUD )
 		jeProperty_SetDataInvalid( &Property  );
 	jeProperty_SetDisabled( &Property, JE_TRUE );
@@ -1608,7 +1607,7 @@ jeBoolean Brush_FillFaceInfoDescriptor( Brush *pBrush, jeProperty_List * pArray 
 	if( Name == NULL )
 		return( JE_FALSE );
 	jeProperty_FillCheck( &Property, Name, Bool, BRUSH_FLAT_FIELD );
-	jeRam_Free( Name );
+	JE_RAM_FREE( Name );
 	if( FaceInfoData.FieldFlag & FACE_FIELD_FLAT )
 		jeProperty_SetDataInvalid( &Property );
 	jeProperty_SetDisabled(&Property, JE_TRUE );
@@ -1624,7 +1623,7 @@ jeBoolean Brush_FillFaceInfoDescriptor( Brush *pBrush, jeProperty_List * pArray 
 	if( Name == NULL )
 		return( JE_FALSE );
 	jeProperty_FillCheck( &Property, Name, Bool, BRUSH_TRANSPARENT_FIELD );
-	jeRam_Free( Name );
+	JE_RAM_FREE( Name );
 	if( FaceInfoData.FieldFlag & FACE_FIELD_INVISIBLE )
 		jeProperty_SetDataInvalid( &Property );
 	if( !jeProperty_Append( pArray, &Property ) )
@@ -1638,7 +1637,7 @@ jeBoolean Brush_FillFaceInfoDescriptor( Brush *pBrush, jeProperty_List * pArray 
 	if( Name == NULL )
 		return( JE_FALSE );
 	jeProperty_FillFloat( &Property, Name, FaceInfo.Alpha, BRUSH_ALPHA_FIELD, 0, 255, 1.0f );
-	jeRam_Free( Name );
+	JE_RAM_FREE( Name );
 	if( FaceInfoData.FieldFlag & FACE_FIELD_ALPHA )
 		jeProperty_SetDataInvalid( &Property );
 	if( !jeProperty_Append( pArray, &Property ) )
@@ -1653,7 +1652,7 @@ jeBoolean Brush_FillFaceInfoDescriptor( Brush *pBrush, jeProperty_List * pArray 
 	if( Name == NULL )
 		return( JE_FALSE );
 	jeProperty_FillCheck( &Property, Name, Bool, BRUSH_FULLBRIGHT_FIELD );
-	jeRam_Free( Name );
+	JE_RAM_FREE( Name );
 	if( FaceInfoData.FieldFlag &  FACE_FIELD_FULLBRIGHT )
 		jeProperty_SetDataInvalid( &Property );
 	if( !jeProperty_Append( pArray, &Property ) )
@@ -1668,7 +1667,7 @@ jeBoolean Brush_FillFaceInfoDescriptor( Brush *pBrush, jeProperty_List * pArray 
 	if( Name == NULL )
 		return( JE_FALSE );
 	jeProperty_FillCheck( &Property, Name, Bool, BRUSH_VIS_PORTAL_FIELD );
-	jeRam_Free( Name );
+	JE_RAM_FREE( Name );
 	if( FaceInfoData.FieldFlag & FACE_FIELD_VIS_PORTAL )
 		jeProperty_SetDataInvalid( &Property );
 	if( !jeProperty_Append( pArray, &Property ) )
@@ -1683,7 +1682,7 @@ jeBoolean Brush_FillFaceInfoDescriptor( Brush *pBrush, jeProperty_List * pArray 
 	if( Name == NULL )
 		return( JE_FALSE );
 	jeProperty_FillCheck( &Property, Name, Bool, BRUSH_RENDER_PORTAL_ONLY );
-	jeRam_Free( Name );
+	JE_RAM_FREE( Name );
 	if( FaceInfoData.FieldFlag & FACE_FIELD_ONLYPORTAL )
 		jeProperty_SetDataInvalid( &Property );
 	if( !jeProperty_Append( pArray, &Property ) )
@@ -1700,7 +1699,7 @@ jeBoolean Brush_FillFaceInfoDescriptor( Brush *pBrush, jeProperty_List * pArray 
 	else
 		PortalName = VisPortalNone;
 	jeProperty_FillCombo( &Property, Name, (char*)PortalName, BRUSH_VIS_PORTAL_COMBO, VisPortalN, VisPortalArray  );
-	jeRam_Free( Name );
+	JE_RAM_FREE( Name );
 	if( !jeProperty_Append( pArray, &Property ) )
 	{
 		return( JE_FALSE );
@@ -1710,7 +1709,7 @@ jeBoolean Brush_FillFaceInfoDescriptor( Brush *pBrush, jeProperty_List * pArray 
 	if( Name == NULL )
 		return( JE_FALSE );
 	jeProperty_FillFloat( &Property, Name, FaceInfo.Rotate,	BRUSH_ROTATE_FIELD, -1, 360, 1.0f );
-	jeRam_Free( Name );
+	JE_RAM_FREE( Name );
 	if( FaceInfoData.FieldFlag & FACE_FIELD_ROTATE )
 		jeProperty_SetDataInvalid( &Property );
 	//jeProperty_SetDisabled( &Property, JE_TRUE );
@@ -1724,7 +1723,7 @@ jeBoolean Brush_FillFaceInfoDescriptor( Brush *pBrush, jeProperty_List * pArray 
 	if( Name == NULL )
 		return( JE_FALSE );
 	jeProperty_FillGroup( &Property, Name,	BRUSH_SHIFT_GROUP  );
-	jeRam_Free( Name );
+	JE_RAM_FREE( Name );
 	if( !jeProperty_Append( pArray, &Property ) )
 	{
 		return( JE_FALSE );
@@ -1734,7 +1733,7 @@ jeBoolean Brush_FillFaceInfoDescriptor( Brush *pBrush, jeProperty_List * pArray 
 	if( Name == NULL )
 		return( JE_FALSE );
 	jeProperty_FillFloat( &Property, Name, FaceInfo.ShiftU,	BRUSH_SHIFTU_FIELD, -FLT_MAX, FLT_MAX, 1.0f );
-	jeRam_Free( Name );
+	JE_RAM_FREE( Name );
 
 	if( FaceInfoData.FieldFlag & FACE_FIELD_SHIFTU )
 		jeProperty_SetDataInvalid( &Property );
@@ -1748,7 +1747,7 @@ jeBoolean Brush_FillFaceInfoDescriptor( Brush *pBrush, jeProperty_List * pArray 
 	if( Name == NULL )
 		return( JE_FALSE );
 	jeProperty_FillFloat( &Property, Name, FaceInfo.ShiftV, BRUSH_SHIFTV_FIELD, -FLT_MAX, FLT_MAX, 1.0f );
-	jeRam_Free( Name );
+	JE_RAM_FREE( Name );
 	if( FaceInfoData.FieldFlag & FACE_FIELD_SHIFTV )
 		jeProperty_SetDataInvalid( &Property );
 	if( !jeProperty_Append( pArray, &Property ) )
@@ -1769,7 +1768,7 @@ jeBoolean Brush_FillFaceInfoDescriptor( Brush *pBrush, jeProperty_List * pArray 
 	if( Name == NULL )
 		return( JE_FALSE );
 	jeProperty_FillGroup( &Property, Name,	BRUSH_DRAWSCALE_GROUP  );
-	jeRam_Free( Name );
+	JE_RAM_FREE( Name );
 	if( !jeProperty_Append( pArray, &Property ) )
 	{
 		return( JE_FALSE );
@@ -1780,7 +1779,7 @@ jeBoolean Brush_FillFaceInfoDescriptor( Brush *pBrush, jeProperty_List * pArray 
 	if( Name == NULL )
 		return( JE_FALSE );
 	jeProperty_FillFloat( &Property, Name, FaceInfo.DrawScaleU,	BRUSH_DRAWSCALEU_FIELD, -64.0f, 64.0f, 0.1f );
-	jeRam_Free( Name );
+	JE_RAM_FREE( Name );
 	if( FaceInfoData.FieldFlag & FACE_FIELD_DRAWSCALEU )
 		jeProperty_SetDataInvalid( &Property );
 	if( !jeProperty_Append( pArray, &Property ) )
@@ -1793,7 +1792,7 @@ jeBoolean Brush_FillFaceInfoDescriptor( Brush *pBrush, jeProperty_List * pArray 
 	if( Name == NULL )
 		return( JE_FALSE );
 	jeProperty_FillFloat( &Property, Name, FaceInfo.DrawScaleV,	BRUSH_DRAWSCALEV_FIELD, -64.0f, 64.0f, 0.1f );
-	jeRam_Free( Name );
+	JE_RAM_FREE( Name );
 	if( FaceInfoData.FieldFlag & FACE_FIELD_DRAWSCALEV )
 		jeProperty_SetDataInvalid( &Property );
 	if( !jeProperty_Append( pArray, &Property ) )
@@ -1813,7 +1812,7 @@ jeBoolean Brush_FillFaceInfoDescriptor( Brush *pBrush, jeProperty_List * pArray 
 	if( Name == NULL )
 		return( JE_FALSE );
 	jeProperty_FillGroup( &Property, Name,	BRUSH_LIGHTMAP_GROUP  );
-	jeRam_Free( Name );
+	JE_RAM_FREE( Name );
 	if( !jeProperty_Append( pArray, &Property ) )
 	{
 		return( JE_FALSE );
@@ -1824,7 +1823,7 @@ jeBoolean Brush_FillFaceInfoDescriptor( Brush *pBrush, jeProperty_List * pArray 
 	if( Name == NULL )
 		return( JE_FALSE );
 	jeProperty_FillFloat( &Property, Name, FaceInfo.LMapScaleU,	BRUSH_LMAPSCALEU_FIELD, -FLT_MAX, FLT_MAX, 0.5f );
-	jeRam_Free( Name );
+	JE_RAM_FREE( Name );
 	if( FaceInfoData.FieldFlag & FACE_FIELD_LMAPSCALEU )
 		jeProperty_SetDataInvalid( &Property );
 	if( !jeProperty_Append( pArray, &Property ) )
@@ -1837,7 +1836,7 @@ jeBoolean Brush_FillFaceInfoDescriptor( Brush *pBrush, jeProperty_List * pArray 
 	if( Name == NULL )
 		return( JE_FALSE );
 	jeProperty_FillFloat( &Property, Name, FaceInfo.LMapScaleV,	BRUSH_LMAPSCALEV_FIELD, -FLT_MAX, FLT_MAX, 0.5f );
-	jeRam_Free( Name );
+	JE_RAM_FREE( Name );
 	if( FaceInfoData.FieldFlag & FACE_FIELD_LMAPSCALEV )
 		jeProperty_SetDataInvalid( &Property );
 	if( !jeProperty_Append( pArray, &Property ) )
@@ -1867,12 +1866,12 @@ static void Brush_AddToPortalList( char * Name )
 	{
 		VisPortalAllocateN += VISPORTALBLOCK;
 		if( VisPortalArray == NULL )
-			VisPortalArray = (char**)jeRam_Allocate( sizeof( char*) * VisPortalAllocateN );
+			VisPortalArray = (char**)JE_RAM_ALLOCATE( sizeof( char*) * VisPortalAllocateN );
 		else
-			VisPortalArray = (char**)jeRam_Realloc( VisPortalArray, VisPortalAllocateN );
+			VisPortalArray = (char**)JE_RAM_REALLOC( VisPortalArray, VisPortalAllocateN );
 		if( VisPortalArray == NULL )
 		{
-			jeErrorLog_Add( JE_ERR_MEMORY_RESOURCE,"Level_AddToPortalList:jeRam_Realloc");
+			jeErrorLog_Add( JE_ERR_MEMORY_RESOURCE,"Level_AddToPortalList:JE_RAM_REALLOC");
 			return;
 		}
 
@@ -1941,7 +1940,7 @@ jeProperty_List *	Brush_BuildDescriptor( Brush * pBrush )
 	if( Name == NULL )
 		goto BBD_ERROR;
 	jeProperty_FillString( &Property, Name, pBrush->ObjectData.pszName, OBJECT_NAME_FIELD );
-	jeRam_Free( Name );
+	JE_RAM_FREE( Name );
 	if( !jeProperty_Append( pArray, &Property ) )
 	{
 		goto BBD_ERROR;
@@ -1957,7 +1956,7 @@ jeProperty_List *	Brush_BuildDescriptor( Brush * pBrush )
 	if( Name == NULL )
 		goto BBD_ERROR;
 	jeProperty_FillRadio( &Property, Name, Bool, BRUSH_SOLID_FIELD );
-	jeRam_Free( Name );
+	JE_RAM_FREE( Name );
 	if( !jeProperty_Append( pArray, &Property ) )
 	{
 		goto BBD_ERROR;
@@ -1969,7 +1968,7 @@ jeProperty_List *	Brush_BuildDescriptor( Brush * pBrush )
 	if( Name == NULL )
 		goto BBD_ERROR;
 	jeProperty_FillRadio( &Property, Name, Bool, BRUSH_EMPTY_FIELD );
-	jeRam_Free( Name );
+	JE_RAM_FREE( Name );
 	if( !jeProperty_Append( pArray, &Property ) )
 	{
 		goto BBD_ERROR;
@@ -1981,7 +1980,7 @@ jeProperty_List *	Brush_BuildDescriptor( Brush * pBrush )
 	if( Name == NULL )
 		goto BBD_ERROR;
 	jeProperty_FillRadio( &Property, Name, Bool, BRUSH_AIR_FIELD );
-	jeRam_Free( Name );
+	JE_RAM_FREE( Name );
 	if( !jeProperty_Append( pArray, &Property ) )
 	{
 		goto BBD_ERROR;
@@ -2325,7 +2324,7 @@ jeBoolean Brush_SelectVert( Brush * pBrush, jeVertArray_Index  Index )
 
 void Brush_DestroyVertCB(void *pData)
 {
-	jeRam_Free( pData );
+	JE_RAM_FREE( pData );
 }
 
 void Brush_DeselectVert( Brush * pBrush, jeVertArray_Index  Index )
@@ -2808,7 +2807,7 @@ jeBoolean Brush_RestoreMaterialCB( Object *pObject, void *Context )
 
 void Brush_DestroyMaterialContextCB( void *Context )
 {
-	jeRam_Free( Context );
+	JE_RAM_FREE( Context );
 }
 
 jeBoolean Brush_SelectClosest( Brush * pBrush, FindInfo	*	pFindInfo )

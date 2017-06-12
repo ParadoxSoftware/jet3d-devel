@@ -166,7 +166,7 @@ static jeBoolean Level_RestoreTransformCB( Object *pObject, void *Context )
 
 static void Level_DestroyTransformContextCB( void *Context )
 {
-	jeRam_Free( Context );
+	JE_RAM_FREE( Context );
 }
 /*
 static jeBoolean Level_DestroyBrushCB( Brush * pBrush, void *Context )
@@ -304,7 +304,7 @@ static Object*  Level_NewCamera( Level * pLevel, jeVec3d *pWorldPt )
 	pCamera = Camera_Create( Name, pLevel->CurrentGroup, nNumber );
 
 	// [MLB-ICE]
-	jeRam_Free(Name);	// Icestorm: Don't forget to clean up your name ;=)
+	JE_RAM_FREE(Name);	// Icestorm: Don't forget to clean up your name ;=)
 	// [MLB-ICE]
 
 	if( pCamera == NULL )
@@ -1368,7 +1368,7 @@ void Level_Destroy( Level ** ppLevel )
 
 	assert( ((*ppLevel)->nSignature = 0) == 0 ) ;	// CLEAR
 
-	jeRam_Free( *ppLevel ) ;
+	JE_RAM_FREE( *ppLevel ) ;
 }// Level_Destroy
 
 // ACCESSORS
@@ -2297,7 +2297,7 @@ Object* Level_NewBrush( Level * pLevel, BRUSH_KIND BrushKind, BRUSH_TYPE eAddTyp
 	if( pTemplate == NULL )
 	{
 		// [MLB-ICE]
-		jeRam_Free(Name);	// Icestorm: Someone doesn't like names?
+		JE_RAM_FREE(Name);	// Icestorm: Someone doesn't like names?
 		// [MLB-ICE] EOB
 
 		return( NULL );
@@ -2305,7 +2305,7 @@ Object* Level_NewBrush( Level * pLevel, BRUSH_KIND BrushKind, BRUSH_TYPE eAddTyp
 	pBrush = Brush_FromTemplate( pTemplate, pLevel->CurrentGroup, Name, nNumber, &pLevel->DefaultFace.FaceInfo, eAddType ) ;
 
 	// [MLB-ICE]
-	jeRam_Free(Name);	// Icestorm: Someone doesn't like names?
+	JE_RAM_FREE(Name);	// Icestorm: Someone doesn't like names?
 	// [MLB-ICE] EOB
 
 	if( pBrush == NULL )
@@ -2366,7 +2366,7 @@ Object * Level_NewUserObject( Level * pLevel, const char * TypeName, const jeExt
 	if( pObject == NULL )
 	{
 		jeObject_Destroy( &pgeObject );
-		jeRam_Free( Name );
+		JE_RAM_FREE( Name );
 	}
 	//Royce
 	jeWorld_AddObject(pLevel->pWorld, pgeObject);

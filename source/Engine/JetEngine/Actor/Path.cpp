@@ -187,7 +187,7 @@ JETAPI jePath *JETCC jePath_Create(
 {
 	jePath *P;
 
-	P = (jePath *)jeRam_AllocateClear(sizeof(jePath));
+	P = (jePath *)JE_RAM_ALLOCATE_CLEAR(sizeof(jePath));
 
 	if ( P == NULL )
 	{
@@ -436,7 +436,7 @@ JETAPI void JETCC jePath_Destroy(jePath **PP)
 		P->Translation.KeyList = NULL;
 	}
 
-	jeRam_Free(*PP);
+	JE_RAM_FREE(*PP);
 
 	*PP = NULL;
 }
@@ -1128,7 +1128,7 @@ JETAPI jePath* JETCC jePath_CreateFromFile(jeVFile* F)
 			return NULL;
 		}
 
-	P = (jePath *)jeRam_AllocateClear(sizeof(jePath));
+	P = (jePath *)JE_RAM_ALLOCATE_CLEAR(sizeof(jePath));
 	if (P == NULL)
 		{
 			jeErrorLog_Add( JE_ERR_MEMORY_RESOURCE, "jePath_CreateFromFile.");
@@ -1156,7 +1156,7 @@ JETAPI jePath* JETCC jePath_CreateFromFile(jeVFile* F)
 			if (P->Translation.KeyList == NULL)
 				{
 					jeErrorLog_Add( JE_ERR_SUBSYSTEM_FAILURE, "jePath_CreateFromFile.");
-					jeRam_Free(P);
+					JE_RAM_FREE(P);
 					return NULL;
 				}
 			P->Translation.InterpolationType = jePath_VKToPathInterpolation(Interp);
@@ -1174,7 +1174,7 @@ JETAPI jePath* JETCC jePath_CreateFromFile(jeVFile* F)
 						{
 							jeTKArray_Destroy(&P->Translation.KeyList);
 						}
-					jeRam_Free(P);
+					JE_RAM_FREE(P);
 					return NULL;
 				}
 			P->Rotation.InterpolationType = jePath_QKToPathInterpolation((jeQKFrame_InterpolationType)Interp);

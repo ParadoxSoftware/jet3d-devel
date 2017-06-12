@@ -115,7 +115,7 @@ LZFile * File;
 	if	(OpenModeFlags & JE_VFILE_OPEN_DIRECTORY)
 		return NULL;
 
-	File = (LZFile *)jeRam_AllocateClear(sizeof(*File));
+	File = (LZFile *)JE_RAM_ALLOCATE_CLEAR(sizeof(*File));
 	if	(!File)
 		return NULL;
 
@@ -156,7 +156,7 @@ LZFile * File;
 			}
 
 			MemContext.DataLength = File->HintsSize;
-			MemContext.Data = jeRam_Allocate(MemContext.DataLength);
+			MemContext.Data = JE_RAM_ALLOCATE(MemContext.DataLength);
 			if ( ! MemContext.Data )
 			{
 				jeErrorLog_AddString(-1,"FSLZ : Allocate failed!",NULL);
@@ -179,7 +179,7 @@ LZFile * File;
 			}
 
 			MemContext.DataLength = File->Size;
-			MemContext.Data = jeRam_Allocate(MemContext.DataLength);
+			MemContext.Data = JE_RAM_ALLOCATE(MemContext.DataLength);
 			if ( ! MemContext.Data )
 			{
 				jeErrorLog_AddString(-1,"FSLZ : Allocate failed!",NULL);
@@ -300,7 +300,7 @@ LZFile * File;
 			}
 		}
 
-		if ( ! (File->CompArray = (uint8 *)jeRam_Allocate(File->CompLen) ) )
+		if ( ! (File->CompArray = (uint8 *)JE_RAM_ALLOCATE(File->CompLen) ) )
 		{
 			jeErrorLog_AddString(-1,"FSLZ_OpenNew : Allocate CompLen failed!",NULL);
 			FSLZ_Close(File);
@@ -374,7 +374,7 @@ jeBoolean Ret = JE_TRUE;
 
 		if ( File->CompArray )
 		{
-			jeRam_Free(File->CompArray);
+			JE_RAM_FREE(File->CompArray);
 			File->CompArray = NULL;
 		}
 		if ( File->Decoder )
@@ -449,11 +449,11 @@ jeBoolean Ret = JE_TRUE;
 						Header_Sizes += 12;
 						#endif
 						
-						jeRam_Free(OutBuf);
+						JE_RAM_FREE(OutBuf);
 					}
 					else
 					{
-						jeRam_Free(OutBuf);
+						JE_RAM_FREE(OutBuf);
 
 						// these hints cost 12 bytes :
 						// 4 hints header
@@ -512,7 +512,7 @@ jeBoolean Ret = JE_TRUE;
 	if ( File->HintsMemFile )
 		jeVFile_Close(File->HintsMemFile);
 
-	jeRam_Free(File);
+	JE_RAM_FREE(File);
 
 return Ret;
 }
@@ -602,7 +602,7 @@ fail:
 
 	if ( File->CompArray )
 	{
-		jeRam_Free(File->CompArray);
+		JE_RAM_FREE(File->CompArray);
 		File->CompArray = NULL;
 	}
 	if ( File->Decoder )

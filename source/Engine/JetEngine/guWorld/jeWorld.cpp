@@ -195,7 +195,7 @@ static char * Util_StrDup(
 	assert( String != NULL );
 
 	// copy string
-	NewString = (char *)jeRam_Allocate( strlen( String ) + 1 );
+	NewString = (char *)JE_RAM_ALLOCATE( strlen( String ) + 1 );
 	if ( NewString ) 
 	{
 		strcpy( NewString, String );
@@ -452,7 +452,7 @@ static jeWorld *jeWorld_CreateBase(jeResourceMgr *ResourceMgr)
 
 	assert(ResourceMgr);
 
-	World = (jeWorld *)jeRam_AllocateClear(sizeof(*World));
+	World = (jeWorld *)JE_RAM_ALLOCATE_CLEAR(sizeof(*World));
 
 	if (!World)
 		return NULL;
@@ -559,7 +559,7 @@ static jeWorld *jeWorld_CreateBase(jeResourceMgr *ResourceMgr)
 				jeChain_Destroy(&World->ActorScriptChain);
 			*/
 
-			jeRam_Free(World);
+			JE_RAM_FREE(World);
 		}
 
 		return NULL;
@@ -877,7 +877,7 @@ JETAPI void JETCC jeWorld_Destroy(jeWorld **pWorld)
 
 				// jet object pointer
 				Data = (char *)jeChain_LinkGetLinkData( Link );
-				jeRam_Free(Data);				
+				JE_RAM_FREE(Data);				
 			}
 
 			// destroy object chain
@@ -1011,7 +1011,7 @@ JETAPI void JETCC jeWorld_Destroy(jeWorld **pWorld)
 			jeObject_Destroy(&World->Model);
 		}
 
-		jeRam_Free(World);
+		JE_RAM_FREE(World);
 	}
 
 	*pWorld = NULL;
@@ -2446,7 +2446,7 @@ static void * JETCC CreatePortalObjectInstance(void)
 
 	if (!Portal)
 	{
-		jeRam_Free(WPortal);
+		JE_RAM_FREE(WPortal);
 		return NULL;
 	}
 
@@ -2480,7 +2480,7 @@ static jeBoolean JETCC DestroyPortalObjectInstance(void **WPortal)
 
 	jePortal_Destroy(&WPortal2->Portal);
 
-	jeRam_Free(WPortal2);
+	JE_RAM_FREE(WPortal2);
 	*WPortal = NULL;
 
 	return JE_TRUE;
@@ -3021,7 +3021,7 @@ JETAPI jeBoolean	JETCC jeWorld_EnableCollision(jeWorld *World, const char* Type)
 		Data = (char*)jeChain_LinkGetLinkData(Link);
 		if(_stricmp(Data,Type) == 0)
 		{
-			jeRam_Free(Data);
+			JE_RAM_FREE(Data);
 			return jeChain_RemoveLink(World->CollisionObjectTypes, Link);			
 		}
 	}
@@ -3070,7 +3070,7 @@ JETAPI jeBoolean JETCC jeWorld_DisableCollision(jeWorld *World, const char *Type
 			char		*Data;		
 		
 			Data = (char*)jeChain_LinkGetLinkData(Link);
-			jeRam_Free(Data);
+			JE_RAM_FREE(Data);
 			jeChain_RemoveLink(World->CollisionObjectTypes, Link);					
 		}
 

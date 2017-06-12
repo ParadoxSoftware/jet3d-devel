@@ -109,7 +109,7 @@ void Ortho_Destroy( Ortho ** ppOrtho )
 	}
 	assert( ((*ppOrtho)->nSignature = 0) == 0 ) ;	// CLEAR
 
-	jeRam_Free( *ppOrtho ) ;
+	JE_RAM_FREE( *ppOrtho ) ;
 }// Ortho_Destroy
 
 //
@@ -406,7 +406,7 @@ void Ortho_ResizeView( Ortho * pOrtho, long vx, long vy )
 		DeleteDC( ViewDC ) ;
 
 //		//allocate a 32 bit zbuffer
-//		v->pZBuffer	=(uint32 *)	jeRam_Allocate(sizeof(uint32) * (vx*vy));
+//		v->pZBuffer	=(uint32 *)	JE_RAM_ALLOCATE(sizeof(uint32) * (vx*vy));
 	}
 
 	pOrtho->FieldOfView		= 2.0f;	//fixed for now?
@@ -422,12 +422,12 @@ void Ortho_ResizeView( Ortho * pOrtho, long vx, long vy )
 	if(v->ViewType < VIEWTOP)
 	{
 		if(v->NewEdges)
-			jeRam_Free (v->NewEdges);
+			JE_RAM_FREE (v->NewEdges);
 		if(v->RemoveEdges)
-			jeRam_Free (v->RemoveEdges);
+			JE_RAM_FREE (v->RemoveEdges);
 
-		v->NewEdges			=(Edge *)jeRam_Allocate(vy*sizeof(Edge));
-		v->RemoveEdges		=(Edge **)jeRam_Allocate(vy*sizeof(Edge *));
+		v->NewEdges			=(Edge *)JE_RAM_ALLOCATE(vy*sizeof(Edge));
+		v->RemoveEdges		=(Edge **)JE_RAM_ALLOCATE(vy*sizeof(Edge *));
 	}
 #endif
 }// Ortho_ResizeView

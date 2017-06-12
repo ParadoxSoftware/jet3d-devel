@@ -66,7 +66,7 @@ static jeBoolean TopDownBody_AddChildren(TopDownBody* pTDNode, int ThisBone, jeB
 			}
 #endif
 
-			pNewNode = jeRam_Realloc(	pTDNode->pChildren, 
+			pNewNode = JE_RAM_REALLOC(	pTDNode->pChildren, 
 										sizeof(TopDownBody) * (pTDNode->NumChildren + 1) );
 			if(pNewNode == NULL)
 			{
@@ -102,7 +102,7 @@ static void TopDownBody_DestroyChildren(TopDownBody* pTDNode)
 			TopDownBody_DestroyChildren(&pTDNode->pChildren[i]);
 		}
 
-		jeRam_Free(pTDNode->pChildren);
+		JE_RAM_FREE(pTDNode->pChildren);
 		pTDNode->NumChildren = 0;
 	}
 }
@@ -136,7 +136,7 @@ void TopDownBody_Destroy(TopDownBody** ppTDBody)
 {
 	TopDownBody_DestroyChildren(*ppTDBody);
 
-	jeRam_Free(*ppTDBody);
+	JE_RAM_FREE(*ppTDBody);
 }
 
 const TopDownBody* TopDownBody_FindBoneIndex(const TopDownBody* pTDNode, int Index)

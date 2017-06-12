@@ -85,13 +85,13 @@ JETAPI void JETCC jeCamera_Destroy(jeCamera **pCamera)
 			jeXForm3d * pXF;
 			while( pXF = (jeXForm3d *)Stack_Pop(Camera->XFormStack) )
 			{
-				//jeRam_Free(pXF);
+				//JE_RAM_FREE(pXF);
 				JE_SAFE_DELETE(pXF);
 			}
 			Stack_Destroy(Camera->XFormStack);
 		}
 
-		//jeRam_Free(Camera);
+		//JE_RAM_FREE(Camera);
 		JE_SAFE_DELETE(Camera);
 	}
 	*pCamera = NULL;
@@ -116,7 +116,7 @@ jeXForm3d * pXF;
 		if ( ! (Camera->XFormStack = Stack_Create()) )
 			return JE_FALSE;
 
-	pXF = (jeXForm3d *)jeRam_Allocate(sizeof(jeXForm3d)*2);
+	pXF = (jeXForm3d *)JE_RAM_ALLOCATE(sizeof(jeXForm3d)*2);
 	//pXF = new jeXForm3d;
 	if ( ! pXF )
 		return JE_FALSE;
@@ -144,7 +144,7 @@ JETAPI jeBoolean JETCC jeCamera_PopXForm( jeCamera *Camera)
 
 	Camera->TransposeXForm = pXF[0];
 	Camera->XForm = pXF[1];
-	//jeRam_Free(pXF);
+	//JE_RAM_FREE(pXF);
 	JE_SAFE_DELETE(pXF);
 	
 	Camera->Pov = Camera->TransposeXForm.Translation;

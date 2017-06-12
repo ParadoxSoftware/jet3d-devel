@@ -639,7 +639,7 @@ void CJweDoc::DrawFaceCB(const jeTLVertex *Verts, int32 NumVerts, void *Context)
 	//					NumVerts, pDrawFaceInfo->pBitmap, JE_RENDER_FLAG_COLORKEY);
 	jeEngine_RenderPoly(pDrawFaceInfo->pEngine, ModVerts, 
 						NumVerts, NULL, JE_RENDER_FLAG_ALPHA);
-	jeRam_Free( ModVerts );
+	JE_RAM_FREE( ModVerts );
 }
 
 jeBoolean CJweDoc::SetModelFaceCB( Model *pModel, void * pVoid ) 
@@ -2595,7 +2595,7 @@ void CJweDoc::ObjectsToFront()
 
 	// Free Mem
 Free:
-	jeRam_Free( pSaveSelObject );
+	JE_RAM_FREE( pSaveSelObject );
 
 }
 

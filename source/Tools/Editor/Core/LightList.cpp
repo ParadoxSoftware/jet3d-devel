@@ -66,7 +66,7 @@ LightList * LightList_Create( jeWorld *pWorld )
 	if( pLightList->pList == NULL )
 	{
 		jeErrorLog_Add( JE_ERR_INTERNAL_RESOURCE, "Trace" );
-		jeRam_Free( pLightList );
+		JE_RAM_FREE( pLightList );
 		return( NULL );
 	}
 	pLightList->pWorld = pWorld;
@@ -78,7 +78,7 @@ LightList * LightList_Create( jeWorld *pWorld )
 void LightList_Destroy( LightList **ppLightList )
 {
 	List_Destroy( &(*ppLightList)->pList, LightList_DestroyLightCB ) ;
-	jeRam_Free( (*ppLightList) );
+	JE_RAM_FREE( (*ppLightList) );
 }// LightList_Destroy
 
 //

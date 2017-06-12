@@ -66,7 +66,7 @@ jeSpring* jeSpring_Create(float Ks, float Kd, jeParticle* p1, jeParticle* p2,
 	assert(Kd > JE_EPSILON && Kd <= 1.f);
 	assert(forceFunc);
 
-	pSpring = (jeSpring*)jeRam_Allocate(sizeof(jeSpring));
+	pSpring = (jeSpring*)JE_RAM_ALLOCATE(sizeof(jeSpring));
 
 	pSpring->Ks = Ks;
 	pSpring->Kd = Kd;
@@ -84,7 +84,7 @@ void jeSpring_Destroy(jeSpring** ppSpring)
 	assert(ppSpring);
 	assert(*ppSpring);
 
-	jeRam_Free(*ppSpring);
+	JE_RAM_FREE(*ppSpring);
 	*ppSpring = NULL;
 }
 

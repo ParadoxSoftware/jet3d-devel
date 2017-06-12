@@ -46,7 +46,7 @@ jeIndexPoly *jeIndexPoly_Create(jeIndexPoly_NumVertType NumVerts)
 
 	if (!Poly->Verts)
 	{
-		jeRam_Free(Poly);
+		JE_RAM_FREE(Poly);
 		return NULL;
 	}
 
@@ -82,7 +82,7 @@ jeIndexPoly *jeIndexPoly_CreateFromFile(jeVFile *VFile)
 
 	if (!Poly->Verts)
 	{
-		jeRam_Free(Poly);
+		JE_RAM_FREE(Poly);
 		return NULL;
 	}
 
@@ -123,14 +123,14 @@ void jeIndexPoly_Destroy(jeIndexPoly **Poly)
 	if (pPoly->Verts)
 	{
 		assert(pPoly->NumVerts > 0);
-		jeRam_Free(pPoly->Verts);
+		JE_RAM_FREE(pPoly->Verts);
 	}
 	else
 	{
 		assert(pPoly->NumVerts == 0);
 	}
 
-	jeRam_Free(pPoly);
+	JE_RAM_FREE(pPoly);
 
 	*Poly = NULL;
 }

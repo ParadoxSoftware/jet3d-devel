@@ -241,15 +241,15 @@ void AProject_Destroy (AProject **ppProject)
 		AProject_RemoveMotion (pProject, pProject->Motions.Count-1);
 	}
 
-	if (pProject->Output.Filename != NULL)	jeRam_Free (pProject->Output.Filename);
-	if (pProject->Paths.Materials != NULL)	jeRam_Free (pProject->Paths.Materials);
-	if (pProject->Paths.TempFiles != NULL)	jeRam_Free (pProject->Paths.TempFiles);
-	if (pProject->Body.Filename != NULL)	jeRam_Free (pProject->Body.Filename);
+	if (pProject->Output.Filename != NULL)	JE_RAM_FREE (pProject->Output.Filename);
+	if (pProject->Paths.Materials != NULL)	JE_RAM_FREE (pProject->Paths.Materials);
+	if (pProject->Paths.TempFiles != NULL)	JE_RAM_FREE (pProject->Paths.TempFiles);
+	if (pProject->Body.Filename != NULL)	JE_RAM_FREE (pProject->Body.Filename);
 
 	if (pProject->Materials.Items != NULL)	Array_Destroy (&pProject->Materials.Items);
 	if (pProject->Motions.Items != NULL)	Array_Destroy (&pProject->Motions.Items);
 
-	jeRam_Free (*ppProject);
+	JE_RAM_FREE (*ppProject);
 }
 
 typedef enum
@@ -1162,8 +1162,8 @@ int AProject_GetMaterialsCount (const AProject *pProject)
 
 static void AProject_FreeMaterialInfo (ApjMaterialEntry *pEntry)
 {
-	if (pEntry->Name != NULL) jeRam_Free (pEntry->Name);
-	if (pEntry->Filename != NULL) jeRam_Free (pEntry->Filename);
+	if (pEntry->Name != NULL) JE_RAM_FREE (pEntry->Name);
+	if (pEntry->Filename != NULL) JE_RAM_FREE (pEntry->Filename);
 }
 
 jeBoolean AProject_AddMaterial
@@ -1361,9 +1361,9 @@ int AProject_GetMotionsCount (const AProject *pProject)
 
 static void AProject_FreeMotionInfo (ApjMotionEntry *pEntry)
 {
-	if (pEntry->Name != NULL) jeRam_Free (pEntry->Name);
-	if (pEntry->Filename != NULL) jeRam_Free (pEntry->Filename);
-	if (pEntry->Bone != NULL) jeRam_Free (pEntry->Bone);
+	if (pEntry->Name != NULL) JE_RAM_FREE (pEntry->Name);
+	if (pEntry->Filename != NULL) JE_RAM_FREE (pEntry->Filename);
+	if (pEntry->Bone != NULL) JE_RAM_FREE (pEntry->Bone);
 }
 
 jeBoolean AProject_AddMotion

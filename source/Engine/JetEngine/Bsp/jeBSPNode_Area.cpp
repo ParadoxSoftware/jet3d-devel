@@ -53,7 +53,7 @@ jeBSPNode_Area *jeBSPNode_AreaCreate(void)
 
 	if (!jeBSPNode_AreaCreateRef(Area))
 	{
-		jeRam_Free(Area);
+		JE_RAM_FREE(Area);
 		return NULL;
 	}
 
@@ -79,7 +79,7 @@ jeBSPNode_Area *jeBSPNode_AreaCreate(void)
 			if (Area->ObjectChain)
 				jeChain_Destroy(&Area->ObjectChain);
 
-			jeRam_Free(Area);
+			JE_RAM_FREE(Area);
 		}
 
 		return NULL;
@@ -127,7 +127,7 @@ void jeBSPNode_AreaDestroy(jeBSPNode_Area **pArea)
 			assert(Area->NumAreaPortals > 0);
 			assert(Area->NumAreaPortals == Area->NumWorkAreaPortals);
 		
-			jeRam_Free(Area->AreaPortals);
+			JE_RAM_FREE(Area->AreaPortals);
 
 			Area->AreaPortals = NULL;
 			Area->NumAreaPortals = 0;
@@ -145,9 +145,9 @@ void jeBSPNode_AreaDestroy(jeBSPNode_Area **pArea)
 			List_Destroy(Area->VisObjectList);
 
 		if ( Area->DrawFaces )
-			jeRam_Free(Area->DrawFaces);
+			JE_RAM_FREE(Area->DrawFaces);
 #endif
-		jeRam_Free(Area);
+		JE_RAM_FREE(Area);
 	}
 
 	*pArea = NULL;
@@ -361,7 +361,7 @@ jeBoolean jeBSPNode_AreaMakeDrawFaces(jeBSPNode_Area *Area)
 		}
 	}
 
-	Area->DrawFaces = jeRam_Allocate(Area->NumDrawFaces*sizeof(void *));
+	Area->DrawFaces = JE_RAM_ALLOCATE(Area->NumDrawFaces*sizeof(void *));
 	if ( ! Area->DrawFaces )
 	{
 		Hash_Destroy(DrawFaceHash);

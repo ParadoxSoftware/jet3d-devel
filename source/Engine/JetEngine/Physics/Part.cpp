@@ -51,7 +51,7 @@ jeParticle* jeParticle_Create(float mass, jeVec3d* p, jeVec3d* v, jeParticle_Fla
 	assert(p);
 	assert(v);
 
-	part = (jeParticle*)jeRam_Allocate(sizeof(jeParticle));
+	part = (jeParticle*)JE_RAM_ALLOCATE(sizeof(jeParticle));
 	if (! part) return NULL;
 
 	part->mass = mass;
@@ -75,7 +75,7 @@ void jeParticle_Destroy(jeParticle** part)
 	assert(part);
 	assert(*part);
 
-	jeRam_Free(*part);
+	JE_RAM_FREE(*part);
 	*part = NULL;
 }
 

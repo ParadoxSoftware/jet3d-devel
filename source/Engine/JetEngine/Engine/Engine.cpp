@@ -111,7 +111,7 @@ JETAPI jeEngine * JETCC jeEngine_Create(HWND hWnd, const char *AppName, const ch
 	assert(hWnd);
 
 	// Attempt to create a new engine object
-	Engine = (jeEngine *)jeRam_AllocateClear(sizeof(jeEngine));
+	Engine = (jeEngine *)JE_RAM_ALLOCATE_CLEAR(sizeof(jeEngine));
 	//Engine = new jeEngine;
 	//memset(Engine, 0, sizeof(jeEngine));
 
@@ -141,7 +141,7 @@ JETAPI jeEngine * JETCC jeEngine_Create(HWND hWnd, const char *AppName, const ch
 	if (DriverDirectory)
 	{
 		//Length = strlen(DriverDirectory) + 1;
-		//Engine->DriverDirectory = (char *)jeRam_Allocate(Length);
+		//Engine->DriverDirectory = (char *)JE_RAM_ALLOCATE(Length);
 
 		//if (!Engine->DriverDirectory)
 		//	goto ExitWithError;
@@ -240,7 +240,7 @@ JETAPI jeEngine * JETCC jeEngine_Create(HWND hWnd, const char *AppName, const ch
 		if (Engine)
 		{
 			//if (Engine->DriverDirectory)
-			//	jeRam_Free(Engine->DriverDirectory);
+			//	JE_RAM_FREE(Engine->DriverDirectory);
 
 			// BEGIN - FIX - Engine not cleaning up everything on error - paradoxnj
 			if (Engine->ChangeDriverCBChain != NULL)
@@ -251,7 +251,7 @@ JETAPI jeEngine * JETCC jeEngine_Create(HWND hWnd, const char *AppName, const ch
 			List_Stop();
 			// END - FIX - Engine not cleaning up everything on error - paradoxnj
 
-			//jeRam_Free(Engine);
+			//JE_RAM_FREE(Engine);
 			JE_SAFE_DELETE(Engine);
 		}
 
@@ -340,7 +340,7 @@ JETAPI void JETCC jeEngine_Free(jeEngine *Engine)
 	JE_SAFE_RELEASE(Engine->ResourceMgr);
 
 	//if (Engine->DriverDirectory)
-	//	jeRam_Free(Engine->DriverDirectory);
+	//	JE_RAM_FREE(Engine->DriverDirectory);
 
 	if (Engine->ChangeDriverCBChain)
 		jeChain_Destroy(&Engine->ChangeDriverCBChain);
@@ -350,7 +350,7 @@ JETAPI void JETCC jeEngine_Free(jeEngine *Engine)
 
 	JE_SAFE_DELETE(Engine->EngineLog);
 
-	//jeRam_Free(Engine);
+	//JE_RAM_FREE(Engine);
 	JE_SAFE_DELETE(Engine);
 }
 
@@ -840,7 +840,7 @@ JETAPI jeEngine_ChangeDriverCB * JETCC jeEngine_CreateChangeDriverCB(	jeEngine		
 	{
 		if (!StartupDriverCB(Engine->DriverInfo.RDriver, Context))
 		{
-			jeRam_Free(ChangeDriverCB);
+			JE_RAM_FREE(ChangeDriverCB);
 			return NULL;
 		}
 	}
@@ -851,7 +851,7 @@ JETAPI jeEngine_ChangeDriverCB * JETCC jeEngine_CreateChangeDriverCB(	jeEngine		
 		{
 			assert(0);
 		}
-		jeRam_Free(ChangeDriverCB);
+		JE_RAM_FREE(ChangeDriverCB);
 		return NULL;
 	}
 
@@ -885,7 +885,7 @@ JETAPI void JETCC jeEngine_DestroyChangeDriverCB(jeEngine *Engine, jeEngine_Chan
 	Ret = jeChain_RemoveLinkData(Engine->ChangeDriverCBChain, *ChangeDriverCB);
 	assert(Ret == JE_TRUE);
 
-	jeRam_Free(*ChangeDriverCB);
+	JE_RAM_FREE(*ChangeDriverCB);
 	*ChangeDriverCB = NULL;
 }
 
@@ -2868,7 +2868,7 @@ JETAPI jeBoolean JETCC jeEngine_RegisterObjects(char * DllPath)
 
 
 				// save dll full name
-				FullName = (char*)jeRam_Allocate( strlen( DllPath ) + strlen( Properties.Name ) + 2 );
+				FullName = (char*)JE_RAM_ALLOCATE( strlen( DllPath ) + strlen( Properties.Name ) + 2 );
 				if ( FullName == NULL )
 				{
 					jeErrorLog_AddString( JE_ERR_MEMORY_RESOURCE, "InitObjects: Unable to allocate dll full name.", NULL );
@@ -2883,7 +2883,7 @@ JETAPI jeBoolean JETCC jeEngine_RegisterObjects(char * DllPath)
 				if ( DllHandle == NULL )
 				{
 					jeErrorLog_AddString( JE_ERR_FILEIO_READ, "InitObjects: Unable to load object dll.", Properties.Name );
-					jeRam_Free( FullName );
+					JE_RAM_FREE( FullName );
 					continue;
 				}
 
@@ -2891,10 +2891,10 @@ JETAPI jeBoolean JETCC jeEngine_RegisterObjects(char * DllPath)
 				if ( jeEngine_RegisterObject( DllHandle ) == JE_FALSE )
 				{
 					jeErrorLog_AddString( JE_ERR_INTERNAL_RESOURCE, "InitObjects: failed to find get functions for object dll.", Properties.Name  );
-					jeRam_Free( FullName );
+					JE_RAM_FREE( FullName );
 					continue;
 				}
-				jeRam_Free( FullName );
+				JE_RAM_FREE( FullName );
 
 			}
 

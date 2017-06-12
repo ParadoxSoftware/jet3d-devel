@@ -94,7 +94,7 @@ static char * Util_LoadLibraryString(
 	}
 
 	// copy resource string
-	NewString = (char*)jeRam_Allocate( Size + 1 );
+	NewString = (char*)JE_RAM_ALLOCATE( Size + 1 );
 	if ( NewString == NULL )
 	{
 		jeErrorLog_Add( JE_ERR_MEMORY_RESOURCE, NULL );
@@ -198,7 +198,7 @@ void * JETCC CreateInstance(void)
 	pModelInstance->RefCnt = 1;
 	if( pModelInstance->pModel == NULL )
 	{
-		jeRam_Free( pModelInstance );
+		JE_RAM_FREE( pModelInstance );
 		return( NULL );
 	}
 		
@@ -228,7 +228,7 @@ jeBoolean JETCC Destroy(void **pInstance)
 	if( pModelInstance->RefCnt == 0 )
 	{
 		jeModel_Destroy( &pModelInstance->pModel );
-		jeRam_Free( pModelInstance );
+		JE_RAM_FREE( pModelInstance );
 	}
 	else
 		return( JE_FALSE );
@@ -414,7 +414,7 @@ void *	JETCC CreateFromFile(jeVFile * File, jePtrMgr *PtrMgr)
 CFF_ERROR:
 	OutputDebugString("ERROR: ModelObject_CreateFromFile()\n");
 
-	jeRam_Free( pModelInstance );
+	JE_RAM_FREE( pModelInstance );
 	return( NULL );
 }
 
@@ -482,7 +482,7 @@ jeBoolean	JETCC GetPropertyList(void * Instance, jeProperty_List **List)
 		goto fail;
 	}
 	jeProperty_Append( PropertyList, &Property );
-	jeRam_Free( Name );
+	JE_RAM_FREE( Name );
 
 
 	Name = Util_LoadLibraryString( ghInstance, IDS_AREAS );
@@ -498,7 +498,7 @@ jeBoolean	JETCC GetPropertyList(void * Instance, jeProperty_List **List)
 	}
 	jeProperty_SetDisabled( &Property, JE_TRUE );
 	jeProperty_Append( PropertyList, &Property );
-	jeRam_Free( Name );
+	JE_RAM_FREE( Name );
 
 	Name = Util_LoadLibraryString( ghInstance, IDS_VIS_PORTALS );
 	if( Name == NULL )
@@ -513,7 +513,7 @@ jeBoolean	JETCC GetPropertyList(void * Instance, jeProperty_List **List)
 	}
 	jeProperty_SetDisabled( &Property, JE_TRUE );
 	jeProperty_Append( PropertyList, &Property );
-	jeRam_Free( Name );
+	JE_RAM_FREE( Name );
 
 	Name = Util_LoadLibraryString( ghInstance, IDS_PORTALS );
 	if( Name == NULL )
@@ -528,7 +528,7 @@ jeBoolean	JETCC GetPropertyList(void * Instance, jeProperty_List **List)
 	}
 	jeProperty_SetDisabled( &Property, JE_TRUE );
 	jeProperty_Append( PropertyList, &Property );
-	jeRam_Free( Name );
+	JE_RAM_FREE( Name );
 
 	Name = Util_LoadLibraryString( ghInstance, IDS_SUB_FACES );
 	if( Name == NULL )
@@ -543,7 +543,7 @@ jeBoolean	JETCC GetPropertyList(void * Instance, jeProperty_List **List)
 	}
 	jeProperty_SetDisabled( &Property, JE_TRUE );
 	jeProperty_Append( PropertyList, &Property );
-	jeRam_Free( Name );
+	JE_RAM_FREE( Name );
 
 	Name = Util_LoadLibraryString( ghInstance, IDS_DRAW_FACES );
 	if( Name == NULL )
@@ -558,7 +558,7 @@ jeBoolean	JETCC GetPropertyList(void * Instance, jeProperty_List **List)
 	}
 	jeProperty_SetDisabled( &Property, JE_TRUE );
 	jeProperty_Append( PropertyList, &Property );
-	jeRam_Free( Name );
+	JE_RAM_FREE( Name );
 
 	Name = Util_LoadLibraryString( ghInstance, IDS_SPLITS );
 	if( Name == NULL )
@@ -573,7 +573,7 @@ jeBoolean	JETCC GetPropertyList(void * Instance, jeProperty_List **List)
 	}
 	jeProperty_SetDisabled( &Property, JE_TRUE );
 	jeProperty_Append( PropertyList, &Property );
-	jeRam_Free( Name );
+	JE_RAM_FREE( Name );
 
 	Name = Util_LoadLibraryString( ghInstance, IDS_LEAFS );
 	if( Name == NULL )
@@ -588,7 +588,7 @@ jeBoolean	JETCC GetPropertyList(void * Instance, jeProperty_List **List)
 	}
 	jeProperty_SetDisabled( &Property, JE_TRUE );
 	jeProperty_Append( PropertyList, &Property );
-	jeRam_Free( Name );
+	JE_RAM_FREE( Name );
 
 	Name = Util_LoadLibraryString( ghInstance, IDS_NODES );
 	if( Name == NULL )
@@ -603,7 +603,7 @@ jeBoolean	JETCC GetPropertyList(void * Instance, jeProperty_List **List)
 	}
 	jeProperty_SetDisabled( &Property, JE_TRUE );
 	jeProperty_Append( PropertyList, &Property );
-	jeRam_Free( Name );
+	JE_RAM_FREE( Name );
 
 	Name = Util_LoadLibraryString( ghInstance, IDS_BRUSH_FACES );
 	if( Name == NULL )
@@ -618,7 +618,7 @@ jeBoolean	JETCC GetPropertyList(void * Instance, jeProperty_List **List)
 	}
 	jeProperty_SetDisabled( &Property, JE_TRUE );
 	jeProperty_Append( PropertyList, &Property );
-	jeRam_Free( Name );
+	JE_RAM_FREE( Name );
 
 	Name = Util_LoadLibraryString( ghInstance, IDS_BRUSHES );
 	if( Name == NULL )
@@ -633,7 +633,7 @@ jeBoolean	JETCC GetPropertyList(void * Instance, jeProperty_List **List)
 	}
 	jeProperty_SetDisabled( &Property, JE_TRUE );
 	jeProperty_Append( PropertyList, &Property );
-	jeRam_Free( Name );
+	JE_RAM_FREE( Name );
 
 	Name = Util_LoadLibraryString( ghInstance, IDS_VISABLE_FACES );
 	if( Name == NULL )
@@ -648,7 +648,7 @@ jeBoolean	JETCC GetPropertyList(void * Instance, jeProperty_List **List)
 	}
 	jeProperty_SetDisabled( &Property, JE_TRUE );
 	jeProperty_Append( PropertyList, &Property );
-	jeRam_Free( Name );
+	JE_RAM_FREE( Name );
 
 	if( !jeProperty_FillGroupEnd( &Property, MODEL_STATS_END_ID  ) )
 	{
@@ -661,7 +661,7 @@ jeBoolean	JETCC GetPropertyList(void * Instance, jeProperty_List **List)
 	return( JE_TRUE );
 fail:
 	if( Name != NULL )
-		jeRam_Free( Name );
+		JE_RAM_FREE( Name );
 	jeProperty_ListDestroy( &PropertyList );
 	*List = NULL;
 	return( JE_FALSE );

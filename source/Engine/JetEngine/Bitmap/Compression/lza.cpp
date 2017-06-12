@@ -55,6 +55,7 @@ possible todos:
 #include "crc32.h"
 
 // consts :
+#define new(type)		JE_RAM_ALLOCATE_CLEAR(sizeof(type))
 
 #if 1  //{ // matchlen of 4
 
@@ -212,13 +213,13 @@ uint32 len0,len1;
 	{
 		*compArrayPtr = comp0;
 		*compLenPtr = len0;
-		jeRam_Free(comp1);
+		JE_RAM_FREE(comp1);
 	}
 	else
 	{
 		*compArrayPtr = comp1;
 		*compLenPtr = len1;
-		jeRam_Free(comp0);
+		JE_RAM_FREE(comp0);
 	}
 }
 
@@ -241,7 +242,7 @@ uint8 *compArray;
 
 	assert( (((uint32)rawArray)&3) == 0 );
 
-	if ( (compArray = (uint8*)jeRam_Allocate(rawLen + 16384)) == NULL )
+	if ( (compArray = (uint8*)JE_RAM_ALLOCATE(rawLen + 16384)) == NULL )
 		CleanUp("AllocMem failed!");
 
 	*compArrayPtr = compArray;
@@ -253,10 +254,10 @@ uint8 *compArray;
 		return;
 	}
 
-	if ( (lookupTable = (struct lookupNode **)jeRam_AllocateClear(sizeof(void *)*HASHSIZE)) == NULL )
+	if ( (lookupTable = (struct lookupNode **)JE_RAM_ALLOCATE_CLEAR(sizeof(void *)*HASHSIZE)) == NULL )
 		CleanUp("AllocMem failed!");
 
-	if ( (lookupHunk = (struct lookupNode *)jeRam_Allocate(sizeof(struct lookupNode)*JE_MIN(lookupHunkSize,rawLen+10))) == NULL )
+	if ( (lookupHunk = (struct lookupNode *)JE_RAM_ALLOCATE(sizeof(struct lookupNode)*JE_MIN(lookupHunkSize,rawLen+10))) == NULL )
 		CleanUp("AllocMem failed!");
 
 	if ( (ari = arithInit()) == NULL )
@@ -278,8 +279,8 @@ uint8 *compArray;
 
 	lzaFree();
 
-	jeRam_Free(lookupTable);
-	jeRam_Free(lookupHunk);
+	JE_RAM_FREE(lookupTable);
+	JE_RAM_FREE(lookupHunk);
 	
 #ifdef DO_CRC
 	*compLenPtr += 4;
@@ -546,7 +547,7 @@ void lzaDecoder_Destroy(lzaDecoder ** pStream)
 		if ( Stream->Stats_Lens ) ozeroFree(Stream->Stats_Lens);
 		if ( Stream->Stats_OffsetBlock ) ozeroFree(Stream->Stats_OffsetBlock);
 
-		jeRam_Free(Stream); Stream = nullptr;
+		JE_RAM_FREE(Stream); //Stream = nullptr;
 		*pStream = NULL;
 	}
 }

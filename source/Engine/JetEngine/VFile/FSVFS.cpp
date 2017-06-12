@@ -112,7 +112,7 @@ static	void *	JETCC FSVFS_FinderCreate(
 	if	(!File->Directory)
 		return NULL;
 
-	Finder = (VFSFinder *)jeRam_Allocate(sizeof(*Finder));
+	Finder = (VFSFinder *)JE_RAM_ALLOCATE(sizeof(*Finder));
 	if	(!Finder)
 		return NULL;
 
@@ -123,7 +123,7 @@ static	void *	JETCC FSVFS_FinderCreate(
 	Finder->Finder	  = DirTree_CreateFinder(File->Directory, FileSpec);
 	if	(!Finder->Finder)
 	{
-		jeRam_Free(Finder);
+		JE_RAM_FREE(Finder);
 		return NULL;
 	}
 
@@ -178,7 +178,7 @@ static	void JETCC FSVFS_FinderDestroy(void *Handle)
 
 	Finder->Signature = 0;
 	DirTree_DestroyFinder(Finder->Finder);
-	jeRam_Free(Finder);
+	JE_RAM_FREE(Finder);
 }
 
 #pragma warning (disable:4100)
@@ -245,7 +245,7 @@ static	void *	JETCC FSVFS_Open(
 			return NULL;
 	}
 
-	NewFile = (VFSFile *)jeRam_Allocate(sizeof(*NewFile));
+	NewFile = (VFSFile *)JE_RAM_ALLOCATE(sizeof(*NewFile));
 	if	(!NewFile)
 		return NewFile;
 
@@ -283,14 +283,14 @@ static	void *	JETCC FSVFS_Open(
 				if	(DirTree_GetFullName(FileEntry, Buff, sizeof(Buff)) == JE_FALSE)
 				{
 					jeErrorLog_AddString(-1,"DirTree GetFullName failed !",NULL);	
-					jeRam_Free(NewFile);
+					JE_RAM_FREE(NewFile);
 					return NULL;
 				}
 				DispersedDir = jeVFile_GetContext(NewFile->RWOps);
 				if ( ! DispersedDir )
 				{
 					jeErrorLog_AddString(-1,"No Context on Dispersed VFS !",NULL);	
-					jeRam_Free(NewFile);
+					JE_RAM_FREE(NewFile);
 					return NULL;
 				}
 				NewFile->DispersedFile = jeVFile_Open(DispersedDir,
@@ -299,7 +299,7 @@ static	void *	JETCC FSVFS_Open(
 				if	(!NewFile->DispersedFile)
 				{
 					jeErrorLog_AddString(-1,"File note found in sispersed VFS !",Buff);	
-					jeRam_Free(NewFile);
+					JE_RAM_FREE(NewFile);
 					return NULL;	// <> CB 2/10
 				}
 			}
@@ -378,7 +378,7 @@ jeVFile *		HintsFile;
 		return NULL;
 	}
 
-	NewFS = (VFSFile *)jeRam_AllocateClear(sizeof(*NewFS));
+	NewFS = (VFSFile *)JE_RAM_ALLOCATE_CLEAR(sizeof(*NewFS));
 	if	(!NewFS)
 		return NewFS;
 
@@ -411,7 +411,7 @@ jeVFile *		HintsFile;
 		NewFS->Directory = DirTree_CreateFromFile(HintsFile);
 		if	(!NewFS->Directory)
 		{
-			jeRam_Free(NewFS);
+			JE_RAM_FREE(NewFS);
 			jeVFile_Seek(RWOps, RWOpsStartPos, JE_VFILE_SEEKSET);
 			jeErrorLog_AddString(-1,"FSVFS : DirTree_Create failed!",NULL);
 			return NULL;
@@ -495,7 +495,7 @@ static	jeBoolean	JETCC FSVFS_Close(void *Handle)
 					if ( HintsPos != File->RWOpsHintsStartPos )
 					{
 						jeErrorLog_AddString(-1,"FSVFS_Close : Hints position changed between Open & Close!",NULL);
-						jeRam_Free(File);
+						JE_RAM_FREE(File);
 						return JE_FALSE;
 					}
 
@@ -549,7 +549,7 @@ static	jeBoolean	JETCC FSVFS_Close(void *Handle)
 	if	(File->DispersedFile)
 		jeVFile_Close(File->DispersedFile);
 
-	jeRam_Free(File);
+	JE_RAM_FREE(File);
 
 	return Result;
 }

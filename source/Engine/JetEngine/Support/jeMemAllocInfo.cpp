@@ -333,7 +333,7 @@ void JETCC jeMemAllocInfo_Free(void *Pointer, const char *FName, int LNr)
 		#ifdef JE_MEMALLOC_USE_NO_JE_RAM
 			free(FreeInfo);
 		#else
-			jeRam_Free(FreeInfo);
+			JE_RAM_FREE(FreeInfo);
 		#endif
 	}
 }
@@ -507,7 +507,7 @@ static void JETCC jeMemAllocInfo_KillDataChain(jeMemAllocInfoDataChain **DataCha
 		#ifdef JE_MEMALLOC_USE_NO_JE_RAM
 			free(*DataChain);
 		#else
-			jeRam_Free(*DataChain);
+			JE_RAM_FREE(*DataChain);
 		#endif
 
 		*DataChain=NextChain;
@@ -527,7 +527,7 @@ static void JETCC jeMemAllocInfo_KillInfoChain(jeMemAllocInfoChain **InfoChain)
 		#ifdef JE_MEMALLOC_USE_NO_JE_RAM
 			free(*InfoChain);
 		#else
-			jeRam_Free(*InfoChain);
+			JE_RAM_FREE(*InfoChain);
 		#endif
 
 		*InfoChain=NextChain;
@@ -539,7 +539,7 @@ static void JETCC jeMemAllocInfo_KillPtrArray(jeMemAllocInfoPtr **PtrChain)
 	#ifdef JE_MEMALLOC_USE_NO_JE_RAM
 		free(*PtrChain);(*PtrChain)=NULL;
 	#else
-		jeRam_Free(*PtrChain);
+		JE_RAM_FREE(*PtrChain);
 	#endif
 }
 
@@ -552,7 +552,7 @@ static void JETCC jeMemAllocInfo_KillBPCallChain(jeMemAllocInfoBPCallChain **Cal
 		#ifdef JE_MEMALLOC_USE_NO_JE_RAM
 			free(*CallChain);
 		#else
-			jeRam_Free(*CallChain);
+			JE_RAM_FREE(*CallChain);
 		#endif
 		*CallChain=NextCall;
 	}
@@ -568,8 +568,8 @@ static void JETCC jeMemAllocInfo_KillFileChain(jeMemAllocInfoFileChain **FChain)
 			free((*FChain)->FileName);
 			free(*FChain);
 		#else
-			jeRam_Free((*FChain)->FileName);
-			jeRam_Free(*FChain);
+			JE_RAM_FREE((*FChain)->FileName);
+			JE_RAM_FREE(*FChain);
 		#endif
 		*FChain=NextChain;
 	}
@@ -585,8 +585,8 @@ static void JETCC jeMemAllocInfo_KillBreakPoints(jeMemAllocInfoBreakPoint **BCha
 			free((*BChain)->AllocFileName);
 			free(*BChain);
 		#else
-			jeRam_Free((*BChain)->AllocFileName);
-			jeRam_Free(*BChain);
+			JE_RAM_FREE((*BChain)->AllocFileName);
+			JE_RAM_FREE(*BChain);
 		#endif
 		*BChain=NextChain;
 	}
@@ -701,7 +701,7 @@ static void JETCC jeMemAllocInfo_UpdateBreakPoints(jeMemAllocInfoChain *InfoChai
 					BPChain=(jeMemAllocInfoBPCallChain*)malloc(sizeof(jeMemAllocInfoBPCallChain));
 				#else
 					jeRam_jMAI_Lock();
-					BPChain=jeRam_Allocate(sizeof(jeMemAllocInfoBPCallChain));
+					BPChain=JE_RAM_ALLOCATE(sizeof(jeMemAllocInfoBPCallChain));
 					jeRam_jMAI_UnLock();
 				#endif
 				BPChain->CallNr=BreakPoint->CallNr;
@@ -727,8 +727,8 @@ static void JETCC jeMemAllocInfo_UpdateBreakPoints(jeMemAllocInfoChain *InfoChai
 					free(BreakPoint->AllocFileName);
 					free(BreakPoint);
 				#else
-					jeRam_Free(BreakPoint->AllocFileName);
-					jeRam_Free(BreakPoint);
+					JE_RAM_FREE(BreakPoint->AllocFileName);
+					JE_RAM_FREE(BreakPoint);
 				#endif
 
 			}

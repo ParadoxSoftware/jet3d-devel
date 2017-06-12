@@ -94,12 +94,12 @@ void DestroyBoneKeyArray(BoneKeyInfo** ppInfo, int nNumBones)
 		if(pInfo[i].pEvents != NULL)
 			jeStrBlock_Destroy(&pInfo[i].pEvents);
 		if(pInfo[i].pMatrixKeys != NULL)
-			jeRam_Free(pInfo[i].pMatrixKeys);
+			JE_RAM_FREE(pInfo[i].pMatrixKeys);
 		if(pInfo[i].pWSKeys != NULL)
-			jeRam_Free(pInfo[i].pWSKeys);
+			JE_RAM_FREE(pInfo[i].pWSKeys);
 	}
 
-	jeRam_Free(*ppInfo);
+	JE_RAM_FREE(*ppInfo);
 }
 
 BoneKeyInfo* CreateBoneKeyArray(int nNumBones, int nNumKeys)
@@ -922,7 +922,7 @@ MkMotion_Options* MkMotion_OptionsCreate()
 		pOptions->pMotionRoots = jeStrBlock_Create();
 		if(pOptions->pMotionRoots == NULL)
 		{
-			jeRam_Free(pOptions);
+			JE_RAM_FREE(pOptions);
 		}
 	}
 
@@ -941,9 +941,9 @@ void MkMotion_OptionsDestroy(MkMotion_Options** ppOptions)
 	jeStrBlock_Destroy(&p->pMotionRoots);
 
 	if(p->pMotionName != NULL)
-		jeRam_Free(p->pMotionName);
+		JE_RAM_FREE(p->pMotionName);
 
-	jeRam_Free(*ppOptions);
+	JE_RAM_FREE(*ppOptions);
 
 	*ppOptions = NULL;
 }
@@ -1107,7 +1107,7 @@ RootEulerAngleError:
 		case 'N':
 			if(strlen(string + 2) > 0)
 			{
-				options->pMotionName = (char*)jeRam_Allocate(strlen(string + 2) + 1);
+				options->pMotionName = (char*)JE_RAM_ALLOCATE(strlen(string + 2) + 1);
 				if(options->pMotionName == NULL)
 				{
 					Printf("ERROR: Could not allocate motion name\n");

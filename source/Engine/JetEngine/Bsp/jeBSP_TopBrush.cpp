@@ -54,7 +54,7 @@ jeBSP_TopBrush *jeBSP_TopBrushCreate(int32 NumSides, uint32 Order)
 	c = (sizeof(jeBSP_TopBrush)-sizeof(jeBSP_TopSide[JE_BSP_BRUSH_DEFAULT_SIDES]))+(sizeof(jeBSP_TopSide)*NumSides);
 
 	// Allocate the brush
-	Brush = (jeBSP_TopBrush*)jeRam_Allocate(c);
+	Brush = (jeBSP_TopBrush*)JE_RAM_ALLOCATE(c);
 
 	if (!Brush)
 		return NULL;
@@ -101,7 +101,7 @@ void jeBSP_TopBrushDestroy(jeBSP_TopBrush **Brush, jeBSP *BSP)
 			jeTexVec_ArrayRemoveTexVec(BSP->TexVecArray, &Side->TexVecIndex);
 	}
 
-	jeRam_Free(*Brush);
+	JE_RAM_FREE(*Brush);
 
 	*Brush = NULL;
 }

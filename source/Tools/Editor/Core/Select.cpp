@@ -1284,25 +1284,25 @@ static jeBoolean Select_FillPositionDescriptor( Level * pLevel, jeProperty *pDes
 	if( Name == NULL )
 		return(JE_FALSE );
 	jeProperty_FillVec3dGroup( &pDescriptor[0], Name, &Center,	OBJECT_POSITION_FIELD  );
-	jeRam_Free( Name );
+	JE_RAM_FREE( Name );
 
 	Name = Util_LoadLocalRcString( IDS_POSITIONX_FIELD );
 	if( Name == NULL )
 		return(JE_FALSE );
 	jeProperty_FillFloat( &pDescriptor[1], Name, Center.X,	OBJECT_POSITION_FIELDX, -FLT_MAX, FLT_MAX, 1.0f );
-	jeRam_Free( Name );
+	JE_RAM_FREE( Name );
 
 	Name = Util_LoadLocalRcString( IDS_POSITIONY_FIELD );
 	if( Name == NULL )
 		return(JE_FALSE );
 	jeProperty_FillFloat( &pDescriptor[2], Name, Center.Y,	OBJECT_POSITION_FIELDY, -FLT_MAX, FLT_MAX, 1.0f );
-	jeRam_Free( Name );
+	JE_RAM_FREE( Name );
 
 	Name = Util_LoadLocalRcString( IDS_POSITIONZ_FIELD );
 	if( Name == NULL )
 		return(JE_FALSE );
 	jeProperty_FillFloat( &pDescriptor[3], Name, Center.Z,	OBJECT_POSITION_FIELDZ, -FLT_MAX, FLT_MAX, 1.0f );
-	jeRam_Free( Name );
+	JE_RAM_FREE( Name );
 
 	jeProperty_FillGroupEnd( &pDescriptor[4], OBJECT_POSITION_FIELD_END );
 	return( JE_TRUE );

@@ -406,7 +406,7 @@ QuadPoint *	Points = NULL;
 
 	assert(T);
 
-	QT = (QuadTree *)jeRam_AllocateClear(sizeof(QuadTree));
+	QT = (QuadTree *)JE_RAM_ALLOCATE_CLEAR(sizeof(QuadTree));
 	if ( ! QT )
 		return NULL;
 
@@ -471,14 +471,14 @@ QuadPoint *	Points = NULL;
 		return NULL;
 	}
 
-	Quads = (Quad *)jeRam_AllocateClear( NumQuads * sizeof(Quad) );
+	Quads = (Quad *)JE_RAM_ALLOCATE_CLEAR( NumQuads * sizeof(Quad) );
 	if ( ! Quads )
 	{
 		QuadTree_Destroy(&QT);
 		return NULL;
 	}
 
-	Points = (QuadPoint *)jeRam_AllocateClear( NumPoints * sizeof(QuadPoint) );
+	Points = (QuadPoint *)JE_RAM_ALLOCATE_CLEAR( NumPoints * sizeof(QuadPoint) );
 	if ( ! Points )
 	{
 		QuadTree_Destroy(&QT);
@@ -741,8 +741,8 @@ QuadPoint *	Points = NULL;
 
 	Quad_FixBBoxes(QT->Root);
 
-	jeRam_Free(Points);
-	jeRam_Free(Quads);
+	JE_RAM_FREE(Points);
+	JE_RAM_FREE(Quads);
 
 return QT;
 }
@@ -1023,7 +1023,7 @@ QuadTree * QT;
 	if ( QT->QuadPool )
 		MemPool_Destroy(&(QT->QuadPool));
 
-	jeRam_Free(QT);
+	JE_RAM_FREE(QT);
 }
 
 /*}{********* Tesselate & Render ************/

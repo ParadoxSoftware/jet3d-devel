@@ -3660,7 +3660,7 @@ void JETCC TimeEdit_FreeTimeLine(TimeEdit *TE, int TimeLineNdx)
 		{
 		if (TE->TimeLineList[TimeLineNdx].Channel[CHANNEL_EVENT].KeyData[k].String)
 			{
-			jeRam_Free(TE->TimeLineList[TimeLineNdx].Channel[CHANNEL_EVENT].KeyData[k].String);
+			JE_RAM_FREE(TE->TimeLineList[TimeLineNdx].Channel[CHANNEL_EVENT].KeyData[k].String);
 			}
 		}
 }
@@ -3688,7 +3688,7 @@ void TimeEdit_Destroy(TimeEdit *TE)
 			{
 			TimeEdit_FreeTimeLine(TE, i);
 			}
-		jeRam_Free(TE);
+		JE_RAM_FREE(TE);
 		}
 }
 
@@ -3741,7 +3741,7 @@ TimeEdit *TimeEdit_CreateTimeEditData(HWND hWnd)
 Error:
 
 	if (TE)
-		jeRam_Free(TE);
+		JE_RAM_FREE(TE);
 
 	return (NULL);
 }
@@ -3815,7 +3815,7 @@ HWND TimeEdit_CreateWindow(HWND hwndParent, int32 Width, int32 Height)
 
 	if (TE)
 		{
-		jeRam_Free(TE);
+		JE_RAM_FREE(TE);
 		}
 	return NULL;
 }
@@ -4025,7 +4025,7 @@ void CTimeLine::SetEventProperties()
 			// if greater than 256 then fall back to deallocate and _strdup'ing
 			if (cp->KeyData[cp->KeysSelected[0]].String)
 				{
-				jeRam_Free(cp->KeyData[cp->KeysSelected[0]].String);
+				JE_RAM_FREE(cp->KeyData[cp->KeysSelected[0]].String);
 				}
 
 			cp->KeyData[cp->KeysSelected[0]].String = Util_StrDup(text);
@@ -4035,7 +4035,7 @@ void CTimeLine::SetEventProperties()
 			// if less than 256 then allocate a fixed buffer for this
 			if (!cp->KeyData[cp->KeysSelected[0]].String)
 				{
-				cp->KeyData[cp->KeysSelected[0]].String = (char*)jeRam_Allocate(256);
+				cp->KeyData[cp->KeysSelected[0]].String = (char*)JE_RAM_ALLOCATE(256);
 				}
 
 			// just do a copy - we're garanteed to have room

@@ -22,11 +22,11 @@ static void ActorObj_DestroyMotionList(
 	for ( i = 0; i < Object->MotionListSize; i++ )
 	{
 		assert( Object->MotionList[i] != NULL );
-		jeRam_Free( Object->MotionList[i] );
+		JE_RAM_FREE( Object->MotionList[i] );
 	}
 
 	// free list
-	jeRam_Free( Object->MotionList );
+	JE_RAM_FREE( Object->MotionList );
 
 	// reset related data fields
 	Object->MotionList = NULL;
@@ -35,7 +35,7 @@ static void ActorObj_DestroyMotionList(
 	Object->MotionTime = 0.0f;
 	if ( Object->MotionName != NULL )
 	{
-		jeRam_Free( Object->MotionName );
+		JE_RAM_FREE( Object->MotionName );
 		Object->MotionName = NULL;
 	}
 
@@ -70,11 +70,11 @@ static void ActorObj_DestroyBoneList(
 	}
 
 	// free list
-	jeRam_Free( Object->BoneList );
+	JE_RAM_FREE( Object->BoneList );
 
 	// free current bone name
 	assert( Object->LightReferenceBoneName != NULL );
-	jeRam_Free( Object->LightReferenceBoneName );
+	JE_RAM_FREE( Object->LightReferenceBoneName );
 	Object->LightReferenceBoneName = NULL;
 
 	// reset related data fields
@@ -146,22 +146,22 @@ static void ActorObj_DestroyMaterialList(
 	// free lists
 	if ( Object->MaterialList != NULL )
 	{
-		jeRam_Free( Object->MaterialList );
+		JE_RAM_FREE( Object->MaterialList );
 		Object->MaterialList = NULL;
 	}
 	if ( Object->MaterialOverideList != NULL )
 	{
-		jeRam_Free( Object->MaterialOverideList );
+		JE_RAM_FREE( Object->MaterialOverideList );
 		Object->MaterialOverideList = NULL;
 	}
 	if ( Object->MaterialOverideBitmap != NULL )
 	{
-		jeRam_Free( Object->MaterialOverideBitmap );
+		JE_RAM_FREE( Object->MaterialOverideBitmap );
 		Object->MaterialOverideBitmap = NULL;
 	}
 	if ( Object->MaterialMapperList != NULL )
 	{
-		jeRam_Free( Object->MaterialMapperList );
+		JE_RAM_FREE( Object->MaterialMapperList );
 		Object->MaterialMapperList = NULL;
 	}
 
@@ -199,7 +199,7 @@ static jeBoolean ActorObj_CreateMotionList(
 	}
 
 	// allocate motion list
-	Object->MotionList = (char **)jeRam_Allocate( sizeof( char * ) * Object->MotionListSize );
+	Object->MotionList = (char **)JE_RAM_ALLOCATE( sizeof( char * ) * Object->MotionListSize );
 	if ( Object->MotionList == NULL )
 	{
 		jeErrorLog_Add( JE_ERR_MEMORY_RESOURCE, NULL );
@@ -273,7 +273,7 @@ static jeBoolean ActorObj_CreateBoneList(
 
 	// allocate bone list
 	assert( Object->BoneList == NULL );
-	Object->BoneList = (char **)jeRam_Allocate( sizeof( char * ) * Object->BoneListSize );
+	Object->BoneList = (char **)JE_RAM_ALLOCATE( sizeof( char * ) * Object->BoneListSize );
 	if ( Object->BoneList == NULL )
 	{
 		jeErrorLog_Add( JE_ERR_MEMORY_RESOURCE, NULL );
@@ -340,10 +340,10 @@ static jeBoolean ActorObj_CreateMaterialList(
 	}
 
 	// allocate lists
-	Object->MaterialList = (char **)jeRam_AllocateClear( sizeof( char * ) * Object->MaterialListSize );
-	Object->MaterialOverideList = (char **)jeRam_AllocateClear( sizeof( char * ) * Object->MaterialListSize );
-	Object->MaterialMapperList = (char **)jeRam_AllocateClear( sizeof( char * ) * Object->MaterialListSize );
-	Object->MaterialOverideBitmap = (jeMaterialSpec **)jeRam_AllocateClear( sizeof ( jeMaterialSpec * ) * Object->MaterialListSize );
+	Object->MaterialList = (char **)JE_RAM_ALLOCATE_CLEAR( sizeof( char * ) * Object->MaterialListSize );
+	Object->MaterialOverideList = (char **)JE_RAM_ALLOCATE_CLEAR( sizeof( char * ) * Object->MaterialListSize );
+	Object->MaterialMapperList = (char **)JE_RAM_ALLOCATE_CLEAR( sizeof( char * ) * Object->MaterialListSize );
+	Object->MaterialOverideBitmap = (jeMaterialSpec **)JE_RAM_ALLOCATE_CLEAR( sizeof ( jeMaterialSpec * ) * Object->MaterialListSize );
 	if (	( Object->MaterialList == NULL ) ||
 			( Object->MaterialOverideList == NULL ) ||
 			( Object->MaterialOverideBitmap == NULL ) ||
@@ -454,7 +454,7 @@ static void ActorObj_ResetMotionList(
 	// set default choice
 	if ( Object->MotionName != NULL )
 	{
-		jeRam_Free( Object->MotionName );
+		JE_RAM_FREE( Object->MotionName );
 	}
 	Object->MotionName = Util_StrDup( Object->MotionList[0] );
 
@@ -497,7 +497,7 @@ static void ActorObj_ResetBoneList(
 	// set default choice
 	if ( Object->LightReferenceBoneName != NULL )
 	{
-		jeRam_Free( Object->LightReferenceBoneName );
+		JE_RAM_FREE( Object->LightReferenceBoneName );
 	}
 	Object->LightReferenceBoneName = Util_StrDup( Object->BoneList[0] );
 

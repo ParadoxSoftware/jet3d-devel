@@ -193,7 +193,7 @@ JETAPI	jeSound_System * JETCC jeSound_CreateSoundSystem(HWND hWnd)
 	SoundSystem->SoundM = CreateSoundManager(hWnd);
 	if (!SoundSystem->SoundM)
 	{
-		jeRam_Free(SoundSystem);
+		JE_RAM_FREE(SoundSystem);
 		jeErrorLog_Add(JE_ERR_SUBSYSTEM_FAILURE, "jeSound_CreateSoundSystem:  Failed to create sound system.");
 		return NULL;
 	}
@@ -203,7 +203,7 @@ JETAPI	jeSound_System * JETCC jeSound_CreateSoundSystem(HWND hWnd)
 
 	if (!SoundSystem->Mp3M)
 	{
-		jeRam_Free(SoundSystem);
+		JE_RAM_FREE(SoundSystem);
 		jeErrorLog_Add(JE_ERR_SUBSYSTEM_FAILURE, "jeSound_CreateSoundSystem:  Failed to create mp3 manager.");
 		return NULL;
 	}
@@ -246,7 +246,7 @@ JETAPI	void JETCC jeSound_DestroySoundSystem(jeSound_System *Sound)
 
 	Sound->SoundM = NULL;
 
-	jeRam_Free(Sound);
+	JE_RAM_FREE(Sound);
 }
 
 //=====================================================================================
@@ -626,7 +626,7 @@ static	SoundManager *	CreateSoundManager(HWND hWnd )
 
 	// END - Upgrade to DirectSound 8 - paradoxnj 4/15/2005
 
-	sm = (SoundManager*)jeRam_Allocate(sizeof(*sm));
+	sm = (SoundManager*)JE_RAM_ALLOCATE(sizeof(*sm));
 	if	(!sm)
 	{
 		jeErrorLog_Add(JE_ERR_MEMORY_RESOURCE,"CreateSoundManager.");
@@ -696,7 +696,7 @@ static	SoundManager *	CreateSoundManager(HWND hWnd )
 
 	jeErrorLog_Add(JE_ERR_WINDOWS_API_FAILURE,"CreateSoundManager: IDirectSound_SetCooperativeLevel failed.");
 	
-	jeRam_Free(sm);
+	JE_RAM_FREE(sm);
 	return NULL;
 }
 
@@ -705,7 +705,7 @@ static	BOOL CreateChannel(DSBUFFERDESC *dsBD, Channel** chanelPtr)
 	Channel* channel;
 	LPDIRECTSOUNDBUFFER				lpBuff;
 
-	channel = (Channel*)jeRam_Allocate( sizeof( Channel ) );
+	channel = (Channel*)JE_RAM_ALLOCATE( sizeof( Channel ) );
 	if	( channel == NULL )
 	{
 		jeErrorLog_Add(JE_ERR_MEMORY_RESOURCE, "CreateChannel.");
@@ -775,7 +775,7 @@ static	BOOL GetSoundData( jeVFile *File, unsigned char** dataPtr)
 			return FALSE;
 		}
 
-	data = (uint8*)jeRam_Allocate(Size);
+	data = (uint8*)JE_RAM_ALLOCATE(Size);
 
 	if (!data) 
 	{
@@ -786,7 +786,7 @@ static	BOOL GetSoundData( jeVFile *File, unsigned char** dataPtr)
 	if	(jeVFile_Read(File, data, Size) == JE_FALSE)
 	{
 		jeErrorLog_Add(JE_ERR_FILEIO_READ,"GetSoundData: failed to read sound data.");
-		jeRam_Free(data);
+		JE_RAM_FREE(data);
 		return FALSE;
 	}
 
@@ -838,7 +838,7 @@ static	BOOL jeSound_FillSoundChannel(SoundManager *sm, jeVFile *File, unsigned i
 	if( !ParseData( data, &dsBD, &pbWaveData ) )
 	{
 		jeErrorLog_Add(JE_ERR_SUBSYSTEM_FAILURE,"jeSound_FillSoundChannel.");
-		jeRam_Free(data);
+		JE_RAM_FREE(data);
 		return( FALSE );
 	}
 
@@ -848,7 +848,7 @@ static	BOOL jeSound_FillSoundChannel(SoundManager *sm, jeVFile *File, unsigned i
 	if	(!CreateChannel(&dsBD, &channel))
 	{
 		jeErrorLog_Add(JE_ERR_SUBSYSTEM_FAILURE,"jeSound_FillSoundChannel.");
-		jeRam_Free(data);
+		JE_RAM_FREE(data);
 		return FALSE;
 	}
 	channel->next = sm->smChannels;
@@ -899,7 +899,7 @@ static	void ClearDupBuffers( Channel* channel )
 			prevChannel->nextDup = dupChannel->nextDup;
 			IDirectSoundBuffer8_Release(dupChannel->buffer);
 //			free( dupChannel );
-			jeRam_Free(dupChannel);
+			JE_RAM_FREE(dupChannel);
 			dupChannel = prevChannel->nextDup;
 		}
 		else
@@ -941,8 +941,8 @@ static	BOOL jeSound_FreeAllChannels(SoundManager *sm)
 		// END - Upgrade to DirectSound 8 - paradoxnj 4/15/2005
 
 		if	(channel->Data)
-			jeRam_Free(channel->Data);
-		jeRam_Free(channel);
+			JE_RAM_FREE(channel->Data);
+		JE_RAM_FREE(channel);
 		channel = nextChannel;
 	}
 	sm->smChannels = NULL;
@@ -983,7 +983,7 @@ static	BOOL jeSound_FreeChannel(SoundManager *sm, Channel* channel)
 		// END - Upgrade to DirectSound 8 - paradoxnj 4/15/2005
 
 		if( channel->Data )
-			jeRam_Free(channel->Data);
+			JE_RAM_FREE(channel->Data);
 
 		curChannel = sm->smChannels;
 		while( curChannel && curChannel != channel )
@@ -997,7 +997,7 @@ static	BOOL jeSound_FreeChannel(SoundManager *sm, Channel* channel)
 				prevChannel->next = curChannel->next;
 			else
 				sm->smChannels = curChannel->next;
-			jeRam_Free(curChannel);
+			JE_RAM_FREE(curChannel);
 		}
 	}
 
@@ -1046,7 +1046,7 @@ static	BOOL DupChannel( SoundManager *sm, Channel* channel, Channel** dupChannel
 	assert( dupChannelPtr );
 
 	*dupChannelPtr = NULL;
-	dupChannel =  (Channel*)jeRam_Allocate( sizeof(Channel ) );
+	dupChannel =  (Channel*)JE_RAM_ALLOCATE( sizeof(Channel ) );
 	if( dupChannel == NULL )
 	{
 		jeErrorLog_Add(JE_ERR_MEMORY_RESOURCE, "DupChannel" );
@@ -1057,7 +1057,7 @@ static	BOOL DupChannel( SoundManager *sm, Channel* channel, Channel** dupChannel
 	Error = IDirectSound8_DuplicateSoundBuffer( lpDirectSound, (LPDIRECTSOUNDBUFFER)channel->buffer, &pBuffer);
 	if( Error != DS_OK )
 	{
-		jeRam_Free(dupChannel);
+		JE_RAM_FREE(dupChannel);
 		dupChannel = ReloadData( channel->Data );
 		if( dupChannel == NULL )
 		{
@@ -1184,8 +1184,8 @@ static	void DestroySoundManager(SoundManager *sm)
 		IDirectSoundBuffer8_Release(snd->buffer);
 		snd->buffer = NULL;
 
-		jeRam_Free(snd->OGG);
-		jeRam_Free(snd);
+		JE_RAM_FREE(snd->OGG);
+		JE_RAM_FREE(snd);
 	}
 
 	jeChain_Destroy(&sm->StreamPlayList);
@@ -1200,11 +1200,11 @@ static	void DestroySoundManager(SoundManager *sm)
 		IDirectSound8_Release(lpDirectSound);
 	// END - Upgrade to DirectSound 8 - paradoxnj 4/15/2005
 
-	jeRam_Free(sm);
+	JE_RAM_FREE(sm);
 
 	//	by trilobite	Jan. 2011
 //	ZeroMemory(sm, sizeof(SoundManager));	//	don't do this...
-	(SoundManager*)jeRam_AllocateClear(sizeof(*sm));
+	(SoundManager*)JE_RAM_ALLOCATE_CLEAR(sizeof(*sm));
 }
 
 static	BOOL	jeSound_ModifyChannel( Channel *channel, jeSound_Cfg *cfg )
@@ -1352,7 +1352,7 @@ static StreamChannel *CreateStreamChannel(jeVFile *FS, const char *filename)
 	sc->OGG = jeOGGStream_Create(FS, filename);
 	if (!sc->OGG)
 	{
-		jeRam_Free(sc);
+		JE_RAM_FREE(sc);
 		sc = NULL;
 
 		return NULL;

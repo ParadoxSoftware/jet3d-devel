@@ -140,14 +140,14 @@ BOOL CJetErr::OnInitDialog()
 						ErrString = Util_LoadLocalRcString( IDS_CONTEXT_OPEN );
 						m_Log += ErrString;
 						if ( ErrString )
-							jeRam_Free(ErrString);
+							JE_RAM_FREE(ErrString);
 
 						m_Log += Context;
 
 						ErrString = Util_LoadLocalRcString( IDS_CONTEXT_CLOSE );
 						m_Log += ErrString;
 						if ( ErrString )
-							jeRam_Free(ErrString);
+							JE_RAM_FREE(ErrString);
 						// [MLB-ICE]
 					}
 			m_Log += "\r\n";
@@ -164,7 +164,7 @@ BOOL CJetErr::OnInitDialog()
 			{
 				m_Error = ErrString;
 				m_Error += " ";
-				jeRam_Free( ErrString );
+				JE_RAM_FREE( ErrString );
 			}
 			if ( (Error >= JE_ERR_FILEIO_OPEN)  && (Error <= JE_ERR_FILEIO_VERSION) )
 			{
@@ -181,7 +181,7 @@ BOOL CJetErr::OnInitDialog()
 			{
 				m_Error = ErrString;
 				m_Error += " ";
-				jeRam_Free( ErrString );
+				JE_RAM_FREE( ErrString );
 			}
 		}
 		m_CurErrorN--;
@@ -192,7 +192,7 @@ BOOL CJetErr::OnInitDialog()
 		if( ErrString )
 		{
 			m_Error = ErrString;
-			jeRam_Free( ErrString );
+			JE_RAM_FREE( ErrString );
 		}
 		if( Context )
 			m_Error += Context;

@@ -242,7 +242,7 @@ MkActor_Options* MkActor_OptionsCreate()
 		pOptions->pMotionFileBlock = jeStrBlock_Create();
 		if(pOptions->pMotionFileBlock == NULL)
 		{
-			jeRam_Free(pOptions);
+			JE_RAM_FREE(pOptions);
 		}
 	}
 
@@ -260,7 +260,7 @@ void MkActor_OptionsDestroy(MkActor_Options** ppOptions)
 
 	jeStrBlock_Destroy(&p->pMotionFileBlock);
 
-	jeRam_Free(*ppOptions);
+	JE_RAM_FREE(*ppOptions);
 
 	*ppOptions = NULL;
 }

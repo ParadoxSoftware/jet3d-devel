@@ -50,7 +50,7 @@ MatrIdx_Struct *MatrIdx_Create( jeMaterial_Array * pMatlArray, jeBitmap * pBitma
 	pMatrIdx->Name = Util_StrDup( Name );
 	if( pMatrIdx->Name == NULL )
 	{
-		jeRam_Free( pMatrIdx );
+		JE_RAM_FREE( pMatrIdx );
 		jeErrorLog_Add( JE_ERR_MEMORY_RESOURCE, "Failed allocate MatrIdx->Name");
 		return( NULL );
 	}
@@ -59,16 +59,16 @@ MatrIdx_Struct *MatrIdx_Create( jeMaterial_Array * pMatlArray, jeBitmap * pBitma
 	pMatrIdx->MaterialIndex =  jeMaterial_ArrayCreateMaterial(pMatlArray, Name );
 	if( pMatrIdx->MaterialIndex  == JE_MATERIAL_ARRAY_NULL_INDEX )
 	{
-		jeRam_Free( pMatrIdx->Name );
-		jeRam_Free( pMatrIdx );
+		JE_RAM_FREE( pMatrIdx->Name );
+		JE_RAM_FREE( pMatrIdx );
 		jeErrorLog_Add( JE_ERR_INTERNAL_RESOURCE, "Failed to create Material to array.");
 		return( NULL );
 	}
 
 	if( !jeMaterial_ArraySetMaterialBitmap( pMatlArray, pMatrIdx->MaterialIndex, pBitmap, Name ) )
 	{
-		jeRam_Free( pMatrIdx->Name );
-		jeRam_Free( pMatrIdx );
+		JE_RAM_FREE( pMatrIdx->Name );
+		JE_RAM_FREE( pMatrIdx );
 		jeErrorLog_Add( JE_ERR_INTERNAL_RESOURCE, "Failed to add Material to array.");
 		return( NULL );
 	}
@@ -125,10 +125,10 @@ jeBoolean MatrIdx_Destroy( MatrIdx_Struct** hMatrIdx )
 		return( JE_FALSE );
 
 	if( (*hMatrIdx )->Name != NULL )
-		jeRam_Free( (*hMatrIdx )->Name );
+		JE_RAM_FREE( (*hMatrIdx )->Name );
 
 
-	jeRam_Free( (*hMatrIdx ) );
+	JE_RAM_FREE( (*hMatrIdx ) );
 	return( JE_TRUE );
 }
 	

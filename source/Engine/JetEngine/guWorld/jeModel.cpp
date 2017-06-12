@@ -145,7 +145,7 @@ JETAPI jeModel * JETCC jeModel_Create(void)
 			if (Model->BSPTree)
 				jeBSP_Destroy(&Model->BSPTree);
 
-			jeRam_Free(Model);
+			JE_RAM_FREE(Model);
 		}
 
 		return NULL;
@@ -294,7 +294,7 @@ JETAPI void JETCC jeModel_Destroy(jeModel **Model)
 			jeFaceInfo_ArrayDestroy(&(*Model)->FaceInfoArray);
 	}
 
-	jeRam_Free(*Model);
+	JE_RAM_FREE(*Model);
 }
 
 //========================================================================================

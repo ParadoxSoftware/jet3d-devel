@@ -73,7 +73,7 @@ void jeBSPNode_LeafDestroy(jeBSPNode_Leaf **Leaf, jeBSP *BSP)
 			jePlaneArray_RemovePlane(BSP->PlaneArray, &(*Leaf)->Sides[i].PlaneIndex);
 		}
 
-		jeRam_Free((*Leaf)->Sides);
+		JE_RAM_FREE((*Leaf)->Sides);
 	}
 
 	if ((*Leaf)->Area)
@@ -81,7 +81,7 @@ void jeBSPNode_LeafDestroy(jeBSPNode_Leaf **Leaf, jeBSP *BSP)
 
 	jeBSPNode_LeafDestroyDrawFaceList(*Leaf, BSP);
 
-	jeRam_Free(*Leaf);
+	JE_RAM_FREE(*Leaf);
 
 	*Leaf = NULL;
 }
@@ -605,7 +605,7 @@ void jeBSPNode_LeafDestroyDrawFaceList(jeBSPNode_Leaf *Leaf, jeBSP *BSP)
 	if (Leaf->DrawFaces)
 	{
 		assert(Leaf->NumDrawFaces);
-		jeRam_Free(Leaf->DrawFaces);
+		JE_RAM_FREE(Leaf->DrawFaces);
 		Leaf->DrawFaces = NULL;
 		Leaf->NumDrawFaces = 0;
 	}

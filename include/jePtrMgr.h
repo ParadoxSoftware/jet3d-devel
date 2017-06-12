@@ -179,7 +179,7 @@ jeActor *jeActor_CreateFromFile(jeVFile *VFile, jePtrMgr *PtrMgr)
 	ExitWithError:
 	{
 		if (Actor)
-			jeRam_Free(Actor);
+			JE_RAM_FREE(Actor);
 
 		return NULL;
 	}

@@ -128,7 +128,7 @@ static	jeBoolean JETCC jeVFile_RegisterFileSystemInternal(const jeVFile_SystemAP
 {
 	jeVFile_SystemAPIs **	NewList;
 
-	NewList = (jeVFile_SystemAPIs **)jeRam_Realloc((void *)RegisteredAPIs, sizeof(*RegisteredAPIs) * (SystemCount + 1));
+	NewList = (jeVFile_SystemAPIs **)JE_RAM_REALLOC((void *)RegisteredAPIs, sizeof(*RegisteredAPIs) * (SystemCount + 1));
 	if(!NewList)
 	 return JE_FALSE;
 
@@ -202,7 +202,7 @@ static void jeVFile_Leave(void)
 	if ( jeVFile_RefCount == 0 )
 	{
 		assert(RegisteredAPIs);
-		jeRam_Free(RegisteredAPIs);
+		JE_RAM_FREE(RegisteredAPIs);
 		
 		RegisteredAPIs = NULL;
 	}
@@ -295,7 +295,7 @@ JETAPI jeVFile * JETCC jeVFile_OpenNewSystem(
 	File->FSData = 		FSData;
 	
 #ifndef LN_SEARCHLIST
-	File->SearchList = 	jeRam_Allocate(sizeof(*File->SearchList));
+	File->SearchList = 	JE_RAM_ALLOCATE(sizeof(*File->SearchList));
 #endif
 
 	File->RefCount = 	0;
@@ -441,7 +441,7 @@ JETAPI jeVFile * JETCC jeVFile_Open(
 	File->APIs = 		FS->APIs;
 	File->FSData = 		FSData;	
 #ifndef LN_SEARCHLIST
-	File->SearchList = 	jeRam_Allocate(sizeof(*File->SearchList));
+	File->SearchList = 	JE_RAM_ALLOCATE(sizeof(*File->SearchList));
 #endif
 	File->Context =		FS;
 	File->RefCount = 	0;
@@ -541,7 +541,7 @@ int RefCount;
 #ifndef LN_SEARCHLIST
 		// <> never cuts self from parents' list !?
 		if ( File->SearchList )
-			jeRam_Free(File->SearchList);
+			JE_RAM_FREE(File->SearchList);
 #endif
 
 		jeVFile_Free(File);
@@ -626,7 +626,7 @@ static	void			DestroySearchList(FSSearchList *SearchList)
 
 		Temp = SearchList;
 		SearchList = SearchList->Next;
-		jeRam_Free(Temp);
+		JE_RAM_FREE(Temp);
 	}
 }
 
@@ -640,7 +640,7 @@ static	FSSearchList *	CopySearchList(const FSSearchList *SearchList)
 	{
 		FSSearchList *	Temp;
 
-		Temp = jeRam_Allocate(sizeof(*Tail));
+		Temp = JE_RAM_ALLOCATE(sizeof(*Tail));
 		if	(!Temp)
 		{
 			DestroySearchList(NewList);
@@ -1079,7 +1079,7 @@ JETAPI jeVFile_Finder * JETCC jeVFile_CreateFinder(
 
 	// CB : I don't think we use Finders enough to justify a MemPool
 
-	Finder = (jeVFile_Finder *)jeRam_Allocate(sizeof(jeVFile_Finder));
+	Finder = (jeVFile_Finder *)JE_RAM_ALLOCATE(sizeof(jeVFile_Finder));
 	if	(!Finder)
 		return Finder;
 
@@ -1088,7 +1088,7 @@ JETAPI jeVFile_Finder * JETCC jeVFile_CreateFinder(
 	jeVFile_UnLock(FileSystem);
 	if	(!Finder->Data)
 	{
-		jeRam_Free(Finder);
+		JE_RAM_FREE(Finder);
 		return NULL;
 	}
 
@@ -1108,7 +1108,7 @@ JETAPI void JETCC jeVFile_DestroyFinder(jeVFile_Finder *Finder)
 	Finder->APIs->FinderDestroy(Finder->Data);
 	UNLOCK_CRITICALSECTION(&Finder->CriticalSection);
 	DELETE_CRITICALSECTION(&Finder->CriticalSection);
-	jeRam_Free(Finder);
+	JE_RAM_FREE(Finder);
 }
 
 JETAPI jeBoolean JETCC jeVFile_FinderGetNextFile(jeVFile_Finder *Finder)

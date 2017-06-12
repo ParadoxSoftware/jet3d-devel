@@ -149,7 +149,7 @@ Light *	Light_Create( const char * const pszName, Group * pGroup, int32 nNumber,
 	if( !Object_Init( &pLight->ObjectData, pGroup, KIND_LIGHT, pszName, nNumber ) )
 	{
 		jeErrorLog_Add( JE_ERR_INTERNAL_RESOURCE, "Trace" );
-		jeRam_Free( pLight );
+		JE_RAM_FREE( pLight );
 		return( NULL );
 	}
 
@@ -157,7 +157,7 @@ Light *	Light_Create( const char * const pszName, Group * pGroup, int32 nNumber,
 	if( pLight->pgeLight == NULL )
 	{
 		jeErrorLog_Add( JE_ERR_INTERNAL_RESOURCE, "Light_Create:jeLight_Create" );
-		jeRam_Free( pLight );
+		JE_RAM_FREE( pLight );
 		return( NULL );
 	}
 	pLight->pWorld = pWorld;
@@ -173,7 +173,7 @@ Light *	Light_Create( const char * const pszName, Group * pGroup, int32 nNumber,
 	  )
 	{
 		jeErrorLog_Add( JE_ERR_INTERNAL_RESOURCE, "Light_Create:jeLight_GetAttributes" );
-		jeRam_Free( pLight );
+		JE_RAM_FREE( pLight );
 		return( NULL );
 	}
 	jeExtBox_Set( &pLight->WorldBounds, LIGHT_BOX_MIN, LIGHT_BOX_MIN, LIGHT_BOX_MIN,
@@ -223,7 +223,7 @@ Light *	Light_FromTemplate( char * pszName, Group * pGroup, Light *	pLight, int3
 	}
 	if( pNewLight->ObjectData.pszName != NULL )
 	{
-		jeRam_Free( pNewLight->ObjectData.pszName );
+		JE_RAM_FREE( pNewLight->ObjectData.pszName );
 	}
 	 pNewLight->ObjectData.pszName = pszName;
 	 pNewLight->ObjectData.pGroup = pGroup ;
@@ -263,10 +263,10 @@ void Light_Destroy( Light ** ppLight )
 
 	// [MLB-ICE] Comment: Same as in Brush/Level/... ;)
 	if( (*ppLight)->ObjectData.pszName != NULL )
-		jeRam_Free( (*ppLight)->ObjectData.pszName );
+		JE_RAM_FREE( (*ppLight)->ObjectData.pszName );
 	// [MLB-ICE] EOB
 
-	jeRam_Free( (*ppLight) );
+	JE_RAM_FREE( (*ppLight) );
 }// Light_Destroy
 
 Light *	Light_CreateTemplate(  jeWorld * pWorld )
@@ -574,10 +574,10 @@ jeBoolean Light_FillPositionDescriptor( Light * pLight, jeProperty_List * pArray
 	jeProperty_FillVec3dGroup( &Property, Name, &pLight->LightData.Pos,	OBJECT_POSITION_FIELD  );
 	if( !jeProperty_Append( pArray,  &Property ) )
 	{
-		jeRam_Free( Name );
+		JE_RAM_FREE( Name );
 		return( JE_FALSE );
 	}
-	jeRam_Free( Name );
+	JE_RAM_FREE( Name );
 
 	Name = Util_LoadLocalRcString( IDS_POSITIONX_FIELD );
 	if( Name == NULL )
@@ -585,10 +585,10 @@ jeBoolean Light_FillPositionDescriptor( Light * pLight, jeProperty_List * pArray
 	jeProperty_FillFloat(  &Property, Name, pLight->LightData.Pos.X, OBJECT_POSITION_FIELDX, -FLT_MAX, FLT_MAX, 1.0f );
 	if( !jeProperty_Append( pArray,  &Property ) )
 	{
-		jeRam_Free( Name );
+		JE_RAM_FREE( Name );
 		return( JE_FALSE );
 	}
-	jeRam_Free( Name );
+	JE_RAM_FREE( Name );
 
 	Name = Util_LoadLocalRcString( IDS_POSITIONY_FIELD );
 	if( Name == NULL )
@@ -596,16 +596,16 @@ jeBoolean Light_FillPositionDescriptor( Light * pLight, jeProperty_List * pArray
 	jeProperty_FillFloat(  &Property, Name, pLight->LightData.Pos.Y,	OBJECT_POSITION_FIELDY, -FLT_MAX, FLT_MAX, 1.0f );
 	if( !jeProperty_Append( pArray, &Property ) )
 	{
-		jeRam_Free( Name );
+		JE_RAM_FREE( Name );
 		return( JE_FALSE );
 	}
-	jeRam_Free( Name );
+	JE_RAM_FREE( Name );
 
 	Name = Util_LoadLocalRcString( IDS_POSITIONZ_FIELD );
 	if( Name == NULL )
 		return( JE_FALSE );
 	jeProperty_FillFloat( &Property, Name, pLight->LightData.Pos.Z, OBJECT_POSITION_FIELDZ, -FLT_MAX, FLT_MAX, 1.0f );
-	jeRam_Free( Name );
+	JE_RAM_FREE( Name );
 	if( !jeProperty_Append( pArray, &Property ) )
 	{
 		return( JE_FALSE );
@@ -628,7 +628,7 @@ jeBoolean Light_FillRGBDescriptor( Light * pLight, jeProperty_List * pArray )
 	if( Name == NULL )
 		return( JE_FALSE );
 	jeProperty_FillColorGroup( &Property, Name, &pLight->LightData.Color,	LIGHT_COLOR_FIELD  );
-	jeRam_Free( Name );
+	JE_RAM_FREE( Name );
 	if( !jeProperty_Append( pArray, &Property ) )
 	{
 		return( JE_FALSE );
@@ -638,7 +638,7 @@ jeBoolean Light_FillRGBDescriptor( Light * pLight, jeProperty_List * pArray )
 	if( Name == NULL )
 		return( JE_FALSE );
 	jeProperty_FillFloat( &Property, Name, pLight->LightData.Color.X,	LIGHT_RED_FIELD, 0, 255.0f, 2.0f );
-	jeRam_Free( Name );
+	JE_RAM_FREE( Name );
 	if( !jeProperty_Append( pArray, &Property ) )
 	{
 		return( JE_FALSE );
@@ -648,7 +648,7 @@ jeBoolean Light_FillRGBDescriptor( Light * pLight, jeProperty_List * pArray )
 	if( Name == NULL )
 		return( JE_FALSE );
 	jeProperty_FillFloat( &Property, Name, pLight->LightData.Color.Y,	LIGHT_GREEN_FIELD, 0, 255.0f, 1.0f );
-	jeRam_Free( Name );
+	JE_RAM_FREE( Name );
 	if( !jeProperty_Append( pArray, &Property ) )
 	{
 		return( JE_FALSE );
@@ -658,7 +658,7 @@ jeBoolean Light_FillRGBDescriptor( Light * pLight, jeProperty_List * pArray )
 	if( Name == NULL )
 		return( JE_FALSE );
 	jeProperty_FillFloat( &Property, Name, pLight->LightData.Color.Z,	LIGHT_BLUE_FIELD, 0, 255.0, 1.0f );
-	jeRam_Free( Name );
+	JE_RAM_FREE( Name );
 	if( !jeProperty_Append( pArray, &Property ) )
 	{
 		return( JE_FALSE );
@@ -669,7 +669,7 @@ jeBoolean Light_FillRGBDescriptor( Light * pLight, jeProperty_List * pArray )
 	if( Name == NULL )
 		return( JE_FALSE );
 	jeProperty_FillColorPicker( &Property, Name, &pLight->LightData.Color,	LIGHT_PICKER_FIELD );
-	jeRam_Free( Name );
+	JE_RAM_FREE( Name );
 	if( !jeProperty_Append( pArray, &Property ) )
 	{
 		return( JE_FALSE );
@@ -703,7 +703,7 @@ jeProperty_List *	Light_BuildDescriptor( Light * pLight )
 	if( Name == NULL )
 		goto LBD_ERROR;
 	jeProperty_FillString( &Property, Name, pLight->ObjectData.pszName, OBJECT_NAME_FIELD );
-	jeRam_Free( Name );
+	JE_RAM_FREE( Name );
 	if( !jeProperty_Append( pArray, &Property ) )
 		goto LBD_ERROR;
 
@@ -713,7 +713,7 @@ jeProperty_List *	Light_BuildDescriptor( Light * pLight )
 	if( Name == NULL )
 		goto LBD_ERROR;
 	jeProperty_FillFloat( &Property, Name, pLight->LightData.Brightness,	LIGHT_BRIGHTNESS_FIELD, 0, FLT_MAX, 1.0f);
-	jeRam_Free( Name );
+	JE_RAM_FREE( Name );
 	if( !jeProperty_Append( pArray, &Property ) )
 		goto LBD_ERROR;
 
@@ -722,7 +722,7 @@ jeProperty_List *	Light_BuildDescriptor( Light * pLight )
 		goto LBD_ERROR;
 	jeProperty_FillFloat( &Property, Name, pLight->LightData.Radius, LIGHT_RADIUS_FIELD, 1, FLT_MAX, 1.0f );
 	Light_FillRGBDescriptor( pLight, pArray );
-	jeRam_Free( Name );
+	JE_RAM_FREE( Name );
 	if( !jeProperty_Append( pArray, &Property ) )
 		goto LBD_ERROR;
 	

@@ -30,7 +30,7 @@ static DList_NodeP DList_InitArray( int32 itemN, int32 dataSize )
 	DList_NodeP NodeArray, Node;
 	int i;
 
-	NodeArray = (DList_NodeP)jeRam_Allocate( itemN * (sizeof( DList_NodeS)+dataSize ) );
+	NodeArray = (DList_NodeP)JE_RAM_ALLOCATE( itemN * (sizeof( DList_NodeS)+dataSize ) );
 	if( NodeArray == NULL )
 		return( NULL );
 	Node = NodeArray;
@@ -48,7 +48,7 @@ DListP DList_Create( int32 itemN, int32 dataSize )
 {
 	DListP DList;
 
-	DList = (DListP)jeRam_Allocate( sizeof( DListS ) );
+	DList = (DListP)JE_RAM_ALLOCATE( sizeof( DListS ) );
 	if( DList == NULL )
 		return( NULL );
 	DList->Head = NULL;
@@ -87,7 +87,7 @@ static DList_NodeP DList_NewNode( DListP List )
 	}
 	else
 	{
-		Node = (DList_NodeP)jeRam_Allocate( sizeof( DList_NodeS)+List->DataSize );
+		Node = (DList_NodeP)JE_RAM_ALLOCATE( sizeof( DList_NodeS)+List->DataSize );
 		Node->Prev = NULL;
 		Node->Next = NULL;
 	}
@@ -108,7 +108,7 @@ static void DList_DestroyNode( DListP List, DList_NodeP Node, DList_DestroyCB Ca
 	}
 	else
 	{
-		jeRam_Free( Node );
+		JE_RAM_FREE( Node );
 	}
 	List->NodeN--;
 
@@ -409,8 +409,8 @@ void DList_Destroy( DListP *List, DList_DestroyCB CallBack, void* Context )
 		DList_Unlink( *List, DLIST_HEAD, NULL, CallBack, Context );
 	}
 	if( (*List)->NodeArray )
-		jeRam_Free( (*List)->NodeArray  );
-	jeRam_Free( *List );
+		JE_RAM_FREE( (*List)->NodeArray  );
+	JE_RAM_FREE( *List );
 }
 
 

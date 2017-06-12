@@ -79,7 +79,7 @@ Model * Model_Create( Group * pGroup, const char * const pszName, int32 nNumber)
 		goto MC_FAILURE;
 	}
 	jeObject_SetName( pModel->pgeObject, NameTag );
-	jeRam_Free( NameTag );
+	JE_RAM_FREE( NameTag );
 	pModel->pInstance = (ModelInstance*)jeObject_GetInstance(pModel->pgeObject) ;
 	if( pModel->pInstance == NULL )
 		goto MC_FAILURE ;
@@ -97,7 +97,7 @@ MC_FAILURE :
 		BrushList_Destroy( &(pModel)->pBrushes, NULL ) ;
 
 	if( pModel != NULL )
-		jeRam_Free( pModel );
+		JE_RAM_FREE( pModel );
 	return NULL ;
 }// Model_Create
 
@@ -161,7 +161,7 @@ void Model_Destroy( Model ** ppModel )
 	assert( ((*ppModel)->nSignature = 0) == 0 ) ;	// CLEAR
 	
 
-	jeRam_Free( *ppModel ) ;
+	JE_RAM_FREE( *ppModel ) ;
 
 }// Model_Destroy
 
@@ -453,10 +453,10 @@ jeBoolean Model_FillPositionDescriptor( Model * pModel, jeProperty_List * pArray
 	jeProperty_FillVec3dGroup( &Property, Name, &XForm.Translation,	OBJECT_POSITION_FIELD  );
 	if( !jeProperty_Append( pArray,  &Property ) )
 	{
-		jeRam_Free( Name );
+		JE_RAM_FREE( Name );
 		return( JE_FALSE );
 	}
-	jeRam_Free( Name );
+	JE_RAM_FREE( Name );
 
 	Name = Util_LoadLocalRcString( IDS_POSITIONX_FIELD );
 	if( Name == NULL )
@@ -464,10 +464,10 @@ jeBoolean Model_FillPositionDescriptor( Model * pModel, jeProperty_List * pArray
 	jeProperty_FillFloat(  &Property, Name, XForm.Translation.X, OBJECT_POSITION_FIELDX, -FLT_MAX, FLT_MAX, 1.0f );
 	if( !jeProperty_Append( pArray,  &Property ) )
 	{
-		jeRam_Free( Name );
+		JE_RAM_FREE( Name );
 		return( JE_FALSE );
 	}
-	jeRam_Free( Name );
+	JE_RAM_FREE( Name );
 
 	Name = Util_LoadLocalRcString( IDS_POSITIONY_FIELD );
 	if( Name == NULL )
@@ -475,10 +475,10 @@ jeBoolean Model_FillPositionDescriptor( Model * pModel, jeProperty_List * pArray
 	jeProperty_FillFloat(  &Property, Name, XForm.Translation.Y,	OBJECT_POSITION_FIELDY, -FLT_MAX, FLT_MAX, 1.0f );
 	if( !jeProperty_Append( pArray, &Property ) )
 	{
-		jeRam_Free( Name );
+		JE_RAM_FREE( Name );
 		return( JE_FALSE );
 	}
-	jeRam_Free( Name );
+	JE_RAM_FREE( Name );
 
 	Name = Util_LoadLocalRcString( IDS_POSITIONZ_FIELD );
 	if( Name == NULL )
@@ -486,10 +486,10 @@ jeBoolean Model_FillPositionDescriptor( Model * pModel, jeProperty_List * pArray
 	jeProperty_FillFloat( &Property, Name, XForm.Translation.Z, OBJECT_POSITION_FIELDZ, -FLT_MAX, FLT_MAX, 1.0f );
 	if( !jeProperty_Append( pArray, &Property ) )
 	{
-		jeRam_Free( Name );
+		JE_RAM_FREE( Name );
 		return( JE_FALSE );
 	}
-	jeRam_Free( Name );
+	JE_RAM_FREE( Name );
 
 	jeProperty_FillGroupEnd( &Property, OBJECT_POSITION_FIELD_END );
 	if( !jeProperty_Append( pArray, &Property ) )
@@ -519,10 +519,10 @@ jeProperty_List *	Model_BuildDescriptor( Model * pModel )
 	if( Name == NULL )
 		goto UOBD_ERROR;
 	jeProperty_FillString( &Property, Name, pModel->ObjectData.pszName, OBJECT_POSITION_FIELD );
-	jeRam_Free( Name );
+	JE_RAM_FREE( Name );
 	if( !jeProperty_Append( pObjectArray,  &Property ) )
 	{
-		jeRam_Free( Name );
+		JE_RAM_FREE( Name );
 		return( NULL );
 	}
 	

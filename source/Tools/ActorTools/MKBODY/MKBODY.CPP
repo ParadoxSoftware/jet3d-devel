@@ -205,13 +205,13 @@ void FreeVPHData(VPHData** ppVPHData)
 		jeStrBlock_Destroy(&pVPHData->pSBObjectNames);
 		for(j=0;j<pVPHData->NumObjects;j++)
 		{
-			jeRam_Free(pVPHData->ppVerts[j]);
+			JE_RAM_FREE(pVPHData->ppVerts[j]);
 		}
-		jeRam_Free(pVPHData->NumVerts);
-		jeRam_Free(pVPHData->ppVerts);
-		jeRam_Free(pVPHData->pLinks);
+		JE_RAM_FREE(pVPHData->NumVerts);
+		JE_RAM_FREE(pVPHData->ppVerts);
+		JE_RAM_FREE(pVPHData->pLinks);
 
-		jeRam_Free(*ppVPHData);
+		JE_RAM_FREE(*ppVPHData);
 	}
 }
 
@@ -314,7 +314,7 @@ ReturnCode ReadVPHData(MkBody_Options* options, FILE* fp, VPHData* pVPHData)
 	if(i != NumLinks)
 	{
 		// there must have been an error
-		jeRam_Free(pVPHLinks);
+		JE_RAM_FREE(pVPHLinks);
 		return retValue;
 	}
 
@@ -323,7 +323,7 @@ ReturnCode ReadVPHData(MkBody_Options* options, FILE* fp, VPHData* pVPHData)
 	{
 		Printf("ERROR: Could not find links in VPH file\n");
 		MkUtil_AdjustReturnCode(&retValue, RETURN_ERROR);
-		jeRam_Free(pVPHLinks);
+		JE_RAM_FREE(pVPHLinks);
 		return retValue;
 	}
 
@@ -332,7 +332,7 @@ ReturnCode ReadVPHData(MkBody_Options* options, FILE* fp, VPHData* pVPHData)
 		Printf("ERROR: Could not read number of objects in VPH file\n");
 		Printf("Line from VPH file:\n%s\n",line);
 		MkUtil_AdjustReturnCode(&retValue, RETURN_ERROR);
-		jeRam_Free(pVPHLinks);
+		JE_RAM_FREE(pVPHLinks);
 		return retValue;
 	}
 
@@ -342,7 +342,7 @@ ReturnCode ReadVPHData(MkBody_Options* options, FILE* fp, VPHData* pVPHData)
 	{
 		Printf("ERROR: Could not allocate VPH string block\n");
 		MkUtil_AdjustReturnCode(&retValue, RETURN_ERROR);
-		jeRam_Free(pVPHLinks);
+		JE_RAM_FREE(pVPHLinks);
 		return retValue;
 	}
 
@@ -352,7 +352,7 @@ ReturnCode ReadVPHData(MkBody_Options* options, FILE* fp, VPHData* pVPHData)
 	{
 		Printf("ERROR: Could not allocate vert count data\n");
 		MkUtil_AdjustReturnCode(&retValue, RETURN_ERROR);
-		jeRam_Free(pVPHLinks);
+		JE_RAM_FREE(pVPHLinks);
 		return retValue;
 	}
 	ppVerts = JE_RAM_ALLOCATE_ARRAY(VPHVertex*, NumObjects);
@@ -360,8 +360,8 @@ ReturnCode ReadVPHData(MkBody_Options* options, FILE* fp, VPHData* pVPHData)
 	{
 		Printf("ERROR: Could not allocate vert list array\n");
 		MkUtil_AdjustReturnCode(&retValue, RETURN_ERROR);
-		jeRam_Free(pVPHLinks);
-		jeRam_Free(pNumVerts);
+		JE_RAM_FREE(pVPHLinks);
+		JE_RAM_FREE(pNumVerts);
 		return retValue;
 	}
 
@@ -468,11 +468,11 @@ ReturnCode ReadVPHData(MkBody_Options* options, FILE* fp, VPHData* pVPHData)
 		jeStrBlock_Destroy(&pSBNames);
 		for(j=0;j<i;j++)
 		{
-			jeRam_Free(ppVerts[j]);
+			JE_RAM_FREE(ppVerts[j]);
 		}
-		jeRam_Free(pNumVerts);
-		jeRam_Free(ppVerts);
-		jeRam_Free(pVPHLinks);
+		JE_RAM_FREE(pNumVerts);
+		JE_RAM_FREE(ppVerts);
+		JE_RAM_FREE(pVPHLinks);
 		return retValue;
 	}
 
@@ -1466,7 +1466,7 @@ if(fgets(line, LINE_LENGTH, fp) == NULL)									\
 			// index 0
 			if(AllocSize1 < pVertGroups[ pFaces[i].v[0] ].NumVerts)
 			{
-				pTemp = jeRam_Realloc(pVertices1, sizeof(*pVertices1) * pVertGroups[ pFaces[i].v[0] ].NumVerts);
+				pTemp = JE_RAM_REALLOC(pVertices1, sizeof(*pVertices1) * pVertGroups[ pFaces[i].v[0] ].NumVerts);
 				if(pTemp == NULL)
 				{
 					MkUtil_AdjustReturnCode(&retValue, RETURN_ERROR);
@@ -1475,7 +1475,7 @@ if(fgets(line, LINE_LENGTH, fp) == NULL)									\
 				}
 				pVertices1 = (jeVec3d*)pTemp;
 
-				pTemp = jeRam_Realloc(pNormals1, sizeof(*pNormals1) * pVertGroups[ pFaces[i].v[0] ].NumVerts);
+				pTemp = JE_RAM_REALLOC(pNormals1, sizeof(*pNormals1) * pVertGroups[ pFaces[i].v[0] ].NumVerts);
 				if(pTemp == NULL)
 				{
 					MkUtil_AdjustReturnCode(&retValue, RETURN_ERROR);
@@ -1484,7 +1484,7 @@ if(fgets(line, LINE_LENGTH, fp) == NULL)									\
 				}
 				pNormals1 = (jeVec3d*)pTemp;
 
-				pTemp = jeRam_Realloc(pBones1, sizeof(*pBones1) * pVertGroups[ pFaces[i].v[0] ].NumVerts);
+				pTemp = JE_RAM_REALLOC(pBones1, sizeof(*pBones1) * pVertGroups[ pFaces[i].v[0] ].NumVerts);
 				if(pTemp == NULL)
 				{
 					MkUtil_AdjustReturnCode(&retValue, RETURN_ERROR);
@@ -1493,7 +1493,7 @@ if(fgets(line, LINE_LENGTH, fp) == NULL)									\
 				}
 				pBones1 = (int*)pTemp;
 
-				pTemp = jeRam_Realloc(pWeights1, sizeof(*pWeights1) * pVertGroups[ pFaces[i].v[0] ].NumVerts);
+				pTemp = JE_RAM_REALLOC(pWeights1, sizeof(*pWeights1) * pVertGroups[ pFaces[i].v[0] ].NumVerts);
 				if(pTemp == NULL)
 				{
 					MkUtil_AdjustReturnCode(&retValue, RETURN_ERROR);
@@ -1545,7 +1545,7 @@ if(fgets(line, LINE_LENGTH, fp) == NULL)									\
 			// index 1
 			if(AllocSize2 < pVertGroups[ pFaces[i].v[1] ].NumVerts)
 			{
-				pTemp = jeRam_Realloc(pVertices2, sizeof(*pVertices2) * pVertGroups[ pFaces[i].v[1] ].NumVerts);
+				pTemp = JE_RAM_REALLOC(pVertices2, sizeof(*pVertices2) * pVertGroups[ pFaces[i].v[1] ].NumVerts);
 				if(pTemp == NULL)
 				{
 					MkUtil_AdjustReturnCode(&retValue, RETURN_ERROR);
@@ -1554,7 +1554,7 @@ if(fgets(line, LINE_LENGTH, fp) == NULL)									\
 				}
 				pVertices2 = (jeVec3d*)pTemp;
 
-				pTemp = jeRam_Realloc(pNormals2, sizeof(*pNormals2) * pVertGroups[ pFaces[i].v[1] ].NumVerts);
+				pTemp = JE_RAM_REALLOC(pNormals2, sizeof(*pNormals2) * pVertGroups[ pFaces[i].v[1] ].NumVerts);
 				if(pTemp == NULL)
 				{
 					MkUtil_AdjustReturnCode(&retValue, RETURN_ERROR);
@@ -1563,7 +1563,7 @@ if(fgets(line, LINE_LENGTH, fp) == NULL)									\
 				}
 				pNormals2 = (jeVec3d*)pTemp;
 
-				pTemp = jeRam_Realloc(pBones2, sizeof(*pBones2) * pVertGroups[ pFaces[i].v[1] ].NumVerts);
+				pTemp = JE_RAM_REALLOC(pBones2, sizeof(*pBones2) * pVertGroups[ pFaces[i].v[1] ].NumVerts);
 				if(pTemp == NULL)
 				{
 					MkUtil_AdjustReturnCode(&retValue, RETURN_ERROR);
@@ -1572,7 +1572,7 @@ if(fgets(line, LINE_LENGTH, fp) == NULL)									\
 				}
 				pBones2 = (int*)pTemp;
 
-				pTemp = jeRam_Realloc(pWeights2, sizeof(*pWeights2) * pVertGroups[ pFaces[i].v[1] ].NumVerts);
+				pTemp = JE_RAM_REALLOC(pWeights2, sizeof(*pWeights2) * pVertGroups[ pFaces[i].v[1] ].NumVerts);
 				if(pTemp == NULL)
 				{
 					MkUtil_AdjustReturnCode(&retValue, RETURN_ERROR);
@@ -1624,7 +1624,7 @@ if(fgets(line, LINE_LENGTH, fp) == NULL)									\
 			// index 2
 			if(AllocSize3 < pVertGroups[ pFaces[i].v[2] ].NumVerts)
 			{
-				pTemp = jeRam_Realloc(pVertices3, sizeof(*pVertices3) * pVertGroups[ pFaces[i].v[2] ].NumVerts);
+				pTemp = JE_RAM_REALLOC(pVertices3, sizeof(*pVertices3) * pVertGroups[ pFaces[i].v[2] ].NumVerts);
 				if(pTemp == NULL)
 				{
 					MkUtil_AdjustReturnCode(&retValue, RETURN_ERROR);
@@ -1633,7 +1633,7 @@ if(fgets(line, LINE_LENGTH, fp) == NULL)									\
 				}
 				pVertices3 = (jeVec3d*)pTemp;
 
-				pTemp = jeRam_Realloc(pNormals3, sizeof(*pNormals3) * pVertGroups[ pFaces[i].v[2] ].NumVerts);
+				pTemp = JE_RAM_REALLOC(pNormals3, sizeof(*pNormals3) * pVertGroups[ pFaces[i].v[2] ].NumVerts);
 				if(pTemp == NULL)
 				{
 					MkUtil_AdjustReturnCode(&retValue, RETURN_ERROR);
@@ -1642,7 +1642,7 @@ if(fgets(line, LINE_LENGTH, fp) == NULL)									\
 				}
 				pNormals3 = (jeVec3d*)pTemp;
 
-				pTemp = jeRam_Realloc(pBones3, sizeof(*pBones3) * pVertGroups[ pFaces[i].v[2] ].NumVerts);
+				pTemp = JE_RAM_REALLOC(pBones3, sizeof(*pBones3) * pVertGroups[ pFaces[i].v[2] ].NumVerts);
 				if(pTemp == NULL)
 				{
 					MkUtil_AdjustReturnCode(&retValue, RETURN_ERROR);
@@ -1651,7 +1651,7 @@ if(fgets(line, LINE_LENGTH, fp) == NULL)									\
 				}
 				pBones3 = (int*)pTemp;
 
-				pTemp = jeRam_Realloc(pWeights3, sizeof(*pWeights3) * pVertGroups[ pFaces[i].v[2] ].NumVerts);
+				pTemp = JE_RAM_REALLOC(pWeights3, sizeof(*pWeights3) * pVertGroups[ pFaces[i].v[2] ].NumVerts);
 				if(pTemp == NULL)
 				{
 					MkUtil_AdjustReturnCode(&retValue, RETURN_ERROR);
@@ -1729,38 +1729,38 @@ if(fgets(line, LINE_LENGTH, fp) == NULL)									\
 
 ReadMeshClean:
 	if(pFaces != NULL)
-		jeRam_Free(pFaces);
+		JE_RAM_FREE(pFaces);
 	if(pTVerts != NULL)
-		jeRam_Free(pTVerts);
+		JE_RAM_FREE(pTVerts);
 	if(pVerts != NULL)
-		jeRam_Free(pVerts);
+		JE_RAM_FREE(pVerts);
 	if(pVertGroups != NULL)
-		jeRam_Free(pVertGroups);
+		JE_RAM_FREE(pVertGroups);
 
 	if(pVertices1 != NULL)
-		jeRam_Free(pVertices1);
+		JE_RAM_FREE(pVertices1);
 	if(pNormals1 != NULL)
-		jeRam_Free(pNormals1);
+		JE_RAM_FREE(pNormals1);
 	if(pBones1 != NULL)
-		jeRam_Free(pBones1);
+		JE_RAM_FREE(pBones1);
 	if(pWeights1 != NULL)
-		jeRam_Free(pWeights1);
+		JE_RAM_FREE(pWeights1);
 	if(pVertices2 != NULL)
-		jeRam_Free(pVertices2);
+		JE_RAM_FREE(pVertices2);
 	if(pNormals2 != NULL)
-		jeRam_Free(pNormals2);
+		JE_RAM_FREE(pNormals2);
 	if(pBones2 != NULL)
-		jeRam_Free(pBones2);
+		JE_RAM_FREE(pBones2);
 	if(pWeights2 != NULL)
-		jeRam_Free(pWeights2);
+		JE_RAM_FREE(pWeights2);
 	if(pVertices3 != NULL)
-		jeRam_Free(pVertices3);
+		JE_RAM_FREE(pVertices3);
 	if(pNormals3 != NULL)
-		jeRam_Free(pNormals3);
+		JE_RAM_FREE(pNormals3);
 	if(pBones3 != NULL)
-		jeRam_Free(pBones3);
+		JE_RAM_FREE(pBones3);
 	if(pWeights3 != NULL)
-		jeRam_Free(pWeights3);
+		JE_RAM_FREE(pWeights3);
 
 	return(retValue);
 }
@@ -2055,7 +2055,7 @@ ReturnCode MkBody_DoMake(MkBody_Options* options,MkUtil_Printf PrintfCallback)
 			{
 				Printf("ERROR: Could not read '%s' VPH data\n", options->VPHFile);
 				jeBody_Destroy(&pBody);
-				jeRam_Free(pvphdata);
+				JE_RAM_FREE(pvphdata);
 				return retValue;
 			}
 		}
@@ -2199,7 +2199,7 @@ ReturnCode MkBody_DoMake(MkBody_Options* options,MkUtil_Printf PrintfCallback)
 	fp = NULL;									\
 	jeBody_Destroy(&pBody);						\
 	FreeVPHData(&pvphdata);						\
-	jeRam_Free(pBoneIDs);						\
+	JE_RAM_FREE(pBoneIDs);						\
 	return retValue
 
 		for(i=0;i<NumBones;i++)
@@ -2286,8 +2286,8 @@ ReturnCode MkBody_DoMake(MkBody_Options* options,MkUtil_Printf PrintfCallback)
 	fp = NULL;									\
 	jeBody_Destroy(&pBody);						\
 	FreeVPHData(&pvphdata);						\
-	jeRam_Free(pBoneIDs);						\
-	jeRam_Free(pNodes);							\
+	JE_RAM_FREE(pBoneIDs);						\
+	JE_RAM_FREE(pNodes);							\
 	return retValue
 
 		for(i=0;i<NumNodes;i++)
@@ -2826,8 +2826,8 @@ ReturnCode MkBody_DoMake(MkBody_Options* options,MkUtil_Printf PrintfCallback)
 
 		jeBody_Destroy(&pBody);
 		FreeVPHData(&pvphdata);
-		jeRam_Free(pBoneIDs);
-		jeRam_Free(pNodes);
+		JE_RAM_FREE(pBoneIDs);
+		JE_RAM_FREE(pNodes);
 	}
 	else
 	{
@@ -2882,7 +2882,7 @@ MkBody_Options* MkBody_OptionsCreate()
 	pOptions->ExtraMaterials = jeStrBlock_Create();
 	if (pOptions->ExtraMaterials == NULL)
 		{
-			jeRam_Free(pOptions);
+			JE_RAM_FREE(pOptions);
 			pOptions = NULL;
 		}
 
@@ -2897,7 +2897,7 @@ void MkBody_OptionsDestroy(MkBody_Options** ppOptions)
 	assert(*ppOptions != NULL);
 
 	jeStrBlock_Destroy( &((*ppOptions)->ExtraMaterials) );
-	jeRam_Free(*ppOptions);
+	JE_RAM_FREE(*ppOptions);
 
 	*ppOptions = NULL;
 }

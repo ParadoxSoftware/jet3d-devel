@@ -129,7 +129,7 @@ void Pen_Release( jwePen * pPen, int32 hDC )
 {
 		SelectPen( (HDC)hDC, pPen->hOldPen ) ;
 		//DeletePen( pPen->hPen ) ;
-		jeRam_Free( pPen );
+		JE_RAM_FREE( pPen );
 }
 
 jeBoolean	Pen_Polyline( int32 hDC, Point * pPoints, int32 nPoints )

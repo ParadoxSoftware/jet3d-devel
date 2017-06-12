@@ -72,7 +72,7 @@ jeBoolean JETCC AttachWorld(
 		int	i;
 
 		// allocate list
-		MaterialMapperNameList = (char **)jeRam_AllocateClear( sizeof ( char * ) * MaterialMapperTableSize );
+		MaterialMapperNameList = (char **)JE_RAM_ALLOCATE_CLEAR( sizeof ( char * ) * MaterialMapperTableSize );
 		if ( MaterialMapperNameList == NULL )
 		{
 			jeErrorLog_Add( JE_ERR_SUBSYSTEM_FAILURE, NULL );
@@ -220,15 +220,15 @@ jeBoolean JETCC AttachEngine(
 		// set actor def
 		Data.String = Util_StrDup( Object->ActorDefName );
 		ret = SetProperty( Actor, ACTOROBJ_LIST_ID, PROPERTY_COMBO_TYPE, &Data );
-		jeRam_Free( Data.String );
+		JE_RAM_FREE( Data.String );
 
 		if (!ret)
 		{
             // Krouer: restore the previous commented line
     	    Object->LoadedFromDisk = JE_FALSE;
-			jeRam_Free(Object->ActorDefName);
-			jeRam_Free(Object->MotionName);
-			jeRam_Free(Object->LightReferenceBoneName);
+			JE_RAM_FREE(Object->ActorDefName);
+			JE_RAM_FREE(Object->MotionName);
+			JE_RAM_FREE(Object->LightReferenceBoneName);
 			Object->ActorDefName = Util_StrDup( NoSelection );
 			Object->MotionName = Util_StrDup( NoSelection );
 			Object->LightReferenceBoneName = Util_StrDup( NoSelection );
@@ -238,25 +238,25 @@ jeBoolean JETCC AttachEngine(
 		// set motion name
 		Data.String = Util_StrDup( RememberMotionName );
 		ret = SetProperty( Actor, ACTOROBJ_MOTIONLIST_ID, PROPERTY_COMBO_TYPE, &Data );
-		jeRam_Free( Data.String );
-		jeRam_Free( RememberMotionName );
+		JE_RAM_FREE( Data.String );
+		JE_RAM_FREE( RememberMotionName );
 
 		if (!ret)
 		{
             // Krouer: restore the previous commented line
     	    Object->LoadedFromDisk = JE_FALSE;
-			jeRam_Free(Object->MotionName);
+			JE_RAM_FREE(Object->MotionName);
 			Object->MotionName = Util_StrDup( NoSelection );
 		}
 
 		// set light reference bone name
 		Data.String = Util_StrDup( Object->LightReferenceBoneName );
 		ret = SetProperty( Actor, ACTOROBJ_LIGHTREFERENCEBONENAMELIST_ID, PROPERTY_COMBO_TYPE, &Data );
-		jeRam_Free( Data.String );
+		JE_RAM_FREE( Data.String );
 
 		if (!ret)
 		{
-			jeRam_Free(Object->LightReferenceBoneName);
+			JE_RAM_FREE(Object->LightReferenceBoneName);
 			Object->LightReferenceBoneName = Util_StrDup( NoSelection );
 		}
 
@@ -311,7 +311,7 @@ jeBoolean JETCC DettachEngine(
 	// free actor def name
 	if ( Object->ActorDefName != NULL )
 	{
-		jeRam_Free( Object->ActorDefName );
+		JE_RAM_FREE( Object->ActorDefName );
 		Object->ActorDefName = NULL;
 	}
 		
@@ -685,7 +685,7 @@ jeBoolean JETCC SendObjMessage(void * Instance, int32 Msg, void * Data)
 					SetProperty( Actor, ACTOROBJ_MOTIONLIST_ID, PROPERTY_COMBO_TYPE, &Data );
 
 					// free temporary string
-					jeRam_Free( Data.String );
+					JE_RAM_FREE( Data.String );
 					break;
 				}
 			}
@@ -718,7 +718,7 @@ void* JETCC CreateInstance(void)
 JETAPI jeBoolean JETCC Destroy(void **pActor) //jeActor **pA)
 {
 	jeActor** pA = (jeActor **)pActor;
-	jeRam_Free((*pA)->Object);
+	JE_RAM_FREE((*pA)->Object);
 	(*pA)->Object = NULL;
 	jeActor_Destroy(pA);	
 	return JE_TRUE;
@@ -787,7 +787,7 @@ void * JETCC CreateFromFile(
 	    Result &= jeVFile_Read( File, &( Size ), sizeof( Size ) );
 	    if ( ( Size > 0 ) && ( Result == JE_TRUE ) )
 		{
-		    Object->ActorDefName = (char *)jeRam_Allocate( Size );
+		    Object->ActorDefName = (char *)JE_RAM_ALLOCATE( Size );
 		    if ( Object->ActorDefName == NULL )
 			{
 			    jeErrorLog_Add( JE_ERR_MEMORY_RESOURCE, NULL );
@@ -800,7 +800,7 @@ void * JETCC CreateFromFile(
 	    Result &= jeVFile_Read( File, &( Size ), sizeof( Size ) );
 	    if ( ( Size > 0 ) && ( Result == JE_TRUE ) )
 		{
-		    Object->MotionName = (char *)jeRam_Allocate( Size );
+		    Object->MotionName = (char *)JE_RAM_ALLOCATE( Size );
 		    if ( Object->MotionName == NULL )
 			{
 			    jeErrorLog_Add( JE_ERR_MEMORY_RESOURCE, NULL );
@@ -813,7 +813,7 @@ void * JETCC CreateFromFile(
 	    Result &= jeVFile_Read( File, &( Size ), sizeof( Size ) );
 	    if ( ( Size > 0 ) && ( Result == JE_TRUE ) )
 		{
-		    Object->LightReferenceBoneName = (char *)jeRam_Allocate( Size );
+		    Object->LightReferenceBoneName = (char *)JE_RAM_ALLOCATE( Size );
 		    if ( Object->LightReferenceBoneName == NULL )
 			{
 			    jeErrorLog_Add( JE_ERR_MEMORY_RESOURCE, NULL );
@@ -885,19 +885,19 @@ void * JETCC CreateFromFile(
 	// free all strings
 	if ( Object->ActorDefName != NULL )
 	{
-		jeRam_Free( Object->ActorDefName );
+		JE_RAM_FREE( Object->ActorDefName );
 	}
 	if ( Object->MotionName != NULL )
 	{
-		jeRam_Free( Object->MotionName );
+		JE_RAM_FREE( Object->MotionName );
 	}
 	if ( Object->LightReferenceBoneName != NULL )
 	{
-		jeRam_Free( Object->LightReferenceBoneName );
+		JE_RAM_FREE( Object->LightReferenceBoneName );
 	}
 
 	// free object
-	jeRam_Free( Object );
+	JE_RAM_FREE( Object );
 
 	// return error
 	return NULL;
@@ -1054,7 +1054,7 @@ void * JETCC DuplicateInstance(void * Instance)
 	jeObject* newActor = NULL;
 	jePtrMgr *ptrMgr = NULL;
 
-	vfsmemctx.Data = jeRam_Allocate(OBJ_PERSIST_SIZE); //"I dunno, 100K sounds good."
+	vfsmemctx.Data = JE_RAM_ALLOCATE(OBJ_PERSIST_SIZE); //"I dunno, 100K sounds good."
 	vfsmemctx.DataLength = OBJ_PERSIST_SIZE;
 
 	if (!vfsmemctx.Data) {
@@ -1073,7 +1073,7 @@ void * JETCC DuplicateInstance(void * Instance)
 
 	if (!ramdisk) {
 		jeErrorLog_AddString(JE_ERR_SUBSYSTEM_FAILURE, "Unable to create a VFile Memory Directory", NULL);
-		jeRam_Free(vfsmemctx.Data);
+		JE_RAM_FREE(vfsmemctx.Data);
 		return NULL;
 	}
 
@@ -1082,7 +1082,7 @@ void * JETCC DuplicateInstance(void * Instance)
 	if (!ramfile) {
 		jeErrorLog_AddString(JE_ERR_SUBSYSTEM_FAILURE, "Unable to create a VFile Memory File", NULL);
 		jeVFile_Close(ramdisk);
-		jeRam_Free(vfsmemctx.Data);
+		JE_RAM_FREE(vfsmemctx.Data);
 		return NULL;
 	}
 	ptrMgr = jePtrMgr_Create();
@@ -1091,7 +1091,7 @@ void * JETCC DuplicateInstance(void * Instance)
 		jeErrorLog_AddString(JE_ERR_SUBSYSTEM_FAILURE, "Unable to create a Pointer Manager", NULL);
 		jeVFile_Close(ramfile);
 		jeVFile_Close(ramdisk);
-		jeRam_Free(vfsmemctx.Data);
+		JE_RAM_FREE(vfsmemctx.Data);
 		return NULL;
 	}
 
@@ -1099,7 +1099,7 @@ void * JETCC DuplicateInstance(void * Instance)
 		jeErrorLog_AddString(JE_ERR_SUBSYSTEM_FAILURE, "Unable to write the object to a temp VFile Memory File", NULL);
 		jeVFile_Close(ramfile);
 		jeVFile_Close(ramdisk);
-		jeRam_Free(vfsmemctx.Data);
+		JE_RAM_FREE(vfsmemctx.Data);
 		return NULL;
 	}
 
@@ -1107,7 +1107,7 @@ void * JETCC DuplicateInstance(void * Instance)
 		jeErrorLog_AddString(JE_ERR_SUBSYSTEM_FAILURE, "Unable to rewind the temp VFile Memory File", NULL);
 		jeVFile_Close(ramfile);
 		jeVFile_Close(ramdisk);
-		jeRam_Free(vfsmemctx.Data);
+		JE_RAM_FREE(vfsmemctx.Data);
 		return NULL;
 	}
 
@@ -1116,14 +1116,14 @@ void * JETCC DuplicateInstance(void * Instance)
 		jeErrorLog_AddString(JE_ERR_SUBSYSTEM_FAILURE, "Unable to reade the object back from a temp VFile Memory File", NULL);
 		jeVFile_Close(ramfile);
 		jeVFile_Close(ramdisk);
-		jeRam_Free(vfsmemctx.Data);
+		JE_RAM_FREE(vfsmemctx.Data);
 		return NULL;
 	}
 
 	jeVFile_Close(ramfile);
 	jeVFile_Close(ramdisk);
 
-	jeRam_Free(vfsmemctx.Data);
+	JE_RAM_FREE(vfsmemctx.Data);
 
 	return( newActor );
 }

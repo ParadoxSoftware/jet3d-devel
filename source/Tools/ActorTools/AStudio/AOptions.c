@@ -75,7 +75,7 @@ AOptions *AOptions_CreateFromFile (const char *IniFilename)
 
 void AOptions_Destroy (AOptions **pOptions)
 {
-	jeRam_Free (*pOptions);
+	JE_RAM_FREE (*pOptions);
 }
 
 jeBoolean AOptions_WriteToFile (const AOptions *Options, const char *IniFilename)

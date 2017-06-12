@@ -159,7 +159,7 @@ void CLists::RenameObject( Object *pObject )
 	if( pszDisplayName != NULL )
 	{
 		m_List.SetItemText( hItem, pszDisplayName );
-		jeRam_Free( pszDisplayName ) ;
+		JE_RAM_FREE( pszDisplayName ) ;
 	}
 
 }
@@ -202,10 +202,10 @@ HTREEITEM CLists::FindObjectKind( CTreeCtrlEx * pList, Object * pObject )
 				{
 					if( strcmp( KindName, ItemText.GetBuffer(0) ) == 0 )
 					{
-						jeRam_Free( KindName );
+						JE_RAM_FREE( KindName );
 						return( hItem );
 					}
-					jeRam_Free( KindName );
+					JE_RAM_FREE( KindName );
 				}
 			}
 			else
@@ -258,7 +258,7 @@ jeBoolean CLists::ObjectCB(Object *pObject, void *lParam)
 			if( pszKindName == NULL )
 				return( JE_FALSE );
 			hParentItem = AddObjectKind( pList, pszKindName, Object_GetKind( pObject) );
-			jeRam_Free( pszKindName );
+			JE_RAM_FREE( pszKindName );
 			if( hParentItem == NULL )
 				return( JE_FALSE );
 		}
@@ -268,7 +268,7 @@ jeBoolean CLists::ObjectCB(Object *pObject, void *lParam)
 			pList->SetItemData( hItem, (DWORD)pObject ) ;
 			Object_AddRef( pObject );
 		}
-		jeRam_Free( pszDisplayName ) ;
+		JE_RAM_FREE( pszDisplayName ) ;
 	}
 	return (hItem == NULL) ? JE_FALSE : JE_TRUE ;
 }// BrushCB
@@ -325,7 +325,7 @@ jeBoolean CLists::SelectCB(Object *pObject, void *lParam)
 	if( hItem != NULL )
 		pList->SelectItemEx( hItem, true ) ;	// From derived TV
 
-	jeRam_Free( pszDisplayName ) ;
+	JE_RAM_FREE( pszDisplayName ) ;
 
 	return (hItem == NULL) ? JE_FALSE : JE_TRUE ;
 }// SelectCB
@@ -390,7 +390,7 @@ jeBoolean CLists::AddSelectionCB(Object *pObject, void *lParam)
 		if( pszKindName == NULL )
 			return( FALSE );
 		hClassItem  = AddObjectKind( pList, pszKindName, Object_GetKind( pObject ));
-		jeRam_Free( pszKindName );
+		JE_RAM_FREE( pszKindName );
 		if( hClassItem == NULL )
 			return( FALSE );
 	}
@@ -399,7 +399,7 @@ jeBoolean CLists::AddSelectionCB(Object *pObject, void *lParam)
 		return JE_FALSE ;
 
 	hItem = pList->InsertItem( pszDisplayName, hClassItem, TVI_SORT ) ;
-	jeRam_Free( pszDisplayName ) ;
+	JE_RAM_FREE( pszDisplayName ) ;
 
 	if( hItem == NULL )
 		return JE_FALSE ;

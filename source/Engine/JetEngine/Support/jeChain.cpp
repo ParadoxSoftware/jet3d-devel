@@ -279,7 +279,7 @@ void jeChain_Destroy(jeChain **Chain)
 			jeChain_LinkDestroy(&Link);
 		}
 
-		jeRam_Free(*Chain);
+		JE_RAM_FREE(*Chain);
 	}
 
 	*Chain = NULL;
@@ -704,7 +704,7 @@ void jeChain_LinkDestroy(jeChain_Link **Link)
 	assert(Link);
 	assert(jeChain_LinkIsValid(*Link) == JE_TRUE);
 
-	jeRam_Free(*Link);
+	JE_RAM_FREE(*Link);
 
 	*Link = NULL;
 }

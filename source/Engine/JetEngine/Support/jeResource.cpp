@@ -79,7 +79,7 @@ JETAPI jeResourceMgr * JETCC jeResource_MgrCreate(jeEngine* pEngine)
 	jeResourceMgr	*ResourceMgr;
 
 	// create resource list struct
-	ResourceMgr = (jeResourceMgr *)jeRam_AllocateClear( sizeof( *ResourceMgr ) );
+	ResourceMgr = (jeResourceMgr *)JE_RAM_ALLOCATE_CLEAR( sizeof( *ResourceMgr ) );
 	if ( ResourceMgr == NULL )
 	{
 		return NULL;
@@ -214,11 +214,11 @@ JETAPI void JETCC jeResource_MgrDestroy(
 			// free name
 			if ( CurResource->Name != NULL )
 			{
-				jeRam_Free( CurResource->Name );
+				JE_RAM_FREE( CurResource->Name );
 			}
 
 			// free resource struct
-			jeRam_Free( CurResource );
+			JE_RAM_FREE( CurResource );
 
 			// get next node
 			CurNode = NextNode;  //CurNode = jeChain_LinkGetNext( CurNode );  [MLB-ICE]
@@ -231,7 +231,7 @@ JETAPI void JETCC jeResource_MgrDestroy(
 	}
 
 	// free main struct
-	jeRam_Free( ResourceMgr );
+	JE_RAM_FREE( ResourceMgr );
 
 	// zap pointer
 	*DeadResourceMgr = NULL;
@@ -332,7 +332,7 @@ JETAPI jeBoolean JETCC jeResource_Add(
 	assert( Data != NULL );
 
 	// create new resource struct
-	NewResource = (jeResource *)jeRam_Allocate( sizeof( *NewResource ) );
+	NewResource = (jeResource *)JE_RAM_ALLOCATE( sizeof( *NewResource ) );
 	if ( NewResource == NULL )
 	{
 		return JE_FALSE;
@@ -475,11 +475,11 @@ JETAPI int JETCC jeResource_Delete(
 		// free name
 		if ( CurResource->Name != NULL )
 		{
-			jeRam_Free( CurResource->Name );
+			JE_RAM_FREE( CurResource->Name );
 		}
 
 		// free resource struct
-		jeRam_Free( CurResource );
+		JE_RAM_FREE( CurResource );
 		// [MLB-ICE] EOB
 
 		return 0;
@@ -511,7 +511,7 @@ static char * jeResource_CreateVFileName(
 	assert( Name != NULL );
 
 	// build new name
-	NewName = (char *)jeRam_Allocate( strlen( VFilePrefix ) + strlen( Name ) + 1 );
+	NewName = (char *)JE_RAM_ALLOCATE( strlen( VFilePrefix ) + strlen( Name ) + 1 );
 	if ( NewName == NULL )
 	{
 		return NULL;
@@ -558,7 +558,7 @@ JETAPI jeBoolean JETCC jeResource_AddVFile(
 
 	// add it to the list
     Result = jeResource_Add( ResourceMgr, NewName, JE_RESOURCE_VFS, Data );
-	jeRam_Free( NewName );
+	JE_RAM_FREE( NewName );
 
 	// all done
 	return Result;
@@ -597,7 +597,7 @@ JETAPI jeVFile * JETCC jeResource_GetVFile(
 
 	// get data
 	Data = (jeVFile *)jeResource_Get( ResourceMgr, NewName );
-	jeRam_Free( NewName );
+	JE_RAM_FREE( NewName );
 
 	// all done
 	return Data;
@@ -636,7 +636,7 @@ JETAPI int JETCC jeResource_DeleteVFile(
 
 	// delete data
 	RefCount = jeResource_Delete( ResourceMgr, NewName );
-	jeRam_Free( NewName );
+	JE_RAM_FREE( NewName );
 
 	// all done
 	return RefCount;
@@ -676,7 +676,7 @@ static jeBoolean jeResource_SetOpenDir(
 
 	// fail if node doesn't exist
     CurNode = jeResource_GetNode( ResourceMgr, JE_RESOURCE_VFS, NewName );
-	jeRam_Free( NewName );
+	JE_RAM_FREE( NewName );
 
 	if ( CurNode == NULL )
 	{
@@ -895,7 +895,7 @@ JETAPI void * JETCC jeResource_GetResource(
 		CurNode = jeResource_GetNode( ResourceMgr, Type, ResName );
 		if (CurNode==NULL) {
 			char* ResNameCopy;
-			ResNameCopy = (char*) jeRam_Allocate(strlen(ResName)+10);
+			ResNameCopy = (char*) JE_RAM_ALLOCATE(strlen(ResName)+10);
 			strcpy(ResNameCopy, ResName);
             Data = NULL;
 			switch (Type) {
@@ -963,14 +963,14 @@ JETAPI void * JETCC jeResource_GetResource(
             if (Data) {
 				jeResource_Add(ResourceMgr, Name, Type, Data);
 			}
-			jeRam_Free(ResNameCopy);
+			JE_RAM_FREE(ResNameCopy);
 		} else {
 			DirRes = (jeResource *)jeChain_LinkGetLinkData( CurNode );
 			DirRes->RefCount++;
 			Data = DirRes->Data;
 		}
 
-		jeRam_Free(CopyName);
+		JE_RAM_FREE(CopyName);
 		return Data;
 	}
 
@@ -1014,7 +1014,7 @@ JETAPI void JETCC jeResource_ExportResource(jeResourceMgr *ResourceMgr, int32 Ty
 	if (CurResource->OpenDir) {
 		char* ResNameCopy;
 		jeVFile* ResFile;
-		ResNameCopy = (char*) jeRam_Allocate(strlen(Name)+10);
+		ResNameCopy = (char*) JE_RAM_ALLOCATE(strlen(Name)+10);
 		strcpy(ResNameCopy, Name);
 		Directory = (jeVFile*) CurResource->Data;
 		switch (Type) {
@@ -1028,7 +1028,7 @@ JETAPI void JETCC jeResource_ExportResource(jeResourceMgr *ResourceMgr, int32 Ty
 			}
 			break;
 		}
-		jeRam_Free(ResNameCopy);
+		JE_RAM_FREE(ResNameCopy);
 	}
 }
 
@@ -1066,11 +1066,11 @@ JETAPI jeBoolean JETCC jeResource_ReleaseResource(jeResourceMgr *ResourceMgr, in
 			// free name
 			if ( CurResource->Name != NULL )
 			{
-				jeRam_Free( CurResource->Name );
+				JE_RAM_FREE( CurResource->Name );
 			}
 
 			// free resource struct
-			jeRam_Free( CurResource );
+			JE_RAM_FREE( CurResource );
 		}
 
 		return JE_TRUE;

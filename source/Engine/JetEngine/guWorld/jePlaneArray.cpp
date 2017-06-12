@@ -109,8 +109,8 @@ jePlaneArray *jePlaneArray_Create(int32 StartPlanes)
 		if (Array)
 		{
 			if (Array->Planes)
-				jeRam_Free(Array->Planes);
-			jeRam_Free(Array);
+				JE_RAM_FREE(Array->Planes);
+			JE_RAM_FREE(Array);
 		}
 
 		return NULL;
@@ -133,14 +133,14 @@ void jePlaneArray_Destroy(jePlaneArray **Array)
 		if ((*Array)->Planes)				// Free the planes
 		{
 			assert((*Array)->MaxPlanes > 0);
-			jeRam_Free((*Array)->Planes);
+			JE_RAM_FREE((*Array)->Planes);
 		}
 		else
 		{
 			assert((*Array)->MaxPlanes == 0);
 		}
 	
-		jeRam_Free(*Array);				// Finally, free the VArray itself
+		JE_RAM_FREE(*Array);				// Finally, free the VArray itself
 	}
 
 	*Array = NULL;
@@ -182,7 +182,7 @@ jePlaneArray_Plane *jePlaneArray_Extend(jePlaneArray *Array)
 		}
 	}
 	
-	Array->Planes = (jePlaneArray_Plane *)jeRam_Realloc(Array->Planes, NewSize*sizeof(jePlaneArray_Plane));
+	Array->Planes = (jePlaneArray_Plane *)JE_RAM_REALLOC(Array->Planes, NewSize*sizeof(jePlaneArray_Plane));
 
 	assert(Array->Planes);
 	if (!Array->Planes)

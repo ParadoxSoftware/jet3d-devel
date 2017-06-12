@@ -128,7 +128,7 @@ void Settings_Destroy( Settings ** ppSettings )
 	pSettings = *ppSettings ;
 	assert( pSettings != NULL ) ;
 
-	jeRam_Free( *ppSettings ) ;
+	JE_RAM_FREE( *ppSettings ) ;
 
 }// Settings_Destroy
 
@@ -252,7 +252,7 @@ void MouseSettings_Destroy( MouseSettings ** ppSettings )
 	pSettings = *ppSettings ;
 	assert(pSettings != NULL) ;
 
-	jeRam_Free(*ppSettings) ;
+	JE_RAM_FREE(*ppSettings) ;
 
 	// what's the pointer of passin a pointer to pointer
 	// if you don't set the data pointer to NULL?

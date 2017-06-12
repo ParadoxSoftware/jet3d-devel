@@ -61,7 +61,7 @@ JETAPI jePtrMgr * JETCC jePtrMgr_Create(void)
 	if (!PtrMgr->PtrStack)
 	{
 		jeErrorLog_AddString(-1, "jePtrMgr_Create:  JE_RAM_ALLOCATE_ARRAY failed.", "PtrMgr->PtrStack");
-		jeRam_Free(PtrMgr);
+		JE_RAM_FREE(PtrMgr);
 		return NULL;
 	}
 
@@ -141,9 +141,9 @@ JETAPI void JETCC jePtrMgr_Destroy(jePtrMgr **PtrMgr)
 	if ((*PtrMgr)->RefCount == 0)
 	{
 		assert((*PtrMgr)->PtrStack);
-		jeRam_Free((*PtrMgr)->PtrStack);
+		JE_RAM_FREE((*PtrMgr)->PtrStack);
 
-		jeRam_Free(*PtrMgr);
+		JE_RAM_FREE(*PtrMgr);
 	}
 
 	*PtrMgr = NULL;
@@ -329,7 +329,7 @@ static jePtrMgr_SEntry *PushSEntry(jePtrMgr *PtrMgr)
 
 		PtrMgr->StackSize = NewSize;
 
-		PtrMgr->PtrStack = (jePtrMgr_SEntry *)jeRam_Realloc(PtrMgr->PtrStack, PtrMgr->StackSize*sizeof(jePtrMgr_SEntry));
+		PtrMgr->PtrStack = (jePtrMgr_SEntry *)JE_RAM_REALLOC(PtrMgr->PtrStack, PtrMgr->StackSize*sizeof(jePtrMgr_SEntry));
 
 		if (!PtrMgr->PtrStack)
 			return NULL;			// Out of memory

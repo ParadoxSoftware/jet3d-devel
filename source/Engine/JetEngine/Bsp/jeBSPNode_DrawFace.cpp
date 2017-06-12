@@ -77,7 +77,7 @@ void jeBSPNode_DrawFaceDestroy(jeBSPNode_DrawFace **Face, jeBSP *BSP)
 
 	if (DFace->PortalXForm)
 	{
-		jeRam_Free(DFace->PortalXForm);
+		JE_RAM_FREE(DFace->PortalXForm);
 		DFace->PortalXForm = NULL;
 	}
 
@@ -103,7 +103,7 @@ void jeBSPNode_DrawFaceDestroy(jeBSPNode_DrawFace **Face, jeBSP *BSP)
 
 	if (DFace->TVerts)
 	{
-		jeRam_Free(DFace->TVerts);
+		JE_RAM_FREE(DFace->TVerts);
 		DFace->TVerts = NULL;
 	}
 
@@ -113,7 +113,7 @@ void jeBSPNode_DrawFaceDestroy(jeBSPNode_DrawFace **Face, jeBSP *BSP)
 	// END - Hardware T&L - paradoxnj 4/7/2005
 
 #ifdef DRAWFACE_USE_JE_RAM
-	jeRam_Free(*Face);
+	JE_RAM_FREE(*Face);
 #else
 	{
 		jeBoolean	Ret;
@@ -163,7 +163,7 @@ jeBoolean jeBSPNode_DrawFaceCreateUVInfo(jeBSPNode_DrawFace *Face, jeBSP *BSP)
 	int32				v;
 
 	if (Face->TVerts)
-		jeRam_Free(Face->TVerts);
+		JE_RAM_FREE(Face->TVerts);
 
 	Face->TVerts = JE_RAM_ALLOCATE_ARRAY(jeTexVert, Face->Poly->NumVerts);
 

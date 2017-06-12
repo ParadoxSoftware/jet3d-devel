@@ -108,7 +108,7 @@ JETAPI jeMaterial * JETCC jeMaterial_Create(const char *MatName)
 
 	if (!jeMaterial_CreateRef(Material))
 	{
-		jeRam_Free(Material);
+		JE_RAM_FREE(Material);
 		return NULL;
 	}
 
@@ -147,7 +147,7 @@ JETAPI void JETCC jeMaterial_Destroy(jeMaterial **Material)
 		if ((*Material)->MatSpec)
 			jeMaterialSpec_Destroy(&(*Material)->MatSpec);
 #endif
-		jeRam_Free(*Material);
+		JE_RAM_FREE(*Material);
 	}
 
 	*Material = NULL;
@@ -253,7 +253,7 @@ JETAPI jeMaterial_Array * JETCC jeMaterial_ArrayCreate(int32 StartSize)
 
 	if (!MArray->Array)
 	{
-		jeRam_Free(MArray);
+		JE_RAM_FREE(MArray);
 		return NULL;
 	}
 
@@ -425,7 +425,7 @@ JETAPI jeMaterial_Array * JETCC jeMaterial_ArrayCreateFromFile(jeVFile *VFile, j
 	if (!Array->Array)
 	{
 		jeErrorLog_AddString(-1, "jeMaterial_ArrayCreateFromFile : jeArray_CreateFromFile failed.", NULL);
-		jeRam_Free(Array);
+		JE_RAM_FREE(Array);
 		return NULL;
 	}
 
@@ -448,7 +448,7 @@ JETAPI jeMaterial_Array * JETCC jeMaterial_ArrayCreateFromFile(jeVFile *VFile, j
 				jeArray_Destroy(&Array->Array);
 		}
 
-		jeRam_Free(Array);
+		JE_RAM_FREE(Array);
 
 		return NULL;
 	}
@@ -633,7 +633,7 @@ JETAPI void JETCC jeMaterial_ArrayDestroy(jeMaterial_Array **Array)
 	if ((*Array)->Engine)
 		jeEngine_Destroy(&(*Array)->Engine);	// Icestorm
 
-	jeRam_Free(*Array);
+	JE_RAM_FREE(*Array);
 
 	*Array = NULL;
 }

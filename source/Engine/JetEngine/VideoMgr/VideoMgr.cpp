@@ -95,7 +95,7 @@ JETAPI jeBoolean JETCC jeVideo_DestroyManager(jeVidMgr **VideoMgr)
 		HELPER_RELEASE(VideoMedia.pGraph);
 		HELPER_RELEASE(VideoMedia.pimex);
 
-		jeRam_Free(Vid);
+		JE_RAM_FREE(Vid);
 		//*Vid = NULL;
 		return JE_TRUE;
 

@@ -212,8 +212,8 @@ jePose *JETCF jePose_Create(void)
 			if (P->JointNames != NULL)
 				jeStrBlock_Destroy(&(P->JointNames));
 			if (P->JointArray != NULL)
-				jeRam_Free(P->JointArray);
-			jeRam_Free(P);
+				JE_RAM_FREE(P->JointArray);
+			JE_RAM_FREE(P);
 		}
 	return NULL;
 }
@@ -231,8 +231,8 @@ void JETCF jePose_Destroy(jePose **PP)
 			jeXFArray_Destroy(&( (*PP)->TransformArray) );
 		}
 	if ((*PP)->JointArray != NULL)
-		jeRam_Free((*PP)->JointArray);
-	jeRam_Free( *PP );
+		JE_RAM_FREE((*PP)->JointArray);
+	JE_RAM_FREE( *PP );
 
 	*PP = NULL;
 }

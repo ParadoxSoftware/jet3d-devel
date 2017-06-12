@@ -522,12 +522,12 @@ JETAPI void JETCC jeProperty_ListDestroy( jeProperty_List **pArray )
 		for( i = 0; i < (*pArray)->jePropertyN; i++ )
 		{
 			if((*pArray)->pjeProperty[i].FieldName != NULL )
-				jeRam_Free((*pArray)->pjeProperty[i].FieldName );
+				JE_RAM_FREE((*pArray)->pjeProperty[i].FieldName );
 		}
-		jeRam_Free((*pArray)->pjeProperty );
+		JE_RAM_FREE((*pArray)->pjeProperty );
 	}
 
-	jeRam_Free(*pArray);
+	JE_RAM_FREE(*pArray);
 
 	*pArray = NULL;
 }

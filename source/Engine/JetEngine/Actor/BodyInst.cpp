@@ -98,20 +98,20 @@ void JETCF jeBodyInst_Destroy( jeBodyInst **BI)
 	G = &( (*BI)->ExportGeometry );
 	if (G->SkinVertexArray != NULL )
 		{
-			jeRam_Free( G->SkinVertexArray );
+			JE_RAM_FREE( G->SkinVertexArray );
 			G->SkinVertexArray = NULL;
 		}
 	if (G->NormalArray != NULL )
 		{
-			jeRam_Free( G->NormalArray );
+			JE_RAM_FREE( G->NormalArray );
 			G->NormalArray = NULL;
 		}
 	if (G->FaceList != NULL )
 		{
-			jeRam_Free( G->FaceList );
+			JE_RAM_FREE( G->FaceList );
 			G->FaceList = NULL;
 		}
-	jeRam_Free( *BI );
+	JE_RAM_FREE( *BI );
 	*BI = NULL;
 }
 
@@ -138,7 +138,7 @@ static jeBodyInst_Geometry * JETCF jeBodyInst_GetGeometryPrep(
 		{
 			if (G->SkinVertexArray!=NULL)
 				{
-					jeRam_Free(G->SkinVertexArray);
+					JE_RAM_FREE(G->SkinVertexArray);
 				}
 			G->SkinVertexArray = JE_RAM_ALLOCATE_ARRAY_CLEAR(jeBodyInst_SkinVertex,B->XSkinVertexCount);
 			if ( G->SkinVertexArray == NULL )
@@ -154,7 +154,7 @@ static jeBodyInst_Geometry * JETCF jeBodyInst_GetGeometryPrep(
 		{
 			if (G->NormalArray!=NULL)
 				{
-					jeRam_Free(G->NormalArray);
+					JE_RAM_FREE(G->NormalArray);
 				}
 			G->NormalArray = JE_RAM_ALLOCATE_ARRAY_CLEAR( jeVec3d,B->SkinNormalCount);
 			if ( G->NormalArray == NULL )
@@ -170,7 +170,7 @@ static jeBodyInst_Geometry * JETCF jeBodyInst_GetGeometryPrep(
 		{
 			if (G->FaceList!=NULL)
 				{
-					jeRam_Free(G->FaceList);
+					JE_RAM_FREE(G->FaceList);
 				}
 			G->FaceListSize = sizeof(jeBody_Index) * 
 					B->SkinFaces[JE_BODY_HIGHEST_LOD].FaceCount * 

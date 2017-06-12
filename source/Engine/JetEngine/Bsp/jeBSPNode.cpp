@@ -154,7 +154,7 @@ void jeBSPNode_Destroy_r(jeBSPNode **Node, jeBSP *BSP)
 	jeBSPNode_DestroyBSPFaces(Node2, BSP, JE_FALSE);
 
 #ifdef NODE_USE_JE_RAM
-	jeRam_Free(*Node);
+	JE_RAM_FREE(*Node);
 #else
 	{
 		jeBoolean	Ret;
@@ -467,7 +467,7 @@ void jeBSPNode_DestroyDrawFaces(jeBSPNode *Node, jeBSP *BSP)
 		jeBSPNode_DrawFaceDestroy(&DFace, BSP);
 	}
 
-	jeRam_Free(Node->DrawFaces);
+	JE_RAM_FREE(Node->DrawFaces);
 
 	Node->DrawFaces = NULL;
 	Node->NumDrawFaces = 0;
@@ -3426,7 +3426,7 @@ jeBoolean jeBSPNode_FixDrawFaceTJuncts_r(jeBSPNode *Node, jeBSP *BSP, jeVertArra
 		
 		assert(NumNewDrawFaces == GoodFaces);		// They should be the same or something went wrong...
 
-		jeRam_Free(Node->DrawFaces);
+		JE_RAM_FREE(Node->DrawFaces);
 		Node->DrawFaces = NewDrawFaces;
 	}	
 

@@ -116,8 +116,8 @@ JETAPI jeVertArray * JETCC jeVertArray_Create(int32 StartVerts)
 		if (VArray)
 		{
 			if (VArray->Verts)
-				jeRam_Free(VArray->Verts);
-			jeRam_Free(VArray);
+				JE_RAM_FREE(VArray->Verts);
+			JE_RAM_FREE(VArray);
 		}
 
 		return NULL;
@@ -185,8 +185,8 @@ JETAPI jeVertArray * JETCC jeVertArray_CreateFromFile(jeVFile *VFile)
 		if (Array)
 		{
 			if (Array->Verts)
-				jeRam_Free(Array->Verts);
-			jeRam_Free(Array);
+				JE_RAM_FREE(Array->Verts);
+			JE_RAM_FREE(Array);
 		}
 
 		return NULL;
@@ -232,14 +232,14 @@ JETAPI void JETCC jeVertArray_Destroy(jeVertArray **VArray)
 		if ((*VArray)->Verts)				// Free the verts 
 		{
 			assert((*VArray)->MaxVerts > 0);
-			jeRam_Free((*VArray)->Verts);
+			JE_RAM_FREE((*VArray)->Verts);
 		}
 		else
 		{
 			assert((*VArray)->MaxVerts == 0);
 		}
 
-		jeRam_Free(*VArray);				// Finally, free the VArray itself
+		JE_RAM_FREE(*VArray);				// Finally, free the VArray itself
 	}
 
 	*VArray = NULL;
@@ -282,7 +282,7 @@ jeVertArray_Vert * jeVertArray_Extend(jeVertArray *Array)
 
 	assert(NewSize > Array->MaxVerts);
 
-	Array->Verts = (jeVertArray_Vert *)jeRam_Realloc(Array->Verts, NewSize*sizeof(jeVertArray_Vert));
+	Array->Verts = (jeVertArray_Vert *)JE_RAM_REALLOC(Array->Verts, NewSize*sizeof(jeVertArray_Vert));
 
 	assert(Array->Verts);
 	if (!Array->Verts)
@@ -575,19 +575,19 @@ static jeBoolean BuildOptimizedIndexList(jeVertArray *Array, jeVertArray_Optimiz
 
 		if (Optimizer->OptimizedIndexList[i] == JE_VERTARRAY_NULL_INDEX)
 		{
-			jeRam_Free(OptimizedVerts);
+			JE_RAM_FREE(OptimizedVerts);
 			return JE_FALSE;
 		}
 	}
 
 	// Free old vert array
-	jeRam_Free(Array->Verts);
+	JE_RAM_FREE(Array->Verts);
 
 	if (NumVerts < Array->ActiveVerts)
 	{
 		// Shrink the new array if it is smaller then the original # of verts
 		//	(This is probably the case since we have welded them together...)
-		OptimizedVerts = (jeVertArray_Vert *)jeRam_Realloc(OptimizedVerts, NumVerts*sizeof(jeVertArray_Vert));
+		OptimizedVerts = (jeVertArray_Vert *)JE_RAM_REALLOC(OptimizedVerts, NumVerts*sizeof(jeVertArray_Vert));
 		Array->ActiveVerts = (jeVertArray_Index)NumVerts;
 	}
 
@@ -655,12 +655,12 @@ JETAPI jeVertArray_Optimizer * JETCC jeVertArray_CreateOptimizer(jeVertArray *Ar
 		if (Optimizer)
 		{
 			if (Optimizer->VertexChain)
-				jeRam_Free(Optimizer->VertexChain);
+				JE_RAM_FREE(Optimizer->VertexChain);
 
 			if (Optimizer->OptimizedIndexList)
-				jeRam_Free(Optimizer->OptimizedIndexList);
+				JE_RAM_FREE(Optimizer->OptimizedIndexList);
 
-			jeRam_Free(Optimizer);
+			JE_RAM_FREE(Optimizer);
 		}
 		return NULL;
 	}
@@ -676,12 +676,12 @@ JETAPI void JETCC jeVertArray_DestroyOptimizer(jeVertArray *Array, jeVertArray_O
 	assert(*Optimizer);
 
 	if ((*Optimizer)->VertexChain)
-		jeRam_Free((*Optimizer)->VertexChain);
+		JE_RAM_FREE((*Optimizer)->VertexChain);
 
 	if ((*Optimizer)->OptimizedIndexList)
-		jeRam_Free((*Optimizer)->OptimizedIndexList);
+		JE_RAM_FREE((*Optimizer)->OptimizedIndexList);
 
-	jeRam_Free(*Optimizer);
+	JE_RAM_FREE(*Optimizer);
 	*Optimizer = NULL;
 }
 

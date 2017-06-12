@@ -19,10 +19,15 @@
 /*                                                                                      */
 /****************************************************************************************/
 #include <assert.h>
+#include "Basetype.h"
+#include "Ram.h"
 #include "arithc.h"
 #include "arithc._h"
 
 #pragma warning (disable : 4244)
+
+#define new(type)		JE_RAM_ALLOCATE_CLEAR(sizeof(type))
+#define destroy(x)		JE_RAM_FREE(x)
 
 /*functions:*/
 
@@ -41,8 +46,8 @@ return(ari);
 
 void arithFree(arithInfo * ari)
 {
-//if (ari) destroy(ari);
-	if (ari) delete ari;
+	if (ari) destroy(ari);
+	//if (ari) delete ari;
 }
 
 

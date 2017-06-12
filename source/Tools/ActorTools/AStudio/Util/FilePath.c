@@ -268,7 +268,7 @@ jeBoolean FilePath_ResolveRelativePathList (const char *RelativeList, char *Reso
 		c = strtok (NULL, ";");
 	}
 
-	jeRam_Free (PathString);
+	JE_RAM_FREE (PathString);
 
 	return JE_TRUE;
 }

@@ -234,7 +234,7 @@ static char * Util_LoadLibraryString(
 	}
 
 	// copy resource string
-	NewString = (char*)jeRam_Allocate( Size + 1 );
+	NewString = (char*)JE_RAM_ALLOCATE( Size + 1 );
 	if ( NewString == NULL )
 	{
 		jeErrorLog_Add( JE_ERR_MEMORY_RESOURCE, NULL );
@@ -595,7 +595,7 @@ void * JETCC CreateInstance( void )
 	pBoxObj->RefCnt = 1;
 	if( !BoxObject_InitBox( pBoxObj ) )
 	{
-		jeRam_Free( pBoxObj );
+		JE_RAM_FREE( pBoxObj );
 		return( NULL );
 	}
 	return( pBoxObj );
@@ -648,7 +648,7 @@ jeBoolean JETCC Destroy(void **pInstance)
 		for( i = 0; i < 6; i++ )
 			if( pBoxObj->Faces[i] != NULL )
 				jeUserPoly_Destroy(&pBoxObj->Faces[i]);
-		jeRam_Free( pBoxObj );
+		JE_RAM_FREE( pBoxObj );
 	}
 	else
 		return( JE_FALSE );
@@ -827,7 +827,7 @@ void *	JETCC CreateFromFile(jeVFile * File, jePtrMgr *PtrMgr)
 
 CFF_ERROR:
 
-	jeRam_Free( pBoxObj );
+	JE_RAM_FREE( pBoxObj );
 	return( NULL );
 }
 

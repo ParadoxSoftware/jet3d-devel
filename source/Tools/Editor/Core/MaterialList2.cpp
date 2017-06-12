@@ -134,7 +134,7 @@ static MaterialDirectory * MaterialList_CreateDirectory(
 	assert( strlen( DirectoryName ) > 0 );
 
 	// create new material directory struct
-	NewMaterialDirectory = (MaterialDirectory *)jeRam_AllocateClear( sizeof( *NewMaterialDirectory ) );
+	NewMaterialDirectory = (MaterialDirectory *)JE_RAM_ALLOCATE_CLEAR( sizeof( *NewMaterialDirectory ) );
 	if ( NewMaterialDirectory == NULL )
 	{
 		jeErrorLog_Add( JE_ERR_MEMORY_RESOURCE, "Could not create material directory struct" );
@@ -142,7 +142,7 @@ static MaterialDirectory * MaterialList_CreateDirectory(
 	}
 
 	// save directory name
-	NewMaterialDirectory->Name = (char *)jeRam_Allocate( strlen( DirectoryName ) + 1 );
+	NewMaterialDirectory->Name = (char *)JE_RAM_ALLOCATE( strlen( DirectoryName ) + 1 );
 	if ( NewMaterialDirectory->Name == NULL )
 	{
 		jeErrorLog_Add( JE_ERR_MEMORY_RESOURCE, "Could not create material directory name" );
@@ -163,7 +163,7 @@ static MaterialDirectory * MaterialList_CreateDirectory(
 
 		// allocate complete path string
 		assert( strlen( ParentPath ) > 0 );
-		NewMaterialDirectory->PathName = (char *)jeRam_Allocate( strlen( ParentPath ) + strlen( DirectoryName ) + 2 );
+		NewMaterialDirectory->PathName = (char *)JE_RAM_ALLOCATE( strlen( ParentPath ) + strlen( DirectoryName ) + 2 );
 		if ( NewMaterialDirectory->PathName == NULL )
 		{
 			jeErrorLog_Add( JE_ERR_MEMORY_RESOURCE, "Could not create material directory name" );
@@ -179,7 +179,7 @@ static MaterialDirectory * MaterialList_CreateDirectory(
 	{
 
 		// allocate complete path string
-		NewMaterialDirectory->PathName = (char *)jeRam_Allocate( strlen( DirectoryName ) + 1 );
+		NewMaterialDirectory->PathName = (char *)JE_RAM_ALLOCATE( strlen( DirectoryName ) + 1 );
 		if ( NewMaterialDirectory->PathName == NULL )
 		{
 			jeErrorLog_Add( JE_ERR_MEMORY_RESOURCE, "Could not create material directory name" );
@@ -218,13 +218,13 @@ static MaterialDirectory * MaterialList_CreateDirectory(
 	// destroy complete path name
 	if ( NewMaterialDirectory->PathName != NULL )
 	{
-		jeRam_Free( NewMaterialDirectory->PathName );
+		JE_RAM_FREE( NewMaterialDirectory->PathName );
 	}
 
 	// destroy directory name
 	if ( NewMaterialDirectory->Name != NULL )
 	{
-		jeRam_Free( NewMaterialDirectory->Name );
+		JE_RAM_FREE( NewMaterialDirectory->Name );
 	}
 
 	// destroy child directory list
@@ -240,7 +240,7 @@ static MaterialDirectory * MaterialList_CreateDirectory(
 	}
 
 	// destroy the material directoty structure
-	jeRam_Free( NewMaterialDirectory );
+	JE_RAM_FREE( NewMaterialDirectory );
 
 	// return failure
 	return NULL;
@@ -345,7 +345,7 @@ static jeBoolean MaterialList_ProcessDirectory(
 			Material	*NewMaterial;
 
 			// create new material
-			NewMaterial = (Material *)jeRam_AllocateClear( sizeof( *NewMaterial ) );
+			NewMaterial = (Material *)JE_RAM_ALLOCATE_CLEAR( sizeof( *NewMaterial ) );
 			if ( NewMaterial == NULL )
 			{
 				jeErrorLog_Add( JE_ERR_MEMORY_RESOURCE, "Could not create material struct" );
@@ -353,7 +353,7 @@ static jeBoolean MaterialList_ProcessDirectory(
 			}
 
 			// setup material name
-			NewMaterial->Name = (char *)jeRam_Allocate( strlen( Properties.Name ) + 1 );
+			NewMaterial->Name = (char *)JE_RAM_ALLOCATE( strlen( Properties.Name ) + 1 );
 			if ( NewMaterial->Name == NULL )
 			{
 				jeErrorLog_Add( JE_ERR_MEMORY_RESOURCE, "Could not create material name" );

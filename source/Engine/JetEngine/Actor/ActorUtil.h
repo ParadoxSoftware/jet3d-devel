@@ -60,7 +60,7 @@ static char * Util_StrDup(
 	assert( String != NULL );
 
 	// copy string
-	NewString = (char *)jeRam_Allocate( strlen( String ) + 1 );
+	NewString = (char *)JE_RAM_ALLOCATE( strlen( String ) + 1 );
 	if ( NewString ) 
 	{
 		strcpy( NewString, String );
@@ -276,26 +276,26 @@ static void Util_DestroyBitmapList(
 		{
 			if ( List->Name[i] != NULL )
 			{
-				jeRam_Free( List->Name[i] );
+				JE_RAM_FREE( List->Name[i] );
 			}
 		}
-		jeRam_Free( List->Name );
+		JE_RAM_FREE( List->Name );
 	}
 
 	// destroy width and height lists
 	if ( List->Width != NULL )
 	{
-		jeRam_Free( List->Width );
+		JE_RAM_FREE( List->Width );
 	}
 	if ( List->Height != NULL )
 	{
-		jeRam_Free( List->Height );
+		JE_RAM_FREE( List->Height );
 	}
 
 	// destroy numeric sizes list
 	if ( List->NumericSizes != NULL )
 	{
-		jeRam_Free( List->NumericSizes );
+		JE_RAM_FREE( List->NumericSizes );
 	}
 
 	// destroy string sizes list
@@ -304,12 +304,12 @@ static void Util_DestroyBitmapList(
 		for ( i = 0; i < List->SizesListSize; i++ )
 		{
 			assert( List->StringSizes[i] != NULL );
-			jeRam_Free( List->StringSizes[i] );
+			JE_RAM_FREE( List->StringSizes[i] );
 		}
 	}
 
 	// free bitmaplist struct
-	jeRam_Free( List );
+	JE_RAM_FREE( List );
 
 	// zap pointer
 	*DeadList = NULL;
@@ -341,7 +341,7 @@ static BitmapList * Util_CreateBitmapList(
 	assert( FileFilter != NULL );
 
 	// allocate bitmaplist struct
-	Bmps = (BitmapList *)jeRam_AllocateClear( sizeof( *Bmps ) );
+	Bmps = (BitmapList *)JE_RAM_ALLOCATE_CLEAR( sizeof( *Bmps ) );
 	if ( Bmps == NULL )
 	{
 		jeErrorLog_Add( JE_ERR_MEMORY_RESOURCE, NULL );
@@ -376,7 +376,7 @@ static BitmapList * Util_CreateBitmapList(
 	Finder = NULL;
 
 	// allocate name list
-	Bmps->Name = (char **)jeRam_AllocateClear( sizeof( char * ) * Bmps->Total );
+	Bmps->Name = (char **)JE_RAM_ALLOCATE_CLEAR( sizeof( char * ) * Bmps->Total );
 	if ( Bmps->Name == NULL )
 	{
 		jeErrorLog_Add( JE_ERR_MEMORY_RESOURCE, NULL );
@@ -384,7 +384,7 @@ static BitmapList * Util_CreateBitmapList(
 	}
 
 	// allocate width list
-	Bmps->Width = (int *)jeRam_AllocateClear( sizeof( int * ) * Bmps->Total );
+	Bmps->Width = (int *)JE_RAM_ALLOCATE_CLEAR( sizeof( int * ) * Bmps->Total );
 	if ( Bmps->Width == NULL )
 	{
 		jeErrorLog_Add( JE_ERR_MEMORY_RESOURCE, NULL );
@@ -392,7 +392,7 @@ static BitmapList * Util_CreateBitmapList(
 	}
 
 	// allocate height list
-	Bmps->Height = (int *)jeRam_AllocateClear( sizeof( int * ) * Bmps->Total );
+	Bmps->Height = (int *)JE_RAM_ALLOCATE_CLEAR( sizeof( int * ) * Bmps->Total );
 	if ( Bmps->Height == NULL )
 	{
 		jeErrorLog_Add( JE_ERR_MEMORY_RESOURCE, NULL );
@@ -400,7 +400,7 @@ static BitmapList * Util_CreateBitmapList(
 	}
 
 	// allocate numeric sizes list
-	Bmps->NumericSizes = (int *)jeRam_AllocateClear( sizeof( int * ) * Bmps->Total );
+	Bmps->NumericSizes = (int *)JE_RAM_ALLOCATE_CLEAR( sizeof( int * ) * Bmps->Total );
 	if ( Bmps->NumericSizes == NULL )
 	{
 		jeErrorLog_Add( JE_ERR_MEMORY_RESOURCE, NULL );
@@ -408,7 +408,7 @@ static BitmapList * Util_CreateBitmapList(
 	}
 
 	// allocate string sizes list
-	Bmps->StringSizes = (char **)jeRam_AllocateClear( sizeof( char * ) * Bmps->Total );
+	Bmps->StringSizes = (char **)JE_RAM_ALLOCATE_CLEAR( sizeof( char * ) * Bmps->Total );
 	if ( Bmps->StringSizes == NULL )
 	{
 		jeErrorLog_Add( JE_ERR_MEMORY_RESOURCE, NULL );
@@ -756,7 +756,7 @@ static jeBoolean Util_CreateEmptyList(
 	*ListSize = 0;
 
 	// allocate list
-	NewList = (char **)jeRam_Allocate( sizeof( char * ) );
+	NewList = (char **)JE_RAM_ALLOCATE( sizeof( char * ) );
 	if ( NewList == NULL )
 	{
 		jeErrorLog_Add( JE_ERR_MEMORY_RESOURCE, NULL );
@@ -840,13 +840,13 @@ static void Util_DestroyFileList(
 	{
 		if ( List[i] != NULL )
 		{
-			jeRam_Free( List[i] );
+			JE_RAM_FREE( List[i] );
 			List[i] = NULL;
 		}
 	}
 
 	// free the list itself
-	jeRam_Free( List );
+	JE_RAM_FREE( List );
 
 	// zap final data
 	List = NULL;
@@ -908,7 +908,7 @@ static char ** Util_BuildFileList(
 	Finder = NULL;
 
 	// allocate file list
-	FileList = (char **)jeRam_AllocateClear( sizeof( char * ) * TotalFiles );
+	FileList = (char **)JE_RAM_ALLOCATE_CLEAR( sizeof( char * ) * TotalFiles );
 	if ( FileList == NULL )
 	{
 		jeErrorLog_Add( JE_ERR_MEMORY_RESOURCE, NULL );
@@ -974,11 +974,11 @@ static char ** Util_BuildFileList(
 		{
 			if ( FileList[CurFile] != NULL )
 			{
-				jeRam_Free( FileList[CurFile] );
+				JE_RAM_FREE( FileList[CurFile] );
 			}
 			CurFile++;
 		}
-		jeRam_Free( FileList );
+		JE_RAM_FREE( FileList );
 	}
 
 	// destroy finder
@@ -1035,7 +1035,7 @@ static char * Util_LoadLibraryString(
 	}
 
 	// copy resource string
-	NewString = (char *)jeRam_Allocate( Size + 1 );
+	NewString = (char *)JE_RAM_ALLOCATE( Size + 1 );
 	if ( NewString == NULL )
 	{
 		jeErrorLog_Add( JE_ERR_MEMORY_RESOURCE, NULL );

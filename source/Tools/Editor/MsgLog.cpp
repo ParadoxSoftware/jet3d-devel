@@ -64,7 +64,7 @@ MsgLog * MsgLog_Create()
 
 MLC_FAILURE:
 	if( pMsgLog != NULL )
-		jeRam_Free( pMsgLog );
+		JE_RAM_FREE( pMsgLog );
 	return( NULL );
 
 }
@@ -78,9 +78,9 @@ void MsgLog_Destroy( MsgLog **hMsgLog )
 		fclose( (*hMsgLog)->File  );
 	
 	if( (*hMsgLog)->Entries != NULL )
-		jeRam_Free( (*hMsgLog)->Entries );
+		JE_RAM_FREE( (*hMsgLog)->Entries );
 
-	jeRam_Free( (*hMsgLog) );
+	JE_RAM_FREE( (*hMsgLog) );
 }
 
 static BOOL	MsgLog_WriteRecordN( MsgLog * pMsgLog )
@@ -256,7 +256,7 @@ static BOOL MsgLog_Read( MsgLog * pMsgLog )
 	sscanf( Buff, "%s%d", Label, &pMsgLog->EntryN );
 
 	if( pMsgLog->Entries != NULL )
-		jeRam_Free( pMsgLog->Entries );
+		JE_RAM_FREE( pMsgLog->Entries );
 	
 	pMsgLog->Entries = JE_RAM_ALLOCATE_ARRAY_CLEAR( LogEntry, pMsgLog->EntryN );
 	if( pMsgLog->Entries == NULL )
@@ -308,7 +308,7 @@ void MsgLog_EndPlay(MsgLog * pMsgLog)
 
 	if( pMsgLog->Entries != NULL )
 	{
-		jeRam_Free( pMsgLog->Entries );
+		JE_RAM_FREE( pMsgLog->Entries );
 		pMsgLog->Entries = NULL ;
 	}
 	pMsgLog->CurEntry = 0;

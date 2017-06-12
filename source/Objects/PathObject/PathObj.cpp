@@ -236,11 +236,11 @@ jeBoolean Util_StrDupManagePtr(char **dest, char *src, int min_size)
 			return JE_TRUE;
 		}
 
-		jeRam_Free(*dest);
+		JE_RAM_FREE(*dest);
 		*dest = NULL;
 	}
 
-	*dest = (char *)jeRam_Allocate(max(min_size, len));
+	*dest = (char *)JE_RAM_ALLOCATE(max(min_size, len));
 	if (*dest == NULL)
 	{
 		jeErrorLog_Add( JE_ERR_MEMORY_RESOURCE, NULL );
@@ -1082,7 +1082,7 @@ void * JETCC CreateInstance()
 
 CI_ERROR:
 	if (pPathObj)
-		jeRam_Free( pPathObj );
+		JE_RAM_FREE( pPathObj );
 
 	return( NULL );
 }
@@ -1167,7 +1167,7 @@ void JETCC PathObject_FreeTimeLine(PathObj *pPathObj, int TimeLineNdx)
 	{
 		if (td->Channels[CHANNEL_EVENT].KeyData[k].String)
 		{
-			jeRam_Free(td->Channels[CHANNEL_EVENT].KeyData[k].String);
+			JE_RAM_FREE(td->Channels[CHANNEL_EVENT].KeyData[k].String);
 			td->Channels[CHANNEL_EVENT].KeyData[k].String = NULL;
 		}
 	}
@@ -1176,7 +1176,7 @@ void JETCC PathObject_FreeTimeLine(PathObj *pPathObj, int TimeLineNdx)
 	{
 		if (td->ObjectNameList[i])
 		{
-			jeRam_Free(td->ObjectNameList[i]);
+			JE_RAM_FREE(td->ObjectNameList[i]);
 			td->ObjectNameList[i] = NULL;
 		}
 	}
@@ -1185,7 +1185,7 @@ void JETCC PathObject_FreeTimeLine(PathObj *pPathObj, int TimeLineNdx)
 	{
 		if (td->PropertyNameList[i])
 		{
-			jeRam_Free(td->PropertyNameList[i]);
+			JE_RAM_FREE(td->PropertyNameList[i]);
 			td->PropertyNameList[i] = NULL;
 		}
 	}
@@ -1211,7 +1211,7 @@ jeBoolean JETCC Destroy(void **pInstance)
 			PathObject_FreeTimeLine(pPathObj, i);
 		}
 
-		jeRam_Free( pPathObj );
+		JE_RAM_FREE( pPathObj );
 	}
 
 	return JE_TRUE;
@@ -1352,7 +1352,7 @@ jeBoolean ObjUtil_ReadString(
 	Result &= jeVFile_Read( File, &( Size ), sizeof( Size ) );
 	if ( ( Size > 0 ) && ( Result == JE_TRUE ) )
 	{
-		*String = (char *)jeRam_Allocate( Size );
+		*String = (char *)JE_RAM_ALLOCATE( Size );
 		if ( *String == NULL )
 		{
 			return JE_FALSE;
@@ -1492,7 +1492,7 @@ void *	JETCC CreateFromFile(jeVFile * File, jePtrMgr *PtrMgr)
 			// KeyData.String will be null
 			if (Util_StrDupManagePtr(&Object->TimeLineList[i].Channels[CHANNEL_EVENT].KeyData[k].String, Buff, MIN_EVENT_STRING_SIZE) == JE_FALSE)
 				goto ExitErr;
-			jeRam_Free (Buff);
+			JE_RAM_FREE (Buff);
 
 		}
 		Object->TimeLineList[i].Obj = jeObject_CreateFromFile(File, PtrMgr);
@@ -1516,7 +1516,7 @@ ExitErr:
 		{
 			if (Object->TimeLineList[i].Channels[CHANNEL_EVENT].KeyData[k].String)
 			{
-				jeRam_Free(Object->TimeLineList[i].Channels[CHANNEL_EVENT].KeyData[k].String);
+				JE_RAM_FREE(Object->TimeLineList[i].Channels[CHANNEL_EVENT].KeyData[k].String);
 				Object->TimeLineList[i].Channels[CHANNEL_EVENT].KeyData[k].String = NULL;
 			}
 		}
@@ -2184,7 +2184,7 @@ jeBoolean	JETCC SetProperty( void * Instance, int32 FieldID, PROPERTY_FIELD_TYPE
 				if (Element->Channels[CHANNEL_EVENT].KeyData[i].String && !cp->KeyData[i].String)
 				{
 					// free and zero any old data
-					jeRam_Free(Element->Channels[CHANNEL_EVENT].KeyData[i].String);
+					JE_RAM_FREE(Element->Channels[CHANNEL_EVENT].KeyData[i].String);
 					Element->Channels[CHANNEL_EVENT].KeyData[i].String = NULL;
 					continue;
 				}

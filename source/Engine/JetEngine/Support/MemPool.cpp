@@ -39,9 +39,9 @@
  *
  */
 
-#define RamCalloc(size)			jeRam_AllocateClear(size)
-#define RamFree(mem)			jeRam_Free(mem)
-#define RamRealloc(mem,size)	jeRam_Realloc(mem,size)
+#define RamCalloc(size)			JE_RAM_ALLOCATE_CLEAR(size)
+#define RamFree(mem)			JE_RAM_FREE(mem)
+#define RamRealloc(mem,size)	JE_RAM_REALLOC(mem,size)
 
 #ifndef memclear
 #define memclear(mem,size)	memset(mem,0,size);

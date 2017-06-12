@@ -519,7 +519,7 @@ static jeBoolean WriteBMP(unsigned short *ScreenBuffer, int32 Width, int32 Heigh
 		#endif
 	}
 
-	jeRam_Free(Buff);
+	JE_RAM_FREE(Buff);
 
 	if (fclose(out))
 		return JE_FALSE;

@@ -29,6 +29,8 @@
 #include "o0coder.h"
 #include "Context.h"
 
+#define new(type)		JE_RAM_ALLOCATE_CLEAR(sizeof(type))
+
 struct ozero 
 {
 	arithInfo * arith;
@@ -107,6 +109,6 @@ return(sym);
 
 void O0coder_CleanUp(ozero * O0I)
 {
-if ( O0I->order0 ) contextFree(O0I->order0);
-jeRam_Free(O0I); O0I = nullptr;
+	if ( O0I->order0 ) contextFree(O0I->order0);
+	JE_RAM_FREE(O0I); //O0I = nullptr;
 }
