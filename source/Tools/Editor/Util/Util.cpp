@@ -360,9 +360,12 @@ void Util_ExtBox_Transform( const jeExtBox *B, const jeXForm3d *XForm, jeExtBox 
 		Box[i].X = UnitBox[i].X * Diff.X + ExtBoxCenter.X;
 		Box[i].Y = UnitBox[i].Y * Diff.Y + ExtBoxCenter.Y;
 		Box[i].Z = UnitBox[i].Z * Diff.Z + ExtBoxCenter.Z;
+
+		jeXForm3d_Transform(XForm, &Box[i], &Box[i]);
 	}
 
-	jeXForm3d_TransformVecArray(XForm, Box, Box, 8);
+	//jeXForm3d_TransformVecArray(XForm, Box, Box, 8);
+
 	jeExtBox_SetToPoint(Result, &Box[0]);
 	for	(i = 1; i < 8; i++)
 		jeExtBox_ExtendToEnclose(Result, &Box[i]);
@@ -389,7 +392,10 @@ void Util_ExtBox_TransformJ( const jeExtBox *B, const jeXForm3d *XForm, jeExtBox
 	Verts[2].Y = Verts[3].Y = Verts[6].Y = Verts[7].Y ;
 	Verts[4].X = Verts[5].X = Verts[6].X = Verts[7].X ;
 
-	jeXForm3d_TransformVecArray(XForm, Verts, Verts, 8);
+	//jeXForm3d_TransformVecArray(XForm, Verts, Verts, 8);
+	for (i = 0; i < 8; i++)
+		jeXForm3d_Transform(XForm, &Verts[i], &Verts[i]);
+
 	jeExtBox_SetToPoint(Result, &Verts[0]);
 	for	(i = 1; i < 8; i++)
 		jeExtBox_ExtendToEnclose(Result, &Verts[i]);

@@ -1147,8 +1147,8 @@ int i;
 		Quad_AddRadixLNChildrenToDepth(pRadix,QT->Root->pChildren[i],QT->BaseDepth-1);
 	}
 
-	jeCPU_FloatControl_Push();
-	jeCPU_FloatControl_SinglePrecision();
+	//jeCPU_FloatControl_Push();
+	//jeCPU_FloatControl_SinglePrecision();
 //	jeCPU_FloatControl_RoundDown(); //{} ?
 
 	while( (pQuad = (Quad *)RadixLN_CutMax(pRadix,&Error)) && Error )
@@ -1162,7 +1162,7 @@ int i;
 		Quad_AddRadixLNChildren(pRadix,pQuad);
 	}
 
-	jeCPU_FloatControl_Pop();
+	//jeCPU_FloatControl_Pop();
 
 	TIMER_Q(Tesselate);
 
@@ -1241,9 +1241,9 @@ int i;
 
 	TIMER_P(Render);
 
-	jeCPU_FloatControl_Push();
-	jeCPU_FloatControl_SinglePrecision();
-	jeCPU_FloatControl_RoundDown();
+	//jeCPU_FloatControl_Push();
+	//jeCPU_FloatControl_SinglePrecision();
+	//jeCPU_FloatControl_RoundDown();
 
 	//	ClipFlags already set in Tesselate; 
 	//		unfortunately that doesn't help much
@@ -1255,7 +1255,7 @@ int i;
 	Quad_RenderWithVis(QT->Root->pChildren[2]);
 	Quad_RenderWithVis(QT->Root->pChildren[3]);
 
-	jeCPU_FloatControl_Pop();
+	//jeCPU_FloatControl_Pop();
 
 	TIMER_Q(Render);
 

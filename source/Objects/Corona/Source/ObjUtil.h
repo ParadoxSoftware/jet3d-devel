@@ -106,7 +106,7 @@ void ObjUtil_DestroyBitmapList(
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 BitmapList * ObjUtil_CreateBitmapList(
-	jeResourceMgr	*ResourceMgr,	// resource manager to use
+	jet3d::jeResourceMgr	*ResourceMgr,	// resource manager to use
 	char			*ResourceName,	// name of resource
 	char			*FileFilter );	// file filter
 
@@ -115,7 +115,7 @@ BitmapList * ObjUtil_CreateBitmapList(
 ////////////////////////////////////////////////////////////////////////////////////////
 void ObjUtil_TextureGroupSetSize(
 	jeEngine		*Engine,			// engine to use
-	jeResourceMgr	*ResourceMgr,		// resource manager to use
+	jet3d::jeResourceMgr	*ResourceMgr,		// resource manager to use
 	BitmapList		*AvailableArt,		// list of all available art
 	char			*ChosenSizeName,	// name of size that was chosen
 	char			**SaveBitmapName,	// current bitmap name and where to save new name
@@ -128,7 +128,7 @@ void ObjUtil_TextureGroupSetSize(
 ////////////////////////////////////////////////////////////////////////////////////////
 jeBoolean ObjUtil_TextureGroupSetArt(
 	jeEngine		*Engine,			// engine to use
-	jeResourceMgr	*ResourceMgr,		// resource manager to use
+	jet3d::jeResourceMgr	*ResourceMgr,		// resource manager to use
 	BitmapList		*AvailableArt,		// list of all available art
 	char			*ChosenBitmapName,	// name of bitmap that was chosen
 	char			*ChosenAlphaName,	// name of alpha that was chosen

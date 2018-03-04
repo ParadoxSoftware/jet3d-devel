@@ -153,7 +153,8 @@ jeBoolean JETCC DettachWorld(
 	//assert( Object->World == World );
 
 	if (Object->ResourceMgr) { // destroy our instance of the resource manager
-		jeResource_MgrDestroy( &( Object->ResourceMgr ) );
+		//jeResource_MgrDestroy( &( Object->ResourceMgr ) );
+		JE_SAFE_RELEASE(Object->ResourceMgr);
 	}
 
 	// zap world pointer

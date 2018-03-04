@@ -33,7 +33,7 @@
 #include "assert.h"
 #include "dsound.h"
 #include "resource.h"
-#include "jeResource.h"
+#include "jeResourceManager.h"
 
 #include "snd.h"
 
@@ -262,7 +262,7 @@ static jeBoolean AmbObject_InitIcon( AmbObj * pAmbObj )
 
 	if (!MatSpec)
 	{
-	    MatSpec = jeMaterialSpec_Create(jeResourceMgr_GetEngine(jeResourceMgr_GetSingleton()), jeResourceMgr_GetSingleton());
+	    MatSpec = jeMaterialSpec_Create(jeResourceMgr_GetSingleton()->getEngine());
 #pragma message ("Krouer: change NULL to something better next time")
 	    jeMaterialSpec_AddLayerFromBitmap(MatSpec, 0, pBitmap, NULL);
 	}
@@ -288,7 +288,7 @@ static jeBoolean AmbObject_UpdateIcon( AmbObj * pAmbObj )
 	{
 		if (!MatSpec)
 	    {
-	        MatSpec = jeMaterialSpec_Create(jeResourceMgr_GetEngine(jeResourceMgr_GetSingleton()), jeResourceMgr_GetSingleton());
+	        MatSpec = jeMaterialSpec_Create(jeResourceMgr_GetSingleton()->getEngine());
 #pragma message ("Krouer: change NULL to something better next time")
 	        jeMaterialSpec_AddLayerFromBitmap(MatSpec, 0, pBitmap, NULL);
 	    }
@@ -307,7 +307,7 @@ static jeBoolean AmbObject_UpdateIcon( AmbObj * pAmbObj )
 
 static jeBoolean AmbObject_LoadSound(AmbObj * pAmbObj, char *Name)
 {
-	jeResourceMgr *ResourceMgr;
+	jet3d::jeResourceMgr *ResourceMgr = nullptr;
 	jeVFile *SoundDir,*SndFile = NULL;
 	jeSound_Def *NewSoundDef;
 
@@ -333,12 +333,13 @@ static jeBoolean AmbObject_LoadSound(AmbObj * pAmbObj, char *Name)
 	ResourceMgr = jeWorld_GetResourceMgr(pAmbObj->Resource.World);
 
 	if (ResourceMgr == NULL)
-		{
+	{
 		jeErrorLog_AddString(JE_ERR_SUBSYSTEM_FAILURE,"AmbObject_LoadSound: jeWorld_GetResourceMgr() failed", Name);
 		return JE_FALSE;
-		}
+	}
 
-	SoundDir = jeResource_GetVFile(ResourceMgr, "Sounds");
+	//SoundDir = jeResource_GetVFile(ResourceMgr, "Sounds");
+	SoundDir = ResourceMgr->getVFile("Sounds");
 
 	//SndFile = jeVFile_OpenNewSystem( SoundDir, JE_VFILE_TYPE_DOS, Name, NULL, JE_VFILE_OPEN_READONLY );
 	SndFile = jeVFile_Open( SoundDir, Name, JE_VFILE_OPEN_READONLY);
@@ -362,7 +363,7 @@ static jeBoolean AmbObject_LoadSound(AmbObj * pAmbObj, char *Name)
 	jeVFile_Close( SndFile );
 
 	// [MLB-ICE]
-	jeResource_MgrDestroy(&ResourceMgr);	// Icestorm: We should clear this Instance up, it was referenced!
+	//jeResource_MgrDestroy(&ResourceMgr);	// Icestorm: We should clear this Instance up, it was referenced!
 	// [MLB-ICE] EOB
 
 	return( JE_TRUE );
@@ -375,7 +376,7 @@ LOAD_CLEAN:
 	strcpy(pAmbObj->Name, NoSelection);
 
 	// [MLB-ICE]
-	jeResource_MgrDestroy(&ResourceMgr);	// Icestorm: We should clear this Instance up, it was referenced!
+	//jeResource_MgrDestroy(&ResourceMgr);	// Icestorm: We should clear this Instance up, it was referenced!
 	// [MLB-ICE] EOB
 
 	return JE_TRUE;
@@ -416,7 +417,7 @@ static jeBoolean AmbObj_ReadSoundNames(jeVFile *FileBase, int *FileCount)
 static jeBoolean JETCC AmbObj_GetSoundNames( void * Instance, jeWorld * pWorld )
 {
 	AmbObj *pAmbObj = (AmbObj*)Instance;
-	jeResourceMgr *ResourceMgr;
+	jet3d::jeResourceMgr *ResourceMgr = nullptr;
 	jeVFile *SoundDir;
 
 	assert( Instance );
@@ -430,7 +431,8 @@ static jeBoolean JETCC AmbObj_GetSoundNames( void * Instance, jeWorld * pWorld )
 	if (ResourceMgr == NULL)
 		return JE_FALSE;
 
-	SoundDir = jeResource_GetVFile(ResourceMgr, "Sounds");
+	//SoundDir = jeResource_GetVFile(ResourceMgr, "Sounds");
+	SoundDir = ResourceMgr->getVFile("Sounds");
 
 	if (!SoundDir)
 		return JE_FALSE;
@@ -439,7 +441,7 @@ static jeBoolean JETCC AmbObj_GetSoundNames( void * Instance, jeWorld * pWorld )
 		return JE_FALSE;
 
 	// [MLB-ICE]
-	jeResource_MgrDestroy(&ResourceMgr);	// Icestorm: We should clear this Instance up, it was referenced!
+	//jeResource_MgrDestroy(&ResourceMgr);	// Icestorm: We should clear this Instance up, it was referenced!
 	// [MLB-ICE] EOB
 
 	return( JE_TRUE );

@@ -26,13 +26,13 @@
 
 #include "BaseType.h"
 #include "VFile.h"
+#include "jeResourceManager.h"
 
 /*! @typedef jePtrMgr
 	@brief A instance of a resource pointer helper
 */
 typedef struct jePtrMgr		jePtrMgr;
-
-typedef struct jeResourceMgr jeResourceMgr;
+//typedef struct jeResourceMgr jeResourceMgr;
 
 //=======================================================================================
 //	Function prototypes
@@ -129,7 +129,7 @@ JETAPI jeBoolean	JETCC jePtrMgr_GetPtrRefs(const jePtrMgr *PtrMgr, int32 *PtrRef
 	@param[in] PtrMgr The jePtrMgr instance
 	@return The current jeResourceMgr or NULL if no Resource Manager set
 */
-JETAPI jeResourceMgr* JETCC jePtrMgr_GetResourceMgr(const jePtrMgr *PtrMgr);
+JETAPI jet3d::jeResourceMgr* JETCC jePtrMgr_GetResourceMgr(const jePtrMgr *PtrMgr);
 
 /*! 
 @page ptrmgr The Pointer Manager

@@ -62,17 +62,17 @@ void showPopTSC(const char *tag)
 {
 double time;
 
-	jeCPU_PauseMMX();
+//	jeCPU_PauseMMX();
 	time = popTSC();
 		Log_Printf("%s : %f seconds\n",tag,time);
-	jeCPU_ResumeMMX();
+//	jeCPU_ResumeMMX();
 }
 
 void showPopTSCper(const char *tag,int items,const char *itemTag)
 {
 double time,hz,per;
 
-	jeCPU_PauseMMX();
+//	jeCPU_PauseMMX();
 	hz = popTSChz();
 	time = hz * jeCPU_SecondsPerClock;
 	per = (time/(double)items);
@@ -87,11 +87,14 @@ double time,hz,per;
 	{
 		Log_Printf("%f %ss /sec\n",(1.0/per),itemTag);
 	}
-	jeCPU_ResumeMMX();
+//	jeCPU_ResumeMMX();
 }
 
 void readTSC(uint32 *tsc)
 {
+#ifdef JET64
+	*tsc = (uint32)__rdtsc();
+#else
 	__asm 
 	{
 		//_emit 0x0F
@@ -101,6 +104,7 @@ void readTSC(uint32 *tsc)
 		mov DWORD PTR [EBX + 0],EDX
 		mov DWORD PTR [EBX + 4],EAX
 	}
+#endif
 }
 
 double timeTSC(void)

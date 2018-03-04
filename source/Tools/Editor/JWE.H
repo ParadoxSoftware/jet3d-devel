@@ -111,7 +111,7 @@ public:// Implementation
 	BOOL  HasInitMaterialList() { return m_bMaterialListInitialised; };
 
 	//	by tom morris feb 2005 - moved to public by Krouer
-	bool	InitMaterialList(jeEngine* pEngine, jeResourceMgr* pResMgr);
+	bool	InitMaterialList(jeEngine* pEngine, jet3d::jeResourceMgr* pResMgr);
 	//	end tom morris
 
 	CString m_strDriverPath;

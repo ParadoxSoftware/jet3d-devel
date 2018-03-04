@@ -38,14 +38,15 @@ CJet3DView::~CJet3DView()
 	if (m_pWorld)
 		jeWorld_Destroy(&m_pWorld);
 
-	if (m_pResMgr)
-		jeResource_MgrDestroy(&m_pResMgr);
+	//if (m_pResMgr)
+		//jeResource_MgrDestroy(&m_pResMgr);
+	JE_SAFE_RELEASE(m_pResMgr);
 
 	if (m_pCamera)
 		jeCamera_Destroy(&m_pCamera);
 
 	if (m_pEngine)
-		jeEngine_Destroy(&m_pEngine);
+		jeEngine_Destroy(&m_pEngine, __FILE__, __LINE__);
 }
 
 BEGIN_MESSAGE_MAP(CJet3DView, CView)
@@ -177,12 +178,15 @@ void CJet3DView::OnInitialUpdate()
 
 	jeEngine_SetRenderMode(m_pEngine, RenderMode_TexturedAndLit);
 
-	m_pResMgr = jeResource_MgrCreateDefault(m_pEngine);
+	//m_pResMgr = jeResource_MgrCreateDefault(m_pEngine);
+	m_pResMgr = jeEngine_GetResourceManager(m_pEngine);
 	if (!m_pResMgr)
 	{
 		TRACE0("Could not create resource manager!!");
 		return;
 	}
+
+	m_pResMgr->initializeWithDefaults();
 
 	if (!InitWorld())
 		return;

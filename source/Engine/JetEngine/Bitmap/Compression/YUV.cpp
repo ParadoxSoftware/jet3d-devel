@@ -314,7 +314,7 @@ uint8 * bline;
 static const __int64 Const_V_16 = 0x0000A6462DB50000;
 static const __int64 Const_U_16 = 0x00000000E9FA7168;
 
-void YUVi_to_BGRb_lines_mmx(int w,int h,int **Ylines,int **Ulines,int **Vlines,uint8 * BGRptr,int BGRstride)
+/*void YUVi_to_BGRb_lines_mmx(int w,int h,int **Ylines,int **Ulines,int **Vlines,uint8 * BGRptr,int BGRstride)
 {
 int yz;
 
@@ -331,10 +331,10 @@ int yz;
 
 		assert(w > 1 && h > 1 );
 
-		/*cachetouch_r(line1,w>>3);
-		cachetouch_r(line2,w>>3);
-		cachetouch_r(line3,w>>3);
-		cachetouch_w(bline,(w*3)>>5);*/
+		//cachetouch_r(line1,w>>3);
+		//cachetouch_r(line2,w>>3);
+		//cachetouch_r(line3,w>>3);
+		//cachetouch_w(bline,(w*3)>>5);
 			
 		__asm
 		{
@@ -347,35 +347,35 @@ int yz;
 
 		More:		
 
-			/**
-			*
-			*	ecx is width
-			*	edi is BGRptr
-			*
-			*	eax is (V<<2)-509
-			*	ebx is (U<<2)-509
-			*	edx is Y
-			*
-			*	the multiply coefficients are in 14 bits, then we rshr 16 via mulhw
-			*
-			*	mm0 is four V int16's, multiplied by their coefficients (mm3)
-			*	mm1 is four U int16's, multiplied by their coefficients (mm4)
-			*	mm2 is four Y int16's
-			*
-			*	XRGB = mm0 + mm1 + mm2
-			*
-			*	we're taking about 45 clocks
-			*	my manual count indicates we could take about 37 if we were perfect
-			*/
+			//**
+			//*
+			//*	ecx is width
+			//*	edi is BGRptr
+			//*
+			//*	eax is (V<<2)-509
+			//*	ebx is (U<<2)-509
+			//*	edx is Y
+			//*
+			//*	the multiply coefficients are in 14 bits, then we rshr 16 via mulhw
+			//*
+			//*	mm0 is four V int16's, multiplied by their coefficients (mm3)
+			//*	mm1 is four U int16's, multiplied by their coefficients (mm4)
+			//*	mm2 is four Y int16's
+			//*
+			//*	XRGB = mm0 + mm1 + mm2
+			//*
+			//*	we're taking about 45 clocks
+			//*	my manual count indicates we could take about 37 if we were perfect
+			
 
-			/*
-			*
-			* MMX optimization notes:
-			*	1. there is only one MMX pack/unpack unit
-			*	2. there is only one MMX multiply unit
-			*	3. MMX instructions that use memory or integers use port 0 only
-			*	4. all MMX instructions are 1 clock except multiply, which is 3
-			*/
+			//*
+			//*
+			//* MMX optimization notes:
+			//*	1. there is only one MMX pack/unpack unit
+			//*	2. there is only one MMX multiply unit
+			//*	3. MMX instructions that use memory or integers use port 0 only
+			//*	4. all MMX instructions are 1 clock except multiply, which is 3
+			//
 
 			mov			eax,line3	// V
 			mov			eax,[eax]	// eax = v; hard stall on eax, inevitable
@@ -488,18 +488,18 @@ int yz;
 	}
 
 	//__asm { emms }	
-}
+}*/
 
-void YUVi_to_BGRb_line_mmx2(int *line1,int *line2,int *line3,uint8 * bline,int len)
+/*void YUVi_to_BGRb_line_mmx2(int *line1,int *line2,int *line3,uint8 * bline,int len)
 {
 	assert(len > 1 );
 
 	len --;
 
-	/*cachetouch_r(line1,len>>3);
-	cachetouch_r(line2,len>>3);
-	cachetouch_r(line3,len>>3);
-	cachetouch_w(bline,(len*3)>>5);*/
+	//cachetouch_r(line1,len>>3);
+	//cachetouch_r(line2,len>>3);
+	//cachetouch_r(line3,len>>3);
+	//cachetouch_w(bline,(len*3)>>5);
 	
 	__asm
 	{
@@ -591,16 +591,16 @@ void YUVi_to_BGRb_line_mmx2(int *line1,int *line2,int *line3,uint8 * bline,int l
 	bline[1] = g;
 	bline[2] = r;
 	}
-}
+}*/
 
-void YUVi_to_XRGB_line_mmx(int *line1,int *line2,int *line3,uint8 * bline,int len)
+/*void YUVi_to_XRGB_line_mmx(int *line1,int *line2,int *line3,uint8 * bline,int len)
 {
 	assert(len > 0 );
 
-	/*cachetouch_r(line1,len>>3);
-	cachetouch_r(line2,len>>3);
-	cachetouch_r(line3,len>>3);
-	cachetouch_w(bline,len>>3);*/
+	//cachetouch_r(line1,len>>3);
+	//cachetouch_r(line2,len>>3);
+	//cachetouch_r(line3,len>>3);
+	//cachetouch_w(bline,len>>3);
 
 	__asm
 	{
@@ -671,7 +671,7 @@ void YUVi_to_XRGB_line_mmx(int *line1,int *line2,int *line3,uint8 * bline,int le
 
 	//emms
 	}
-}
+}*/
 
 /*}{******* CPU setup ***********/
 
@@ -682,16 +682,17 @@ void SetupYUV(void)
 {
 	jeCPU_GetInfo();
 
-	if ( jeCPU_Features & JE_CPU_HAS_MMX )
+	/*if ( jeCPU_Features & JE_CPU_HAS_MMX )
 	{
 		// timed on hare512.bmp :
 	//	YUVi_to_BGRb_line = YUVi_to_BGRb_line_mmx1;	// blit : 0.025 seconds = 47.2 clocks / pixel
 	//	YUVi_to_BGRb_line = YUVi_to_BGRb_line_mmx2;	// blit : 0.025 seconds = 47.2 clocks / pixel
-	//	YUVi_to_BGRb_line = YUVi_to_BGRb_line_c;	// blit : 0.034 seconds = 66.6 clocks / pixel
-		YUVi_to_XRGB_line = YUVi_to_XRGB_line_mmx;
-		YUVi_to_BGRb_lines = YUVi_to_BGRb_lines_mmx;// blit : 0.0245 seconds= 45.9 clocks / pixel
+		YUVi_to_BGRb_line = YUVi_to_BGRb_line_c;	// blit : 0.034 seconds = 66.6 clocks / pixel
+	//	YUVi_to_XRGB_line = YUVi_to_XRGB_line_mmx;
+	//	YUVi_to_BGRb_lines = YUVi_to_BGRb_lines_mmx;// blit : 0.0245 seconds= 45.9 clocks / pixel
+		YUVi_to_BGRb_lines = YUVi_to_BGRb_lines_c;// blit : 0.0245 seconds= 45.9 clocks / pixel
 	}
-	else
+	else*/
 	{
 	//	YUVi_to_BGRb_line = YUVi_to_BGRb_line_c;
 		YUVi_to_XRGB_line = YUVi_to_XRGB_line_c;

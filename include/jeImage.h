@@ -26,11 +26,11 @@
 #include <string>
 #include "Basetype.h"
 #include "VFILE.H"
-#include "jeResourceMgr.h"
+#include "jeResourceManager.h"
 
 typedef struct jeTexture					jeTexture;
 
-class jeImage : virtual public jet3d::jeResource
+class jeImage
 {
 protected:
 	virtual ~jeImage(){}

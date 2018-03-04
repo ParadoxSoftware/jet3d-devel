@@ -25,7 +25,7 @@
 #include "bitmap.h"
 #include "ram.h"
 #include "errorlog.h"
-#include "jeResource.h"
+#include "jeResourceManager.h"
 #include "ObjUtil.h"
 
 
@@ -453,7 +453,7 @@ static void ObjUtil_TextureGroupSetActiveList(
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 BitmapList * ObjUtil_CreateBitmapList(
-	jeResourceMgr	*ResourceMgr,	// resource manager to use
+	jet3d::jeResourceMgr	*ResourceMgr,	// resource manager to use
 	char			*ResourceName,	// name of resource
 	char			*FileFilter )	// file filter
 {
@@ -478,7 +478,8 @@ BitmapList * ObjUtil_CreateBitmapList(
 	}
 
 	// get vfile dir
-	FileDir = jeResource_GetVFile( ResourceMgr, ResourceName );
+	//FileDir = jeResource_GetVFile( ResourceMgr, ResourceName );
+	FileDir = ResourceMgr->getVFile(ResourceName);
 	if ( FileDir == NULL )
 	{
 		jeErrorLog_Add( JE_ERR_SUBSYSTEM_FAILURE, NULL );
@@ -641,7 +642,8 @@ BitmapList * ObjUtil_CreateBitmapList(
 	jeVFile_DestroyFinder( Finder );
 
 	// close vfile dir
-	if ( jeResource_DeleteVFile( ResourceMgr, ResourceName ) == 0 )
+	//if ( jeResource_DeleteVFile( ResourceMgr, ResourceName ) == 0 )
+	if (!ResourceMgr->removeVFile(ResourceName))
 	{
 		jeVFile_Close( FileDir );
 	}
@@ -704,7 +706,8 @@ BitmapList * ObjUtil_CreateBitmapList(
 	// close vfile dir
 	if ( FileDir != NULL )
 	{
-		if ( jeResource_DeleteVFile( ResourceMgr, ResourceName ) == 0 )
+		//if ( jeResource_DeleteVFile( ResourceMgr, ResourceName ) == 0 )
+		if (!ResourceMgr->removeVFile(ResourceName))
 		{
 			jeVFile_Close( FileDir );
 		}
@@ -758,7 +761,7 @@ static char * ObjUtil_TextureGroupGetStringFromList(
 ////////////////////////////////////////////////////////////////////////////////////////
 void ObjUtil_TextureGroupSetSize(
 	jeEngine		*Engine,			// engine to use
-	jeResourceMgr	*ResourceMgr,		// resource manager to use
+	jet3d::jeResourceMgr	*ResourceMgr,		// resource manager to use
 	BitmapList		*AvailableArt,		// list of all available art
 	char			*ChosenSizeName,	// name of size that was chosen
 	char			**SaveBitmapName,	// current bitmap name and where to save new name
@@ -812,10 +815,12 @@ void ObjUtil_TextureGroupSetSize(
 		// free old art
 		jeEngine_RemoveBitmap( Engine, *SaveArt );
 		assert( *SaveArtName != NULL );
-		if ( jeResource_Delete( ResourceMgr, *SaveArtName ) == 0 )
+		//if ( jeResource_Delete( ResourceMgr, *SaveArtName ) == 0 )
+		if (ResourceMgr->remove(*SaveArtName))
 		{
 			jeBitmap_Destroy( &( *SaveArt ) );
 		}
+
 		*SaveArt = NULL;
 
 		// free old art name
@@ -834,7 +839,7 @@ void ObjUtil_TextureGroupSetSize(
 ////////////////////////////////////////////////////////////////////////////////////////
 jeBoolean ObjUtil_TextureGroupSetArt(
 	jeEngine		*Engine,			// engine to use
-	jeResourceMgr	*ResourceMgr,		// resource manager to use
+	jet3d::jeResourceMgr	*ResourceMgr,		// resource manager to use
 	BitmapList		*AvailableArt,		// list of all available art
 	char			*ChosenBitmapName,	// name of bitmap that was chosen
 	char			*ChosenAlphaName,	// name of alpha that was chosen
@@ -861,7 +866,8 @@ jeBoolean ObjUtil_TextureGroupSetArt(
 		// free old art
 		jeEngine_RemoveBitmap( Engine, *SaveArt );
 		assert( *SaveArtName != NULL );
-		if ( jeResource_Delete( ResourceMgr, *SaveArtName ) == 0 )
+		//if ( jeResource_Delete( ResourceMgr, *SaveArtName ) == 0 )
+		if (ResourceMgr->remove(*SaveArtName))
 		{
 			jeBitmap_Destroy( &( *SaveArt ) );
 		}
@@ -918,7 +924,8 @@ jeBoolean ObjUtil_TextureGroupSetArt(
 	}
 
 	// get new art
-	*SaveArt = (jeBitmap*)jeResource_Get( ResourceMgr, *SaveArtName );
+	//*SaveArt = (jeBitmap*)jeResource_Get( ResourceMgr, *SaveArtName );
+	*SaveArt = static_cast<jeBitmap*>(jeResourceMgr_GetSingleton()->get(*SaveArtName));
 
 	// if it doesn't exist then create it
 	if ( *SaveArt == NULL )
@@ -928,7 +935,8 @@ jeBoolean ObjUtil_TextureGroupSetArt(
 		jeVFile	*FileDir;
 
 		// get vfile dir
-		FileDir = jeResource_GetVFile( ResourceMgr, "GlobalMaterials" );
+		//FileDir = jeResource_GetVFile( ResourceMgr, "GlobalMaterials" );
+		FileDir = jeResourceMgr_GetSingleton()->getVFile("GlobalMaterials");
 		if ( FileDir == NULL )
 		{
 			jeErrorLog_Add( JE_ERR_SUBSYSTEM_FAILURE, "Failed to get a vfile resource" );
@@ -946,7 +954,8 @@ jeBoolean ObjUtil_TextureGroupSetArt(
 		}
 
 		// close vfile dir
-		if ( jeResource_DeleteVFile( ResourceMgr, "GlobalMaterials" ) == 0 )
+		//if ( jeResource_DeleteVFile( ResourceMgr, "GlobalMaterials" ) == 0 )
+		if (!jeResourceMgr_GetSingleton()->removeVFile("GlobalMaterials"))
 		{
 			jeVFile_Close( FileDir );
 		}
@@ -959,7 +968,8 @@ jeBoolean ObjUtil_TextureGroupSetArt(
 		}
 
 		// add it to the resource manager
-		jeResource_Add( ResourceMgr, *SaveArtName, JE_RESOURCE_BITMAP, *SaveArt );
+		//jeResource_Add( ResourceMgr, *SaveArtName, JE_RESOURCE_BITMAP, *SaveArt );
+		jeResourceMgr_GetSingleton()->add(*SaveArtName, JE_RESOURCE_BITMAP, static_cast<void*>(*SaveArt));
 	}
 
 	// add it to the engine

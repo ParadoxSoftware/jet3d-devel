@@ -30,7 +30,7 @@
 #include "stdafx.h"
 #include "jMinApp.h"
 #include "MainFrm.h"
-
+#include "Errorlog.h"
 
 
 
@@ -568,12 +568,12 @@ bool	CMainFrame::InitializeJet3D()
 		GetCursorPos(&point);
 		m_ptOldMousePoint = point;
 
-		m_pImage = jeEngine_CreateImage();
-		jeVFile *File = jeVFile_OpenNewSystem(NULL, JE_VFILE_TYPE_DOS, "GlobalMaterials\\rhine.bmp", NULL, JE_VFILE_OPEN_READONLY);
-		if (!File)
-		{
-			AfxMessageBox("Could not open image file!!");
-		}
+//		m_pImage = jeEngine_CreateImage();
+		//jeVFile *File = jeVFile_OpenNewSystem(NULL, JE_VFILE_TYPE_DOS, "GlobalMaterials\\rhine.bmp", NULL, JE_VFILE_OPEN_READONLY);
+		//if (!File)
+		//{
+		//	AfxMessageBox("Could not open image file!!");
+		//}
 
 /*		if (!m_pImage->CreateFromFile(File))
 		{
@@ -582,10 +582,10 @@ bool	CMainFrame::InitializeJet3D()
 			m_pImage = NULL;
 		}
 */
-		jeVFile_Close(File);
+		//jeVFile_Close(File);
 		
-		if (m_pImage)
-			jeEngine_AddImage(m_pEngine, m_pImage);
+		//if (m_pImage)
+		//	jeEngine_AddImage(m_pEngine, m_pImage);
 
 //ShowWindow(SW_SHOW);
 
@@ -719,12 +719,12 @@ bool CMainFrame::ShutdownAll()
 			jeEngine_Activate(m_pEngine, FALSE);
 		}
 
-		if (m_pImage)
+		/*if (m_pImage)
 		{
 			jeEngine_RemoveImage(m_pEngine, m_pImage);
 			m_pImage->Release();
 			m_pImage = NULL;
-		}
+		}*/
 
 		//	destroy world, engine, etc...
 		if (m_pWorld)
@@ -754,7 +754,7 @@ bool CMainFrame::ShutdownAll()
 				jeEngine_ShutdownDriver(m_pEngine);
 			}
 
-			jeEngine_Destroy(&m_pEngine);
+			jeEngine_Destroy(&m_pEngine, __FILE__, __LINE__);
 		}
 
 		//	destroy all the virtual file systems
@@ -784,10 +784,11 @@ bool CMainFrame::ShutdownAll()
 		}
 
 		/////////////////
-		if (m_pResourceMgr)
+		/*if (m_pResourceMgr)
 		{
 			jeResource_MgrDestroy(&m_pResourceMgr);
-		}
+		}*/
+		JE_SAFE_RELEASE(m_pResourceMgr);
 
 		//	destroy all the virtual file systems
 		if (m_pvFileSys)
@@ -849,7 +850,8 @@ bool CMainFrame::InitFileSystem(jeEngine* pEngine)
 		return false;
 
 	//	create resource manager
-	m_pResourceMgr = jeResource_MgrCreate(pEngine);
+	//m_pResourceMgr = jeResource_MgrCreate(pEngine);
+	m_pResourceMgr = jeEngine_GetResourceManager(pEngine);
 
 	if (m_pResourceMgr)
 	{	
@@ -885,25 +887,39 @@ bool CMainFrame::InitFileSystem(jeEngine* pEngine)
 
 		//	add file systems to resourcemgr so the world loader 
 		//	can resolve references in a world file
-		if (!jeResource_AddVFile(m_pResourceMgr,
+		/*if (!jeResource_AddVFile(m_pResourceMgr,
 			m_strMaterialDir.GetBuffer(m_strMaterialDir.GetLength()),
-			m_pvfMaterialFile )) 
+			m_pvfMaterialFile )) */
+		if (!m_pResourceMgr->addVFile(m_strMaterialDir.GetBuffer(m_strMaterialDir.GetLength()), m_pvfMaterialFile))
+		{
+			jeErrorLog_AddString(-1, "Could not add GlobalMaterials directory!!", NULL);
 			return false;
-
-		if( !jeResource_AddVFile(m_pResourceMgr,
+		}
+		/*if( !jeResource_AddVFile(m_pResourceMgr,
 			m_strSoundDir.GetBuffer(m_strSoundDir.GetLength()),
-			m_pvfSoundFile ))
+			m_pvfSoundFile ))*/
+		if (!m_pResourceMgr->addVFile(m_strSoundDir.GetBuffer(m_strSoundDir.GetLength()), m_pvfSoundFile))
+		{
+			jeErrorLog_AddString(-1, "Could not add Sounds directory!!", NULL);
 			return false;
-
-		if(!jeResource_AddVFile(m_pResourceMgr, 
+		}
+		/*if (!jeResource_AddVFile(m_pResourceMgr,
 			m_strActorDir.GetBuffer(m_strActorDir.GetLength()),
-			m_pvfActorFile))
+			m_pvfActorFile))*/
+		if (!m_pResourceMgr->addVFile(m_strActorDir.GetBuffer(m_strActorDir.GetLength()), m_pvfActorFile))
+		{
+			jeErrorLog_AddString(-1, "Could not add Actors directory!!", NULL);
 			return false;
+		}
 
-		if(!jeResource_AddVFile(m_pResourceMgr,
+		/*if(!jeResource_AddVFile(m_pResourceMgr,
 			m_strLevelDir.GetBuffer(m_strLevelDir.GetLength()),
-			m_pvfLevelFile))
+			m_pvfLevelFile))*/
+		if (!m_pResourceMgr->addVFile(m_strLevelDir.GetBuffer(m_strLevelDir.GetLength()), m_pvfLevelFile))
+		{
+			jeErrorLog_AddString(-1, "Could not add Levels directory!!", NULL);
 			return false;
+		}
 
 	}	//	if (m_pResourceMgr)...
 	else
@@ -1205,11 +1221,11 @@ bool CMainFrame::LoadWorld()
 
 				if (levelpath)
 				{
-					m_pWorld = jeWorld_CreateFromEditorFile(levelpath, m_pPtrMgr, m_pResourceMgr);
+					m_pWorld = jeWorld_CreateFromEditorFile(levelpath, m_pPtrMgr);
 
 					if (m_pWorld)
 					{
-						jeWorld_CreateRef(m_pWorld);	// SHOULD be done automatically... but ain't
+						//jeWorld_CreateRef(m_pWorld);	// SHOULD be done automatically... but ain't
 
 						if (!jeWorld_SetEngine(m_pWorld, m_pEngine))
 						{
@@ -1419,7 +1435,7 @@ bool CMainFrame::RenderView(jeFloat fElapsedTime)
 			//jeEngine_Printf(m_pEngine, 0, 0, "jMinApp - Press ESC to close jMinApp.");
 			jeEngine_Printf(m_pEngine, 0, 10, 10, JE_COLOR_COLORVALUE(100,100,100,100), "jMinApp - Press ESC to close jMinApp.");
 
-			jeEngine_DrawImage(m_pEngine, m_pImage, NULL, 1, 1);
+			//jeEngine_DrawImage(m_pEngine, m_pImage, NULL, 1, 1);
 
 			//	flip the new rendered frame to the screen
 			if (!jeEngine_EndFrame(m_pEngine))

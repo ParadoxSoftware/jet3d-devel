@@ -272,7 +272,7 @@ public:
    // End DJT
    //---------------------------------------------------
 	// Krouer: add few accessor
-	inline jeResourceMgr* GetResourceMgr() { return m_pResourceMgr; }
+	inline jet3d::jeResourceMgr* GetResourceMgr() { return m_pResourceMgr; }
 	jeEngine* GetJetEngine();
 	// end Krouer adds
    
@@ -422,7 +422,7 @@ public:
     jeMaterialSpec *	LightBitmap;
 #endif
     BOOL     m_RenderMode;
-	jeResourceMgr *	m_pResourceMgr; // krouer
+	jet3d::jeResourceMgr *	m_pResourceMgr; // krouer
 
 	//	tom morris feb 2005
 	const CString	m_strRebuild;

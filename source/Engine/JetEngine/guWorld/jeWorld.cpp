@@ -129,7 +129,7 @@ typedef struct jeWorld
 	jeEngine					*Engine;
 	jeSound_System				*SoundSystem;
 	
-	jeResourceMgr				*ResourceMgr;
+	jet3d::jeResourceMgr				*ResourceMgr;
 
 	int32						Recursion;
 
@@ -446,11 +446,14 @@ static jeBoolean jeWorld_AddDefaultObjects(jeWorld *World)
 //========================================================================================
 //	jeWorld_CreateBase
 //========================================================================================
-static jeWorld *jeWorld_CreateBase(jeResourceMgr *ResourceMgr)
+static jeWorld *jeWorld_CreateBase()
 {
 	jeWorld		*World;
+	jet3d::jeResourceMgr *ResourceMgr = nullptr;
 
+	ResourceMgr = jeResourceMgr_GetSingleton();
 	assert(ResourceMgr);
+	ResourceMgr->AddRef();
 
 	World = (jeWorld *)JE_RAM_ALLOCATE_CLEAR(sizeof(*World));
 
@@ -543,8 +546,9 @@ static jeWorld *jeWorld_CreateBase(jeResourceMgr *ResourceMgr)
 			if (World->Objects)
 				jeChain_Destroy(&World->Objects);
 
-			if (World->ResourceMgr)
-				jeResource_MgrDestroy(&World->ResourceMgr);
+			//if (World->ResourceMgr)
+			//	jeResource_MgrDestroy(&World->ResourceMgr);
+			JE_SAFE_RELEASE(World->ResourceMgr);
 
 			//if (World->Actors) // Added cause it was needed (cyrius)
 			//	jeChain_Destroy(&World->Actors);
@@ -569,13 +573,11 @@ static jeWorld *jeWorld_CreateBase(jeResourceMgr *ResourceMgr)
 //========================================================================================
 //	jeWorld_Create
 //========================================================================================
-JETAPI jeWorld * JETCC jeWorld_Create(jeResourceMgr *pResourceMgr)
+JETAPI jeWorld * JETCC jeWorld_Create()
 {
 	jeWorld		*World;
-
-	assert(pResourceMgr);
 	
-	World = jeWorld_CreateBase(pResourceMgr);
+	World = jeWorld_CreateBase();
 
 	if (!World)
 		return NULL;
@@ -626,11 +628,15 @@ JETAPI jeWorld * JETCC jeWorld_Create(jeResourceMgr *pResourceMgr)
 //========================================================================================
 //	jeWorld_CreateFromFile
 //========================================================================================
-JETAPI jeWorld * JETCC jeWorld_CreateFromFile(jeVFile *VFile, jePtrMgr *PtrMgr, jeResourceMgr *pResourceMgr)
+//JETAPI jeWorld * JETCC jeWorld_CreateFromFile(jeVFile *VFile, jePtrMgr *PtrMgr, jeResourceMgr *pResourceMgr)
+JETAPI jeWorld * JETCC jeWorld_CreateFromFile(jeVFile *VFile, jePtrMgr *PtrMgr)
 {
 	jeWorld			*World;
+	jet3d::jeResourceMgr *pResourceMgr = nullptr;
 
-	World = jeWorld_CreateBase(pResourceMgr);
+	pResourceMgr = jeResourceMgr_GetSingleton();
+
+	World = jeWorld_CreateBase();
 
 	if (!World)
 		return NULL;
@@ -652,6 +658,7 @@ JETAPI jeWorld * JETCC jeWorld_CreateFromFile(jeVFile *VFile, jePtrMgr *PtrMgr, 
 	// Krouer: inform the PtrMgr on the resource and world it behaves
 	PtrMgr->pWorld = World;
 	PtrMgr->pResMgr = pResourceMgr;
+	PtrMgr->pResMgr->AddRef();
 
 	// Read the header
 	if (!jeWorld_ReadHeader(World, VFile))
@@ -1003,7 +1010,8 @@ JETAPI void JETCC jeWorld_Destroy(jeWorld **pWorld)
 		// destroy resource manager
 		if ( World->ResourceMgr != NULL )
 		{
-			jeResource_MgrDestroy( &( World->ResourceMgr ) );
+			//jeResource_MgrDestroy( &( World->ResourceMgr ) );
+			JE_SAFE_RELEASE(World->ResourceMgr);
 		}
 
 		if (World->Model != NULL)
@@ -2394,12 +2402,13 @@ JETAPI jeSound_System *	JETCC jeWorld_GetSoundSystem(jeWorld *World )
 //========================================================================================
 //	jeWorld_GetResourceMgr
 //========================================================================================
-JETAPI jeResourceMgr * JETCC jeWorld_GetResourceMgr(jeWorld *World)
+JETAPI jet3d::jeResourceMgr * JETCC jeWorld_GetResourceMgr(jeWorld *World)
 {
 	assert( World != NULL );
 	assert( World->ResourceMgr != NULL );
 
-	jeResource_MgrIncRefcount( World->ResourceMgr );
+	//jeResource_MgrIncRefcount( World->ResourceMgr );
+	//World->ResourceMgr->AddRef();
 	return( World->ResourceMgr );
 }
 
@@ -3144,7 +3153,8 @@ JETAPI char * JETCC jeWorld_GetNextCollisionExclusion(const jeWorld *World, cons
 // level created in JEdit and it will automatically open the appropriate, file and fork, and 
 // then read in the world.  The second two parameters here CAN be NULL.  If they are NULL,
 // they will be created automatically.
-JETAPI jeWorld	* JETCC jeWorld_CreateFromEditorFile(const char* FileName, jePtrMgr *pPtrMgr, jeResourceMgr * pResourceMgr )
+//JETAPI jeWorld	* JETCC jeWorld_CreateFromEditorFile(const char* FileName, jePtrMgr *pPtrMgr, jeResourceMgr * pResourceMgr )
+JETAPI jeWorld	* JETCC jeWorld_CreateFromEditorFile(const char* FileName, jePtrMgr *pPtrMgr)
 {
 	jeWorld *pWorld;
 	jeVFile *pMapFile;
@@ -3161,7 +3171,7 @@ JETAPI jeWorld	* JETCC jeWorld_CreateFromEditorFile(const char* FileName, jePtrM
 		return NULL;
 	}
 	
-	if(pResourceMgr == NULL) 
+	/*if(pResourceMgr == NULL) 
 	{
 		bCreated = JE_TRUE;
 		pResourceMgr = jeResource_MgrCreateDefault(NULL);	
@@ -3173,7 +3183,7 @@ JETAPI jeWorld	* JETCC jeWorld_CreateFromEditorFile(const char* FileName, jePtrM
 		jeErrorLog_Add( JE_ERR_SUBSYSTEM_FAILURE, "OnSaveDocument:jeResource_MgrCreateDefault");
 		jePtrMgr_Destroy( &pPtrMgr );		
 		return NULL;
-	}
+	}*/
 	
 	pMapFile = jeVFile_OpenNewSystem
 	(
@@ -3187,7 +3197,7 @@ JETAPI jeWorld	* JETCC jeWorld_CreateFromEditorFile(const char* FileName, jePtrM
 	{
 		jeErrorLog_AddString( JE_ERR_FILEIO_OPEN, "OnOpenDocument:jeVFile_OpenNewSystem", FileName);		
 		jePtrMgr_Destroy( &pPtrMgr );
-		jeResource_MgrDestroy(&pResourceMgr);
+	//	jeResource_MgrDestroy(&pResourceMgr);
 		return NULL;
 	}
 
@@ -3198,11 +3208,11 @@ JETAPI jeWorld	* JETCC jeWorld_CreateFromEditorFile(const char* FileName, jePtrM
 		jeVFile_Close( pMapFile ) ;
 		jeErrorLog_AddString( JE_ERR_FILEIO_FORMAT, "OnOpenDocument:jeVFile_Open", FileName);		
 		jePtrMgr_Destroy( &pPtrMgr );
-		jeResource_MgrDestroy(&pResourceMgr);
+		//jeResource_MgrDestroy(&pResourceMgr);
 		return NULL;
 	}		
 
-	pWorld = jeWorld_CreateFromFile( pWorldFork, pPtrMgr, pResourceMgr );
+	pWorld = jeWorld_CreateFromFile( pWorldFork, pPtrMgr );
 
 	jeVFile_Close( pWorldFork ) ;
 	if( pWorld == NULL )
@@ -3210,7 +3220,7 @@ JETAPI jeWorld	* JETCC jeWorld_CreateFromEditorFile(const char* FileName, jePtrM
 		jeVFile_Close( pMapFile ) ;
 		jeErrorLog_AddString( JE_ERR_SUBSYSTEM_FAILURE, "OnOpenDocument:jeWorld_CreateFromFile", FileName);		
 		jePtrMgr_Destroy( &pPtrMgr );
-		jeResource_MgrDestroy(&pResourceMgr);
+		//jeResource_MgrDestroy(&pResourceMgr);
 		return NULL;
 	}
 
@@ -3219,7 +3229,7 @@ JETAPI jeWorld	* JETCC jeWorld_CreateFromEditorFile(const char* FileName, jePtrM
 
 	// pWorld uses the resource manager, so only destroy
 	// (decrease refcount) if we didn't create the manager.
-	if(!bCreated) jeResource_MgrDestroy(&pResourceMgr);
+	//if(!bCreated) jeResource_MgrDestroy(&pResourceMgr);
 
 	return pWorld;
 }

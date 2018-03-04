@@ -29,7 +29,7 @@
 
 typedef struct jeShader jeShader;
 typedef struct jeEngine jeEngine;
-typedef struct jeResourceMgr jeResourceMgr;
+//typedef struct jeResourceMgr jeResourceMgr;
 //=======================================================================================
 //	
 //=======================================================================================

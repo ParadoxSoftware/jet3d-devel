@@ -1051,7 +1051,8 @@ jeBoolean JETCC SetProperty(
 			}
 
 			// get new actor def			
-			ActorDefinition = (jeActor_Def *)jeResource_Get( Object->ResourceMgr, Object->ActorDefName );
+			//ActorDefinition = (jeActor_Def *)jeResource_Get( Object->ResourceMgr, Object->ActorDefName );
+			ActorDefinition = static_cast<jeActor_Def*>(Object->ResourceMgr->get(Object->ActorDefName));
 
 			// if it doesn't exist then create it
 			if ( ActorDefinition == NULL )
@@ -1061,7 +1062,8 @@ jeBoolean JETCC SetProperty(
 				jeVFile	*ActorDefFile;
 
 				// get vfile dir
-				FileDir = jeResource_GetVFile( Object->ResourceMgr, "Actors" );
+				//FileDir = jeResource_GetVFile( Object->ResourceMgr, "Actors" );
+				FileDir = Object->ResourceMgr->getVFile("Actors");
 				if ( FileDir == NULL )
 				{
 					jeErrorLog_Add( JE_ERR_SUBSYSTEM_FAILURE, NULL );
@@ -1081,7 +1083,8 @@ jeBoolean JETCC SetProperty(
 				jeVFile_Close( ActorDefFile );
 
 				// close vfile dir
-				if ( jeResource_DeleteVFile( Object->ResourceMgr, "Actors" ) == 0 )
+				//if ( jeResource_DeleteVFile( Object->ResourceMgr, "Actors" ) == 0 )
+				if (!Object->ResourceMgr->removeVFile("Actors"))
 				{
 					jeErrorLog_Add( JE_ERR_SUBSYSTEM_FAILURE, NULL );
 					jeVFile_Close( FileDir );
@@ -1096,7 +1099,8 @@ jeBoolean JETCC SetProperty(
 
 				// add actor def to the resource manager
 				assert( Object->ActorDefName != NULL );
-				jeResource_Add( Object->ResourceMgr, Object->ActorDefName, JE_RESOURCE_ACTOR, ActorDefinition );
+				//jeResource_Add( Object->ResourceMgr, Object->ActorDefName, JE_RESOURCE_ACTOR, ActorDefinition );
+				Object->ResourceMgr->add(std::string(Object->ActorDefName), JE_RESOURCE_ACTOR, static_cast<void*>(ActorDefinition));
 			}
 
 			// create actor
@@ -1381,7 +1385,8 @@ jeBoolean JETCC SetProperty(
 							jeVFile	*FileDir;
 
 							// get vfile dir
-							FileDir = jeResource_GetVFile( Object->ResourceMgr, "GlobalMaterials" );
+							//FileDir = jeResource_GetVFile( Object->ResourceMgr, "GlobalMaterials" );
+							FileDir = Object->ResourceMgr->getVFile("GlobalMaterials");
 							if ( FileDir == NULL )
 							{
 								jeErrorLog_Add( JE_ERR_SUBSYSTEM_FAILURE, NULL );
@@ -1392,7 +1397,8 @@ jeBoolean JETCC SetProperty(
 							Bitmap = Util_CreateBitmapFromFileName( FileDir, Object->MaterialOverideList[Object->MaterialCurrent], NULL, Object->ResourceMgr );
 		
 							// close vfile dir
-							if ( jeResource_DeleteVFile( Object->ResourceMgr, "GlobalMaterials" ) == 0 )
+							//if ( jeResource_DeleteVFile( Object->ResourceMgr, "GlobalMaterials" ) == 0 )
+							if (!Object->ResourceMgr->removeVFile("GlobalMaterials"))
 							{
 								jeVFile_Close( FileDir );
 							}

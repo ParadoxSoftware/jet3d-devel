@@ -436,10 +436,11 @@ HANDLE GetGraphEventHandle()
 void OnGraphNotify()
 {
     IMediaEvent *pME;
-    long lEventCode, lParam1, lParam2;
+	LONG_PTR lParam1, lParam2;
+	long lEventCode;
 	
     ASSERT( media.hGraphNotifyEvent != NULL );
-	
+
     if( SUCCEEDED(media.pGraph->QueryInterface(IID_IMediaEvent, (void **) &pME)))
 	{
 		if( SUCCEEDED(pME->GetEvent(&lEventCode, &lParam1, &lParam2, 0))) 

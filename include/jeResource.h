@@ -86,50 +86,14 @@
 #define JE_RESOURCE_H
 
 #include "BaseType.h"
-
-/*! @name Resource kinds
-	@brief Possible value for Type parameter of jeResource_GetResource() */
-/*@{*/
-/*! @def JE_RESOURCE_ANY
-	@brief The resource is anything
-*/
-#define JE_RESOURCE_ANY		0x0000
-/*! @def JE_RESOURCE_VFS
-	@brief The resource is a #jeVFile pointer
-*/
-#define JE_RESOURCE_VFS		0x0001
-/*! @def JE_RESOURCE_BITMAP
-	@brief The resource is a #jeBitmap pointer
-*/
-#define JE_RESOURCE_BITMAP	0x0002
-/*! @def JE_RESOURCE_SHADER
-	@brief The resource is a #jeShader pointer
-*/
-#define JE_RESOURCE_SHADER	0x0004
-/*! @def JE_RESOURCE_SOUND
-	@brief The resource is a #jeSound pointer
-*/
-#define JE_RESOURCE_SOUND	0x0005
-/*! @def JE_RESOURCE_ACTOR
-	@brief The resource is a #jeActor pointer
-*/
-#define JE_RESOURCE_ACTOR	0x0006
-/*! @def JE_RESOURCE_MATERIAL
-	@brief The resource is a #jeMaterialSpec Material pointer build from JMAT file
-*/
-#define JE_RESOURCE_MATERIAL	0x0010
-/*! @def JE_RESOURCE_TEXTURE
-	@brief The resource is a #jeTexture Texture pointer build from image file by driver
-*/
-#define JE_RESOURCE_TEXTURE		0x0011
-/*@}*/
+#include "jeResourceManager.h"
 
 /*! @typedef jeResourceMgr
 	@brief The jeResourceMgr struct
 */
-typedef struct jeResourceMgr	jeResourceMgr;
+//typedef struct jeResourceMgr	jeResourceMgr;
 
-typedef struct jeEngine	jeEngine;
+//typedef struct jeEngine	jeEngine;
 
 ////////////////////////////////////////////////////////////////////////////////////////
 //	Resource manager functions
@@ -142,14 +106,14 @@ typedef struct jeEngine	jeEngine;
 
 	The @p pEngine parameter is need to built texture resource.
 */
-JETAPI jeResourceMgr* JETCC jeResource_MgrCreate(jeEngine* pEngine);
+//JETAPI jeResourceMgr* JETCC jeResource_MgrCreate(jeEngine* pEngine);
 
 /*!	@fn int jeResource_MgrIncRefcount(jeResourceMgr* ResourceMgr)
 	@brief Increment a resource managers reference/usage count.
 	@param ResourceMgr Manager whose ref count will be incremented
 	@return The new reference counter value
 */
-JETAPI int32 JETCC jeResource_MgrIncRefcount(jeResourceMgr* ResourceMgr );
+//JETAPI int32 JETCC jeResource_MgrIncRefcount(jeResourceMgr* ResourceMgr );
 
 /*! @fn void JETCC jeResource_MgrDestroy(jeResourceMgr** DeadResourceMgr)
 	@brief Destroy a resource manager.
@@ -158,18 +122,17 @@ JETAPI int32 JETCC jeResource_MgrIncRefcount(jeResourceMgr* ResourceMgr );
 	The Resource Manager is zapped oly if its reference counter is zero.<br>
 	The function first decrement the ref count.
 */
-JETAPI void JETCC jeResource_MgrDestroy(jeResourceMgr** DeadResourceMgr);
+//JETAPI void JETCC jeResource_MgrDestroy(jeResourceMgr** DeadResourceMgr);
    
 /*! @fn jeBoolean jeResourceMgr_SetEngine(jeEngine* pEngine)
 	@brief Assign the current jeEngine instance to the jeResourceMgr
 	@param pEngine The current jeEngine instance
 	@return JE_TRUE when succeed
 */
-JETAPI jeBoolean JETCC jeResourceMgr_SetEngine(jeResourceMgr *ResourceMgr, jeEngine* pEngine);
+//JETAPI jeBoolean JETCC jeResourceMgr_SetEngine(jeResourceMgr *ResourceMgr, jeEngine* pEngine);
 
-JETAPI jeEngine* JETCC jeResourceMgr_GetEngine(const jeResourceMgr *ResourceMgr);
+//JETAPI jeEngine* JETCC jeResourceMgr_GetEngine(const jeResourceMgr *ResourceMgr);
 
-JETAPI jeResourceMgr* JETCC jeResourceMgr_GetSingleton();
 
 ////////////////////////////////////////////////////////////////////////////////////////
 //	Generic resource functions
@@ -178,21 +141,21 @@ JETAPI jeResourceMgr* JETCC jeResourceMgr_GetSingleton();
 //	Add a new resource.
 //
 ////////////////////////////////////////////////////////////////////////////////////////
-JETAPI jeBoolean JETCC jeResource_Add(
+/*JETAPI jeBoolean JETCC jeResource_Add(
 	jeResourceMgr	*ResourceMgr,	// resource manager to add it to
 	char			*Name,			// name
     uint32          Type,           // type
 	void			*Data );		// data
-
+	*/
 /*! @brief Get an existing resource.
 	@param ResourceMgr The resource manager to delete it from
 	@param Name The resource name
     @deprecated Replace by jeResource_GetResource
 */
-JETAPI void * JETCC jeResource_Get(
+/*JETAPI void * JETCC jeResource_Get(
 	jeResourceMgr	*ResourceMgr,	// resource manager to get it from
 	char			*Name );		// resource name
-
+	*/
 /*! @brief Delete an existing resource.
 	
 	Decrement the @p Name identified resource reference counter and remove it when reach zero.
@@ -204,7 +167,7 @@ JETAPI void * JETCC jeResource_Get(
     @deprecated Replace by jeResource_ReleaseResource
 */
 ////////////////////////////////////////////////////////////////////////////////////////
-JETAPI int JETCC jeResource_Delete(jeResourceMgr *ResourceMgr, char *Name );
+//JETAPI int JETCC jeResource_Delete(jeResourceMgr *ResourceMgr, char *Name );
 
 
 
@@ -216,25 +179,25 @@ JETAPI int JETCC jeResource_Delete(jeResourceMgr *ResourceMgr, char *Name );
 //	Add a new VFile resource.
 //
 ////////////////////////////////////////////////////////////////////////////////////////
-JETAPI jeBoolean JETCC jeResource_AddVFile(
+/*JETAPI jeBoolean JETCC jeResource_AddVFile(
 	jeResourceMgr	*ResourceMgr,	// resource list to add it to
 	char			*Name,			// name
 	jeVFile			*Data );		// data
-
+	*/
 //	Get an existing VFile resource.
 //
 ////////////////////////////////////////////////////////////////////////////////////////
-JETAPI jeVFile * JETCC jeResource_GetVFile(
+/*JETAPI jeVFile * JETCC jeResource_GetVFile(
 	jeResourceMgr	*ResourceMgr,	// resource list to get it from
 	char			*Name );		// name
-
+	*/
 //	Delete an existing VFile resource.
 //
 ////////////////////////////////////////////////////////////////////////////////////////
-JETAPI int JETCC jeResource_DeleteVFile(
+/*JETAPI int JETCC jeResource_DeleteVFile(
 	jeResourceMgr	*ResourceMgr,	// resource list to delete it from
 	char			*Name );		// name
-
+	*/
 /*! @fn jeBoolean jeResource_OpenDirectory(jeResourceMgr* pResourceMgr, char* DirName, char* ResName)
 	@brief Open a vfile(directory) for Resource Manager (WITH AutoRemove on ResMgrDestroy)
 	@param pResourceMgr The Resource Manager instance
@@ -243,7 +206,7 @@ JETAPI int JETCC jeResource_DeleteVFile(
 	@return JE_TRUE when succeed
 	@author Icestorm
 */
-JETAPI jeBoolean JETCC jeResource_OpenDirectory(jeResourceMgr* pResourceMgr, char* DirName, char* ResName);
+//JETAPI jeBoolean JETCC jeResource_OpenDirectory(jeResourceMgr* pResourceMgr, char* DirName, char* ResName);
 
 /*! @fn jeResourceMgr* jeResource_MgrCreateDefault(jeEngine* pEngine)
 	@brief Create a Resource Manager using the default paths.
@@ -254,7 +217,7 @@ JETAPI jeBoolean JETCC jeResource_OpenDirectory(jeResourceMgr* pResourceMgr, cha
 
     It makes usage of jeResource_OpenDirectory to create its @ref defaultDirs "4 defaults directories".
 */
-JETAPI jeResourceMgr* JETCC jeResource_MgrCreateDefault(jeEngine* pEngine);
+//JETAPI jeResourceMgr* JETCC jeResource_MgrCreateDefault(jeEngine* pEngine);
 
 /*! @fn void* jeResource_GetResource(jeResourceMgr *ResourceMgr, int32 Type, char *Name);
 	@brief Create a resource from memory or disk
@@ -268,7 +231,7 @@ JETAPI jeResourceMgr* JETCC jeResource_MgrCreateDefault(jeEngine* pEngine);
 	@param[in] Name The resource name
 	@return The resource pointer to be casted following the flag of @a Type or NULL if failed
 */
-JETAPI void* JETCC jeResource_GetResource(jeResourceMgr *ResourceMgr, int32 Type, char *Name);
+//JETAPI void* JETCC jeResource_GetResource(jeResourceMgr *ResourceMgr, int32 Type, char *Name);
 
 /*! @fn void jeResource_ExportResource(jeResourceMgr *ResourceMgr, int32 Type, char *Name);
 	@brief Save a resource to its format on the disk
@@ -281,7 +244,7 @@ JETAPI void* JETCC jeResource_GetResource(jeResourceMgr *ResourceMgr, int32 Type
 
 	@note Only bitmaps export is currently implemented and bmp generated file aren't BMP format files.
 */
-JETAPI void JETCC jeResource_ExportResource(jeResourceMgr *ResourceMgr, int32 Type, char *Name, void* Data);
+//JETAPI void JETCC jeResource_ExportResource(jeResourceMgr *ResourceMgr, int32 Type, char *Name, void* Data);
 
 /*! @fn void* jeResource_Release(jeResourceMgr *ResourceMgr, int32 Type, char *Name);
 	@brief Release the identified resource
@@ -297,6 +260,78 @@ JETAPI void JETCC jeResource_ExportResource(jeResourceMgr *ResourceMgr, int32 Ty
 	@param[in] Name The resource name identifier
 	@return JE_TRUE when succeed
 */
-JETAPI jeBoolean JETCC jeResource_ReleaseResource(jeResourceMgr *ResourceMgr, int32 Type, char *Name);
+//JETAPI jeBoolean JETCC jeResource_ReleaseResource(jeResourceMgr *ResourceMgr, int32 Type, char *Name);
+
+#include <map>
+#include <string>
+#include "jeSingleton.h"
+#include "jeResourceManager.h"
+
+namespace jet3d {
+
+class jeResource_Impl : public jeResource
+{
+public:
+	jeResource_Impl(const std::string &strName, uint32 iType, void *pvData, jeBoolean bOpenDir);
+	virtual ~jeResource_Impl();
+
+protected:
+	std::string m_strName;
+	uint32 m_iType;
+	void *m_pvData;
+	jeBoolean m_bOpenDir;
+	uint32 m_iRefCount;
+	jeEngine *m_pEngine;
+
+public:
+	uint32 AddRef();
+	uint32 Release();
+
+	const std::string &getName()		{ return m_strName; }
+	const uint32 getType()				{ return m_iType;   }
+	void *getData()						{ return m_pvData;  }
+	jeBoolean isOpenDirectory()			{ return m_bOpenDir; }
+	void setOpenDirectory()				{ m_bOpenDir = JE_TRUE; }
+	void setEngine(jeEngine *pEngine)	{ m_pEngine = pEngine; }
+};
+
+typedef std::map<std::string, jeResource_Impl*>				ResourceMap;
+typedef ResourceMap::iterator								ResourceMapItr;
+
+class jeResourceMgr_Impl : public jeResourceMgr, public jeSingleton<jeResourceMgr_Impl>
+{
+public:
+	jeResourceMgr_Impl();
+	virtual ~jeResourceMgr_Impl();
+
+protected:
+	uint32 m_iRefCount;
+	ResourceMap m_Resources;
+	::jeEngine *m_pEngine;
+
+public:
+	uint32 AddRef();
+	uint32 Release();
+
+	bool initialize(::jeEngine *pEngine);
+	bool initializeWithDefaults();
+	void shutdown();
+
+	jeEngine *getEngine()			{ return m_pEngine; }
+
+	bool add(const std::string &strName, uint32 iType, void *pvData);
+	void *get(const std::string &strName);
+	bool remove(const std::string &strName);
+
+	bool addVFile(const std::string &strName, jeVFile *pFile);
+	jeVFile *getVFile(const std::string &strName);
+	bool removeVFile(const std::string &strName);
+
+	void *createResource(const std::string &strName, uint32 iType);
+	bool openDirectory(const std::string &strDirName, const std::string &strResourceName);
+};
+
+} // namespace jet3d
+
 
 #endif

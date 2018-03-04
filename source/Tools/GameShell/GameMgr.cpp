@@ -87,7 +87,7 @@ void CGameMgr::Shutdown()
 		jePtrMgr_Destroy(&m_pPtrMgr);
 
 	if (m_pEngine)
-		jeEngine_Destroy(&m_pEngine);
+		jeEngine_Destroy(&m_pEngine, __FILE__, __LINE__);
 
 	m_pEngine = NULL;
 }

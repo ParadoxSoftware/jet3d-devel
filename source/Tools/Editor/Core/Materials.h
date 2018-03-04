@@ -32,11 +32,11 @@
 typedef struct		Material_Struct			Material_Struct;
 
 // Krouer: old function to generate bmps
-Material_Struct *	Materials_Load( jeEngine* pEngine, jeResourceMgr* pResMgr, char* DirPath, char* Name );
+Material_Struct *	Materials_Load( jeEngine* pEngine, jet3d::jeResourceMgr* pResMgr, char* DirPath, char* Name );
 // Krouer: this function create JMAT material from BMP files
-Material_Struct *	Materials_ConvertToJMAT( jeEngine* pEngine, jeResourceMgr* pResMgr, char* DirPath, char* Name );
+Material_Struct *	Materials_ConvertToJMAT( jeEngine* pEngine, jet3d::jeResourceMgr* pResMgr, char* DirPath, char* Name );
 // Krouer: this function load JMAT material
-Material_Struct *	Materials_LoadEx( jeEngine* pEngine, jeResourceMgr* pResMgr, char* DirPath, char* Name );
+Material_Struct *	Materials_LoadEx( jeEngine* pEngine, jet3d::jeResourceMgr* pResMgr, char* DirPath, char* Name );
 
 void				Materials_Destroy( Material_Struct* Material );
 const char		*	Materials_GetName( Material_Struct* Material );

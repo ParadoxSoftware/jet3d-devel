@@ -32,7 +32,7 @@
 #include "Dcommon.h"
 #include "jeChain.h"
 #include "jeFileLogger.h"
-#include "jeResourceMgr.h"
+#include "jeResource.h"
 
 #ifndef WINVER
 typedef double LONGLONG;
@@ -134,8 +134,8 @@ typedef struct BitmapList BitmapList;
 //typedef std::list<jeBitmap*>	BitmapList;
 //typedef BitmapList::iterator	BitmapListItr;
 
-typedef std::list<jeImage*> ImageList;
-typedef ImageList::iterator	ImageListItr;
+//typedef std::list<jeImage*> ImageList;
+//typedef ImageList::iterator	ImageListItr;
 
 // System globals initialized by module it belongs to...
 struct jeEngine
@@ -189,9 +189,9 @@ struct jeEngine
 	int32				RenderMode;
 
 	// jeImage to replace jeBitmap
-	ImageList			AttachedImages;
+	//ImageList			AttachedImages;
 
-	jet3d::jeResourceMgr	*ResourceMgr;
+	jet3d::jeResourceMgr_Impl *ResourceMgr;
 
 	jeEngine			* MySelf2;
 };

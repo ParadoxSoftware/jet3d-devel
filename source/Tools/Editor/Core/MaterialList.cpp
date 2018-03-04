@@ -106,7 +106,7 @@ jeBoolean Materials_DoesExist( Material_Struct * pMaterial, void * pVoid )
 
 // Parses the diretory specified by DirPath for ".bmp" extention
 // Creates a material for each found bmp and adds it to MaterialList
-jeBoolean MaterialList_LoadFromDir( MaterialList_Struct* MaterialList, jeEngine* pEngine, jeResourceMgr* pResMgr, char* DirPath )
+jeBoolean MaterialList_LoadFromDir( MaterialList_Struct* MaterialList, jeEngine* pEngine, jet3d::jeResourceMgr* pResMgr, char* DirPath )
 {
 #define JMAT_SPEC "*.jmat"
 #define BMP_SPEC "*.bmp"

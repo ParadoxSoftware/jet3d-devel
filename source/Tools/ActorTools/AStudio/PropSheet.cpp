@@ -206,7 +206,8 @@ BOOL CAStudioPropSheet::OnInitDialog()
 	CPropertySheet::OnInitDialog();
 
     m_pEngine = jeEngine_Create(GetSafeHwnd(), "AStudio", ".");
-    m_pResManager = jeResource_MgrCreate(m_pEngine);
+    //m_pResManager = jeResource_MgrCreate(m_pEngine);
+	m_pResManager = jeEngine_GetResourceManager(m_pEngine);
 
 	// Set the icon for this dialog.  The framework does this automatically
 	//  when the application's main window is not a dialog
@@ -339,8 +340,8 @@ int CAStudioPropSheet::OnCreate (LPCREATESTRUCT lpCreateStruct)
 void CAStudioPropSheet::OnDestroy()
 {
 	WinHelp(0L, HELP_QUIT);	// shutdown WinHelp
-    jeEngine_Destroy(&m_pEngine);
-    jeResource_MgrDestroy(&m_pResManager);
+    jeEngine_Destroy(&m_pEngine, __FILE__, __LINE__);
+    //jeResource_MgrDestroy(&m_pResManager);
 	CPropertySheet::OnDestroy();
 }
 

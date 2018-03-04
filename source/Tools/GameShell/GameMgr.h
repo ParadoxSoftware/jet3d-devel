@@ -25,7 +25,7 @@ public:
 	HWND							m_hWnd;
 
 	jePtrMgr						*m_pPtrMgr;
-	jeResourceMgr					*m_pResMgr;
+	jet3d::jeResourceMgr					*m_pResMgr;
 
 	char							m_DriverName[MAX_DRIVER_NAME];
 	int32							m_Width, m_Height, m_BPP;

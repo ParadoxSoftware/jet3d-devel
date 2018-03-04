@@ -106,7 +106,7 @@ private:
 	int				m_ExpandedHeight;
 
     jeEngine        *m_pEngine;
-    jeResourceMgr   *m_pResManager;
+    jet3d::jeResourceMgr   *m_pResManager;
 
 	// Parent passes a pointer-to-pointer to structure so we can return it.
 	// But we use m_Project.

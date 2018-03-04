@@ -135,7 +135,7 @@ static jeMaterialSpec * Util_CreateBitmapFromFileName(
 	jeVFile		*File,			// file system to use
 	const char	*Name,			// name of the file
 	const char	*AlphaName,		// name of the alpha file
-	const jeResourceMgr* ResourceMgr)	
+	jet3d::jeResourceMgr* ResourceMgr)	
 {
 
 	// locals
@@ -165,8 +165,8 @@ static jeMaterialSpec * Util_CreateBitmapFromFileName(
 	// create the bitmap
 	Bmp = jeBitmap_CreateFromFile( BmpFile );
 	
-	MatSpec = jeMaterialSpec_Create(jeResourceMgr_GetEngine(ResourceMgr), (jeResourceMgr*) ResourceMgr);
-	
+	//MatSpec = jeMaterialSpec_Create(jeResourceMgr_GetEngine(ResourceMgr), ResourceMgr);
+	MatSpec = jeMaterialSpec_Create(ResourceMgr->getEngine());
 	jeVFile_Close( BmpFile );
 	if ( Bmp == NULL )
 	{
@@ -324,7 +324,7 @@ static void Util_DestroyBitmapList(
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 static BitmapList * Util_CreateBitmapList(
-	jeResourceMgr	*ResourceMgr,	// resource manager to use
+	jet3d::jeResourceMgr	*ResourceMgr,	// resource manager to use
 	char			*ResourceName,	// name of resource
 	char			*FileFilter )	// file filter
 {
@@ -349,7 +349,8 @@ static BitmapList * Util_CreateBitmapList(
 	}
 
 	// get vfile dir
-	FileDir = jeResource_GetVFile( ResourceMgr, ResourceName );
+	//FileDir = jeResource_GetVFile( ResourceMgr, ResourceName );
+	FileDir = ResourceMgr->getVFile(ResourceName);
 	if ( FileDir == NULL )
 	{
 		jeErrorLog_Add( JE_ERR_SUBSYSTEM_FAILURE, NULL );
@@ -513,7 +514,8 @@ static BitmapList * Util_CreateBitmapList(
 	jeVFile_DestroyFinder( Finder );
 
 	// close vfile dir
-	if ( jeResource_DeleteVFile( ResourceMgr, ResourceName ) == 0 )
+	//if ( jeResource_DeleteVFile( ResourceMgr, ResourceName ) == 0 )
+	if (!ResourceMgr->removeVFile(ResourceName))
 	{
 		jeVFile_Close( FileDir );
 	}
@@ -558,7 +560,8 @@ static BitmapList * Util_CreateBitmapList(
 	// close vfile dir
 	if ( FileDir != NULL )
 	{
-		if ( jeResource_DeleteVFile( ResourceMgr, ResourceName ) == 0 )
+		//if ( jeResource_DeleteVFile( ResourceMgr, ResourceName ) == 0 )
+		if (!ResourceMgr->removeVFile(ResourceName))
 		{
 			jeVFile_Close( FileDir );
 		}
@@ -862,7 +865,7 @@ static void Util_DestroyFileList(
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 static char ** Util_BuildFileList(
-	jeResourceMgr	*ResourceMgr,
+	jet3d::jeResourceMgr	*ResourceMgr,
 	char			*ResourceName,
 	char			*FileFilter,
 	int				*FileListSize )
@@ -882,7 +885,8 @@ static char ** Util_BuildFileList(
 	assert( FileListSize );
 
 	// get vfile dir
-	FileDir = jeResource_GetVFile( ResourceMgr, ResourceName );
+	//FileDir = jeResource_GetVFile( ResourceMgr, ResourceName );
+	FileDir = ResourceMgr->getVFile(ResourceName);
 	if ( FileDir == NULL )
 	{
 		jeErrorLog_Add( JE_ERR_SUBSYSTEM_FAILURE, NULL );
@@ -954,7 +958,8 @@ static char ** Util_BuildFileList(
 	jeVFile_DestroyFinder( Finder );
 
 	// close vfile dir
-	if ( jeResource_DeleteVFile( ResourceMgr, ResourceName ) == 0 )
+	//if ( jeResource_DeleteVFile( ResourceMgr, ResourceName ) == 0 )
+	if (!ResourceMgr->removeVFile(ResourceName))
 	{
 		jeVFile_Close( FileDir );
 	}
@@ -990,7 +995,8 @@ static char ** Util_BuildFileList(
 	// close vfile dir
 	if ( FileDir != NULL )
 	{
-		if ( jeResource_DeleteVFile( ResourceMgr, ResourceName ) == 0 )
+		//if ( jeResource_DeleteVFile( ResourceMgr, ResourceName ) == 0 )
+		if (!ResourceMgr->removeVFile(ResourceName))
 		{
 			jeVFile_Close( FileDir );
 		}

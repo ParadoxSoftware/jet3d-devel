@@ -35,7 +35,7 @@
 
 #include "jeGArray.h"
 
-#include "jeResource.h"
+#include "jeResourceManager.h"
 
 #include "log.h"
 //#include "jeTexture.h"
@@ -60,9 +60,9 @@
 //=======================================================================================
 //	jeMaterialSpec_Create
 //=======================================================================================
-JETAPI jeMaterialSpec * JETCC jeMaterialSpec_Create(jeEngine* pEngine, jeResourceMgr* pResourceMgr)
+JETAPI jeMaterialSpec * JETCC jeMaterialSpec_Create(jeEngine* pEngine)
 {
-	jeMaterialSpec	*MaterialSpec;
+	jeMaterialSpec	*MaterialSpec = nullptr;
 
 	MaterialSpec = JE_RAM_ALLOCATE_STRUCT(jeMaterialSpec);
 
@@ -98,12 +98,13 @@ JETAPI void JETCC jeMaterialSpec_Destroy(jeMaterialSpec **MaterialSpec)
 		// empty the layers
 		for (idx=0; idx<pMatSpec->LayerCounts; idx++) {
 			if (pMatSpec->pLayers[idx]) {
-				if (pMatSpec->pLayers[idx]->Kind == JE_RESOURCE_BITMAP) {
+				//if (pMatSpec->pLayers[idx]->Kind == JE_RESOURCE_BITMAP) {
 					jeBitmap_Destroy(&pMatSpec->pLayers[idx]->pBitmap);
-					jeResource_Delete(jeResourceMgr_GetSingleton(), pMatSpec->pLayers[idx]->Name);
-				} else {
-					jeResource_ReleaseResource(jeResourceMgr_GetSingleton(), pMatSpec->pLayers[idx]->Kind, pMatSpec->pLayers[idx]->Name);
-				}
+					//jeResource_Delete(jeResourceMgr_GetSingleton(), pMatSpec->pLayers[idx]->Name);
+					jeResourceMgr_GetSingleton()->remove(pMatSpec->pLayers[idx]->Name);
+				//} else {
+					//jeResource_ReleaseResource(jeResourceMgr_GetSingleton(), pMatSpec->pLayers[idx]->Kind, pMatSpec->pLayers[idx]->Name);
+				//}
 
 				JE_RAM_FREE(pMatSpec->pLayers[idx]);
 			}
@@ -128,7 +129,7 @@ JETAPI void JETCC jeMaterialSpec_Destroy(jeMaterialSpec **MaterialSpec)
 //========================================================================================
 //	jeMaterialSpec_CreateFromFile
 //========================================================================================
-JETAPI jeMaterialSpec* JETCC jeMaterialSpec_CreateFromFile(jeVFile *VFile, jeEngine* pEngine, jeResourceMgr *ResMgr)
+JETAPI jeMaterialSpec* JETCC jeMaterialSpec_CreateFromFile(jeVFile *VFile, jeEngine* pEngine)
 {
 	uint8 Version;
 	uint16 Flags;
@@ -215,7 +216,8 @@ JETAPI jeMaterialSpec* JETCC jeMaterialSpec_CreateFromFile(jeVFile *VFile, jeEng
 		if (!jeVFile_Read(VFile, ShaderName, JE_MATERIAL_MAX_NAME_SIZE)) {
 			goto ExitInError;
 		}
-		MaterialSpec->pShader = (jeShader*) jeResource_GetResource(jeResourceMgr_GetSingleton(), JE_RESOURCE_SHADER, ShaderName);
+		//MaterialSpec->pShader = (jeShader*) jeResource_GetResource(jeResourceMgr_GetSingleton(), JE_RESOURCE_SHADER, ShaderName);
+		MaterialSpec->pShader = static_cast<jeShader*>(jeResourceMgr_GetSingleton()->createResource(ShaderName, JE_RESOURCE_SHADER));
 	}
 
 	if (MaterialSpec->Flags&MATSPEC_SIZE_FLAG) {
@@ -249,7 +251,8 @@ JETAPI jeMaterialSpec* JETCC jeMaterialSpec_CreateFromFile(jeVFile *VFile, jeEng
 		}
 
 		// Create the texture from the resource manager
-		pLayer->pTexture = (jeTexture*) jeResource_GetResource(jeResourceMgr_GetSingleton(), pLayer->Kind, pLayer->Name);
+		//pLayer->pTexture = (jeTexture*) jeResource_GetResource(jeResourceMgr_GetSingleton(), pLayer->Kind, pLayer->Name);
+		pLayer->pTexture = static_cast<jeTexture*>(jeResourceMgr_GetSingleton()->createResource(pLayer->Name, pLayer->Kind));
 
 		if (!jeVFile_Read(VFile, &pLayer->XForm, sizeof(pLayer->XForm))) {
 			goto ExitInError;
@@ -465,7 +468,8 @@ JETAPI jeBoolean JETCC jeMaterialSpec_AddLayer(jeMaterialSpec* MatSpec, int32 la
 	pLayer->Kind = (uint16) Kind;
 	jeXForm3d_SetIdentity(&pLayer->XForm);
 
-	pLayer->pTexture = (jeTexture*) jeResource_GetResource(jeResourceMgr_GetSingleton(), pLayer->Kind, pLayer->Name);
+	//pLayer->pTexture = (jeTexture*) jeResource_GetResource(jeResourceMgr_GetSingleton(), pLayer->Kind, pLayer->Name);
+	pLayer->pTexture = static_cast<jeTexture*>(jeResourceMgr_GetSingleton()->createResource(pLayer->Name, pLayer->Kind));
 
 	if (pLayer->Kind == JE_RESOURCE_BITMAP) {
 		jeBitmap_CreateRef((jeBitmap*)pLayer->pTexture);

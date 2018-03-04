@@ -1024,7 +1024,8 @@ return T;
 			if (Version) {
 				char Name[256];
 				jeVFile_Read(File, Name, 256);
-				Tex = (jeBitmap*) jeResource_GetResource(jePtrMgr_GetResourceMgr(PtrMgr), JE_RESOURCE_BITMAP, Name);
+				//Tex = (jeBitmap*) jeResource_GetResource(jePtrMgr_GetResourceMgr(PtrMgr), JE_RESOURCE_BITMAP, Name);
+				Tex = static_cast<jeBitmap*>(jeResourceMgr_GetSingleton()->createResource(Name, JE_RESOURCE_BITMAP));
 			} else {
 				Tex = jeBitmap_CreateFromFile(File);
 			}
@@ -2662,7 +2663,7 @@ JETAPI jeBoolean JETCC jeTerrain_AttachEngine(void *T,jeEngine *Engine)
 	{
 	int i;
 
-		jeEngine_CreateRef(Ter->Engine);
+		jeEngine_CreateRef(Ter->Engine, __FILE__, __LINE__);
 
 		jeEngine_AddBitmap(Ter->Engine,Ter->NullTexture,JE_ENGINE_BITMAP_TYPE_3D);
 		jeEngine_AddBitmap(Ter->Engine,Ter->HiliteTexture,JE_ENGINE_BITMAP_TYPE_3D);
@@ -2702,7 +2703,7 @@ JETAPI jeBoolean JETCC jeTerrain_DetachEngine(void *T,jeEngine *Engine)
 			}
 		}
 		
-		jeEngine_Destroy(&(Ter->Engine));
+		jeEngine_Destroy(&(Ter->Engine), __FILE__, __LINE__);
 	}
 	
 	Ter->Engine = NULL;

@@ -27,7 +27,7 @@
 #include "ErrorLog.h"
 //#include "debug_new.h"
 
-jeImageImpl::jeImageImpl()
+/*jeImageImpl::jeImageImpl()
 {
 	m_pData = nullptr;
 	m_pTexture = nullptr;
@@ -37,6 +37,8 @@ jeImageImpl::jeImageImpl()
 	m_ImageSize = 0;
 
 	m_iRefCount = 1;
+	m_strType = "Bitmap";
+	m_strFileName = "BitmapFileName";
 }
 
 jeImageImpl::~jeImageImpl()
@@ -62,29 +64,14 @@ uint32 jeImageImpl::Release()
 	return m_iRefCount;
 }
 
-jeBoolean jeImageImpl::IsDirty()
+bool jeImageImpl::isDirty()
 {
-	return JE_FALSE;
+	return false;
 }
 
-const std::string &jeImageImpl::GetFileName()
+bool jeImageImpl::isLoaded()
 {
-	return m_strFileName;
-}
-
-jet3d::jeResource *jeImageImpl::MakeCopy()
-{
-	jeImageImpl *pCopy = new jeImageImpl();
-
-	if (!pCopy->Create(m_Width, m_Height, m_ByteDepth))
-	{
-		JE_SAFE_DELETE(pCopy);
-		return nullptr;
-	}
-
-	memcpy(pCopy->m_pData, m_pData, m_ImageSize);
-	pCopy->m_strFileName = m_strFileName;
-	return pCopy;
+	return true;
 }
 
 jeBoolean jeImageImpl::Create(int32 Width, int32 Height, int32 BPP)
@@ -195,3 +182,5 @@ jeBoolean jeImage_BMP::Save(jeVFile *pFile, jet3d::jeResource *pResource)
 {
 	return JE_TRUE;
 }
+
+*/

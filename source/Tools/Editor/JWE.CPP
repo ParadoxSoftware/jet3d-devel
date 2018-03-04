@@ -625,7 +625,7 @@ bool	 CJweApp::RefreshMaterialList()
 		if (pDoc)
 		{
 			jeEngine* pEngine = pDoc->GetJetEngine();
-			jeResourceMgr* pResMgr = pDoc->GetResourceMgr();
+			jet3d::jeResourceMgr* pResMgr = pDoc->GetResourceMgr();
 			InitMaterialList(pEngine, pResMgr);
 
 			if (pDoc)
@@ -671,7 +671,7 @@ bool	 CJweApp::RefreshMaterialList()
 }
 
 
-bool	CJweApp::InitMaterialList(jeEngine* pEngine, jeResourceMgr* pResMgr)
+bool	CJweApp::InitMaterialList(jeEngine* pEngine, jet3d::jeResourceMgr* pResMgr)
 {
 	MaterialList = MaterialList_Create();
 	if( MaterialList == NULL )

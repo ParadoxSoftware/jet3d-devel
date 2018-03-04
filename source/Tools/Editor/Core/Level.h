@@ -86,7 +86,7 @@ typedef struct tagSelectObjectInfo
 
 Level *				Level_Create( jeWorld * pWorld, MaterialList_Struct * pGlobalMaterials) ;
 void				Level_Destroy( Level ** ppLevel ) ;
-jeResourceMgr	*	Level_CreateResourceMgr( jeEngine* pEngine );
+jet3d::jeResourceMgr	*	Level_CreateResourceMgr( jeEngine* pEngine );
 
 // ACCESSORS
 Group *					Level_GetCurrentGroup( const Level * pLevel ) ;

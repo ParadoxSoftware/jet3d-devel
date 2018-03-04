@@ -52,14 +52,15 @@ typedef struct jeStaticMesh
 	jeBody_TriangleList					Faces;
 } jeStaticMesh;
 
-JETAPI jeStaticMesh * JETCC jeStaticMesh_Create(const char *MeshName, jeResourceMgr *ResMgr, jeXForm3d *XForm)
+JETAPI jeStaticMesh * JETCC jeStaticMesh_Create(const char *MeshName, jeXForm3d *XForm)
 {
 	jeActor_Def							*ActorDef = NULL;
 	jeBody								*Body = NULL;
 	int									NumVerts, NumFaces, NumNormals;
 	jeStaticMesh						*Mesh = NULL;
 	
-	ActorDef = (jeActor_Def*)jeResource_Get(ResMgr, (char*)MeshName);
+	//ActorDef = (jeActor_Def*)jeResource_Get(ResMgr, (char*)MeshName);
+	ActorDef = static_cast<jeActor_Def*>(jeResourceMgr_GetSingleton()->get(MeshName));
 	if (!ActorDef)
 	{
 		jeVFile							*Dir = NULL, *File = NULL;
@@ -73,7 +74,8 @@ JETAPI jeStaticMesh * JETCC jeStaticMesh_Create(const char *MeshName, jeResource
 		fullpath = "StaticMesh\\";
 		fullpath += meshpath;
 
-		Dir = jeResource_GetVFile(ResMgr, (char*)meshpath.c_str());
+		//Dir = jeResource_GetVFile(ResMgr, (char*)meshpath.c_str());
+		Dir = jeResourceMgr_GetSingleton()->getVFile(meshpath);
 		if (!Dir)
 		{
 			std::string				temppath;
@@ -81,7 +83,8 @@ JETAPI jeStaticMesh * JETCC jeStaticMesh_Create(const char *MeshName, jeResource
 			temppath = meshpath;
 			temppath += ".jetpak";
 
-			Dir = jeResource_GetVFile(ResMgr, (char*)temppath.c_str());
+			//Dir = jeResource_GetVFile(ResMgr, (char*)temppath.c_str());
+			Dir = jeResourceMgr_GetSingleton()->getVFile(temppath);
 			if (!Dir)
 			{
 				Dir = jeVFile_OpenNewSystem(NULL, JE_VFILE_TYPE_DOS, fullpath.c_str(), NULL, JE_VFILE_OPEN_READONLY | JE_VFILE_OPEN_DIRECTORY);
@@ -95,7 +98,8 @@ JETAPI jeStaticMesh * JETCC jeStaticMesh_Create(const char *MeshName, jeResource
 					meshpath += ".jetpak";
 				}
 
-				jeResource_AddVFile(ResMgr, (char*)meshpath.c_str(), Dir);
+				//jeResource_AddVFile(ResMgr, (char*)meshpath.c_str(), Dir);
+				jeResourceMgr_GetSingleton()->addVFile(meshpath, Dir);
 			}
 		}
 
@@ -112,7 +116,8 @@ JETAPI jeStaticMesh * JETCC jeStaticMesh_Create(const char *MeshName, jeResource
 
 		jeVFile_Close(File);
 
-		jeResource_Add(ResMgr, (char*)MeshName, JE_RESOURCE_ACTOR, ActorDef);
+		//jeResource_Add(ResMgr, (char*)MeshName, JE_RESOURCE_ACTOR, ActorDef);
+		jeResourceMgr_GetSingleton()->add(MeshName, JE_RESOURCE_ACTOR, static_cast<void*>(ActorDef));
 	}
     
 	Body = jeActor_GetBody(ActorDef);

@@ -22,33 +22,82 @@
 
 	@note C++ conversion done by Anthony Rufrano (paradoxnj)
 */
-#pragma once
+#ifndef __JE_RESOURCE_MANAGER_H__
+#define __JE_RESOURCE_MANAGER_H__
 
 #include <string>
 #include <list>
 #include "Basetype.h"
 #include "jeVFile.h"
 
+typedef struct jeEngine jeEngine;
+
+/*! @name Resource kinds
+@brief Possible value for Type parameter of jeResource_GetResource() */
+/*@{*/
+/*! @def JE_RESOURCE_ANY
+@brief The resource is anything
+*/
+#define JE_RESOURCE_ANY		0x0000
+/*! @def JE_RESOURCE_VFS
+@brief The resource is a #jeVFile pointer
+*/
+#define JE_RESOURCE_VFS		0x0001
+/*! @def JE_RESOURCE_BITMAP
+@brief The resource is a #jeBitmap pointer
+*/
+#define JE_RESOURCE_BITMAP	0x0002
+/*! @def JE_RESOURCE_SHADER
+@brief The resource is a #jeShader pointer
+*/
+#define JE_RESOURCE_SHADER	0x0004
+/*! @def JE_RESOURCE_SOUND
+@brief The resource is a #jeSound pointer
+*/
+#define JE_RESOURCE_SOUND	0x0005
+/*! @def JE_RESOURCE_ACTOR
+@brief The resource is a #jeActor pointer
+*/
+#define JE_RESOURCE_ACTOR	0x0006
+/*! @def JE_RESOURCE_MATERIAL
+@brief The resource is a #jeMaterialSpec Material pointer build from JMAT file
+*/
+#define JE_RESOURCE_MATERIAL	0x0010
+/*! @def JE_RESOURCE_TEXTURE
+@brief The resource is a #jeTexture Texture pointer build from image file by driver
+*/
+#define JE_RESOURCE_TEXTURE		0x0011
+/*@}*/
+
 namespace jet3d {
 
-class jeResource : virtual public jeUnknown
+class jeResourceNew : virtual public jeUnknown
 {
 protected:
-	virtual ~jeResource(){}
+	virtual ~jeResourceNew(){}
 
 public:
 	virtual const std::string &getType() = 0;
 	virtual const std::string &getName() = 0;
 
-	virtual bool load() = 0;
-	virtual bool unload() = 0;
-
 	virtual bool isLoaded() = 0;
 	virtual bool isDirty() = 0;
 };
 
-typedef std::list<jeResource*>				jeResourceList;
-typedef jeResourceList::iterator			jeResourceListItr;
+class jeResourceFactory : virtual public jeUnknown
+{
+protected:
+	virtual ~jeResourceFactory(){}
+
+public:
+	virtual jeResourceNew *load(jeVFile *pFile) = 0;
+	virtual jeBoolean save(jeVFile *pFile, jeResourceNew *pResource) = 0;
+
+	virtual const std::string &GetFileExtension() = 0;
+};
+
+typedef std::list<jeResourceNew*>				jeResourceList;
+typedef jeResourceList::iterator				jeResourceListItr;
 
 class jeResourceManager : virtual public jeUnknown
 {
@@ -59,7 +108,46 @@ public:
 	virtual bool initialize() = 0;
 	virtual bool shutdown() = 0;
 
-	virtual jeResource *create(IVFile *pFile, const std::string &strName) = 0; 
+	virtual jeResourceNew *create(IVFile *pFile, const std::string &strName) = 0; 
+};
+
+class jeResource : virtual public jeUnknown
+{
+protected:
+	virtual ~jeResource(){}
+
+public:
+	virtual const std::string &getName() = 0;
+	virtual const uint32 getType() = 0;
+	virtual void *getData() = 0;
+	virtual jeBoolean isOpenDirectory() = 0;
+};
+
+class jeResourceMgr : virtual public jeUnknown
+{
+protected:
+	virtual ~jeResourceMgr(){}
+
+public:
+	virtual bool initializeWithDefaults() = 0;
+	virtual void shutdown() = 0;
+
+	virtual bool add(const std::string &strName, uint32 iType, void *pvData) = 0;
+	virtual void *get(const std::string &strName) = 0;
+	virtual bool remove(const std::string &strName) = 0;
+
+	virtual jeEngine *getEngine() = 0;
+
+	virtual bool addVFile(const std::string &strName, jeVFile *pFile) = 0;
+	virtual jeVFile *getVFile(const std::string &strName) = 0;
+	virtual bool removeVFile(const std::string &strName) = 0;
+
+	virtual void *createResource(const std::string &strName, uint32 iType) = 0;
+	virtual bool openDirectory(const std::string &strDirName, const std::string &strResourceName) = 0;
 };
 
 } // namespace jet3d
+
+JETAPI jet3d::jeResourceMgr* JETCC jeResourceMgr_GetSingleton();
+
+#endif

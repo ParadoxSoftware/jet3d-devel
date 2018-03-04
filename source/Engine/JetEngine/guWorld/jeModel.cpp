@@ -201,7 +201,7 @@ JETAPI jeModel * JETCC jeModel_CreateFromFile(jeVFile *VFile, jePtrMgr *PtrMgr)
 	jeBSP_SetXForm(Model->BSPTree, &Model->XForm);
 
 	if (PtrMgr) {
-		jeBSP_SetEngine(Model->BSPTree, jeResourceMgr_GetEngine(jePtrMgr_GetResourceMgr(PtrMgr)));
+		jeBSP_SetEngine(Model->BSPTree, jePtrMgr_GetResourceMgr(PtrMgr)->getEngine());
 	}
 
 	if (PtrMgr)

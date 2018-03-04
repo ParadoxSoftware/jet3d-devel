@@ -31,7 +31,7 @@
 #include "vph.h"
 #include "mkbody.h"
 #include "bitmap.h"
-#include "jeResource.h"
+#include "jeResourceManager.h"
 #include "jeMaterial.h"
 
 #include "maxmath.h"
@@ -1885,7 +1885,7 @@ jeBoolean	MkBody_Material(MkBody_Options *options, const char *line, jeBody *pBo
 			strcpy(name,line+6);		// after the "(MAP) "
 			*strrchr(name, ':')=0;
 
-			MatSpec = jeMaterialSpec_Create(jeResourceMgr_GetEngine(jeResourceMgr_GetSingleton()), jeResourceMgr_GetSingleton());
+			MatSpec = jeMaterialSpec_Create(jeResourceMgr_GetSingleton()->getEngine());
 #pragma message ("Krouer: change NULL to something better next time")
 	        jeMaterialSpec_AddLayerFromBitmap(MatSpec, 0, Bmp, name);
 	        

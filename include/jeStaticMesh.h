@@ -28,7 +28,6 @@
 #include "XForm3d.h"
 #include "Vec3d.h"
 #include "VFile.h"
-#include "jeResource.h"
 
 typedef struct jeCamera								jeCamera;
 typedef struct jeEngine								jeEngine;
@@ -46,10 +45,9 @@ typedef struct jeStaticMesh							jeStaticMesh;
 	@fn jeStaticMesh *jeStaticMesh_Create(const char *Name)
 	@brief Creates a static mesh
 	@param[in] MeshName Name of the static mesh (Directory/PAK.FileName (no extension))
-	@param[in] ResMgr The resource manager
 	@return The new mesh
 */
-JETAPI jeStaticMesh * JETCC jeStaticMesh_Create(const char *MeshName, jeResourceMgr *ResMgr);
+JETAPI jeStaticMesh * JETCC jeStaticMesh_Create(const char *MeshName, jeXForm3d *XForm);
 
 /*!
 	@fn uint32 jeStaticMesh_Destroy(jeStaticMesh **Mesh)

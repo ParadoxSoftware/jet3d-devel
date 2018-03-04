@@ -40,7 +40,7 @@
 #include "ObjectList.h"
 #include "Ram.h"
 #include "../Resource.h"
-#include "jeresource.h" //added CyRiuS
+#include "jeresourcemanager.h" //added CyRiuS
 #include "Util.h"
 #include "BrushTemplate.h"
 #include "Level.h"
@@ -550,15 +550,16 @@ static jeBoolean Level_InitWorldData( Level* pLevel, jeWorld * pWorld,MaterialLi
 	return( JE_TRUE );
 } // Level_InitWorldData
 
-jeResourceMgr	* Level_CreateResourceMgr( jeEngine* pEngine )
+jet3d::jeResourceMgr	* Level_CreateResourceMgr( jeEngine* pEngine )
 {
 //	jeVFile			*	pFS = NULL ;	[MLB-ICE]
-	char		AppPath[255];
-	char		SubPath[255];
-	jeResourceMgr	*ResourceMgr;
+	char					AppPath[255];
+	char					SubPath[255];
+	jet3d::jeResourceMgr	*ResourceMgr = nullptr;;
 
 
-	ResourceMgr =  jeResource_MgrCreate( pEngine);
+	//ResourceMgr =  jeResource_MgrCreate( pEngine);
+	ResourceMgr = jeEngine_GetResourceManager(pEngine);
 	if( ResourceMgr == NULL )
 	{
 		jeErrorLog_AddString(JE_ERR_SUBSYSTEM_FAILURE, "Level_CreateResourceMgr:jeResource_MgrCreate", NULL);
@@ -569,26 +570,30 @@ jeResourceMgr	* Level_CreateResourceMgr( jeEngine* pEngine )
 	//I'm not sure where is the best place to store this
 	strcpy( SubPath, AppPath );
 	strcat( SubPath, "Sounds" );
-	if (!jeResource_OpenDirectory(ResourceMgr, SubPath, "Sounds"))
+	//if (!jeResource_OpenDirectory(ResourceMgr, SubPath, "Sounds"))
+	if (!ResourceMgr->openDirectory(SubPath, "Sounds"))
 		jeErrorLog_AddString(JE_ERR_SYSTEM_RESOURCE, "Level_CreateResourceMgr:jeResource_OpenDirectory", SubPath);
 
 	// save bitmap vfile
 	strcpy( SubPath, AppPath );
 	strcat( SubPath, "GlobalMaterials" );
-	if (!jeResource_OpenDirectory(ResourceMgr, SubPath, "GlobalMaterials"))
+	//if (!jeResource_OpenDirectory(ResourceMgr, SubPath, "GlobalMaterials"))
+	if (!ResourceMgr->openDirectory(SubPath, "GlobalMaterials"))
 		jeErrorLog_AddString( JE_ERR_SYSTEM_RESOURCE, "Level_CreateResourceMgr:jeResource_OpenDirectory", SubPath );
 
 	// save actors vfile
 	strcpy( SubPath, AppPath );
 	strcat( SubPath, "Actors" );
-	if (!jeResource_OpenDirectory(ResourceMgr, SubPath, "Actors"))
+	//if (!jeResource_OpenDirectory(ResourceMgr, SubPath, "Actors"))
+	if (!ResourceMgr->openDirectory(SubPath, "Actors"))
 		jeErrorLog_AddString( JE_ERR_SYSTEM_RESOURCE, "Level_CreateResourceMgr:jeResource_OpenDirectory", SubPath );
 
 	//BEGIN CYRIUS
 	// save shader vfile
 	strcpy( SubPath, AppPath );
 	strcat( SubPath, "Shaders" );
-	if (!jeResource_OpenDirectory(ResourceMgr, SubPath, "Shaders"))
+	//if (!jeResource_OpenDirectory(ResourceMgr, SubPath, "Shaders"))
+	if (!ResourceMgr->openDirectory(SubPath, "Shaders"))
 		jeErrorLog_AddString( JE_ERR_SYSTEM_RESOURCE, "Level_CreateResourceMgr:jeResource_OpenDirectory", SubPath );
 
 	//END CYRIUS

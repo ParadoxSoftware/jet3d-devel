@@ -94,12 +94,11 @@ typedef struct							jeMaterialSpec		jeMaterialSpec;
 /*! @fn jeMaterialSpec* jeMaterialSpec_Create()
 *   @brief Create an empty jeMaterialSpec instance
 	@param pEngine The engine associate with this material
-	@param pResourceMgr The resource manager for accessing dependancies
 	@return The jeMaterialSpec instance created if succeed, NULL otherwise
 *   @see jeMaterial
 *	@see jeTexture
 */
-JETAPI jeMaterialSpec* JETCC jeMaterialSpec_Create(jeEngine* pEngine, jeResourceMgr* pResourceMgr);
+JETAPI jeMaterialSpec* JETCC jeMaterialSpec_Create(jeEngine* pEngine);
 
 JETAPI jeBoolean JETCC jeMaterialSpec_CreateRef(jeMaterialSpec* MaterialSpec);
 
@@ -107,12 +106,11 @@ JETAPI jeBoolean JETCC jeMaterialSpec_CreateRef(jeMaterialSpec* MaterialSpec);
 *   @brief Create a jeMaterialSpec instance from the JMAT file
 	@param VFile The file already opened for read operations
 	@param pEngine The engine associate with this material
-	@param ResMgr The resource manager instance
 	@return The jeMaterialSpec instance created if succeed, NULL otherwise
 *   @see jeMaterial
 *	@see jeTexture
 */
-JETAPI jeMaterialSpec* JETCC jeMaterialSpec_CreateFromFile(jeVFile *VFile, jeEngine* pEngine, jeResourceMgr *ResMgr);
+JETAPI jeMaterialSpec* JETCC jeMaterialSpec_CreateFromFile(jeVFile *VFile, jeEngine* pEngine);
 
 /*! @fn void jeMaterialSpec_Destroy(jeMaterialSpec **ppMaterialSpec);
 *   @brief Destroy the jeMaterialSpec instance

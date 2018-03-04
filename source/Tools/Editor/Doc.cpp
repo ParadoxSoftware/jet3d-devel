@@ -322,7 +322,7 @@ jeMaterialSpec * CJweDoc::InitMaterial( WORD Resource )
                             		&Context,JE_VFILE_OPEN_READONLY  );
 
 	if (BmpFile) {
-		pMat = jeMaterialSpec_Create(GetJetEngine(), GetResourceMgr());
+		pMat = jeMaterialSpec_Create(GetJetEngine());
 		jeMaterialSpec_AddLayerFromFile(pMat, 0, BmpFile, JE_TRUE, 255);
 		jeVFile_Close( BmpFile );
 	}
@@ -349,7 +349,7 @@ BOOL CJweDoc::OnNewDocument()
 		pApp->InitMaterialList(pJetView->GetEngine(), m_pResourceMgr);
 	}
 
-	m_pWorld = jeWorld_Create(m_pResourceMgr) ;
+	m_pWorld = jeWorld_Create() ;
 	if( m_pWorld == NULL )
 	{
 		TRACE0("World Create Failed\n") ;
@@ -3227,7 +3227,7 @@ BOOL CJweDoc::OnOpenDocument(LPCTSTR lpszPathName)
 	Level			*	pNewLevel ;
 	CMainFrame *	pMainFrm = (CMainFrame*)AfxGetMainWnd() ;
 	jePtrMgr	*pPtrMgr = NULL;
-	jeResourceMgr *	pResourceMgr;
+	jet3d::jeResourceMgr *	pResourceMgr;
 	jeBSP_Options Options = 0;
 	jeBSP_Logic Logic;
 	jeBSP_LogicBalance LogicBalance;
@@ -3329,7 +3329,7 @@ BOOL CJweDoc::OnOpenDocument(LPCTSTR lpszPathName)
 	pResourceMgr = Level_CreateResourceMgr(pJetView->GetEngine());
 	if( pResourceMgr == NULL )
 		return( FALSE );
-	pNewWorld = jeWorld_CreateFromFile( pF, pPtrMgr, pResourceMgr );
+	pNewWorld = jeWorld_CreateFromFile( pF, pPtrMgr );
 
 	jeVFile_Close( pF ) ;
 	if( pNewWorld == NULL )

@@ -29,13 +29,12 @@
 #include "VFile.h"
 #include "jeProperty.h"
 #include "Ram.h"
-#include "jeResource.h"
+#include "jeResourceManager.h"
 #include "jeWorld.h"
 #include "PulsingLight.h"
 #include "Resource.h"
 #include "Errorlog.h"
 #include "jeMaterial.h"
-#include "jeResource.h"
 
 
 
@@ -203,7 +202,7 @@ static jeMaterialSpec *MatSpec;
 typedef struct PulsingLight
 {
 	jeWorld			*pWorld;
-	jeResourceMgr	*pResourceMgr;
+	jet3d::jeResourceMgr	*pResourceMgr;
 	jeEngine		*pEngine;
 	int				RefCount;
 	jeXForm3d		Xf;
@@ -482,7 +481,7 @@ static jeBoolean PulsingLight_InitIcon( PulsingLight * pObject )
 
 			if (!MatSpec)
 	        {
-	            MatSpec = jeMaterialSpec_Create(jeResourceMgr_GetEngine(jeResourceMgr_GetSingleton()), jeResourceMgr_GetSingleton());
+	            MatSpec = jeMaterialSpec_Create(jeResourceMgr_GetSingleton()->getEngine());
 #pragma message ("Krouer: change NULL to something better next time")
 	            jeMaterialSpec_AddLayerFromBitmap(MatSpec, 0, m_pBitmap, NULL);
 	        }
@@ -521,7 +520,7 @@ static jeBoolean PulsingLight_UpdateIcon( PulsingLight * pObject )
 				{
 					if (!MatSpec)
 	                {
-	                    MatSpec = jeMaterialSpec_Create(jeResourceMgr_GetEngine(jeResourceMgr_GetSingleton()), jeResourceMgr_GetSingleton());
+	                    MatSpec = jeMaterialSpec_Create(jeResourceMgr_GetSingleton()->getEngine());
 #pragma message ("Krouer: change NULL to something better next time")
 	                    jeMaterialSpec_AddLayerFromBitmap(MatSpec, 0, m_pBitmap, NULL);
 	                }
@@ -945,12 +944,14 @@ jeBoolean JETCC AttachWorld(
 			// save an instance of the resource manager
 			pObject->pResourceMgr = jeWorld_GetResourceMgr( World );
 			assert( pObject->pResourceMgr != NULL );
+			pObject->pResourceMgr->AddRef();
 
 			// create light
 			if ( PulsingLight_Create( pObject ) == JE_FALSE )
 			{
 				jeErrorLog_Add( JE_ERR_INTERNAL_RESOURCE, NULL );
-				jeResource_MgrDestroy( &( pObject->pResourceMgr ) );
+				//jeResource_MgrDestroy( &( pObject->pResourceMgr ) );
+				JE_SAFE_RELEASE(pObject->pResourceMgr);
 				pObject->pWorld = NULL;
 				return JE_FALSE;
 			}
@@ -1020,7 +1021,8 @@ jeBoolean JETCC DettachWorld(
 		PulsingLight_Destroy( pObject );
 
 		// destroy our instance of the resource manager
-		jeResource_MgrDestroy( &( pObject->pResourceMgr ) );
+		//jeResource_MgrDestroy( &( pObject->pResourceMgr ) );
+		JE_SAFE_RELEASE(pObject->pResourceMgr);
 
 		// zap world pointer
 		pObject->pWorld = NULL;

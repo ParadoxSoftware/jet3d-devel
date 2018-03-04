@@ -21,7 +21,7 @@
 #include <assert.h>
 #include "BaseType.h"
 
-namespace Jet3D {
+namespace jet3d {
 
 template <typename T> class jeSingleton
 {
@@ -35,7 +35,7 @@ private:
 public:
 	jeSingleton()
 	{
-		assert(!s_Singleton);
+//		assert(!s_Singleton);
 		s_Singleton = static_cast<T*>(this);
 	}
 

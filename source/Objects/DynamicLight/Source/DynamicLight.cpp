@@ -27,7 +27,7 @@
 #include "VFile.h"
 #include "jeProperty.h"
 #include "Ram.h"
-#include "jeResource.h"
+#include "jeResourceManager.h"
 #include "jeWorld.h"
 #include "DynamicLight.h"
 #include "Resource.h"
@@ -110,7 +110,7 @@ static jeProperty_List	DynamicLightPropertyList = { DYNAMICLIGHT_LAST_INDEX, &( 
 typedef struct DynamicLight
 {
 	jeWorld			*World;
-	jeResourceMgr	*ResourceMgr;
+	jet3d::jeResourceMgr	*ResourceMgr;
 	jeEngine		*Engine;
 	int				RefCount;
 	jeXForm3d		Xf;
@@ -443,6 +443,8 @@ jeBoolean JETCC Destroy(
 		return JE_FALSE;
 	}
 
+	JE_SAFE_RELEASE(Object->ResourceMgr);
+
 	// make sure everything has been properly destroyed
 	assert( Object->World == NULL );
 	assert( Object->Engine == NULL );
@@ -517,12 +519,14 @@ jeBoolean JETCC AttachWorld(
 	// save an instance of the resource manager
 	Object->ResourceMgr = jeWorld_GetResourceMgr( World );
 	assert( Object->ResourceMgr != NULL );
+	Object->ResourceMgr->AddRef();
 
 	// create light
 	if ( DynamicLight_Create( Object ) == JE_FALSE )
 	{
 		jeErrorLog_Add( JE_ERR_INTERNAL_RESOURCE, NULL );
-		jeResource_MgrDestroy( &( Object->ResourceMgr ) );
+		//jeResource_MgrDestroy( &( Object->ResourceMgr ) );
+		JE_SAFE_RELEASE(Object->ResourceMgr);
 		Object->World = NULL;
 		return JE_FALSE;
 	}
@@ -559,7 +563,8 @@ jeBoolean JETCC DettachWorld(
 	DynamicLight_Destroy( Object );
 
 	// destroy our instance of the resource manager
-	jeResource_MgrDestroy( &( Object->ResourceMgr ) );
+	//jeResource_MgrDestroy( &( Object->ResourceMgr ) );
+	JE_SAFE_RELEASE(Object->ResourceMgr);
 
 	// zap world pointer
 	Object->World = NULL;

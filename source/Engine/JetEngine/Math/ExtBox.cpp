@@ -20,6 +20,7 @@
 /****************************************************************************************/
 #include "ExtBox.h"
 #include <assert.h>
+#include <intrin.h>
 
 #define MAX(aa,bb)   ( ((aa)>(bb))?(aa):(bb) )
 #define MIN(aa,bb)   ( ((aa)<(bb))?(aa):(bb) )
@@ -635,6 +636,7 @@ __asm	je    NoCollision			/* !(B->Min._P<=t*vPath->_P+xMovingBox->Max._P) */
 
 static __inline jeBoolean jeExtBox_asmCollisionTestX_(jeFloat t, jeVec3d *vPath, const jeExtBox *B, jeExtBox *xMovingBox)
 {
+#ifndef JET64
 	__asm
 	{
 		mov   esi,vPath
@@ -652,10 +654,14 @@ NoCollision:
 		xor   eax,eax
 End:
 	}
+#else
+	return JE_FALSE;
+#endif
 }
 
 static __inline jeBoolean jeExtBox_asmCollisionTestY_(jeFloat t, jeVec3d *vPath, const jeExtBox *B, jeExtBox *xMovingBox)
 {
+#ifndef JET64
 	_asm
 	{
 		mov   esi,vPath
@@ -673,10 +679,14 @@ NoCollision:
 		xor   eax,eax
 End:
 	}
+#else
+	return JE_FALSE;
+#endif
 }
 
 static __inline jeBoolean jeExtBox_asmCollisionTestZ_(jeFloat t, jeVec3d *vPath, const jeExtBox *B, jeExtBox *xMovingBox)
 {
+#ifndef JET64
 	_asm
 	{
 		mov   esi,vPath
@@ -694,6 +704,9 @@ NoCollision:
 		xor   eax,eax
 End:
 	}
+#else
+	return JE_FALSE;
+#endif
 }
 
 // Added by Icestorm (fast, rewritten version of Incarnadine's one)
@@ -709,6 +722,7 @@ JETAPI jeBoolean JETCC jeExtBox_Collision(	const jeExtBox *B, const jeExtBox *Mo
 											const jeVec3d *Start, const jeVec3d *End, 
 											jeFloat *T, jeVec3d *Normal )
 {
+#ifndef JET64
 	jeFloat t;
 	jeExtBox xSweepBox,xMovingBox,*xMovingBoxPtr=&xMovingBox;
 	jeVec3d vPath,*vPathPtr=&vPath;
@@ -1007,12 +1021,12 @@ CTEndZ2:
 			}
 		}
 	}
-
+#endif
 
 	return JE_FALSE;
 }
 
-
+#ifndef JET64
 #define _ASM_TEST2_(_P)																   \
 __asm	fld   _VPATH _P				/* |   vPath->_P								*/ \
 __asm	fmul  t						/* | t*vPath->_P								*/ \
@@ -1033,7 +1047,8 @@ __asm	fcompp						/*												*/ \
 __asm	fnstsw ax					/*												*/ \
 __asm	test  ah,41h				/*												*/ \
 __asm	je    NoCollision			/* !(B->Min._P<=t*vPath2->_P+xMovingBox->Max._P)*/
-
+#endif
+#ifndef JET64
 static __inline jeBoolean jeExtBox_asmCollisionTestX2_(jeFloat t, jeVec3d *vPath, jeVec3d *vPath2,
 													   const jeExtBox *B, jeExtBox *xMovingBox)
 {
@@ -1090,7 +1105,7 @@ NoCollision:
 End:
 	}
 }
-
+#endif
 
 // Added by Icestorm
 // ----------------------------------------
@@ -1105,6 +1120,7 @@ JETAPI jeBoolean JETCC jeExtBox_ChangeBoxCollision(	const jeExtBox *B, const jeV
 													const jeExtBox *StartBox, const jeExtBox *EndBox,
 													jeFloat *T, jeVec3d *Normal, jeVec3d *Point )
 {
+#ifndef JET64
 	jeFloat t;
 	jeExtBox xStartBox,xChangeBox,*xStartBoxPtr=&xStartBox;
 	jeVec3d vPath,vPath2,*vPathPtr=&vPath,*vPathPtr2=&vPath2;
@@ -1408,7 +1424,7 @@ CTEndZ2:
 			}
 		}
 	}
-
+#endif
 
 	return JE_FALSE;
 }

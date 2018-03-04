@@ -475,7 +475,7 @@ jeMaterial.h(47):JETAPI jeMaterial_Array		*jeMaterial_ArrayCreateFromFile(jeVFil
 jePtrMgr.h(47):jeActor *jeActor_CreateFromFile(jeVFile *VFile, jePtrMgr *PtrMgr)
 jeVertArray.h(39):JETAPI jeVertArray		*jeVertArray_CreateFromFile(jeVFile *VFile);
 jeModel.h(35):JETAPI jeModel		*jeModel_CreateFromFile(jeVFile *VFile, jePtrMgr *PtrMgr);
-jeWorld.h(71):JETAPI jeWorld	*	jeWorld_CreateFromFile(jeVFile *VFile, jePtrMgr *PtrMgr, jeResourceMgr * pResourceMgr );
+jeWorld.h(71):JETAPI jeWorld	*	jeWorld_CreateFromFile(jeVFile *VFile, jePtrMgr *PtrMgr );
 motion.h(150):JETAPI jeMotion *JETCC jeMotion_CreateFromFile(jeVFile *f);
 object.h(99):JETAPI jeObject *	JETCC jeObject_CreateFromFile(jeVFile * File, jeObjectIO *ObjIO);
 object.h(186):	void *		( JETCC * CreateFromFile)(jeVFile * File, jeObjectIO *ObjIO);
@@ -520,7 +520,7 @@ jeMaterial.h(47):JETAPI jeMaterial_Array		*jeMaterial_ArrayCreateFromFile(jeVFil
 jeMaterial.h(48):JETAPI jeBoolean			jeMaterial_ArrayWriteToFile(jeMaterial_Array *MatArray, jeVFile *VFile, jePtrMgr *PtrMgr);
 jeModel.h(35):JETAPI jeModel		*jeModel_CreateFromFile(jeVFile *VFile, jePtrMgr *PtrMgr);
 jeModel.h(36):JETAPI jeBoolean	jeModel_WriteToFile(const jeModel *Model, jeVFile *VFile, jePtrMgr *PtrMgr);
-jeWorld.h(71):JETAPI jeWorld	*	jeWorld_CreateFromFile(jeVFile *VFile, jePtrMgr *PtrMgr, jeResourceMgr * pResourceMgr );
+jeWorld.h(71):JETAPI jeWorld	*	jeWorld_CreateFromFile(jeVFile *VFile, jePtrMgr *PtrMgr );
 jeWorld.h(72):JETAPI jeBoolean	jeWorld_WriteToFile(const jeWorld *World, jeVFile *VFile, jePtrMgr *PtrMgr);
 jeWorld.h(154):JETAPI jeObjectIO *jeWorld_CreateObjectIO(jeWorld *pWorld, jePtrMgr *PtrMgr);
 jeWorld.h(157):JETAPI jePtrMgr *jeWorld_GetObjectIOPtrMgr(jeObjectIO *ObjIO);

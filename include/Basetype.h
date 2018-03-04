@@ -21,6 +21,10 @@
 #ifndef JE_BASETYPE_H
 #define JE_BASETYPE_H
  
+#ifdef JET64
+#include <cmath>
+#endif
+
 /*
 	Some basic types defined with clear names for
 	more specific data definitions
@@ -138,6 +142,7 @@ static __inline jeFloat jeFloat_Cube(jeFloat a)
 
 static jeFloat __inline jeFloat_RoundToInt(jeFloat val) // rounds depending on how you set jeCPU_FloatControl
 {
+#ifndef JET64
 	__asm
 	{
 		FLD  val
@@ -145,10 +150,14 @@ static jeFloat __inline jeFloat_RoundToInt(jeFloat val) // rounds depending on h
 		FSTP val
 	}
 return val;
+#else
+	return roundf(val);
+#endif
 }
 
 static jeFloat __inline jeFloat_Sqrt(jeFloat val)
 {
+#ifndef JET64
 	__asm 
 	{
 		FLD  val		// 1 clock
@@ -156,21 +165,29 @@ static jeFloat __inline jeFloat_Sqrt(jeFloat val)
 		FSTP val		// 2 clocks
 	}
 return val;
+#else
+	return sqrtf(val);
+#endif
 }
 
 static jeFloat __inline jeFloat_Sin(jeFloat val)
 {
-	__asm 
+#ifndef JET64
+	__asm
 	{
 		FLD  val		// 1 clock
 		FSIN			// ~ 200 clocks
 		FSTP val		// 2 clocks
 	}
 return val;
+#else
+	return sinf(val);
+#endif
 }
 
 static jeFloat __inline jeFloat_Cos(jeFloat val)
 {
+#ifndef JET64
 	__asm 
 	{
 		FLD  val		// 1 clock
@@ -178,10 +195,14 @@ static jeFloat __inline jeFloat_Cos(jeFloat val)
 		FSTP val		// 2 clocks
 	}
 return val;
+#else
+	return cosf(val);
+#endif
 }
 
 static int32 __inline jeFloat_ToInt(jeFloat f)
 {
+#ifndef JET64
 int32 i;
 	__asm
 	{
@@ -189,6 +210,9 @@ int32 i;
 		FISTP i
 	}
 return i;
+#else
+	return *((int32*)&f);
+#endif
 }
 
 #pragma warning (disable:4514)	// unreferenced inline function

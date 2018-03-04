@@ -50,7 +50,7 @@
 #include "jeBSP.h"
 #include "jeFileLogger.h"
 #include "jeImageImpl.h"
-#include "jeResourceMgrImpl.h"
+//#include "jeResourceMgrImpl.h"
 
 #ifdef _DEBUG
 	#define DEBUG_OUTPUT_LEVEL		0
@@ -176,8 +176,8 @@ JETAPI jeEngine * JETCC jeEngine_Create(HWND hWnd, const char *AppName, const ch
 	}
 
 	// Initialize the new resource manager
-	Engine->ResourceMgr = new jet3d::jeResourceMgrImpl();
-	if (!Engine->ResourceMgr->Initialize())
+	Engine->ResourceMgr = new jet3d::jeResourceMgr_Impl();
+	if (!Engine->ResourceMgr->initialize(Engine))
 	{
 		Engine->EngineLog->logMessage(jet3d::jeLogger::LogError, "Could not enumerate drivers!!");
 		goto ExitWithError;
@@ -262,11 +262,14 @@ JETAPI jeEngine * JETCC jeEngine_Create(HWND hWnd, const char *AppName, const ch
 //=====================================================================================
 //	jeEngine_CreateRef
 //=====================================================================================
-JETAPI jeBoolean JETCC jeEngine_CreateRef(jeEngine *Engine)
+JETAPI jeBoolean JETCC jeEngine_CreateRef(jeEngine *Engine, char *filename, int line)
 {
 	assert(jeEngine_IsValid(Engine));
+	char buff[1024];
 
 	Engine->RefCount++;
+	sprintf(buff, "FILE:  %s, LINE:  %d, RefCountInc:  %d", filename, line, Engine->RefCount);
+	Engine->EngineLog->logMessage(jet3d::jeLogger::LogInfo, buff);
 
 	return JE_TRUE;
 }
@@ -275,13 +278,13 @@ JETAPI jeBoolean JETCC jeEngine_CreateRef(jeEngine *Engine)
 //	jeEngine_Free
 //=====================================================================================
 
-JETAPI void	JETCC jeEngine_Destroy(jeEngine **pEngine)
+JETAPI void	JETCC jeEngine_Destroy(jeEngine **pEngine, char *filename, int line)
 {
 	assert( pEngine );
 	char buff[1024];
 
 	(*pEngine)->RefCount--;
-	sprintf(buff, "Engine Reference Count = %d", (*pEngine)->RefCount);
+	sprintf(buff, "FILE:  %s, LINE:  %d, RefCountDec = %d", filename, line, (*pEngine)->RefCount);
 	(*pEngine)->EngineLog->logMessage(jet3d::jeLogger::LogInfo, buff);
 
 	if ((*pEngine)->RefCount <= 0)
@@ -319,24 +322,22 @@ JETAPI void JETCC jeEngine_Free(jeEngine *Engine)
 	assert(Ret == JE_TRUE);
 	Engine->EngineLog->logMessage(jet3d::jeLogger::LogInfo, "Driver shutdown");
 
-	ImageListItr i = Engine->AttachedImages.begin();
+	/*ImageListItr i = Engine->AttachedImages.begin();
 	while (i != Engine->AttachedImages.end())
 	{
 		jeEngine_RemoveImage(Engine, (*i));
 		i++;
 	}
 	Engine->EngineLog->logMessage(jet3d::jeLogger::LogInfo, "ImageList shutdown");
+	*/
 
 	Ret = jeEngine_BitmapListShutdown(Engine);
 	assert(Ret == JE_TRUE);
 	Engine->EngineLog->logMessage(jet3d::jeLogger::LogInfo, "BitmapList shutdown");
 
 	// Shutdown resource manager
-	if (!Engine->ResourceMgr->Shutdown())
-		Engine->EngineLog->logMessage(jet3d::jeLogger::LogWarn, "Resource manager was not shut down properly!!");
-	else
-		Engine->EngineLog->logMessage(jet3d::jeLogger::LogInfo, "Resource manager shutdown");
-
+	Engine->ResourceMgr->shutdown();
+	Engine->EngineLog->logMessage(jet3d::jeLogger::LogInfo, "Resource manager shutdown");
 	JE_SAFE_RELEASE(Engine->ResourceMgr);
 
 	//if (Engine->DriverDirectory)
@@ -1118,7 +1119,7 @@ JETAPI jeBoolean JETCC jeEngine_RemoveBitmap(jeEngine *Engine, jeBitmap *Bitmap)
 	return JE_TRUE;
 }
 
-JETAPI jeBoolean JETCC jeEngine_AddImage(jeEngine *Engine, jeImage *Image)
+/*JETAPI jeBoolean JETCC jeEngine_AddImage(jeEngine *Engine, jeImage *Image)
 {
 	assert(Engine);
 	assert(Image);
@@ -1310,7 +1311,7 @@ JETAPI jeBoolean JETCC jeEngine_DrawImage3D(const jeEngine *Engine,
 
 	return Ret;
 }
-
+*/
 /*}{**** SECTION : Render/Draw  *********************/
 
 //================================================================================
@@ -2383,6 +2384,7 @@ static void Engine_DrawFontBuffer(jeEngine *Engine)
 
 static void SubLarge(LARGE_INTEGER *start, LARGE_INTEGER *end, LARGE_INTEGER *delta)
 {
+#ifndef JET64
 	_asm {
 		mov ebx,dword ptr [start]
 		mov esi,dword ptr [end]
@@ -2397,6 +2399,9 @@ static void SubLarge(LARGE_INTEGER *start, LARGE_INTEGER *end, LARGE_INTEGER *de
 		mov dword ptr [ebx+0],eax
 		mov dword ptr [ebx+4],edx
 	}
+#else
+	delta->QuadPart = end->QuadPart - start->QuadPart;
+#endif
 }
 
 //===================================================================================
@@ -3044,12 +3049,12 @@ JETAPI jeBoolean JETCC jeEngine_DestroyFont(jeEngine *Engine, jeFont **Font)
 	return JE_FALSE;
 }
 
-JETAPI jeImage * JETCC jeEngine_CreateImage()
+/*JETAPI jeImage * JETCC jeEngine_CreateImage()
 {
 	return new jeImageImpl();
-}
+}*/
 
 JETAPI jet3d::jeResourceMgr * JETCC jeEngine_GetResourceManager(jeEngine *Engine)
 {
-	return Engine->ResourceMgr;
+	return static_cast<jet3d::jeResourceMgr*>(jeResourceMgr_GetSingleton());
 }

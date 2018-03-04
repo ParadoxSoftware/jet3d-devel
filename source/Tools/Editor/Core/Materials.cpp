@@ -46,7 +46,7 @@ typedef struct Material_Struct {
 //Loads the bitmap specifed in the properties
 //Intializes the Material struct
 //Returns NULL on failure
-Material_Struct *Materials_Load( jeEngine* pEngine, jeResourceMgr* pResMgr, char* DirPath, char* Name )
+Material_Struct *Materials_Load( jeEngine* pEngine, jet3d::jeResourceMgr* pResMgr, char* DirPath, char* Name )
 {
 	Material_Struct *Material;
 	jeVFile *MaterialFile;
@@ -128,7 +128,7 @@ Material_Struct *Materials_Load( jeEngine* pEngine, jeResourceMgr* pResMgr, char
 	return( Material );
 }
 
-Material_Struct *Materials_ConvertToJMAT( jeEngine* pEngine, jeResourceMgr* pResMgr, char* DirPath, char* Name )
+Material_Struct *Materials_ConvertToJMAT( jeEngine* pEngine, jet3d::jeResourceMgr* pResMgr, char* DirPath, char* Name )
 {
 	Material_Struct *Material;
 	jeVFile *MaterialFile;
@@ -210,7 +210,7 @@ Material_Struct *Materials_ConvertToJMAT( jeEngine* pEngine, jeResourceMgr* pRes
 	}
 
 	// Create an empty material spec
-	Material->MaterialSpec = jeMaterialSpec_Create(pEngine, pResMgr);
+	Material->MaterialSpec = jeMaterialSpec_Create(pEngine);
 	jeMaterialSpec_AddLayerFromBitmap(Material->MaterialSpec, 0, pBmps, Material->Name);
 
 	//now create the thumbnail from the bmps
@@ -238,7 +238,7 @@ Material_Struct *Materials_ConvertToJMAT( jeEngine* pEngine, jeResourceMgr* pRes
 }
 
 // Same as above but for loading jeMaterialSpec
-Material_Struct *Materials_LoadEx( jeEngine* pEngine, jeResourceMgr* pResMgr, char* DirPath, char* Name )
+Material_Struct *Materials_LoadEx( jeEngine* pEngine, jet3d::jeResourceMgr* pResMgr, char* DirPath, char* Name )
 {
 	Material_Struct *Material;
 	jeVFile *MaterialFile;
@@ -300,7 +300,7 @@ Material_Struct *Materials_LoadEx( jeEngine* pEngine, jeResourceMgr* pResMgr, ch
 		return( NULL );
 	}
 
-	Material->MaterialSpec = jeMaterialSpec_CreateFromFile( MaterialFile, pEngine, pResMgr );
+	Material->MaterialSpec = jeMaterialSpec_CreateFromFile( MaterialFile, pEngine );
 	if( Material->MaterialSpec == NULL )
 	{
 		jeErrorLog_AddString( JE_ERR_FILEIO_READ, "Failed to create bitmap", Material->PrimaryMaterialPath );

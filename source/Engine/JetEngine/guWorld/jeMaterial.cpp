@@ -33,7 +33,7 @@
 
 #include "jeGArray.h"
 
-#include "jeResource.h"
+#include "jeResourceManager.h"
 #include "jePtrMgr._h"
 
 #include "log.h"
@@ -81,7 +81,7 @@ typedef struct jeMaterial_Array
 typedef struct jeMaterial_Context
 {
 	jeEngine		*Engine;
-	jeResourceMgr	*ResMgr;
+	jet3d::jeResourceMgr	*ResMgr;
 	uint16			Version;
 	uint16			Reserved;
 } jeMaterial_Context;
@@ -333,7 +333,7 @@ static jeBoolean ReadMaterial(jeVFile *File, void *Element,void *Context)
 	// Icestorm: Only to be on the save side!
 	Material->RefCount = 1;
 
-	if (Version == 0) {
+	/*if (Version == 0) {
 #ifdef _USE_BITMAPS
 		// Read the bitmap in to the material
 		Material->Bitmap = jeBitmap_CreateFromFile(File);
@@ -345,15 +345,16 @@ static jeBoolean ReadMaterial(jeVFile *File, void *Element,void *Context)
 		Material->MatSpec = jeMaterialSpec_Create(WorldContext->Engine, WorldContext->ResMgr);
 		jeMaterialSpec_AddLayer(Material->MatSpec, 0, Material->ResourceKind, JE_MATERIAL_LAYER_BASE, 0, Material->BitmapName);
 #endif
-	} else {
+	} else {*/
 		// Load texture from directory / pak file
 		if (Material->ResourceKind == JE_RESOURCE_BITMAP) {
-			Material->MatSpec = jeMaterialSpec_Create(WorldContext->Engine, WorldContext->ResMgr);
+			Material->MatSpec = jeMaterialSpec_Create(WorldContext->Engine);
 			jeMaterialSpec_AddLayer(Material->MatSpec, 0, Material->ResourceKind, JE_MATERIAL_LAYER_BASE, 0, Material->BitmapName);
 		} else {
-            Material->MatSpec = (jeMaterialSpec*) jeResource_GetResource(WorldContext->ResMgr, Material->ResourceKind, Material->BitmapName);
+            //Material->MatSpec = (jeMaterialSpec*) jeResource_GetResource(WorldContext->ResMgr, Material->ResourceKind, Material->BitmapName);
+			Material->MatSpec = static_cast<jeMaterialSpec*>(jeResourceMgr_GetSingleton()->createResource(Material->BitmapName, Material->ResourceKind));
 		}
-	}
+	//}
 
 #ifdef _USE_BITMAPS
 	if (!Material->Bitmap)
@@ -413,7 +414,7 @@ JETAPI jeMaterial_Array * JETCC jeMaterial_ArrayCreateFromFile(jeVFile *VFile, j
 
 	MatCtx.Version = Version;
 	MatCtx.ResMgr  = jePtrMgr_GetResourceMgr(PtrMgr);
-	MatCtx.Engine  = jeResourceMgr_GetEngine(MatCtx.ResMgr);
+	MatCtx.Engine  = MatCtx.ResMgr->getEngine();
 	lVersionOffsetSize = 0;
 	if (Version == 0) {
 		// Setup the Version 1 structure diff size
@@ -631,7 +632,7 @@ JETAPI void JETCC jeMaterial_ArrayDestroy(jeMaterial_Array **Array)
 	jeArray_Destroy(&(*Array)->Array);
 
 	if ((*Array)->Engine)
-		jeEngine_Destroy(&(*Array)->Engine);	// Icestorm
+		jeEngine_Destroy(&(*Array)->Engine, __FILE__, __LINE__);	// Icestorm
 
 	JE_RAM_FREE(*Array);
 
@@ -877,10 +878,10 @@ jeBoolean jeMaterial_ArraySetEngine(jeMaterial_Array *Array, jeEngine *Engine)
 	}
 
 	if (Array->Engine)
-		jeEngine_Destroy(&Array->Engine);	// Icestorm: We want to be sure Engine will be valid all the time!
+		jeEngine_Destroy(&Array->Engine, __FILE__, __LINE__);	// Icestorm: We want to be sure Engine will be valid all the time!
 
 	Array->Engine = Engine;
-	jeEngine_CreateRef(Engine);	// Icestorm
+	jeEngine_CreateRef(Engine, __FILE__, __LINE__);	// Icestorm
 
 	return JE_TRUE;
 }

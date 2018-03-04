@@ -48,8 +48,8 @@ JETAPI jeCamera *JETCC jeCamera_Create(jeFloat FovRadians, const jeRect *Rect)
 
 	assert( Rect != NULL );
 
-	//Camera = JE_RAM_ALLOCATE_STRUCT_CLEAR(jeCamera);
-	Camera = new jeCamera;
+	Camera = JE_RAM_ALLOCATE_STRUCT_CLEAR(jeCamera);
+	//Camera = new jeCamera;
 
 	if (Camera == NULL)
 	{
@@ -91,8 +91,8 @@ JETAPI void JETCC jeCamera_Destroy(jeCamera **pCamera)
 			Stack_Destroy(Camera->XFormStack);
 		}
 
-		//JE_RAM_FREE(Camera);
-		JE_SAFE_DELETE(Camera);
+		JE_RAM_FREE(Camera);
+		//JE_SAFE_DELETE(Camera);
 	}
 	*pCamera = NULL;
 }
@@ -774,7 +774,11 @@ JETAPI void JETCC jeCamera_TransformVecArray(	const jeCamera	*Camera,
 	assert( WorldSpacePointPtr );
 	assert( CameraSpacePointPtr );
 
-	jeXForm3d_TransformVecArray(&(Camera->XForm), WorldSpacePointPtr,CameraSpacePointPtr,Count);
+	//jeXForm3d_TransformVecArray(&(Camera->XForm), WorldSpacePointPtr,CameraSpacePointPtr,Count);
+	for (int32 i = 0; i < Count; i++)
+	{
+		jeXForm3d_Transform(&Camera->XForm, &WorldSpacePointPtr[i], &CameraSpacePointPtr[i]);
+	}
 }
 
 //========================================================================================
@@ -811,10 +815,14 @@ JETAPI void JETCC jeCamera_TransformAndProjectArray(const jeCamera	*Camera,
 	assert( WorldSpacePointPtr );
 	assert( ProjectedSpacePointPtr );
 
-	jeXForm3d_TransformArray(	&(Camera->XForm),
+	/*jeXForm3d_TransformArray(	&(Camera->XForm),
 								WorldSpacePointPtr, WorldStride,
 								ProjectedSpacePointPtr,ProjectedStride,
-								Count);
+								Count);*/
+	for (int32 i = 0; i < Count; i++)
+	{
+		jeXForm3d_Transform(&Camera->XForm, &WorldSpacePointPtr[i], &ProjectedSpacePointPtr[i]);
+	}
 
 	jeCamera_ProjectArray(	Camera,
 							ProjectedSpacePointPtr,
@@ -838,10 +846,15 @@ JETAPI void JETCC jeCamera_TransformAndProjectAndClampArray(const	jeCamera	*Came
 	assert( WorldSpacePointPtr );
 	assert( ProjectedSpacePointPtr );
 
-	jeXForm3d_TransformArray(	&(Camera->XForm),
+	/*jeXForm3d_TransformArray(	&(Camera->XForm),
 								WorldSpacePointPtr, WorldStride,
 								ProjectedSpacePointPtr,ProjectedStride,
-								Count);
+								Count);*/
+
+	for (int32 i = 0; i < Count; i++)
+	{
+		jeXForm3d_Transform(&Camera->XForm, &WorldSpacePointPtr[i], &ProjectedSpacePointPtr[i]);
+	}
 
 	jeCamera_ProjectAndClampArray(	Camera,
 							ProjectedSpacePointPtr,
@@ -855,7 +868,7 @@ JETAPI void JETCC jeCamera_TransformAndProjectAndClampArray(const	jeCamera	*Came
 //========================================================================================================
 //	jeCamera_TransformAndProjectArray
 //========================================================================================================
-JETAPI void JETCC jeCamera_TransformAndProjectArray(const jeCamera	*Camera, 
+/*JETAPI void JETCC jeCamera_TransformAndProjectArray(const jeCamera	*Camera, 
 															const jeVec3d	*InFmPoints, 
 															int32			FmStride,
 															jeVec3d			*InToPoints, 
@@ -982,9 +995,8 @@ int c;
 		ToPoints = NextToPoints;
 	}
 }
-
+*/
 #endif
-
 //========================================================================================
 //	jeCamera_TransformAndProjectLArray
 //========================================================================================

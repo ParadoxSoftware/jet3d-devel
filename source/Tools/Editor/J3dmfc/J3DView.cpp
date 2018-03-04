@@ -139,6 +139,8 @@ CJ3DView::CJ3DView()
 
 CJ3DView::~CJ3DView()
 {
+	OnDestroy();
+
 	// Make sure everything is clean
 	ASSERT(m_pEngine == NULL);
 	ASSERT(m_hFullWnd == 0);
@@ -197,18 +199,18 @@ void CJ3DView::OnInitialUpdate()
 
 void CJ3DView::OnDestroy() 
 {
-	CView::OnDestroy();
-
-	if(m_pEngine != NULL)
+	if (m_pEngine != NULL)
 	{
 		// Shutting down the driver and then freeing the engine
 		//jeEngine_ShutdownDriver(m_pEngine);
 
 		//jeEngine_Free(m_pEngine);
-		jeEngine_Destroy(&m_pEngine);
+		jeEngine_Destroy(&m_pEngine, __FILE__, __LINE__);
 		m_pEngine = NULL;
 		m_bEngineEnabled = JE_FALSE;
 	}
+	
+	CView::OnDestroy();
 }
 
 int CJ3DView::OnCreate(LPCREATESTRUCT lpCreateStruct) 

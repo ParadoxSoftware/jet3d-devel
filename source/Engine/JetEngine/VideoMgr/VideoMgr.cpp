@@ -271,8 +271,8 @@ JETAPI void JETCC jeVideo_Notify()
 {
 	
 	long      evCode;
-	long      evParam1;
-	long      evParam2;
+	LONG_PTR  evParam1;
+	LONG_PTR  evParam2;
 
 	HRESULT hr;
 	if(VideoMedia.pimex)

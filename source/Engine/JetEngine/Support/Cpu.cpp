@@ -35,6 +35,7 @@ rounding in.  We need to make sure this is accurate enough
 #include <windows.h>
 #include <stdlib.h>
 #include <assert.h>
+#include <string>
 
 #include "Errorlog.h"
 #include "Dcommon.h"
@@ -64,6 +65,7 @@ static uint32	ProcFamily;
 static uint32	ProcModel;
 static uint32	ProcStepping;
 
+#ifndef JET64
 //CPU Identification routines
 static uint32	GetCPUIDEAX(uint32 funcNum)
 {
@@ -174,13 +176,15 @@ static void	GetCPUIDStringAMD(uint32 funcNum, char *szId)
 
    printf("AMDSTRING\n\n\n\n\n");
 }
-
+#endif
 // For out of order processors, the cpuid does serliaization
 // On all processors, additional overhead is added
 static __int64	GetRDTSC(void)
 {
 	__int64	clock;
 
+#ifndef JET64
+	
 	_asm
 	{
 		push	ebx
@@ -195,6 +199,10 @@ static __int64	GetRDTSC(void)
 		pop		ecx
 		pop		ebx
 	}
+
+#else
+	clock = __rdtsc();
+#endif
 
 	return	clock;
 }
@@ -316,6 +324,144 @@ static jeBoolean GetPerformanceFreq(void)
 	return JE_TRUE;
 }
 #endif
+
+#ifdef JET64
+#include <intrin.h>
+
+//  Misc.
+bool HW_MMX;
+bool HW_x64;
+bool HW_ABM;      // Advanced Bit Manipulation
+bool HW_RDRAND;
+bool HW_BMI1;
+bool HW_BMI2;
+bool HW_ADX;
+bool HW_PREFETCHWT1;
+
+//  SIMD: 128-bit
+bool HW_SSE;
+bool HW_SSE2;
+bool HW_SSE3;
+bool HW_SSSE3;
+bool HW_SSE41;
+bool HW_SSE42;
+bool HW_SSE4a;
+bool HW_AES;
+bool HW_SHA;
+
+//  SIMD: 256-bit
+bool HW_AVX;
+bool HW_XOP;
+bool HW_FMA3;
+bool HW_FMA4;
+bool HW_AVX2;
+
+//  SIMD: 512-bit
+bool HW_AVX512F;    //  AVX512 Foundation
+bool HW_AVX512CD;   //  AVX512 Conflict Detection
+bool HW_AVX512PF;   //  AVX512 Prefetch
+bool HW_AVX512ER;   //  AVX512 Exponential + Reciprocal
+bool HW_AVX512VL;   //  AVX512 Vector Length Extensions
+bool HW_AVX512BW;   //  AVX512 Byte + Word
+bool HW_AVX512DQ;   //  AVX512 Doubleword + Quadword
+bool HW_AVX512IFMA; //  AVX512 Integer 52-bit Fused Multiply-Add
+bool HW_AVX512VBMI; //  AVX512 Vector Byte Manipulation Instructions
+
+std::string strCPUName;
+
+uint32 regs[4];
+
+jeBoolean jeCPU_GetInfo(void)
+{
+	int nIds = 0;
+
+	__cpuid((int*)regs, 0);
+	nIds = regs[0];
+
+	__cpuid((int*)regs, 0x80000000);
+	unsigned nExIds = regs[0];
+
+	if (nIds >= 0x00000001)
+	{
+		__cpuid((int*)regs, 0x00000001);
+		HW_MMX = (regs[3] & ((int)1 << 23)) != 0;
+		HW_SSE = (regs[3] & ((int)1 << 25)) != 0;
+		HW_SSE2 = (regs[3] & ((int)1 << 26)) != 0;
+		HW_SSE3 = (regs[2] & ((int)1 << 0)) != 0;
+
+		HW_SSSE3 = (regs[2] & ((int)1 << 9)) != 0;
+		HW_SSE41 = (regs[2] & ((int)1 << 19)) != 0;
+		HW_SSE42 = (regs[2] & ((int)1 << 20)) != 0;
+		HW_AES = (regs[2] & ((int)1 << 25)) != 0;
+
+		HW_AVX = (regs[2] & ((int)1 << 28)) != 0;
+		HW_FMA3 = (regs[2] & ((int)1 << 12)) != 0;
+
+		HW_RDRAND = (regs[2] & ((int)1 << 30)) != 0;
+	}
+
+	if (nIds >= 0x00000007)
+	{
+		HW_AVX2 = (regs[1] & ((int)1 << 5)) != 0;
+
+		HW_BMI1 = (regs[1] & ((int)1 << 3)) != 0;
+		HW_BMI2 = (regs[1] & ((int)1 << 8)) != 0;
+		HW_ADX = (regs[1] & ((int)1 << 19)) != 0;
+		HW_SHA = (regs[1] & ((int)1 << 29)) != 0;
+		HW_PREFETCHWT1 = (regs[2] & ((int)1 << 0)) != 0;
+
+		HW_AVX512F = (regs[1] & ((int)1 << 16)) != 0;
+		HW_AVX512CD = (regs[1] & ((int)1 << 28)) != 0;
+		HW_AVX512PF = (regs[1] & ((int)1 << 26)) != 0;
+		HW_AVX512ER = (regs[1] & ((int)1 << 27)) != 0;
+		HW_AVX512VL = (regs[1] & ((int)1 << 31)) != 0;
+		HW_AVX512BW = (regs[1] & ((int)1 << 30)) != 0;
+		HW_AVX512DQ = (regs[1] & ((int)1 << 17)) != 0;
+		HW_AVX512IFMA = (regs[1] & ((int)1 << 21)) != 0;
+		HW_AVX512VBMI = (regs[2] & ((int)1 << 1)) != 0;
+	}
+
+	if (nExIds >= 0x80000001)
+	{
+		__cpuid((int*)regs, 0x80000001);
+		HW_x64 = (regs[3] & ((int)1 << 29)) != 0;
+		HW_ABM = (regs[2] & ((int)1 << 5)) != 0;
+		HW_SSE4a = (regs[2] & ((int)1 << 6)) != 0;
+		HW_FMA4 = (regs[2] & ((int)1 << 16)) != 0;
+		HW_XOP = (regs[2] & ((int)1 << 11)) != 0;
+	}
+
+	jeCPU_Features = 0;
+
+	if (HW_MMX) jeCPU_Features |= JE_CPU_HAS_MMX;
+	if (HW_RDRAND) jeCPU_Features |= JE_CPU_HAS_RDTSC;
+	if (HW_SSE) jeCPU_Features |= JE_CPU_HAS_KATMAI;
+	if (HW_SSE2) jeCPU_Features |= JE_CPU_HAS_SSE2;
+
+	return JE_TRUE;
+}
+
+const uint32 &jeCPU_GetEAX()
+{
+	return regs[0];
+}
+
+const uint32 &jeCPU_GetEBX()
+{
+	return regs[1];
+}
+
+const uint32 &jeCPU_GetECX()
+{
+	return regs[2];
+}
+
+const uint32 &jeCPU_GetEDX()
+{
+	return regs[3];
+}
+
+#else
 
 jeBoolean jeCPU_GetInfo(void)
 {
@@ -476,13 +622,14 @@ jeBoolean jeCPU_GetInfo(void)
 
 	return JE_TRUE;
 }
+#endif
 
 /*}{**** Functions : FloatControl related stuff *********************/
 
 #define STACK_SIZE	(1024)
 static uint16 ControlStack[STACK_SIZE];
 static int ControlStackI = 0;
-
+/*
 void jeCPU_FloatControl_Push(void)
 {
 	uint16 control;
@@ -579,10 +726,10 @@ void jeCPU_FloatControl_DoublePrecision(void)
 		FLDCW control
 	}
 }
-
+*/
 /*}{**** Functions : MMX related stuff *********************/
 
-static jeBoolean jeCPU_InMMX = JE_FALSE;
+/*static jeBoolean jeCPU_InMMX = JE_FALSE;
 static jeBoolean jeCPU_WasInMMX = JE_FALSE;
 
 void jeCPU_EnterMMX(void)
@@ -620,3 +767,4 @@ void jeCPU_ResumeMMX(void)
 	if ( jeCPU_WasInMMX )
 		jeCPU_EnterMMX();
 }
+*/

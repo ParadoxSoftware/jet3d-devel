@@ -29,7 +29,7 @@
 #include "Errorlog.h"
 #include "Log.h"
 
-#include "jeResource.h"
+#include "jeResourceManager.h"
 
 #define MAX(aa,bb)   ( (aa)>(bb)?(aa):(bb) )
 #define MIN(aa,bb)   ( (aa)<(bb)?(aa):(bb) )
@@ -1911,7 +1911,7 @@ JETAPI jeBody *JETCC jeBody_CreateFromFile(jeVFile *pFile)
 				goto CreateError;
 			}
 
-			M->MatSpec = jeMaterialSpec_Create(jeResourceMgr_GetEngine(jeResourceMgr_GetSingleton()), jeResourceMgr_GetSingleton());
+			M->MatSpec = jeMaterialSpec_Create(jeResourceMgr_GetSingleton()->getEngine());
 			if (M->MatSpec == NULL)
 			{
 				jeErrorLog_AddString( JE_ERR_SUBSYSTEM_FAILURE , "jeBody_CreateFromFile: Failed to read bitmap:",FName);

@@ -79,7 +79,7 @@ if ( O1I->order1 )
 	JE_RAM_FREE(O1I->order1); //O1I->order1 = nullptr;
 	}
 if ( O1I->order0 ) oZeroFree(O1I->order0);
-JE_RAM_FREE(O1I); //O1I = nullptr;
+//JE_RAM_FREE(O1I); //O1I = nullptr;
 }
 
 void O1coder_EncodeC(oOne * O1I,long sym,long context)

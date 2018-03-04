@@ -35,7 +35,7 @@
 #include "Object.h"
 #include "Sound.h"
 #include "jeChain.h"
-#include "jeResource.h"
+#include "jeResourceManager.h"
 
 //========================================================================================
 
@@ -86,9 +86,11 @@ typedef struct
 //========================================================================================
 // Misc functions
 
-JETAPI jeWorld	*	JETCC jeWorld_Create( jeResourceMgr * pResourceMgr );
+//JETAPI jeWorld	*	JETCC jeWorld_Create( jeResourceMgr * pResourceMgr );
+JETAPI jeWorld	*	JETCC jeWorld_Create();
 JETAPI jeBoolean	JETCC jeWorld_WriteToFile(const jeWorld *World, jeVFile *VFile, jePtrMgr *PtrMgr);
-JETAPI jeWorld	*	JETCC jeWorld_CreateFromFile(jeVFile *VFile, jePtrMgr *PtrMgr, jeResourceMgr * pResourceMgr );
+//JETAPI jeWorld	*	JETCC jeWorld_CreateFromFile(jeVFile *VFile, jePtrMgr *PtrMgr, jeResourceMgr * pResourceMgr );
+JETAPI jeWorld	*	JETCC jeWorld_CreateFromFile(jeVFile *VFile, jePtrMgr *PtrMgr);
 
 // =====================
 // Incarnadine
@@ -97,7 +99,8 @@ JETAPI jeWorld	*	JETCC jeWorld_CreateFromFile(jeVFile *VFile, jePtrMgr *PtrMgr, 
 // level created in JEdit and it will automatically open the appropriate, file and fork, and 
 // then read in the world.  The second two parameters here CAN be NULL.  If they are NULL,
 // they will be created automatically.
-JETAPI jeWorld	*	JETCC jeWorld_CreateFromEditorFile(const char* FileName, jePtrMgr *pPtrMgr, jeResourceMgr * pResourceMgr );
+//JETAPI jeWorld	*	JETCC jeWorld_CreateFromEditorFile(const char* FileName, jePtrMgr *pPtrMgr, jeResourceMgr * pResourceMgr );
+JETAPI jeWorld	*	JETCC jeWorld_CreateFromEditorFile(const char* FileName, jePtrMgr *pPtrMgr);
 
 JETAPI jeBoolean	JETCC jeWorld_CreateRef(jeWorld *World);
 JETAPI void			JETCC jeWorld_Destroy(jeWorld **World);
@@ -200,7 +203,7 @@ JETAPI jeBoolean	JETCC jeWorld_AttachSoundSystem(jeWorld *World, jeSound_System 
 JETAPI jeSound_System *	JETCC jeWorld_GetSoundSystem(jeWorld *World );
 
 // resource manager
-JETAPI jeResourceMgr * JETCC jeWorld_GetResourceMgr(jeWorld *World);
+JETAPI jet3d::jeResourceMgr * JETCC jeWorld_GetResourceMgr(jeWorld *World);
 
 
 //========================================================================================

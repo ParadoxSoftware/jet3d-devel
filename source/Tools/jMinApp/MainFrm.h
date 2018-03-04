@@ -89,7 +89,7 @@ private:
 	//	Jet3D core
 	jeEngine		*m_pEngine;			//	engine
 	jeVFile         *m_pvFileSys;		//	main virtual file system
-	jeResourceMgr	*m_pResourceMgr;	//	resource manager
+	jet3d::jeResourceMgr	*m_pResourceMgr;	//	resource manager
 	jePtrMgr		*m_pPtrMgr;			//	pointer manager
 	jeXForm3d		m_xfCamera;			//	camera transform
 	jeCamera		*m_pCamera;			//	camera object

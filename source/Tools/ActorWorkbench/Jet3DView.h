@@ -35,7 +35,7 @@ protected:
 	jeXForm3d							m_CameraXForm;
 
 	jeWorld								*m_pWorld;
-	jeResourceMgr						*m_pResMgr;
+	jet3d::jeResourceMgr						*m_pResMgr;
 
 	jeImage								*m_pImage;
 

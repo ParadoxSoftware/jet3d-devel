@@ -27,7 +27,7 @@
 #include "vfile.h"
 #include "jeProperty.h"
 #include "ram.h"
-#include "jeResource.h"
+#include "jeResourceManager.h"
 #include "jeWorld.h"
 #include "Corona.h"
 #include "resource.h"
@@ -35,7 +35,6 @@
 #include "ObjectMsg.h"
 #include "ObjUtil.h"
 #include "jeMaterial.h"
-#include "jeResource.h"
 
 #define CORONA_VERSION_NUMBER 1
 
@@ -123,7 +122,7 @@ typedef struct Corona
 
 	// standard stuff
 	jeWorld			*World;
-	jeResourceMgr	*ResourceMgr;
+	jet3d::jeResourceMgr	*ResourceMgr;
 	jeEngine		*Engine;
 	int				RefCount;
 	jeBoolean		LoadedFromDisk;
@@ -516,7 +515,7 @@ jeBoolean JETCC Render(
 		// add poly
 		if (!MatSpec)
     	{
-	        MatSpec = jeMaterialSpec_Create(jeResourceMgr_GetEngine(jeResourceMgr_GetSingleton()), jeResourceMgr_GetSingleton());
+	        MatSpec = jeMaterialSpec_Create(jeResourceMgr_GetSingleton()->getEngine());
 #pragma message ("Krouer: change NULL to something better next time")
 	        jeMaterialSpec_AddLayerFromBitmap(MatSpec, 0, Object->Art, NULL);
 	    }
@@ -571,6 +570,7 @@ jeBoolean JETCC AttachWorld(
 	// save an instance of the resource manager
 	Object->ResourceMgr = jeWorld_GetResourceMgr( World );
 	assert( Object->ResourceMgr != NULL );
+	Object->ResourceMgr->AddRef();
 
 	// build bitmap list if required
 	if ( AvailableArt == NULL )
@@ -610,7 +610,8 @@ jeBoolean JETCC AttachWorld(
 	// destroy our instance of the resource manager
 	if ( Object->ResourceMgr != NULL )
 	{
-		jeResource_MgrDestroy( &( Object->ResourceMgr ) );
+		//jeResource_MgrDestroy( &( Object->ResourceMgr ) );
+		JE_SAFE_RELEASE(Object->ResourceMgr);
 	}
 
 	// return failure
@@ -643,7 +644,8 @@ jeBoolean JETCC DettachWorld(
 	assert( Object->World == World );
 
 	// destroy our instance of the resource manager
-	jeResource_MgrDestroy( &( Object->ResourceMgr ) );
+	//jeResource_MgrDestroy( &( Object->ResourceMgr ) );
+	JE_SAFE_RELEASE(Object->ResourceMgr);
 
 	// zap world pointer
 	Object->World = NULL;

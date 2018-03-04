@@ -31,6 +31,9 @@
 #include "Errorlog.h" // Added by Incarnadine
 #include "Log.h"
 #include "Engine.h"
+#include "Engine._h"
+#include "jeMaterial.h"
+#include "Actor.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////
 //	jeResourceMgr struct
@@ -58,14 +61,14 @@ typedef struct
 } jeResource;
 
 
-static jeResourceMgr* g_pSingleResource = NULL;
+//static jeResourceMgr* g_pSingleResource = NULL;
 
-JETAPI jeResourceMgr* JETCC jeResourceMgr_GetSingleton()
+JETAPI jet3d::jeResourceMgr* JETCC jeResourceMgr_GetSingleton()
 {
-	return g_pSingleResource;
+	return jet3d::jeResourceMgr_Impl::getSingletonPtr();
 }
 
-
+/*
 ////////////////////////////////////////////////////////////////////////////////////////
 //
 //	jeResource_MgrCreate()
@@ -797,7 +800,7 @@ JETAPI jeResourceMgr* JETCC jeResource_MgrCreateDefault(jeEngine* pEngine)
 		jeResource_AddVFile( pResourceMgr, "Actors", pFS );
 	}*/
 
-	return pResourceMgr;
+/*	return pResourceMgr;
 }
 // [MLB-ICE] EOB
 
@@ -916,7 +919,7 @@ JETAPI void * JETCC jeResource_GetResource(
 				strcat(ResNameCopy, ".jmat");
 				ResFile = jeVFile_Open(Directory, ResNameCopy, JE_VFILE_OPEN_READONLY);
 				if (ResFile) {
-					Data = jeMaterialSpec_CreateFromFile(ResFile, ResourceMgr->Engine, ResourceMgr);
+					Data = jeMaterialSpec_CreateFromFile(ResFile, ResourceMgr->Engine);
                 } else {
 #ifdef _DEBUG
 					Log_Printf("Replace %s by jet3d.jmat\n", ResNameCopy);
@@ -925,7 +928,7 @@ JETAPI void * JETCC jeResource_GetResource(
                     ResFile = jeVFile_Open(Directory, "Jet3D.jmat", JE_VFILE_OPEN_READONLY);
                     Data = jeMaterialSpec_CreateFromFile(ResFile, ResourceMgr->Engine, ResourceMgr);
 */
-                    Data = jeResource_GetResource(ResourceMgr, JE_RESOURCE_MATERIAL, "jet3d");
+/*                    Data = jeResource_GetResource(ResourceMgr, JE_RESOURCE_MATERIAL, "jet3d");
                 }
 				break;
 			case JE_RESOURCE_TEXTURE:
@@ -1078,4 +1081,344 @@ JETAPI jeBoolean JETCC jeResource_ReleaseResource(jeResourceMgr *ResourceMgr, in
 
 	return JE_FALSE;
 }
+*/
+namespace jet3d {
 
+jeResourceMgr_Impl::jeResourceMgr_Impl()
+{
+	m_pEngine = nullptr;
+	m_iRefCount = 1;
+}
+
+jeResourceMgr_Impl::~jeResourceMgr_Impl()
+{
+	shutdown();
+}
+
+uint32 jeResourceMgr_Impl::AddRef()
+{
+	m_iRefCount++;
+	return m_iRefCount;
+}
+
+uint32 jeResourceMgr_Impl::Release()
+{
+	m_iRefCount--;
+	if (m_iRefCount == 0)
+	{
+		delete this;
+		return 0;
+	}
+
+	return m_iRefCount;
+}
+
+bool jeResourceMgr_Impl::initialize(jeEngine *pEngine)
+{
+	m_pEngine = pEngine;
+	jeEngine_CreateRef(m_pEngine, __FILE__, __LINE__);
+
+	return true;
+}
+
+void jeResourceMgr_Impl::shutdown()
+{
+	ResourceMapItr i = m_Resources.begin();
+	while (i != m_Resources.end())
+	{
+		JE_SAFE_RELEASE(i->second);
+		i++;
+	}
+
+	jeEngine_Destroy(&m_pEngine, __FILE__, __LINE__);
+}
+
+bool jeResourceMgr_Impl::add(const std::string &strName, uint32 iType, void *pvData)
+{
+	std::string temp = "jeResourceMgr_add() - Adding resource " + strName;
+	m_pEngine->EngineLog->logMessage(jet3d::jeLogger::LogInfo, temp);
+
+	ResourceMapItr i = m_Resources.find(strName);
+	if (i == m_Resources.end())
+	{
+		jeResource_Impl *pRes = new jeResource_Impl(strName, iType, pvData, JE_FALSE);
+		m_Resources[strName] = pRes;
+		return true;
+	}
+
+	m_pEngine->EngineLog->logMessage(jet3d::jeLogger::LogInfo, "jeResourceMgr_Add() - Resource already Exists!!");
+	return false;
+}
+
+void *jeResourceMgr_Impl::get(const std::string &strName)
+{
+	std::string temp = "jeResourceMgr::get() - Getting resource " + strName;
+	m_pEngine->EngineLog->logMessage(jet3d::jeLogger::LogInfo, temp);
+
+	ResourceMapItr i = m_Resources.find(strName);
+	if (i != m_Resources.end())
+	{
+		i->second->AddRef();
+		return i->second->getData();
+	}
+
+	m_pEngine->EngineLog->logMessage(jet3d::jeLogger::LogInfo, "jeResourceMgr_Get() - Resource not found!!");
+	return nullptr;
+}
+
+bool jeResourceMgr_Impl::remove(const std::string &strName)
+{
+	std::string temp = "jeResource_remove() - Removing resource " + strName;
+	m_pEngine->EngineLog->logMessage(jet3d::jeLogger::LogInfo, temp);
+
+	ResourceMapItr i = m_Resources.find(strName);
+	if (i != m_Resources.end())
+	{
+		if (i->second->Release() == 0)
+		{
+			m_Resources.erase(i);
+			return false;
+		}
+
+		return true;
+	}
+
+	m_pEngine->EngineLog->logMessage(jet3d::jeLogger::LogInfo, "jeResourceMgr_Remove() - Resource not found!!");
+	return false;
+}
+
+bool jeResourceMgr_Impl::addVFile(const std::string &strName, jeVFile *pFile)
+{
+	return add(strName, JE_RESOURCE_VFS, static_cast<void*>(pFile));
+}
+
+jeVFile *jeResourceMgr_Impl::getVFile(const std::string &strName)
+{
+	return static_cast<jeVFile*>(get(strName));
+}
+
+bool jeResourceMgr_Impl::removeVFile(const std::string &strName)
+{
+	return remove(strName);
+}
+
+bool jeResourceMgr_Impl::openDirectory(const std::string &strDirName, const std::string &strResourceName)
+{
+	jeVFile *pFile = jeVFile_OpenNewSystem(NULL, JE_VFILE_TYPE_DOS, strDirName.c_str(), NULL, JE_VFILE_OPEN_READONLY | JE_VFILE_OPEN_DIRECTORY);
+	if (!pFile)
+	{
+		m_pEngine->EngineLog->logMessage(jet3d::jeLogger::LogError, "jeResourceMgr_OpenDirectory() - Could not open directory!!");
+		return false;
+	}
+
+	if (!addVFile(strResourceName, pFile))
+	{
+		m_pEngine->EngineLog->logMessage(jet3d::jeLogger::LogError, "jeResourceMgr_OpenDirectory() - Resource already exists!!");
+		jeVFile_Close(pFile);
+		pFile = nullptr;
+		return false;
+	}
+
+	ResourceMapItr i = m_Resources.find(strResourceName);
+	if (i == m_Resources.end())
+	{
+		m_pEngine->EngineLog->logMessage(jet3d::jeLogger::LogError, "jeResourceMgr_OpenDirectory() - Resource not added successfully!!");
+		removeVFile(strResourceName);
+		jeVFile_Close(pFile);
+		return false;
+	}
+
+	i->second->setOpenDirectory();
+	return true;
+}
+
+void *jeResourceMgr_Impl::createResource(const std::string &strName, uint32 iType)
+{
+	ResourceMapItr i = m_Resources.find(strName);
+	if (i != m_Resources.end())
+	{
+		i->second->AddRef();
+		return static_cast<void*>(i->second);
+	}
+
+	jeVFile *Directory = nullptr;
+	std::string strFileName;
+	void *pRes = nullptr;
+
+	switch (iType)
+	{
+	case JE_RESOURCE_BITMAP:
+	{
+		Directory = getVFile("GlobalMaterials");
+		if (!Directory)
+			return nullptr;
+
+		strFileName = strName + ".bmp";
+		jeVFile *pFile = jeVFile_Open(Directory, strFileName.c_str(), JE_VFILE_OPEN_READONLY);
+		if (!pFile)
+			return nullptr;
+
+		jeBitmap *Bmp = jeBitmap_CreateFromFile(pFile);
+		if (!Bmp)
+		{
+			jeVFile_Close(pFile);
+			pFile = nullptr;
+			return nullptr;
+		}
+
+		pRes = static_cast<void*>(Bmp);
+		break;
+	}
+	case JE_RESOURCE_MATERIAL:
+	{
+		Directory = getVFile("GlobalMaterials");
+		if (!Directory)
+			return nullptr;
+
+		strFileName = strName + ".jmat";
+		jeVFile *pFile = jeVFile_Open(Directory, strFileName.c_str(), JE_VFILE_OPEN_READONLY);
+		if (!pFile)
+			return nullptr;
+
+		jeMaterialSpec *MatSpec = jeMaterialSpec_CreateFromFile(pFile, m_pEngine);
+		if (!MatSpec)
+		{
+			jeVFile_Close(pFile);
+			pFile = nullptr;
+			return nullptr;
+		}
+
+		pRes = static_cast<void*>(MatSpec);
+		break;
+	}
+	case JE_RESOURCE_TEXTURE:
+	{
+		Directory = getVFile("GlobalMaterials");
+		if (!Directory)
+			return nullptr;
+
+		strFileName = strName + ".png";
+		jeVFile *pFile = jeVFile_Open(Directory, strFileName.c_str(), JE_VFILE_OPEN_READONLY);
+		if (!pFile)
+		{
+			strFileName = strName + ".bmp";
+			pFile = jeVFile_Open(Directory, strFileName.c_str(), JE_VFILE_OPEN_READONLY);
+			if (!pFile)
+				return nullptr;
+		}
+			
+		jeTexture *Bmp = jeEngine_CreateTextureFromFile(m_pEngine, pFile);
+		if (!Bmp)
+		{
+			jeVFile_Close(pFile);
+			pFile = nullptr;
+			return nullptr;
+		}
+
+		pRes = static_cast<void*>(Bmp);
+		break;
+	}
+	
+	default:
+		return nullptr;
+	}
+
+	add(strName, iType, pRes);
+	return pRes;
+}
+
+bool jeResourceMgr_Impl::initializeWithDefaults()
+{
+	bool clean = true;
+
+	if (!openDirectory("GlobalMaterials", "GlobalMaterials"))
+	{
+		m_pEngine->EngineLog->logMessage(jet3d::jeLogger::LogError, "jeResourceMgr_CreateDefault() - Could not open GlobalMaterials!!");
+		clean = false;
+	}
+
+	if (!openDirectory("Actors", "Actors"))
+	{
+		m_pEngine->EngineLog->logMessage(jet3d::jeLogger::LogError, "jeResourceMgr_CreateDefault() - Could not open Actors!!");
+		clean = false;
+	}
+
+	if (!openDirectory("Sounds", "Sounds"))
+	{
+		m_pEngine->EngineLog->logMessage(jet3d::jeLogger::LogError, "jeResourceMgr_CreateDefault() - Could not open Sounds!!");
+		clean = false;
+	}
+
+	if (!openDirectory("Shaders", "Shaders"))
+	{
+		m_pEngine->EngineLog->logMessage(jet3d::jeLogger::LogError, "jeResourceMgr_CreateDefault() - Could not open Shaders!!");
+		clean = false;
+	}
+
+	return clean;
+}
+
+jeResource_Impl::jeResource_Impl(const std::string &strName, uint32 iType, void *pvData, jeBoolean bOpenDir)
+{
+	m_strName = strName;
+	m_iType = iType;
+	m_pvData = pvData;
+	m_bOpenDir = bOpenDir;
+	m_iRefCount = 1;
+}
+
+jeResource_Impl::~jeResource_Impl()
+{
+	if (m_iType == JE_RESOURCE_VFS)
+	{
+		jeVFile *pFile = (jeVFile*)m_pvData;
+		jeVFile_Close(pFile);
+		pFile = nullptr;
+	}
+	else if (m_iType == JE_RESOURCE_BITMAP)
+	{
+		jeBitmap *Bmp = (jeBitmap*)m_pvData;
+		jeBitmap_Destroy(&Bmp);
+		Bmp = nullptr;
+	}
+	else if (m_iType == JE_RESOURCE_ACTOR)
+	{
+		jeActor_Def *Def = (jeActor_Def*)m_pvData;
+		jeActor_DefDestroy(&Def);
+		Def = nullptr;
+	}
+	else if (m_iType == JE_RESOURCE_MATERIAL)
+	{
+		jeMaterialSpec *Mat = (jeMaterialSpec*)m_pvData;
+		jeMaterialSpec_Destroy(&Mat);
+
+	}
+	else if (m_iType == JE_RESOURCE_TEXTURE)
+	{
+		jeTexture *Tex = (jeTexture*)m_pvData;
+		jeEngine_DestroyTexture(m_pEngine, Tex);
+		Tex = nullptr;
+	}
+
+	m_pvData = nullptr;
+}
+
+uint32 jeResource_Impl::AddRef()
+{
+	m_iRefCount++;
+	return m_iRefCount;
+}
+
+uint32 jeResource_Impl::Release()
+{
+	m_iRefCount--;
+	if (m_iRefCount == 0)
+	{
+		delete this;
+		return 0;
+	}
+
+	return m_iRefCount;
+}
+
+} // namespace jet3d

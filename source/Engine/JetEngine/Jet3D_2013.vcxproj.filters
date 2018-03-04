@@ -10,9 +10,6 @@
     <ClCompile Include="Bitmap\Compression\arithc.cpp">
       <Filter>Bitmap\Compression</Filter>
     </ClCompile>
-    <ClCompile Include="Math\asmxform3d.cpp">
-      <Filter>Math</Filter>
-    </ClCompile>
     <ClCompile Include="Support\Array.cpp">
       <Filter>Support</Filter>
     </ClCompile>
@@ -256,16 +253,10 @@
     <ClCompile Include="Support\jeNameMgr.cpp">
       <Filter>Support</Filter>
     </ClCompile>
-    <ClCompile Include="Support\jeMemAllocInfo.cpp">
-      <Filter>Support</Filter>
-    </ClCompile>
     <ClCompile Include="Mp3Mgr\Mp3Mgr.cpp">
       <Filter>Media</Filter>
     </ClCompile>
     <ClCompile Include="Object.cpp">
-      <Filter>World</Filter>
-    </ClCompile>
-    <ClCompile Include="Math\ObjectPos.cpp">
       <Filter>World</Filter>
     </ClCompile>
     <ClCompile Include="OGGStream.cpp">
@@ -358,9 +349,6 @@
     <ClCompile Include="TClip.cpp">
       <Filter>Support</Filter>
     </ClCompile>
-    <ClCompile Include="Timer.cpp">
-      <Filter>Support</Filter>
-    </ClCompile>
     <ClCompile Include="Actor\TKArray.cpp">
       <Filter>Actor</Filter>
     </ClCompile>
@@ -375,9 +363,6 @@
     </ClCompile>
     <ClCompile Include="UVMap.cpp">
       <Filter>Support</Filter>
-    </ClCompile>
-    <ClCompile Include="Math\Vec2d.cpp">
-      <Filter>Math</Filter>
     </ClCompile>
     <ClCompile Include="Math\Vec3d.cpp">
       <Filter>Math</Filter>
@@ -430,9 +415,6 @@
     <ClCompile Include="VFile\VFile.cpp">
       <Filter>VFS</Filter>
     </ClCompile>
-    <ClCompile Include="Support\jeResourceMgrImpl.cpp">
-      <Filter>Support</Filter>
-    </ClCompile>
     <ClCompile Include="VFile\FSZip.cpp">
       <Filter>VFS</Filter>
     </ClCompile>
@@ -459,9 +441,6 @@
     </ClInclude>
     <ClInclude Include="Bitmap\Compression\arithc.h">
       <Filter>Bitmap\Compression</Filter>
-    </ClInclude>
-    <ClInclude Include="Math\asmxform3d.h">
-      <Filter>Math</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\ARRAY.H">
       <Filter>Support</Filter>
@@ -739,9 +718,6 @@
     <ClInclude Include="..\..\..\include\OBJECT.H">
       <Filter>World</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\ObjectPos.h">
-      <Filter>World</Filter>
-    </ClInclude>
     <ClInclude Include="OGGStream.h">
       <Filter>Media</Filter>
     </ClInclude>
@@ -844,9 +820,6 @@
     <ClInclude Include="tclip.h">
       <Filter>Support</Filter>
     </ClInclude>
-    <ClInclude Include="timer.h">
-      <Filter>Support</Filter>
-    </ClInclude>
     <ClInclude Include="Actor\tkarray.h">
       <Filter>Actor</Filter>
     </ClInclude>
@@ -861,9 +834,6 @@
     </ClInclude>
     <ClInclude Include="..\..\..\include\UVMAP.H">
       <Filter>Support</Filter>
-    </ClInclude>
-    <ClInclude Include="Math\vec2d.h">
-      <Filter>Math</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\Vec3d.h">
       <Filter>Math</Filter>
@@ -901,12 +871,6 @@
     <ClInclude Include="Bitmap\Compression\image.h">
       <Filter>Bitmap\Compression</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\jeResourceMgr.h">
-      <Filter>Interface Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="Support\jeResourceMgrImpl.h">
-      <Filter>Support</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\jeImageImpl.h">
       <Filter>Engine</Filter>
     </ClInclude>
@@ -915,6 +879,12 @@
     </ClInclude>
     <ClInclude Include="Bitmap\Compression\context.h">
       <Filter>Bitmap\Compression</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\jeResourceManager.h">
+      <Filter>Interface Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\jeSingleton.h">
+      <Filter>Interface Headers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -948,8 +918,11 @@
     <None Include="guWorld\jeModel._h">
       <Filter>World</Filter>
     </None>
-    <None Include="Support\jeMemAllocInfo._h">
+    <None Include="Support\jePtrMgr._h">
       <Filter>Support</Filter>
+    </None>
+    <None Include="Camera._h">
+      <Filter>Math</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

@@ -166,7 +166,7 @@ JETAPI void JETCC jeXForm3d_Transform(
 	jeVec3d *Result);
 	// Result is Matrix M * Vector V:  V Tranformed by M
 
-JETAPI void JETCC jeXForm3d_TransformVecArray(const jeXForm3d *XForm, 
+/*JETAPI void JETCC jeXForm3d_TransformVecArray(const jeXForm3d *XForm, 
 								const jeVec3d *Source, 
 								jeVec3d *Dest, 
 								int32 Count);
@@ -176,7 +176,7 @@ JETAPI void JETCC jeXForm3d_TransformArray(	const jeXForm3d *XForm,
 									int32 SourceStride,
 								jeVec3d *Dest,
 									int32 DestStride,
-								int32 Count);
+								int32 Count);*/
 
 JETAPI void JETCC jeXForm3d_Rotate(
 	const jeXForm3d *M,

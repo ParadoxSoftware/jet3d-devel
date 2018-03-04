@@ -28,7 +28,7 @@
 #include "VFile.h"
 #include "jeProperty.h"
 #include "Ram.h"
-#include "jeResource.h"
+#include "jeResourceManager.h"
 #include "jeWorld.h"
 #include "Spout.h"
 #include "Resource.h"
@@ -36,7 +36,6 @@
 #include "jeVersion.h"
 #include "Errorlog.h"
 #include "jeMaterial.h"
-#include "jeResource.h"
 
 
 #define SPOUTOBJECT_VERSION 1
@@ -181,7 +180,7 @@ typedef struct Spout
 {
 	jeParticle_System	*Ps;
 	jeWorld				*World;
-	jeResourceMgr		*ResourceMgr;
+	jet3d::jeResourceMgr		*ResourceMgr;
 	jeEngine			*Engine;
 	jeXForm3d			Xf;
 	int					RefCount;
@@ -689,7 +688,7 @@ static void Util_DestroyBitmapList(
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 static BitmapList * Util_CreateBitmapList(
-	jeResourceMgr	*ResourceMgr,	// resource manager to use
+	jet3d::jeResourceMgr	*ResourceMgr,	// resource manager to use
 	char			*ResourceName,	// name of resource
 	char			*FileFilter )	// file filter
 {
@@ -714,7 +713,8 @@ static BitmapList * Util_CreateBitmapList(
 	}
 
 	// get vfile dir
-	FileDir = jeResource_GetVFile( ResourceMgr, ResourceName );
+	//FileDir = jeResource_GetVFile( ResourceMgr, ResourceName );
+	FileDir = ResourceMgr->getVFile(ResourceName);
 	if ( FileDir == NULL )
 	{
 		jeErrorLog_Add( JE_ERR_SUBSYSTEM_FAILURE, NULL );
@@ -877,7 +877,8 @@ static BitmapList * Util_CreateBitmapList(
 	jeVFile_DestroyFinder( Finder );
 
 	// close vfile dir
-	if ( jeResource_DeleteVFile( ResourceMgr, ResourceName ) == 0 )
+	//if ( jeResource_DeleteVFile( ResourceMgr, ResourceName ) == 0 )
+	if (!ResourceMgr->removeVFile(ResourceName))
 	{
 		jeVFile_Close( FileDir );
 	}
@@ -922,7 +923,8 @@ static BitmapList * Util_CreateBitmapList(
 	// close vfile dir
 	if ( FileDir != NULL )
 	{
-		if ( jeResource_DeleteVFile( ResourceMgr, ResourceName ) == 0 )
+		//if ( jeResource_DeleteVFile( ResourceMgr, ResourceName ) == 0 )
+		if (!ResourceMgr->removeVFile(ResourceName))
 		{
 			jeVFile_Close( FileDir );
 		}
@@ -1592,6 +1594,7 @@ jeBoolean JETCC AttachWorld(
 	// save an instance of the resource manager
 	Object->ResourceMgr = jeWorld_GetResourceMgr( World );
 	assert( Object->ResourceMgr != NULL );
+	Object->ResourceMgr->AddRef();
 
 	// build bitmap list if required
 	if ( Bitmaps == NULL )
@@ -1646,7 +1649,8 @@ jeBoolean JETCC DettachWorld(
 	}
 
 	// destroy our instance of the resource manager
-	jeResource_MgrDestroy( &( Object->ResourceMgr ) );
+	//jeResource_MgrDestroy( &( Object->ResourceMgr ) );
+	JE_SAFE_RELEASE(Object->ResourceMgr);
 
 	// zap world pointer
 	Object->World = NULL;
@@ -2927,10 +2931,11 @@ jeBoolean JETCC SetProperty(
 				jeVFile	*FileDir;
 
     			// create new art
-                Object->Art = jeMaterialSpec_Create(Object->Engine, Object->ResourceMgr);
+                Object->Art = jeMaterialSpec_Create(Object->Engine);
 	
                 // get vfile dir
-				FileDir = jeResource_GetVFile( Object->ResourceMgr, "GlobalMaterials" );
+				//FileDir = jeResource_GetVFile( Object->ResourceMgr, "GlobalMaterials" );
+				FileDir = Object->ResourceMgr->getVFile("GlobalMaterials");
 				if ( FileDir == NULL )
 				{
 					jeErrorLog_Add( JE_ERR_SUBSYSTEM_FAILURE, NULL );
@@ -2948,7 +2953,8 @@ jeBoolean JETCC SetProperty(
 				}
 
 				// close vfile dir
-				if ( jeResource_DeleteVFile( Object->ResourceMgr, "GlobalMaterials" ) == 0 )
+				//if ( jeResource_DeleteVFile( Object->ResourceMgr, "GlobalMaterials" ) == 0 )
+				if (!Object->ResourceMgr->removeVFile("GlobalMaterials"))
 				{
 					jeVFile_Close( FileDir );
 				}

@@ -22,6 +22,7 @@
 #ifndef JE_CONTEXTPTRMGR_H
 #define JE_CONTEXTPTRMGR_H
 
+#include "jeResourceManager.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -29,7 +30,7 @@ extern "C" {
 
 // Krouer : create a world context info
 typedef struct jeWorld		jeWorld;
-typedef struct jeResourceMgr	jeResourceMgr;
+//typedef struct jeResourceMgr	jeResourceMgr;
 
 // PtrMgr definition - moved from .c file
 typedef uint32						jePtrMgr_Index;
@@ -63,13 +64,13 @@ typedef struct jePtrMgr
 
 	// Krouer add few new elements
 	jeWorld*		pWorld;
-	jeResourceMgr*	pResMgr;
+	jet3d::jeResourceMgr*	pResMgr;
 	int32			lData;
 
 #ifdef _DEBUG
 	jePtrMgr		*Signature2;
 #endif
-} jePrtMgr;
+} jePtrMgr;
 
 typedef struct
 {

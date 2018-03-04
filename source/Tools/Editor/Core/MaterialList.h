@@ -49,7 +49,7 @@ void				MaterialList_SetCurMaterial( MaterialList_Struct* MaterialList, Material
 
 // MODIFIERS
 MaterialIterator	MaterialList_Append( MaterialList_Struct * pList, Material_Struct * pMaterial ) ;
-jeBoolean			MaterialList_LoadFromDir( MaterialList_Struct* MaterialList, jeEngine* pEngine, jeResourceMgr* pResMgr, char* DirPath );
+jeBoolean			MaterialList_LoadFromDir( MaterialList_Struct* MaterialList, jeEngine* pEngine, jet3d::jeResourceMgr* pResMgr, char* DirPath );
 
 // ENUMERATION
 int32				MaterialList_EnumMaterials( MaterialList_Struct * pList, void * pVoid, MaterialListCB Callback ) ;

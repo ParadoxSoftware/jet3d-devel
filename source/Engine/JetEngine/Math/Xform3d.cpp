@@ -22,7 +22,7 @@
 #include <math.h>
 
 #include "XForm3d.h"
-#include "asmXForm3d.h"
+//#include "asmXForm3d.h"
 #include "cpu.h"
 
 #include "memory.h"
@@ -407,102 +407,102 @@ static	XFMVECARRAY	XFormVecArray	=NULL;	//does this guarantee first time null?
 typedef void (JETCC *XFMARRAY)(const jeXForm3d *XForm, const jeVec3d *Source, jeVec3d *Dest, int32 SourceStride, int32 DestStride, int32 Count);
 static	XFMARRAY	XFormArray	=NULL;	//does this guarantee first time null?
 
-JETAPI	jeBoolean	JETCC	jeXForm3d_UsingKatmai(void) 
+/*JETAPI	jeBoolean	JETCC	jeXForm3d_UsingKatmai(void) 
 {
 	return (XFormVecArray==jeXForm3d_TransformVecArrayKatmai);
-}
+}*/
 
-JETAPI	jeBoolean	JETCC	jeXForm3d_EnableKatmai(jeBoolean useit) 
-{
-	if(jeCPU_Features & JE_CPU_HAS_KATMAI)
+//JETAPI	jeBoolean	JETCC	jeXForm3d_EnableKatmai(jeBoolean useit) 
+//{
+	/*if(jeCPU_Features & JE_CPU_HAS_KATMAI)
 	{
 		if(useit)
 		{
 			XFormVecArray	=jeXForm3d_TransformVecArrayKatmai;
 		}
-		else
-		{
-			XFormVecArray	=jeXForm3d_TransformVecArrayX86;
-		}
-		return	JE_TRUE;
-	}
+		else*/
+	//	{
+		//	XFormVecArray	=jeXForm3d_TransformVecArrayX86;
+		//}
+	//	return	JE_TRUE;
+	//}
 
-	return	JE_FALSE;
-}
+	//return	JE_FALSE;
+//}
 
 //========================================================================================
 //	jeXForm3d_TransformVecArray
 //	Calls the correct version (if no flags are set goes to x86)
 //========================================================================================
-JETAPI void JETCC jeXForm3d_TransformVecArray(const jeXForm3d *XForm, 
-	const jeVec3d *Source, jeVec3d *Dest, int32 Count)
-{
-
-#if 0 // @@
-	jeXForm3d_TransformArray(XForm,Source,sizeof(jeVec3d),Dest,sizeof(jeVec3d),Count);
-#endif
-
-	if(XFormVecArray)
-	{
-		XFormVecArray(XForm, Source, Dest, Count);	
-	}
-	else
-	{
-		if(jeCPU_Features & JE_CPU_HAS_KATMAI)
-		{
-			XFormVecArray	=jeXForm3d_TransformVecArrayKatmai;
-		}
-#if 0	//darn no native 3dnow 
-		else if(jeCPU_Features & JE_CPU_HAS_3DNOW)
-		{
-			XFormVecArray	=jeXForm3d_TransformVecArray3DNow;
-		}
-#endif
-		else
-		{
-			XFormVecArray	=jeXForm3d_TransformVecArrayX86;
-		}
-		
-		XFormVecArray(XForm, Source, Dest, Count);
-	}
-}
+//JETAPI void JETCC jeXForm3d_TransformVecArray(const jeXForm3d *XForm, 
+//	const jeVec3d *Source, jeVec3d *Dest, int32 Count)
+//{
+//
+//#if 0 // @@
+//	jeXForm3d_TransformArray(XForm,Source,sizeof(jeVec3d),Dest,sizeof(jeVec3d),Count);
+//#endif
+//
+//	if(XFormVecArray)
+//	{
+//		XFormVecArray(XForm, Source, Dest, Count);	
+//	}
+//	else
+//	{
+//		if(jeCPU_Features & JE_CPU_HAS_KATMAI)
+//		{
+//			XFormVecArray	=jeXForm3d_TransformVecArrayKatmai;
+//		}
+//#if 0	//darn no native 3dnow 
+//		else if(jeCPU_Features & JE_CPU_HAS_3DNOW)
+//		{
+//			XFormVecArray	=jeXForm3d_TransformVecArray3DNow;
+//		}
+//#endif
+//		else
+//		{
+//			XFormVecArray	=jeXForm3d_TransformVecArrayX86;
+//		}
+//		
+//		XFormVecArray(XForm, Source, Dest, Count);
+//	}
+//}
 
 //========================================================================================
 //	jeXForm3d_TransformArray (allows strides)
 //	Calls the correct version (if no flags are set goes to x86)
 //========================================================================================
-JETAPI void JETCC jeXForm3d_TransformArray(const jeXForm3d *XForm,
-												   const jeVec3d *Source,
-													   int32 SourceStride,
-												   jeVec3d *Dest,
-													   int32 DestStride,
-												   int32 Count)
-{
-	if(XFormArray)
-	{
-		XFormArray(XForm, Source, Dest, SourceStride, DestStride, Count);	
-	}
-	else
-	{
-		if(jeCPU_Features & JE_CPU_HAS_KATMAI)
-		{
-			XFormArray	=jeXForm3d_TransformArrayKatmai;
-		}
-		#pragma message("XForm3d : Get the 3dnow XFormArray integrated!")
-#if 0	//darn no native 3dnow 
-		else if(jeCPU_Features & JE_CPU_HAS_3DNOW)
-		{
-			XFormArray	=jeXForm3d_TransformArray3DNow;
-		}
-#endif
-		else
-		{
-			XFormArray	=jeXForm3d_TransformArrayX86;
-		}
-		
-		XFormArray(XForm, Source, Dest, SourceStride, DestStride, Count);
-	}
-}
+//JETAPI void JETCC jeXForm3d_TransformArray(const jeXForm3d *XForm,
+//												   const jeVec3d *Source,
+//													   int32 SourceStride,
+//												   jeVec3d *Dest,
+//													   int32 DestStride,
+//												   int32 Count)
+//{
+//	if(XFormArray)
+//	{
+//		XFormArray(XForm, Source, Dest, SourceStride, DestStride, Count);	
+//	}
+//	//else
+//	//{
+//		/*if(jeCPU_Features & JE_CPU_HAS_KATMAI)
+//		{
+//			XFormArray	=jeXForm3d_TransformArrayKatmai;
+//		}
+//		#pragma message("XForm3d : Get the 3dnow XFormArray integrated!")
+//#if 0	//darn no native 3dnow 
+//		else if(jeCPU_Features & JE_CPU_HAS_3DNOW)
+//		{
+//			XFormArray	=jeXForm3d_TransformArray3DNow;
+//		}
+//#endif
+//		else*/
+//	//	{
+//			//XFormArray	=jeXForm3d_TransformArrayX86;
+//		//}
+//		
+//		//XFormArray(XForm, Source, Dest, SourceStride, DestStride, Count);
+//	//}
+//}
 
 JETAPI void JETCC jeXForm3d_Rotate(
 	const jeXForm3d *M,

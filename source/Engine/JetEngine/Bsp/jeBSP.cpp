@@ -318,7 +318,7 @@ void jeBSP_Destroy(jeBSP **BSPTree)
 		assert((*BSPTree)->ChangeDriverCB);
 		jeEngine_DestroyChangeDriverCB((*BSPTree)->Engine, &(*BSPTree)->ChangeDriverCB);
 		//jeEngine_Free((*BSPTree)->Engine);
-		jeEngine_Destroy(&(*BSPTree)->Engine);
+		jeEngine_Destroy(&(*BSPTree)->Engine, __FILE__, __LINE__);
 		(*BSPTree)->Engine = NULL;
 	}
 	else
@@ -1431,7 +1431,7 @@ jeBoolean jeBSP_SetEngine(jeBSP *Tree, jeEngine *Engine)
 		assert(Tree->ChangeDriverCB);
 		jeEngine_DestroyChangeDriverCB(Tree->Engine, &Tree->ChangeDriverCB);
 		//jeEngine_Free(Tree->Engine);
-		jeEngine_Destroy(&Tree->Engine);
+		jeEngine_Destroy(&Tree->Engine, __FILE__, __LINE__);
 		Tree->Engine = NULL;
 	}
 	else
@@ -1449,7 +1449,7 @@ jeBoolean jeBSP_SetEngine(jeBSP *Tree, jeEngine *Engine)
 		//if (!Tree->ChangeDriverCB)
 		//	return JE_FALSE;
 
-		jeEngine_CreateRef(Engine);
+		jeEngine_CreateRef(Engine, __FILE__, __LINE__);
 		jeEngine_SetRenderMode(Engine, Tree->RenderMode);
 	}
 

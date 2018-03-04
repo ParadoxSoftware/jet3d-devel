@@ -143,6 +143,7 @@ JETAPI void JETCC jePtrMgr_Destroy(jePtrMgr **PtrMgr)
 		assert((*PtrMgr)->PtrStack);
 		JE_RAM_FREE((*PtrMgr)->PtrStack);
 
+		JE_SAFE_RELEASE((*PtrMgr)->pResMgr);
 		JE_RAM_FREE(*PtrMgr);
 	}
 
@@ -366,7 +367,7 @@ static jePtrMgr_Index FindIndexFromPtr(const jePtrMgr *PtrMgr, void *Ptr)
 }
 
 // Krouer : ResourceMgr accessor
-JETAPI jeResourceMgr* JETCC jePtrMgr_GetResourceMgr(const jePtrMgr *PtrMgr)
+JETAPI jet3d::jeResourceMgr* JETCC jePtrMgr_GetResourceMgr(const jePtrMgr *PtrMgr)
 {
 	assert(PtrMgr);
 	return PtrMgr->pResMgr;

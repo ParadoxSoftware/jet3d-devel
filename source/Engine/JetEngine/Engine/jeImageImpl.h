@@ -25,7 +25,7 @@
 
 #include "jeImage.h"
 
-class jeImageImpl : public jeImage
+/*class jeImageImpl : public jeImage
 {
 public:
 	jeImageImpl();
@@ -42,14 +42,17 @@ protected:
 	int32 m_ImageSize;
 
 	std::string m_strFileName;
+	std::string m_strType;
 
 public:
 	uint32 AddRef();
 	uint32 Release();
 
-	jeBoolean IsDirty();
-	const std::string &GetFileName();
-	jet3d::jeResource *MakeCopy();
+	const std::string &getType() { return m_strType; }
+	const std::string &getName() { return m_strFileName; }
+
+	bool isDirty();
+	bool isLoaded();
 
 	jeBoolean Create(int32 Width, int32 Height, int32 BPP);
 	void Destroy();
@@ -105,5 +108,5 @@ public:
 
 	const std::string &GetFileExtension() { return m_strFileExtension; }
 };
-
+*/
 #endif
