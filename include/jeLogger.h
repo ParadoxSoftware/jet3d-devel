@@ -35,7 +35,7 @@ namespace jet3d
 	private:
 		jeLogger();
 		jeLogger(const jeLogger& rhs);
-		jeLogger& operator=(const jeLogger& rhs);
+		jeLogger& operator=(const jeLogger& rhs) {}
 	public:
 		typedef enum LogThreshold
 		{
@@ -44,7 +44,7 @@ namespace jet3d
 			LogWarn  = 0x0004,
 			LogInfo  = 0x0008,
 			LogDebug = 0x0010,
-		};
+		} LogThreshold;
 	protected:
 		std::string _name;
 		unsigned short _logThreshold;

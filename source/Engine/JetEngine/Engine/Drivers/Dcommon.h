@@ -94,8 +94,11 @@ typedef struct tagRECT
 
 #define DRV_VERSION_MAJOR		200			// Jet 2.0
 #define DRV_VERSION_MINOR		4			// version 3 has specular rgb in the verts ; 4 has bigger debug info
-#define DRV_VMAJS				"200"
-#define DRV_VMINS				"4"
+//#define DRV_VMAJS				"200"
+//#define DRV_VMINS				"4"
+
+const std::string DRV_VMAJS = "200";
+const std::string DRV_VMINS = "4";
 
 #ifndef US_TYPEDEFS
 #define US_TYPEDEFS

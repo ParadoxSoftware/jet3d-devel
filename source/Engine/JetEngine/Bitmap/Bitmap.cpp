@@ -4434,7 +4434,7 @@ uint8 NameStrLen;
 	}
 	
 	if ( ! Bmp->Persistable )	NameStrLen = 0;
-	else						NameStrLen = strlen(Bmp->PersistName);
+	else						NameStrLen = static_cast<uint8>(strlen(Bmp->PersistName));
 
 	jeVFile_Write(VFile,&NameStrLen,1);
 

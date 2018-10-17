@@ -33,7 +33,7 @@ namespace jet3d
 	private:
 		jeFileLogger();
 		jeFileLogger(const jeFileLogger& rhs);
-		jeFileLogger& operator=(const jeFileLogger& rhs);
+		jeFileLogger& operator=(const jeFileLogger& rhs) {}
 	private:
 		std::ofstream _outputFile;
 		std::string _directory;

@@ -1088,14 +1088,14 @@ jeBoolean JETCC MessageFunction (void * Instance, int32 Msg, void * Data)
 
 	assert( Instance );
 
-	switch (Msg)
+	/*switch (Msg)
 		{
 		default:
 			return JE_FALSE;
 			break;
 		}// switch
-
-	return( JE_TRUE );
+		*/
+	return( JE_FALSE );
 }
 
 

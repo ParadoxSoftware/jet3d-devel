@@ -162,7 +162,7 @@ BOOL D3DMain_InitD3D(HWND hWnd, const char *DriverName, int32 Width, int32 Heigh
 
 	D3DMain_Log("=================================================================\n");
 	D3DMain_Log(" D3DInfo v%i.%i\n", DRV_VERSION_MAJOR, DRV_VERSION_MINOR);
-	D3DMain_Log(" Build Date: "__DATE__", Time: "__TIME__"\n");
+	D3DMain_Log(" Build Date: %s, Time: %d\n", __DATE__, __TIME__);
 	D3DMain_Log("=================================================================\n\n");
 
 	D3DMain_Log("Current Time: %2i:%2i:%2i\n", Time.wHour, Time.wMinute, Time.wSecond);

@@ -124,7 +124,7 @@ void Trigger_ParseEvent(jeWorld *World, TriggerContext ContextType, void *Contex
 
 	ep = EventString;
 	memset(Arg,0, sizeof(Arg));
-	sscanf(ep, "%s %s %s %s %s %s", &Arg[0], &Arg[1], &Arg[2], &Arg[3], &Arg[4], &Arg[5], &Arg[6]);
+	sscanf(ep, "%s %s %s %s %s %s", &Arg[0], &Arg[1], &Arg[2], &Arg[3], &Arg[4], &Arg[5]);
 
 	etype = (int32*)Arg[0];
 	switch (*etype)

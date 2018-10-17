@@ -30,7 +30,7 @@ typedef struct Select3dContextDef
 
 
 
-typedef enum {
+enum {
 	JETEDITOR_GET_JEBRUSH = 4000,	// Context is pointer to jeBrush pointer (jeBrush**)
 	JETEDITOR_SELECT3D,				// Context is Select3dContextDef
 	JETEDITOR_APPLYMATERIAL,		// Context is jeBitmap

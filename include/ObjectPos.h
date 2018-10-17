@@ -30,7 +30,7 @@ typedef struct
 } Matrix34;
 
 typedef union MatrixXForm {
-	struct{ 
+	struct { 
 		Matrix34	Matrix;
 		jeVec3d		Translation;
 	};

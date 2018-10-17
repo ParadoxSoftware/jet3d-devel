@@ -279,9 +279,12 @@ static jeBoolean DRIVERCC DrvGetDeviceCaps(jeDeviceCaps *DeviceCaps)
 BOOL DRIVERCC EnumSubDrivers2(DRV_ENUM_DRV_CB *Cb, void *Context);
 BOOL DRIVERCC EnumModes2(int32 Driver, char *DriverName, DRV_ENUM_MODES_CB *Cb, void *Context);
 
+std::string temp = "D3D driver. v" + DRV_VMAJS + "." + DRV_VMINS + ". Copyright 1999, Eclipse Entertainment; All Rights Reserved.";
+
 DRV_Driver D3DDRV = 
 {
-    "D3D driver. v"DRV_VMAJS"."DRV_VMINS". Copyright 1999, Eclipse Entertainment; All Rights Reserved.",
+    //"D3D driver. v"DRV_VMAJS"."DRV_VMINS". Copyright 1999, Eclipse Entertainment; All Rights Reserved.",
+	const_cast<char*>(temp.c_str()),
 	DRV_VERSION_MAJOR,
 	DRV_VERSION_MINOR,
 

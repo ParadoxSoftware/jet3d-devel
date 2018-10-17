@@ -1612,7 +1612,7 @@ jeBoolean JETCC SendAMessage(
 	assert( Object != NULL );
 
 	// process message
-	switch ( Msg )
+	/*switch ( Msg )
 	{
 
 		// unsupported message
@@ -1621,7 +1621,7 @@ jeBoolean JETCC SendAMessage(
 			//return JE_FALSE;
 			break;
 		}
-	}
+	}*/
 
 	// all done
 	return JE_FALSE;

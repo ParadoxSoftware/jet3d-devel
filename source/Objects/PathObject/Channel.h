@@ -37,7 +37,7 @@ CHANNEL_POS = 0,
 CHANNEL_ROT,
 CHANNEL_EVENT,
 MAX_CHANNELS,
-};
+}ChannelDef;
 
 typedef union ChannelData
 {

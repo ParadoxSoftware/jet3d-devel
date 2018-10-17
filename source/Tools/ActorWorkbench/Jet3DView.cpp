@@ -290,7 +290,7 @@ jeBoolean CJet3DView::InitWorld(void)
 	if (!m_pResMgr || !m_pEngine)
 		return JE_FALSE;
 
-	m_pWorld = jeWorld_Create(m_pResMgr);
+	m_pWorld = jeWorld_Create();
 	if (!m_pWorld)
 	{
 		AfxMessageBox("Could not create world!!", 48, 0);
