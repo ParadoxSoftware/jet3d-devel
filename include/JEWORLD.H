@@ -102,8 +102,8 @@ JETAPI jeWorld	*	JETCC jeWorld_CreateFromFile(jeVFile *VFile, jePtrMgr *PtrMgr);
 //JETAPI jeWorld	*	JETCC jeWorld_CreateFromEditorFile(const char* FileName, jePtrMgr *pPtrMgr, jeResourceMgr * pResourceMgr );
 JETAPI jeWorld	*	JETCC jeWorld_CreateFromEditorFile(const char* FileName, jePtrMgr *pPtrMgr);
 
-JETAPI jeBoolean	JETCC jeWorld_CreateRef(jeWorld *World);
-JETAPI void			JETCC jeWorld_Destroy(jeWorld **World);
+JETAPI jeBoolean	JETCC jeWorld_CreateRef(jeWorld *World, char *filename, int line);
+JETAPI void			JETCC jeWorld_Destroy(jeWorld **World, char *filename, int line);
 
 JETAPI jeBoolean JETCC jeWorld_RebuildBSP(jeWorld *World, 
 										jeBSP_Options Options, 

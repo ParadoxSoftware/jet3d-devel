@@ -729,7 +729,7 @@ bool CMainFrame::ShutdownAll()
 		//	destroy world, engine, etc...
 		if (m_pWorld)
 		{
-			jeWorld_Destroy(&m_pWorld);
+			jeWorld_Destroy(&m_pWorld, __FILE__, __LINE__);
 		}
 
 //		if (m_pResourceMgr)
@@ -1229,7 +1229,7 @@ bool CMainFrame::LoadWorld()
 
 						if (!jeWorld_SetEngine(m_pWorld, m_pEngine))
 						{
-							jeWorld_Destroy(&m_pWorld);
+							jeWorld_Destroy(&m_pWorld, __FILE__, __LINE__);
 							return false;
 						}
 

@@ -320,6 +320,7 @@ void jeBSP_Destroy(jeBSP **BSPTree)
 		//jeEngine_Free((*BSPTree)->Engine);
 		jeEngine_Destroy(&(*BSPTree)->Engine, __FILE__, __LINE__);
 		(*BSPTree)->Engine = NULL;
+		jeErrorLog_AddString(-1, "jeBSP_Destroy() - Engine ref count decrement", NULL);
 	}
 	else
 	{
@@ -1463,17 +1464,24 @@ jeBoolean jeBSP_SetWorld(jeBSP *Tree, jeWorld *World)
 {
 	assert(Tree);
 	
+	if (World == NULL)
+	{
+		jeWorld_Destroy(&Tree->World, __FILE__, __LINE__);
+		Tree->World = NULL;
+		return JE_TRUE;
+	}
+
 	if (Tree->World)
 	{
-		jeWorld_Destroy(&Tree->World);
+		jeWorld_Destroy(&Tree->World, __FILE__, __LINE__);
 		Tree->World = NULL;
 	}
 
 	Tree->World = World;
 
-	if (World)
+	if (Tree->World)
 	{
-		jeWorld_CreateRef(World);
+		jeWorld_CreateRef(Tree->World, __FILE__, __LINE__);
 	}
 
 	return JE_TRUE;

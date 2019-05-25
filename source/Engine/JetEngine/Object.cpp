@@ -401,6 +401,8 @@ JETAPI jeObject *	JETCC jeObject_CreateFromFile(jeVFile * File, jePtrMgr *PtrMgr
 		Object->Name = (char *)JE_RAM_ALLOCATE( NameLng );
 		if ( ! jeVFile_Read(File, Object->Name, NameLng) )
 			goto fail;
+
+		jeErrorLog_AddString(-1, Object->Name, NULL);
 	}
 
 	if ( ! Object->Methods )

@@ -35,6 +35,8 @@
 #include "jeMaterial.h"
 #include "Actor.h"
 
+extern jet3d::jeFileLogger *jetLog;
+
 ////////////////////////////////////////////////////////////////////////////////////////
 //	jeResourceMgr struct
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -1126,6 +1128,8 @@ void jeResourceMgr_Impl::shutdown()
 	ResourceMapItr i = m_Resources.begin();
 	while (i != m_Resources.end())
 	{
+		std::string msg = "jeResource_Shutdown() - Deleting resource " + i->second->getName();
+		jeErrorLog_AddString(-1, msg.c_str(), NULL);
 		JE_SAFE_RELEASE(i->second);
 		i++;
 	}
@@ -1136,7 +1140,7 @@ void jeResourceMgr_Impl::shutdown()
 bool jeResourceMgr_Impl::add(const std::string &strName, uint32 iType, void *pvData)
 {
 	std::string temp = "jeResourceMgr_add() - Adding resource " + strName;
-	m_pEngine->EngineLog->logMessage(jet3d::jeLogger::LogInfo, temp);
+	jetLog->logMessage(jet3d::jeLogger::LogInfo, temp);
 
 	ResourceMapItr i = m_Resources.find(strName);
 	if (i == m_Resources.end())
@@ -1146,14 +1150,14 @@ bool jeResourceMgr_Impl::add(const std::string &strName, uint32 iType, void *pvD
 		return true;
 	}
 
-	m_pEngine->EngineLog->logMessage(jet3d::jeLogger::LogInfo, "jeResourceMgr_Add() - Resource already Exists!!");
+	jetLog->logMessage(jet3d::jeLogger::LogInfo, "jeResourceMgr_Add() - Resource already Exists!!");
 	return false;
 }
 
 void *jeResourceMgr_Impl::get(const std::string &strName)
 {
 	std::string temp = "jeResourceMgr::get() - Getting resource " + strName;
-	m_pEngine->EngineLog->logMessage(jet3d::jeLogger::LogInfo, temp);
+	jetLog->logMessage(jet3d::jeLogger::LogInfo, temp);
 
 	ResourceMapItr i = m_Resources.find(strName);
 	if (i != m_Resources.end())
@@ -1162,14 +1166,14 @@ void *jeResourceMgr_Impl::get(const std::string &strName)
 		return i->second->getData();
 	}
 
-	m_pEngine->EngineLog->logMessage(jet3d::jeLogger::LogInfo, "jeResourceMgr_Get() - Resource not found!!");
+	jetLog->logMessage(jet3d::jeLogger::LogInfo, "jeResourceMgr_Get() - Resource not found!!");
 	return nullptr;
 }
 
 bool jeResourceMgr_Impl::remove(const std::string &strName)
 {
 	std::string temp = "jeResource_remove() - Removing resource " + strName;
-	m_pEngine->EngineLog->logMessage(jet3d::jeLogger::LogInfo, temp);
+	jetLog->logMessage(jet3d::jeLogger::LogInfo, temp);
 
 	ResourceMapItr i = m_Resources.find(strName);
 	if (i != m_Resources.end())
@@ -1183,7 +1187,7 @@ bool jeResourceMgr_Impl::remove(const std::string &strName)
 		return true;
 	}
 
-	m_pEngine->EngineLog->logMessage(jet3d::jeLogger::LogInfo, "jeResourceMgr_Remove() - Resource not found!!");
+	jetLog->logMessage(jet3d::jeLogger::LogInfo, "jeResourceMgr_Remove() - Resource not found!!");
 	return false;
 }
 
@@ -1207,13 +1211,13 @@ bool jeResourceMgr_Impl::openDirectory(const std::string &strDirName, const std:
 	jeVFile *pFile = jeVFile_OpenNewSystem(NULL, JE_VFILE_TYPE_DOS, strDirName.c_str(), NULL, JE_VFILE_OPEN_READONLY | JE_VFILE_OPEN_DIRECTORY);
 	if (!pFile)
 	{
-		m_pEngine->EngineLog->logMessage(jet3d::jeLogger::LogError, "jeResourceMgr_OpenDirectory() - Could not open directory!!");
+		jetLog->logMessage(jet3d::jeLogger::LogError, "jeResourceMgr_OpenDirectory() - Could not open directory!!");
 		return false;
 	}
 
 	if (!addVFile(strResourceName, pFile))
 	{
-		m_pEngine->EngineLog->logMessage(jet3d::jeLogger::LogError, "jeResourceMgr_OpenDirectory() - Resource already exists!!");
+		jetLog->logMessage(jet3d::jeLogger::LogError, "jeResourceMgr_OpenDirectory() - Resource already exists!!");
 		jeVFile_Close(pFile);
 		pFile = nullptr;
 		return false;
@@ -1222,7 +1226,7 @@ bool jeResourceMgr_Impl::openDirectory(const std::string &strDirName, const std:
 	ResourceMapItr i = m_Resources.find(strResourceName);
 	if (i == m_Resources.end())
 	{
-		m_pEngine->EngineLog->logMessage(jet3d::jeLogger::LogError, "jeResourceMgr_OpenDirectory() - Resource not added successfully!!");
+		jetLog->logMessage(jet3d::jeLogger::LogError, "jeResourceMgr_OpenDirectory() - Resource not added successfully!!");
 		removeVFile(strResourceName);
 		jeVFile_Close(pFile);
 		return false;
@@ -1249,18 +1253,27 @@ void *jeResourceMgr_Impl::createResource(const std::string &strName, uint32 iTyp
 	{
 	case JE_RESOURCE_BITMAP:
 	{
+		jetLog->logMessage(jet3d::jeLogger::LogInfo, "jeResource_CreateResource() - Creating bitmap resource " + strName);
+
 		Directory = getVFile("GlobalMaterials");
 		if (!Directory)
+		{
+			jeErrorLog_AddString(-1, "jeResource_CreateResource() - Could not get GlobalMaterials directory!!", NULL);
 			return nullptr;
+		}
 
 		strFileName = strName + ".bmp";
 		jeVFile *pFile = jeVFile_Open(Directory, strFileName.c_str(), JE_VFILE_OPEN_READONLY);
 		if (!pFile)
+		{
+			jeErrorLog_AddString(-1, "jeResource_CreateResource() - Could not open bitmap file", NULL);
 			return nullptr;
+		}
 
 		jeBitmap *Bmp = jeBitmap_CreateFromFile(pFile);
 		if (!Bmp)
 		{
+			jeErrorLog_AddString(-1, "jeResource_CreateResource() - Could not create bitmap from file!!", NULL);
 			jeVFile_Close(pFile);
 			pFile = nullptr;
 			return nullptr;
@@ -1310,6 +1323,7 @@ void *jeResourceMgr_Impl::createResource(const std::string &strName, uint32 iTyp
 		jeTexture *Bmp = jeEngine_CreateTextureFromFile(m_pEngine, pFile);
 		if (!Bmp)
 		{
+			jetLog->logMessage(jet3d::jeLogger::LogError, "[Resource Manager] Could not load texture from file." + strFileName);
 			jeVFile_Close(pFile);
 			pFile = nullptr;
 			return nullptr;
@@ -1333,25 +1347,25 @@ bool jeResourceMgr_Impl::initializeWithDefaults()
 
 	if (!openDirectory("GlobalMaterials", "GlobalMaterials"))
 	{
-		m_pEngine->EngineLog->logMessage(jet3d::jeLogger::LogError, "jeResourceMgr_CreateDefault() - Could not open GlobalMaterials!!");
+		jetLog->logMessage(jet3d::jeLogger::LogError, "jeResourceMgr_CreateDefault() - Could not open GlobalMaterials!!");
 		clean = false;
 	}
 
 	if (!openDirectory("Actors", "Actors"))
 	{
-		m_pEngine->EngineLog->logMessage(jet3d::jeLogger::LogError, "jeResourceMgr_CreateDefault() - Could not open Actors!!");
+		jetLog->logMessage(jet3d::jeLogger::LogError, "jeResourceMgr_CreateDefault() - Could not open Actors!!");
 		clean = false;
 	}
 
 	if (!openDirectory("Sounds", "Sounds"))
 	{
-		m_pEngine->EngineLog->logMessage(jet3d::jeLogger::LogError, "jeResourceMgr_CreateDefault() - Could not open Sounds!!");
+		jetLog->logMessage(jet3d::jeLogger::LogError, "jeResourceMgr_CreateDefault() - Could not open Sounds!!");
 		clean = false;
 	}
 
 	if (!openDirectory("Shaders", "Shaders"))
 	{
-		m_pEngine->EngineLog->logMessage(jet3d::jeLogger::LogError, "jeResourceMgr_CreateDefault() - Could not open Shaders!!");
+		jetLog->logMessage(jet3d::jeLogger::LogError, "jeResourceMgr_CreateDefault() - Could not open Shaders!!");
 		clean = false;
 	}
 

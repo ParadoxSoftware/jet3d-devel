@@ -13,6 +13,7 @@
 #include "wglext.h"
 
 #include "DCommon.h"
+#include "jeFileLogger.h"
 
 #define DRIVERAPI				extern "C" _declspec(dllexport)
 
@@ -28,6 +29,8 @@ extern PFNGLMULTITEXCOORD4FARBPROC glMultiTexCoord4fARB;
 
 extern DRV_Window				ClientWindow;
 extern DRV_Driver				OGLDRV;
+
+extern jet3d::jeFileLogger		*ogllog;
 
 // Private Driver Functions
 void							BuildRGBGammaTables(float Gamma);

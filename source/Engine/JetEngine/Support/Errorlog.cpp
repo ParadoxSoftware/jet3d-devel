@@ -26,6 +26,7 @@
 #include <string.h>		// memmove(), strncpy() strncat()
 
 #include "Errorlog.h"   
+#include "jeFileLogger.h"
 
 #define USE_STDIO_LOG	//	Outputs to file
 
@@ -39,6 +40,8 @@
 FILE						*errorlog = NULL;
 #define FILENAME			"Jet3D.log"
 #endif
+
+jet3d::jeFileLogger			*jetLog = NULL;
 
 typedef struct
 {
@@ -55,6 +58,23 @@ typedef struct
 } jeErrorLogType;
 
 jeErrorLogType jeErrorLog_Locals = {0,MAX_ERRORS};
+
+void jeErrorLog_Initialize(const char *logName, const char *logDir)
+{
+	jetLog = new jet3d::jeFileLogger(logName, logDir, jet3d::jeLogger::LogInfo | jet3d::jeLogger::LogWarn | jet3d::jeLogger::LogError | jet3d::jeLogger::LogFatal
+#ifdef _DEBUG
+		| jet3d::jeLogger::LogDebug
+#endif
+	);
+
+	jetLog->logMessage(jet3d::jeLogger::LogInfo, "Jet3D Engine Logging Started");
+}
+
+void jeErrorLog_Shutdown()
+{
+	jetLog->logMessage(jet3d::jeLogger::LogInfo, "Jet3D Logging Stopped");
+	JE_SAFE_DELETE(jetLog);
+}
 
 JETAPI void JETCC jeErrorLog_Clear(void)
 	// clears error history
@@ -183,6 +203,9 @@ JETAPI void JETCC jeErrorLog_AddExplicit(jeErrorLog_ErrorClassType Error,
 		OutputDebugString(buff);
 		OutputDebugString(SDst);
 		OutputDebugString("\r\n");
+
+		jetLog->logMessage(jet3d::jeLogger::LogError, SDst);
+
 #ifdef USE_STDIO_LOG
 		/*errorlog = fopen(FILENAME, "at");
 		if (!errorlog)

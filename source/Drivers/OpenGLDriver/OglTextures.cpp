@@ -2,9 +2,9 @@
 #include <math.h>
 #include "OglTextures.h"
 #include "OglDrv.h"
+#include "jeFileLogger.h"
 
 jeTexture							TextureHandles[MAX_TEXTURE_HANDLES];
-extern FILE							*ogllog;
 
 static void CkBlit24_32(GLubyte *dstPtr, GLint dstWidth, GLint dstHeight, GLubyte *srcPtr, GLint srcWidth, GLint srcHeight)
 {
@@ -105,6 +105,8 @@ static int32 GetLog(int32 Width, int32 Height)
 
 jeBoolean THandle_Startup()
 {
+	ogllog->logMessage(jet3d::jeLogger::LogDebug, "THandle_Startup()");
+
 	for (int i = 0; i < MAX_TEXTURE_HANDLES; i++)
 	{
 		memset(&TextureHandles[i], 0, sizeof(jeTexture));
@@ -116,6 +118,8 @@ jeBoolean THandle_Startup()
 
 jeBoolean THandle_Shutdown()
 {
+	ogllog->logMessage(jet3d::jeLogger::LogDebug, "THandle_Shutdown()");
+
 	FreeAllTextureHandles();
 	return JE_TRUE;
 }
@@ -147,7 +151,7 @@ static jeTexture *FindTextureHandle()
 
 jeBoolean DRIVERCC OGLDrv_THandle_Destroy(jeTexture *THandle)
 {
-	fprintf(ogllog, "THandle_Destroy\n");
+	ogllog->logMessage(jet3d::jeLogger::LogDebug, "THandle_Destroy()");
 
 	if (THandle->Active == JE_FALSE)
 		return JE_TRUE;
@@ -176,11 +180,11 @@ jeTexture *DRIVERCC OGLDrv_THandle_Create(int32 Width, int32 Height, int32 NumMi
 	jeTexture					*Texture = NULL;
 	GLubyte						Log;
 
-	fprintf(ogllog, "THandle_Create\n");
+	ogllog->logMessage(jet3d::jeLogger::LogDebug, "THandle_Create()");
 	Texture = FindTextureHandle();
 	if (!Texture)
 	{
-		fprintf(ogllog, "No available THandles!!\n");
+		ogllog->logMessage(jet3d::jeLogger::LogError, "No available THandles!!");
 		return NULL;
 	}
 
@@ -192,14 +196,14 @@ jeTexture *DRIVERCC OGLDrv_THandle_Create(int32 Width, int32 Height, int32 NumMi
 		if (Width != SWidth)
 		{
 			Texture->Active = JE_FALSE;
-			fprintf(ogllog, "Texture is not power of 2 (Width)\n");
+			ogllog->logMessage(jet3d::jeLogger::LogError, "Texture is not power of 2 (Width)");
 			return NULL;
 		}
 
 		if (Height != SHeight)
 		{
 			Texture->Active = JE_FALSE;
-			fprintf(ogllog, "Texture is not power of 2 (Height)\n");
+			ogllog->logMessage(jet3d::jeLogger::LogError, "Texture is not power of 2 (Height)");
 			return NULL;
 		}
 	}
@@ -236,7 +240,7 @@ jeTexture *DRIVERCC OGLDrv_THandle_Create(int32 Width, int32 Height, int32 NumMi
 
 jeBoolean DRIVERCC OGLDrv_THandle_GetInfo(jeTexture *THandle, int32 MipLevel, jeTexture_Info *Info)
 {
-	fprintf(ogllog, "THandle_GetInfo\n");
+	ogllog->logMessage(jet3d::jeLogger::LogDebug, "THandle_GetInfo()");
 
 	if (!THandle->Active)
 		return JE_FALSE;
@@ -262,7 +266,7 @@ jeBoolean DRIVERCC OGLDrv_THandle_GetInfo(jeTexture *THandle, int32 MipLevel, je
 
 jeBoolean DRIVERCC OGLDrv_THandle_Lock(jeTexture *THandle, int32 MipLevel, void **Data)
 {
-	fprintf(ogllog, "THandle_Lock\n");
+	ogllog->logMessage(jet3d::jeLogger::LogDebug, "THandle_Lock()");
 
 	if (THandle->Data[MipLevel] != NULL)
 	{
@@ -314,16 +318,16 @@ jeBoolean DRIVERCC OGLDrv_THandle_Lock(jeTexture *THandle, int32 MipLevel, void 
 
 jeBoolean DRIVERCC OGLDrv_THandle_Unlock(jeTexture *THandle, int32 MipLevel)
 {
-	fprintf(ogllog, "THandle_Unlock\n");
+	ogllog->logMessage(jet3d::jeLogger::LogDebug, "THandle_Unlock()");
 	if (!(THandle->Flags & (THANDLE_LOCKED << MipLevel)))
 	{
-		fprintf(ogllog, "Not locked!!\n");
+		ogllog->logMessage(jet3d::jeLogger::LogError, "Not locked!!");
 		return JE_FALSE;
 	}
 
 	if (THandle->Data[MipLevel] == NULL)
 	{
-		fprintf(ogllog, "Invalid mip level!!\n");
+		ogllog->logMessage(jet3d::jeLogger::LogError, "Invalid mip level!!");
 		return JE_FALSE;
 	}
 
@@ -437,7 +441,7 @@ void THandle_DownloadLightmap(jeTexture *THandle, jeRDriver_LMapCBInfo *LInfo)
 
 jeBoolean DRIVERCC OGLDrv_Reset()
 {
-	fprintf(ogllog, "Drv_Reset\n");
+	ogllog->logMessage(jet3d::jeLogger::LogDebug, "Drv_Reset()");
 	FreeAllTextureHandles();
 	return JE_TRUE;
 }

@@ -159,33 +159,6 @@
     <ClCompile Include="Bitmap\Compression\codepal.c">
       <Filter>Source Files\Bitmap\Compression</Filter>
     </ClCompile>
-    <ClCompile Include="Bitmap\Compression\coder.c">
-      <Filter>Source Files\Bitmap\Compression</Filter>
-    </ClCompile>
-    <ClCompile Include="Bitmap\Compression\coder_bp.c">
-      <Filter>Source Files\Bitmap\Compression</Filter>
-    </ClCompile>
-    <ClCompile Include="Bitmap\Compression\coder_bpb2.c">
-      <Filter>Source Files\Bitmap\Compression</Filter>
-    </ClCompile>
-    <ClCompile Include="Bitmap\Compression\coder_bpbf.c">
-      <Filter>Source Files\Bitmap\Compression</Filter>
-    </ClCompile>
-    <ClCompile Include="Bitmap\Compression\coder_bpbfr.c">
-      <Filter>Source Files\Bitmap\Compression</Filter>
-    </ClCompile>
-    <ClCompile Include="Bitmap\Compression\coder_bpbfrl.c">
-      <Filter>Source Files\Bitmap\Compression</Filter>
-    </ClCompile>
-    <ClCompile Include="Bitmap\Compression\coder_f.c">
-      <Filter>Source Files\Bitmap\Compression</Filter>
-    </ClCompile>
-    <ClCompile Include="Bitmap\Compression\coder_f2.c">
-      <Filter>Source Files\Bitmap\Compression</Filter>
-    </ClCompile>
-    <ClCompile Include="Bitmap\Compression\coder_f3.c">
-      <Filter>Source Files\Bitmap\Compression</Filter>
-    </ClCompile>
     <ClCompile Include="Bitmap\Compression\codeutil.c">
       <Filter>Source Files\Bitmap\Compression</Filter>
     </ClCompile>
@@ -202,12 +175,6 @@
       <Filter>Source Files\Bitmap\Compression</Filter>
     </ClCompile>
     <ClCompile Include="Bitmap\Compression\image.c">
-      <Filter>Source Files\Bitmap\Compression</Filter>
-    </ClCompile>
-    <ClCompile Include="Bitmap\Compression\intmath.c">
-      <Filter>Source Files\Bitmap\Compression</Filter>
-    </ClCompile>
-    <ClCompile Include="Bitmap\Compression\katcache.c">
       <Filter>Source Files\Bitmap\Compression</Filter>
     </ClCompile>
     <ClCompile Include="Bitmap\Compression\ladder.c">
@@ -246,52 +213,13 @@
     <ClCompile Include="Bitmap\Compression\runtrans.c">
       <Filter>Source Files\Bitmap\Compression</Filter>
     </ClCompile>
-    <ClCompile Include="Bitmap\Compression\scontext.c">
-      <Filter>Source Files\Bitmap\Compression</Filter>
-    </ClCompile>
     <ClCompile Include="Bitmap\Compression\sortpal.c">
       <Filter>Source Files\Bitmap\Compression</Filter>
     </ClCompile>
     <ClCompile Include="Bitmap\Compression\sortpalx.c">
       <Filter>Source Files\Bitmap\Compression</Filter>
     </ClCompile>
-    <ClCompile Include="Bitmap\Compression\soz.c">
-      <Filter>Source Files\Bitmap\Compression</Filter>
-    </ClCompile>
     <ClCompile Include="Bitmap\Compression\strutil.c">
-      <Filter>Source Files\Bitmap\Compression</Filter>
-    </ClCompile>
-    <ClCompile Include="Bitmap\Compression\tblock.c">
-      <Filter>Source Files\Bitmap\Compression</Filter>
-    </ClCompile>
-    <ClCompile Include="Bitmap\Compression\trans_bcw3.c">
-      <Filter>Source Files\Bitmap\Compression</Filter>
-    </ClCompile>
-    <ClCompile Include="Bitmap\Compression\trans_cdf22.c">
-      <Filter>Source Files\Bitmap\Compression</Filter>
-    </ClCompile>
-    <ClCompile Include="Bitmap\Compression\trans_cdf22q.c">
-      <Filter>Source Files\Bitmap\Compression</Filter>
-    </ClCompile>
-    <ClCompile Include="Bitmap\Compression\trans_cdf24.c">
-      <Filter>Source Files\Bitmap\Compression</Filter>
-    </ClCompile>
-    <ClCompile Include="Bitmap\Compression\trans_d4.c">
-      <Filter>Source Files\Bitmap\Compression</Filter>
-    </ClCompile>
-    <ClCompile Include="Bitmap\Compression\trans_l97.c">
-      <Filter>Source Files\Bitmap\Compression</Filter>
-    </ClCompile>
-    <ClCompile Include="Bitmap\Compression\trans_spt.c">
-      <Filter>Source Files\Bitmap\Compression</Filter>
-    </ClCompile>
-    <ClCompile Include="Bitmap\Compression\transform.c">
-      <Filter>Source Files\Bitmap\Compression</Filter>
-    </ClCompile>
-    <ClCompile Include="Bitmap\Compression\utility.c">
-      <Filter>Source Files\Bitmap\Compression</Filter>
-    </ClCompile>
-    <ClCompile Include="Bitmap\Compression\wavelet.c">
       <Filter>Source Files\Bitmap\Compression</Filter>
     </ClCompile>
     <ClCompile Include="Bitmap\Compression\yuv.c">
@@ -453,9 +381,6 @@
     <ClCompile Include="Math\jeRay.cpp">
       <Filter>Source Files\Math</Filter>
     </ClCompile>
-    <ClCompile Include="Math\jeVec3d_Katmai.cpp">
-      <Filter>Source Files\Math</Filter>
-    </ClCompile>
     <ClCompile Include="Math\ObjectPos.cpp">
       <Filter>Source Files\Math</Filter>
     </ClCompile>
@@ -531,15 +456,6 @@
     <ClCompile Include="VFile\fsdos.c">
       <Filter>Source Files\VFile</Filter>
     </ClCompile>
-    <ClCompile Include="VFile\fsfakenet.c">
-      <Filter>Source Files\VFile</Filter>
-    </ClCompile>
-    <ClCompile Include="VFile\Fsinet.cpp">
-      <Filter>Source Files\VFile</Filter>
-    </ClCompile>
-    <ClCompile Include="VFile\fslz.c">
-      <Filter>Source Files\VFile</Filter>
-    </ClCompile>
     <ClCompile Include="VFile\Fsmemory.c">
       <Filter>Source Files\VFile</Filter>
     </ClCompile>
@@ -578,6 +494,12 @@
     </ClCompile>
     <ClCompile Include="Engine\jeImage.cpp">
       <Filter>Source Files\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="VFile\FSZip.cpp">
+      <Filter>Source Files\VFile</Filter>
+    </ClCompile>
+    <ClCompile Include="VFile\FSLZ.cpp">
+      <Filter>Source Files\VFile</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -695,19 +617,10 @@
     <ClInclude Include="Bitmap\Compression\arithc.h">
       <Filter>Source Files\Bitmap\Compression</Filter>
     </ClInclude>
-    <ClInclude Include="bitmap\compression\cache3dn.h">
-      <Filter>Source Files\Bitmap\Compression</Filter>
-    </ClInclude>
     <ClInclude Include="Bitmap\Compression\codealphas.h">
       <Filter>Source Files\Bitmap\Compression</Filter>
     </ClInclude>
-    <ClInclude Include="Bitmap\Compression\codeimage.h">
-      <Filter>Source Files\Bitmap\Compression</Filter>
-    </ClInclude>
     <ClInclude Include="Bitmap\Compression\codepal.h">
-      <Filter>Source Files\Bitmap\Compression</Filter>
-    </ClInclude>
-    <ClInclude Include="Bitmap\Compression\coder.h">
       <Filter>Source Files\Bitmap\Compression</Filter>
     </ClInclude>
     <ClInclude Include="Bitmap\Compression\codeutil.h">
@@ -726,12 +639,6 @@
       <Filter>Source Files\Bitmap\Compression</Filter>
     </ClInclude>
     <ClInclude Include="Bitmap\Compression\image.h">
-      <Filter>Source Files\Bitmap\Compression</Filter>
-    </ClInclude>
-    <ClInclude Include="Bitmap\Compression\intmath.h">
-      <Filter>Source Files\Bitmap\Compression</Filter>
-    </ClInclude>
-    <ClInclude Include="Bitmap\Compression\katcache.h">
       <Filter>Source Files\Bitmap\Compression</Filter>
     </ClInclude>
     <ClInclude Include="Bitmap\Compression\ladder.h">
@@ -770,31 +677,13 @@
     <ClInclude Include="Bitmap\Compression\runtrans.h">
       <Filter>Source Files\Bitmap\Compression</Filter>
     </ClInclude>
-    <ClInclude Include="Bitmap\Compression\scontext.h">
-      <Filter>Source Files\Bitmap\Compression</Filter>
-    </ClInclude>
     <ClInclude Include="Bitmap\Compression\sortpal.h">
       <Filter>Source Files\Bitmap\Compression</Filter>
     </ClInclude>
     <ClInclude Include="Bitmap\Compression\sortpalx.h">
       <Filter>Source Files\Bitmap\Compression</Filter>
     </ClInclude>
-    <ClInclude Include="Bitmap\Compression\soz.h">
-      <Filter>Source Files\Bitmap\Compression</Filter>
-    </ClInclude>
     <ClInclude Include="Bitmap\Compression\strutil.h">
-      <Filter>Source Files\Bitmap\Compression</Filter>
-    </ClInclude>
-    <ClInclude Include="Bitmap\Compression\tblock.h">
-      <Filter>Source Files\Bitmap\Compression</Filter>
-    </ClInclude>
-    <ClInclude Include="Bitmap\Compression\transform.h">
-      <Filter>Source Files\Bitmap\Compression</Filter>
-    </ClInclude>
-    <ClInclude Include="Bitmap\Compression\utility.h">
-      <Filter>Source Files\Bitmap\Compression</Filter>
-    </ClInclude>
-    <ClInclude Include="Bitmap\Compression\wavelet.h">
       <Filter>Source Files\Bitmap\Compression</Filter>
     </ClInclude>
     <ClInclude Include="Bitmap\Compression\yuv.h">
@@ -923,9 +812,6 @@
     <ClInclude Include="..\..\..\include\jeRay.h">
       <Filter>Source Files\Math</Filter>
     </ClInclude>
-    <ClInclude Include="Math\jeVec3d_Katmai.h">
-      <Filter>Source Files\Math</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\include\ObjectPos.h">
       <Filter>Source Files\Math</Filter>
     </ClInclude>
@@ -999,12 +885,6 @@
       <Filter>Source Files\VFile</Filter>
     </ClInclude>
     <ClInclude Include="VFile\fsdos.h">
-      <Filter>Source Files\VFile</Filter>
-    </ClInclude>
-    <ClInclude Include="VFile\fsfakenet.h">
-      <Filter>Source Files\VFile</Filter>
-    </ClInclude>
-    <ClInclude Include="VFile\fsINet.h">
       <Filter>Source Files\VFile</Filter>
     </ClInclude>
     <ClInclude Include="VFile\fslz.H">
@@ -1097,6 +977,9 @@
     <ClInclude Include="Engine\jeImageImpl.h">
       <Filter>Source Files\Engine</Filter>
     </ClInclude>
+    <ClInclude Include="VFile\FSZip.h">
+      <Filter>Source Files\VFile</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="jet.rc">
@@ -1136,9 +1019,6 @@
     </CustomBuildStep>
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="bitmap\compression\cache3dn.asm">
-      <Filter>Source Files\Bitmap\Compression</Filter>
-    </CustomBuild>
     <CustomBuild Include="Bitmap\Compression\rungasm.asm">
       <Filter>Source Files\Bitmap\Compression</Filter>
     </CustomBuild>

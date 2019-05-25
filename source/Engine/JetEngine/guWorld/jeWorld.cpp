@@ -53,7 +53,11 @@
 #include "jePtrMgr._h"
 #include "log.h"
 
+#include "jeFileLogger.h"
+
 //#define FIRST_OBJECT_IN_HIERARCHY_IS_MODEL_HACK
+
+extern jet3d::jeFileLogger *jetLog;
 
 #ifdef _DEBUG 
 	#define WORLD_DEBUG_OUTPUT_LEVEL	1
@@ -618,7 +622,7 @@ JETAPI jeWorld * JETCC jeWorld_Create()
 	ExitWithError:
 	{
 		if (World)
-			jeWorld_Destroy(&World);
+			jeWorld_Destroy(&World, __FILE__, __LINE__);
 
 		return NULL;
 	}
@@ -701,7 +705,7 @@ JETAPI jeWorld * JETCC jeWorld_CreateFromFile(jeVFile *VFile, jePtrMgr *PtrMgr)
 			if (PtrMgr)
 				jePtrMgr_Destroy(&PtrMgr);
 
-			jeWorld_Destroy(&World);
+			jeWorld_Destroy(&World, __FILE__, __LINE__);
 		}
 		return NULL;
 	}
@@ -792,12 +796,15 @@ JETAPI jeBoolean JETCC jeWorld_WriteToFile(const jeWorld *World, jeVFile *VFile,
 //========================================================================================
 //	jeWorld_CreateRef
 //========================================================================================
-JETAPI jeBoolean JETCC jeWorld_CreateRef(jeWorld *World)
+JETAPI jeBoolean JETCC jeWorld_CreateRef(jeWorld *World, char *filename, int line)
 {
 	assert(World);
 	assert(World->RefCount >= 0);
+	char buff[1024];
 
 	World->RefCount++;
+	sprintf(buff, "World - FILE:  %s, LINE:  %d, RefCountInc = %d", filename, line, (World)->RefCount);
+	jetLog->logMessage(jet3d::jeLogger::LogInfo, buff);
 
 	return JE_TRUE;
 }
@@ -806,10 +813,11 @@ JETAPI jeBoolean JETCC jeWorld_CreateRef(jeWorld *World)
 //========================================================================================
 //	jeWorld_Destroy
 //========================================================================================
-JETAPI void JETCC jeWorld_Destroy(jeWorld **pWorld)
+JETAPI void JETCC jeWorld_Destroy(jeWorld **pWorld, char *filename, int line)
 {
 	jeChain_Link		*Link;
 	jeWorld				*World;
+	char				buff[1024];
 
 	assert(pWorld);
 	assert(*pWorld);
@@ -822,6 +830,8 @@ JETAPI void JETCC jeWorld_Destroy(jeWorld **pWorld)
 #endif
 
 	World->RefCount--;
+	sprintf(buff, "World - FILE:  %s, LINE:  %d, RefCountDec = %d", filename, line, (*pWorld)->RefCount);
+	jetLog->logMessage(jet3d::jeLogger::LogInfo, buff);
 
 	if (World->RefCount == 0)
 	{

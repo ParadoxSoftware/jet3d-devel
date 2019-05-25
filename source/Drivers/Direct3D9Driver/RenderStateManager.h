@@ -18,7 +18,7 @@ enum MaterialType
 	NUM_MATERIAL_TYPES
 };
 
-class RenderStateManager : public Jet3D::jeSingleton<RenderStateManager>
+class RenderStateManager : public jet3d::jeSingleton<RenderStateManager>
 {
 public:
 	RenderStateManager(IDirect3DDevice9 *pDevice);

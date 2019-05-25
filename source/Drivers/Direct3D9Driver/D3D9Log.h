@@ -12,7 +12,7 @@
 
 #define LOG_FILE_NAME						"d3d9driver.log"
 
-class D3D9Log : public Jet3D::jeSingleton<D3D9Log>
+class D3D9Log : public jet3d::jeSingleton<D3D9Log>
 {
 public:
 	D3D9Log();

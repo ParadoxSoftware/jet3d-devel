@@ -421,6 +421,7 @@
     <ClCompile Include="Bitmap\Compression\Context.cpp">
       <Filter>Bitmap\Compression</Filter>
     </ClCompile>
+    <ClCompile Include="DLLMain.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />

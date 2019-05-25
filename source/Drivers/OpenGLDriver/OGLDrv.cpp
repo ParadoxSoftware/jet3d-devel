@@ -3,6 +3,7 @@
 #include <gl/glu.h>
 #include <stdio.h>
 #include <math.h>
+#include <list>
 
 #include "OglDrv.h"
 #include "OglTextures.h"
@@ -13,7 +14,8 @@ HWND							hWnd = NULL;
 HDC								hDC = NULL;
 HGLRC							hglRC = NULL;
 
-FILE							*ogllog = NULL;
+//FILE							*ogllog = NULL;
+jet3d::jeFileLogger				*ogllog = NULL;
 
 bool							Has_Stencil = false;
 bool							Has_MultiTexture = false;
@@ -47,7 +49,7 @@ GLfloat							StencilRef = 0.0f;
 
 jeBoolean DRIVERCC OGLDrv_EnumSubDrivers(DRV_ENUM_DRV_CB *Cb, void *Context)
 {
-	fprintf(ogllog, "EnumSubDrivers\n");
+	ogllog->logMessage(jet3d::jeLogger::LogDebug, "EnumSubDrivers()");
 	Cb(0, "OpenGL Driver", Context);
 	return JE_TRUE;
 }
@@ -58,22 +60,36 @@ jeBoolean DRIVERCC OGLDrv_EnumModes(S32 Driver, char *DriverName, DRV_ENUM_MODES
 	int							modecount = 0;
 	int							numModes = 0;
 //	DISPLAY_DEVICE				device;
+	typedef std::list<DEVMODE>	ModeList;
+	ModeList					modes;
 
-	fprintf(ogllog, "EnumModes\n");
+	ogllog->logMessage(jet3d::jeLogger::LogDebug, "EnumModes()");
 	while (EnumDisplaySettings(NULL, modecount, &mode))
 	{
-		if (mode.dmPelsWidth <= 2048 && mode.dmPelsHeight <= 1024)
+		ModeList::iterator i = modes.begin();
+		jeBoolean Found = JE_FALSE;
+
+		if (mode.dmPelsWidth <= 2048 && mode.dmPelsHeight <= 1024 && mode.dmDisplayFrequency == 60 && mode.dmBitsPerPel > 8)
 		{
-			if (ChangeDisplaySettings(&mode, CDS_TEST) == DISP_CHANGE_SUCCESSFUL)
+			while (i != modes.end())
 			{
-				if (mode.dmBitsPerPel > 8 && mode.dmPelsWidth > 512 && mode.dmPelsHeight > 384 && mode.dmDisplayFrequency == 60)
+				if ((*i).dmBitsPerPel == mode.dmBitsPerPel && (*i).dmPelsWidth == mode.dmPelsWidth && (*i).dmPelsHeight == mode.dmPelsHeight)
+					Found = JE_TRUE;
+
+				i++;
+			}
+
+			if (!Found)
+			{
+				if (ChangeDisplaySettings(&mode, CDS_TEST) == DISP_CHANGE_SUCCESSFUL)
 				{
 					char			modename[32];
 
 					sprintf(modename, "%dx%dx%d", mode.dmPelsWidth, mode.dmPelsHeight, mode.dmBitsPerPel);
-					fprintf(ogllog, "%s\n", modename);
+					ogllog->logMessage(jet3d::jeLogger::LogInfo, modename);
 					Cb(numModes, modename, mode.dmPelsWidth, mode.dmPelsHeight, mode.dmBitsPerPel, Context);
-					
+					modes.push_back(mode);
+
 					numModes++;
 				}
 			}
@@ -82,7 +98,7 @@ jeBoolean DRIVERCC OGLDrv_EnumModes(S32 Driver, char *DriverName, DRV_ENUM_MODES
 		modecount++;
 	}
 
-	Cb(numModes, "WindowMode", -1, -1, -1, Context);
+	Cb(numModes + 1, "WindowMode", -1, -1, -1, Context);
 	return JE_TRUE;
 }
 
@@ -99,7 +115,7 @@ jeBoolean DRIVERCC OGLDrv_EnumPixelFormats(DRV_ENUM_PFORMAT_CB *Cb, void *Contex
 {
 	GLint i;
 
-	fprintf(ogllog, "EnumPixelFormats\n");
+	ogllog->logMessage(jet3d::jeLogger::LogDebug, "EnumPixelFormats()");
 	for(i = 0; i < NUM_PIXEL_FORMATS; i++)
 	{
 		if(!Cb(&PixelFormats[i], Context))
@@ -111,7 +127,7 @@ jeBoolean DRIVERCC OGLDrv_EnumPixelFormats(DRV_ENUM_PFORMAT_CB *Cb, void *Contex
 
 jeBoolean DRIVERCC OGLDrv_Init(DRV_DriverHook *Hook)
 {
-	fprintf(ogllog, "Init\n");
+	ogllog->logMessage(jet3d::jeLogger::LogDebug, "Init()");
 	if (Hook->Width != -1 && Hook->Height != -1)
 	{
 		DEVMODE						mode;
@@ -124,7 +140,7 @@ jeBoolean DRIVERCC OGLDrv_Init(DRV_DriverHook *Hook)
 
 		if (ChangeDisplaySettings(&mode, CDS_FULLSCREEN) != DISP_CHANGE_SUCCESSFUL)
 		{
-			fprintf(ogllog, "Could not set fullscreen mode!!\n");
+			ogllog->logMessage(jet3d::jeLogger::LogError, "Could not set fullscreen mode!!");
 			return JE_FALSE;
 		}
 
@@ -147,7 +163,7 @@ jeBoolean DRIVERCC OGLDrv_Init(DRV_DriverHook *Hook)
 	hDC = GetDC(Hook->hWnd);
 	if (!hDC)
 	{
-		fprintf(ogllog, "Could not get device context!!\n");
+		ogllog->logMessage(jet3d::jeLogger::LogError, "Could not get device context!!");
 		if (fullscreen)
 			ChangeDisplaySettings(NULL, 0);
 
@@ -174,7 +190,7 @@ jeBoolean DRIVERCC OGLDrv_Init(DRV_DriverHook *Hook)
 	int pixelformat = ChoosePixelFormat(hDC, &pfd);
 	if (!SetPixelFormat(hDC, pixelformat, &pfd))
 	{
-		fprintf(ogllog, "Could not set pixel format!!\n");
+		ogllog->logMessage(jet3d::jeLogger::LogError, "Could not set pixel format!!");
 		return JE_FALSE;
 	}
 
@@ -183,7 +199,7 @@ jeBoolean DRIVERCC OGLDrv_Init(DRV_DriverHook *Hook)
 	hglRC = wglCreateContext(hDC);
 	if (!hglRC)
 	{
-		fprintf(ogllog, "Could not get rendering context!!\n");
+		ogllog->logMessage(jet3d::jeLogger::LogError, "Could not get rendering context!!");
 		if (fullscreen)
 			ChangeDisplaySettings(NULL, 0);
 
@@ -242,7 +258,7 @@ jeBoolean DRIVERCC OGLDrv_Init(DRV_DriverHook *Hook)
 
 jeBoolean DRIVERCC OGLDrv_Shutdown()
 {
-	fprintf(ogllog, "Shutdown\n");
+	ogllog->logMessage(jet3d::jeLogger::LogDebug, "Shutdown()");
 
 	glFinish();
 
@@ -254,7 +270,7 @@ jeBoolean DRIVERCC OGLDrv_Shutdown()
 
 	ReleaseDC(ClientWindow.hWnd, hDC);
 
-	fclose(ogllog);
+	JE_SAFE_DELETE(ogllog);
 
 	return JE_TRUE;
 }
@@ -1120,8 +1136,13 @@ DRV_Driver OGLDRV =
 
 DRIVERAPI BOOL DriverHook(DRV_Driver **Driver)
 {
-	ogllog = fopen("OGLDrv.log", "wt");
-	fprintf(ogllog, "OpenGL Driver Log\n\n");
+	ogllog = new jet3d::jeFileLogger("OGLDrv", ".\\", jet3d::jeLogger::LogInfo | jet3d::jeLogger::LogWarn | jet3d::jeLogger::LogError | jet3d::jeLogger::LogFatal
+#ifdef _DEBUG
+		| jet3d::jeLogger::LogDebug
+#endif
+	);
+
+	ogllog->logMessage(jet3d::jeLogger::LogInfo, "OpenGL Driver Log");
 
 	EngineSettings.CanSupportFlags = (DRV_SUPPORT_ALPHA | DRV_SUPPORT_COLORKEY);
 	EngineSettings.PreferenceFlags = 0;

@@ -95,6 +95,8 @@ extern int32 NumMakeFaces;
 extern int32 NumMergedFaces;
 extern int32 NumSubdividedFaces;
 
+extern jet3d::jeFileLogger *jetLog;
+
 //=====================================================================================
 // ------- Create/Destroy
 //=====================================================================================
@@ -117,7 +119,7 @@ JETAPI jeEngine * JETCC jeEngine_Create(HWND hWnd, const char *AppName, const ch
 
 	if (!Engine)
 	{
-		//jeErrorLog_Add(JE_ERR_OUT_OF_MEMORY, NULL);
+		jeErrorLog_Add(JE_ERR_OUT_OF_MEMORY, NULL);
 		goto ExitWithError;
 	}
 
@@ -126,17 +128,17 @@ JETAPI jeEngine * JETCC jeEngine_Create(HWND hWnd, const char *AppName, const ch
 	Engine->MySelf1 = Engine;
 	Engine->MySelf2 = Engine;
 	
-	Engine->EngineLog = new jet3d::jeFileLogger("Jet3D", ".\\", jet3d::jeLogger::LogInfo | jet3d::jeLogger::LogWarn | jet3d::jeLogger::LogError | jet3d::jeLogger::LogFatal);
-	Engine->EngineLog->logMessage(jet3d::jeLogger::LogInfo, "Jet3D initialization...");
+	Engine->EngineLog = new jet3d::jeFileLogger("NewJet", ".\\", jet3d::jeLogger::LogInfo | jet3d::jeLogger::LogWarn | jet3d::jeLogger::LogError | jet3d::jeLogger::LogFatal);
+	jeErrorLog_AddString(-1, "Jet3D initialization...", NULL);
 
 	if (!List_Start())
 	{
 		//jeErrorLog_Add(JE_ERR_OUT_OF_MEMORY, NULL);
-		Engine->EngineLog->logMessage(jet3d::jeLogger::LogError, "Out of memory!!");
+		jeErrorLog_AddString(-1, "Out of memory!!", NULL);
 		goto ExitWithError;
 	}
 	else
-		Engine->EngineLog->logMessage(jet3d::jeLogger::LogInfo, "List initialized");
+		jeErrorLog_AddString(-1, "List initialized", NULL);
 
 	if (DriverDirectory)
 	{
@@ -152,7 +154,7 @@ JETAPI jeEngine * JETCC jeEngine_Create(HWND hWnd, const char *AppName, const ch
 	else
 		Engine->DriverDirectory = ".";
 	
-	Engine->EngineLog->logMessage(jet3d::jeLogger::LogInfo, std::string("DriverDirectory = ") + Engine->DriverDirectory);
+	jeErrorLog_AddString(-1, (std::string("DriverDirectory = ") + Engine->DriverDirectory).c_str(), NULL);
 
 	Engine->hWnd = hWnd;
 
@@ -168,38 +170,38 @@ JETAPI jeEngine * JETCC jeEngine_Create(HWND hWnd, const char *AppName, const ch
 	{
 		if (!Engine_EnumSubDrivers(Engine, &Engine->DriverInfo, DriverDirectory))
 		{
-			Engine->EngineLog->logMessage(jet3d::jeLogger::LogError, "Could not enumerate drivers!!");
+			jeErrorLog_AddString(-1, "Could not enumerate drivers!!", NULL);
 			goto ExitWithError;
 		}
 		else
-			Engine->EngineLog->logMessage(jet3d::jeLogger::LogInfo, "Drivers enumerated");
+			jeErrorLog_AddString(-1, "Drivers enumerated", NULL);
 	}
 
 	// Initialize the new resource manager
 	Engine->ResourceMgr = new jet3d::jeResourceMgr_Impl();
 	if (!Engine->ResourceMgr->initialize(Engine))
 	{
-		Engine->EngineLog->logMessage(jet3d::jeLogger::LogError, "Could not enumerate drivers!!");
+		jeErrorLog_AddString(-1, "Could not enumerate drivers!!", NULL);
 		goto ExitWithError;
 	}
 	else
-		Engine->EngineLog->logMessage(jet3d::jeLogger::LogInfo, "Resource manager initialized");
+		jeErrorLog_AddString(-1, "Resource manager initialized", NULL);
 
 	if (!jeEngine_BitmapListInit(Engine))
 	{
-		Engine->EngineLog->logMessage(jet3d::jeLogger::LogError, "Could not initialize bitmap list!!");
+		jeErrorLog_AddString(-1, "Could not initialize bitmap list!!", NULL);
 		goto ExitWithError;
 	}
 	else
-		Engine->EngineLog->logMessage(jet3d::jeLogger::LogInfo, "BitmapList initialized");
+		jeErrorLog_AddString(-1, "BitmapList initialized", NULL);
 
 	if (!jeEngine_InitFonts(Engine))				// Must be after BitmapList
 	{
-		Engine->EngineLog->logMessage(jet3d::jeLogger::LogError, "Could not initialize fonts!!");
+		jeErrorLog_AddString(-1, "Could not initialize fonts!!", NULL);
 		goto ExitWithError;
 	}
 	else
-		Engine->EngineLog->logMessage(jet3d::jeLogger::LogInfo, "Fonts initialized");
+		jeErrorLog_AddString(-1, "Fonts initialized", NULL);
 
 	Engine->DisplayFrameRateCounter = JE_TRUE;	// Default to showing the FPS counter
 
@@ -213,15 +215,15 @@ JETAPI jeEngine * JETCC jeEngine_Create(HWND hWnd, const char *AppName, const ch
 
 	if (!jeCPU_GetInfo())
 	{
-		Engine->EngineLog->logMessage(jet3d::jeLogger::LogError, "Could not get CPU info!!");
+		jeErrorLog_AddString(-1, "Could not get CPU info!!", NULL);
 		goto ExitWithError;
 	}
 	else
-		Engine->EngineLog->logMessage(jet3d::jeLogger::LogInfo, "CPU info retreived");
+		jeErrorLog_AddString(-1, "CPU info retreived", NULL);
 
 	// jeImage to replace jeBitmap
 	//Engine->AttachedImages.clear();
-	Engine->EngineLog->logMessage(jet3d::jeLogger::LogInfo, "Image list initialized");
+	jeErrorLog_AddString(-1, "Image list initialized", NULL);
 	//Engine->ImageFileFormats.clear();
 
 	Engine->ChangeDriverCBChain = jeChain_Create();
@@ -249,6 +251,8 @@ JETAPI jeEngine * JETCC jeEngine_Create(HWND hWnd, const char *AppName, const ch
 //			jeEngine_ShutdownFonts(Engine);
 			jeEngine_BitmapListShutdown(Engine);
 			List_Stop();
+
+			JE_SAFE_DELETE(Engine->EngineLog);
 			// END - FIX - Engine not cleaning up everything on error - paradoxnj
 
 			//JE_RAM_FREE(Engine);
@@ -269,7 +273,7 @@ JETAPI jeBoolean JETCC jeEngine_CreateRef(jeEngine *Engine, char *filename, int 
 
 	Engine->RefCount++;
 	sprintf(buff, "FILE:  %s, LINE:  %d, RefCountInc:  %d", filename, line, Engine->RefCount);
-	Engine->EngineLog->logMessage(jet3d::jeLogger::LogInfo, buff);
+	jetLog->logMessage(jet3d::jeLogger::LogInfo, buff);
 
 	return JE_TRUE;
 }
@@ -285,7 +289,7 @@ JETAPI void	JETCC jeEngine_Destroy(jeEngine **pEngine, char *filename, int line)
 
 	(*pEngine)->RefCount--;
 	sprintf(buff, "FILE:  %s, LINE:  %d, RefCountDec = %d", filename, line, (*pEngine)->RefCount);
-	(*pEngine)->EngineLog->logMessage(jet3d::jeLogger::LogInfo, buff);
+	jetLog->logMessage(jet3d::jeLogger::LogInfo, buff);
 
 	if ((*pEngine)->RefCount <= 0)
 	{
@@ -310,17 +314,17 @@ JETAPI void JETCC jeEngine_Free(jeEngine *Engine)
 
 	if (Engine->RefCount > 0)
 	{
-		Engine->EngineLog->logMessage(jet3d::jeLogger::LogWarn, "RefCount is greater than 0!!");
+		jetLog->logMessage(jet3d::jeLogger::LogWarn, "RefCount is greater than 0!!");
 		return;
 	}
 
 	Ret = jeEngine_ShutdownFonts(Engine);
 	assert(Ret == JE_TRUE);
-	Engine->EngineLog->logMessage(jet3d::jeLogger::LogInfo, "Fonts shutdown");
+	jetLog->logMessage(jet3d::jeLogger::LogInfo, "Fonts shutdown");
 
 	Ret = jeEngine_ShutdownDriver(Engine);
 	assert(Ret == JE_TRUE);
-	Engine->EngineLog->logMessage(jet3d::jeLogger::LogInfo, "Driver shutdown");
+	jetLog->logMessage(jet3d::jeLogger::LogInfo, "Driver shutdown");
 
 	/*ImageListItr i = Engine->AttachedImages.begin();
 	while (i != Engine->AttachedImages.end())
@@ -328,16 +332,16 @@ JETAPI void JETCC jeEngine_Free(jeEngine *Engine)
 		jeEngine_RemoveImage(Engine, (*i));
 		i++;
 	}
-	Engine->EngineLog->logMessage(jet3d::jeLogger::LogInfo, "ImageList shutdown");
+	jetLog->logMessage(jet3d::jeLogger::LogInfo, "ImageList shutdown");
 	*/
 
 	Ret = jeEngine_BitmapListShutdown(Engine);
 	assert(Ret == JE_TRUE);
-	Engine->EngineLog->logMessage(jet3d::jeLogger::LogInfo, "BitmapList shutdown");
+	jetLog->logMessage(jet3d::jeLogger::LogInfo, "BitmapList shutdown");
 
 	// Shutdown resource manager
 	Engine->ResourceMgr->shutdown();
-	Engine->EngineLog->logMessage(jet3d::jeLogger::LogInfo, "Resource manager shutdown");
+	jetLog->logMessage(jet3d::jeLogger::LogInfo, "Resource manager shutdown");
 	JE_SAFE_RELEASE(Engine->ResourceMgr);
 
 	//if (Engine->DriverDirectory)
@@ -347,7 +351,7 @@ JETAPI void JETCC jeEngine_Free(jeEngine *Engine)
 		jeChain_Destroy(&Engine->ChangeDriverCBChain);
 
 	List_Stop();
-	Engine->EngineLog->logMessage(jet3d::jeLogger::LogInfo, "List stopped");
+	jetLog->logMessage(jet3d::jeLogger::LogInfo, "List stopped");
 
 	JE_SAFE_DELETE(Engine->EngineLog);
 
@@ -380,15 +384,15 @@ JETAPI jeBoolean JETCC jeEngine_IsValid(const jeEngine *E)
 		char buff[32];
 
 		sprintf(buff, "Engine Ref:  %d", E->RefCount);
-		E->EngineLog->logMessage(jet3d::jeLogger::LogInfo, buff);
-		E->EngineLog->logMessage(jet3d::jeLogger::LogError, "Engine reference count is less than or equal to 0!!");
+		jetLog->logMessage(jet3d::jeLogger::LogInfo, buff);
+		jetLog->logMessage(jet3d::jeLogger::LogError, "Engine reference count is less than or equal to 0!!");
 		return JE_FALSE;
 	}
 
 	//if (!IsWindowHandleValid(E->hWnd)) 
 	if (!E->hWnd)
 	{
-		E->EngineLog->logMessage(jet3d::jeLogger::LogError, "Engine window handle is invalid!!");
+		jetLog->logMessage(jet3d::jeLogger::LogError, "Engine window handle is invalid!!");
 		return JE_FALSE;
 	}
 
@@ -1129,7 +1133,7 @@ JETAPI jeBoolean JETCC jeEngine_RemoveBitmap(jeEngine *Engine, jeBitmap *Bitmap)
 	{
 		if ((*i) == Image)
 		{
-			Engine->EngineLog->logMessage(jet3d::jeLogger::LogInfo, "Image already added");
+			jetLog->logMessage(jet3d::jeLogger::LogInfo, "Image already added");
 			return JE_FALSE;
 		}
 	}
@@ -1217,7 +1221,7 @@ JETAPI jeBoolean JETCC jeEngine_DrawImage(const jeEngine *Engine,
 
 	if ( ! Ret )
 	{
-		Engine->EngineLog->logMessage(jet3d::jeLogger::LogError, "jeEngine_DrawImage:  DrawDecal failed!!");
+		jetLog->logMessage(jet3d::jeLogger::LogError, "jeEngine_DrawImage:  DrawDecal failed!!");
 		//jeErrorLog_AddString(-1,"jeEngine_DrawImage : DrawDecal failed", NULL);	
 	}
 
@@ -1305,7 +1309,7 @@ JETAPI jeBoolean JETCC jeEngine_DrawImage3D(const jeEngine *Engine,
 
 	if ( ! Ret )
 	{
-		Engine->EngineLog->logMessage(jet3d::jeLogger::LogError, "jeEngine_DrawImage3D:  Render failed!!");
+		jetLog->logMessage(jet3d::jeLogger::LogError, "jeEngine_DrawImage3D:  Render failed!!");
 		//jeErrorLog_AddString(-1,"jeEngine_DrawImage3D : Render failed", NULL);	
 	}
 
@@ -1463,6 +1467,8 @@ JETAPI jeBoolean JETCC jeEngine_DrawBitmap(const jeEngine *Engine,
 JETAPI jeTexture *JETCC jeEngine_CreateTextureFromFile(const jeEngine *Engine, jeVFile *File)
 {
 	jeBitmap* pBmp = NULL;
+
+	jeErrorLog_AddString(-1, "jeEngine_CreateTextureFromFile()", NULL);
 
 	if (Engine->DriverInfo.RDriver->THandle_CreateFromFile) {
 		return Engine->DriverInfo.RDriver->THandle_CreateFromFile(File);
@@ -2723,7 +2729,7 @@ static jeBoolean Engine_EnumSubDrivers(jeEngine *Engine, Engine_DriverInfo *Driv
 		std::string msg = "Loaded driver ";
 		msg += Properties.Name;
 
-		Engine->EngineLog->logMessage(jet3d::jeLogger::LogInfo, msg);
+		jetLog->logMessage(jet3d::jeLogger::LogInfo, msg);
 
 		DriverInfo->RDriver = NULL;		// clear out the RDriver pointer!
 
