@@ -1,0 +1,921 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="Actor\Actor.cpp">
+      <Filter>Actor</Filter>
+    </ClCompile>
+    <ClCompile Include="Actor\ActorObj.cpp">
+      <Filter>Actor</Filter>
+    </ClCompile>
+    <ClCompile Include="Bitmap\Compression\arithc.cpp">
+      <Filter>Bitmap\Compression</Filter>
+    </ClCompile>
+    <ClCompile Include="Support\Array.cpp">
+      <Filter>Support</Filter>
+    </ClCompile>
+    <ClCompile Include="Bitmap\Bitmap.cpp">
+      <Filter>Bitmap</Filter>
+    </ClCompile>
+    <ClCompile Include="Bitmap\bitmap_blitdata.cpp">
+      <Filter>Bitmap</Filter>
+    </ClCompile>
+    <ClCompile Include="Bitmap\bitmap_gamma.cpp">
+      <Filter>Bitmap</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\BitmapList.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Actor\Body.cpp">
+      <Filter>Actor</Filter>
+    </ClCompile>
+    <ClCompile Include="Actor\BodyInst.cpp">
+      <Filter>Actor</Filter>
+    </ClCompile>
+    <ClCompile Include="Math\Box.cpp">
+      <Filter>Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Bitmap\Compression\CodePal.cpp">
+      <Filter>Bitmap\Compression</Filter>
+    </ClCompile>
+    <ClCompile Include="Bitmap\Compression\colorconv.cpp">
+      <Filter>Bitmap\Compression</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Drivers\D3DDrv\d3d_DDMemMgr.cpp">
+      <Filter>Engine\Drivers\D3D7Drv</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Drivers\D3DDrv\d3d_err.cpp">
+      <Filter>Engine\Drivers\D3D7Drv</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Drivers\D3DDrv\d3d_fx.cpp">
+      <Filter>Engine\Drivers\D3D7Drv</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Drivers\D3DDrv\d3d_gspan.cpp">
+      <Filter>Engine\Drivers\D3D7Drv</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Drivers\D3DDrv\d3d_main.cpp">
+      <Filter>Engine\Drivers\D3D7Drv</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Drivers\D3DDrv\d3d_pcache.cpp">
+      <Filter>Engine\Drivers\D3D7Drv</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Drivers\D3DDrv\d3d_render.cpp">
+      <Filter>Engine\Drivers\D3D7Drv</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Drivers\D3DDrv\d3d_Scene.cpp">
+      <Filter>Engine\Drivers\D3D7Drv</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Drivers\D3DDrv\d3d_thandle.cpp">
+      <Filter>Engine\Drivers\D3D7Drv</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Drivers\D3DDrv\d3d_tpage.cpp">
+      <Filter>Engine\Drivers\D3D7Drv</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Drivers\D3DDrv\d3dcache.cpp">
+      <Filter>Engine\Drivers\D3D7Drv</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Drivers\D3DDrv\d3ddrv.cpp">
+      <Filter>Engine\Drivers\D3D7Drv</Filter>
+    </ClCompile>
+    <ClCompile Include="Support\Cpu.cpp">
+      <Filter>Support</Filter>
+    </ClCompile>
+    <ClCompile Include="Math\crc32.cpp">
+      <Filter>Support</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Engine.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Support\Errorlog.cpp">
+      <Filter>Support</Filter>
+    </ClCompile>
+    <ClCompile Include="Math\ExtBox.cpp">
+      <Filter>Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\FontBmp.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Bitmap\Compression\huffa.cpp">
+      <Filter>Bitmap\Compression</Filter>
+    </ClCompile>
+    <ClCompile Include="Bitmap\Compression\huffman2.cpp">
+      <Filter>Bitmap\Compression</Filter>
+    </ClCompile>
+    <ClCompile Include="Bsp\jeBSP.cpp">
+      <Filter>BSP</Filter>
+    </ClCompile>
+    <ClCompile Include="Bsp\jeBSP_Brush.cpp">
+      <Filter>BSP</Filter>
+    </ClCompile>
+    <ClCompile Include="Bsp\jeBSP_TopBrush.cpp">
+      <Filter>BSP</Filter>
+    </ClCompile>
+    <ClCompile Include="Bsp\jeBSPNode.cpp">
+      <Filter>BSP</Filter>
+    </ClCompile>
+    <ClCompile Include="Bsp\jeBSPNode_Area.cpp">
+      <Filter>BSP</Filter>
+    </ClCompile>
+    <ClCompile Include="Bsp\jeBSPNode_DrawFace.cpp">
+      <Filter>BSP</Filter>
+    </ClCompile>
+    <ClCompile Include="Bsp\jeBSPNode_Face.cpp">
+      <Filter>BSP</Filter>
+    </ClCompile>
+    <ClCompile Include="Bsp\jeBSPNode_Leaf.cpp">
+      <Filter>BSP</Filter>
+    </ClCompile>
+    <ClCompile Include="Bsp\jeBSPNode_Light.cpp">
+      <Filter>BSP</Filter>
+    </ClCompile>
+    <ClCompile Include="Bsp\jeBSPNode_Portal.cpp">
+      <Filter>BSP</Filter>
+    </ClCompile>
+    <ClCompile Include="guWorld\jeBrush.cpp">
+      <Filter>World</Filter>
+    </ClCompile>
+    <ClCompile Include="Support\jeAssert.cpp">
+      <Filter>Support</Filter>
+    </ClCompile>
+    <ClCompile Include="Support\jeChain.cpp">
+      <Filter>Support</Filter>
+    </ClCompile>
+    <ClCompile Include="guWorld\jeFaceInfo.cpp">
+      <Filter>World</Filter>
+    </ClCompile>
+    <ClCompile Include="guWorld\jeFrustum.cpp">
+      <Filter>Math</Filter>
+    </ClCompile>
+    <ClCompile Include="guWorld\jeMaterial.cpp">
+      <Filter>World</Filter>
+    </ClCompile>
+    <ClCompile Include="guWorld\jeMaterialSpec.cpp">
+      <Filter>World</Filter>
+    </ClCompile>
+    <ClCompile Include="guWorld\jeModel.cpp">
+      <Filter>World</Filter>
+    </ClCompile>
+    <ClCompile Include="guWorld\jeIndexPoly.cpp">
+      <Filter>World</Filter>
+    </ClCompile>
+    <ClCompile Include="guWorld\jeLight.cpp">
+      <Filter>World</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\jeImage.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="guWorld\jePlane.cpp">
+      <Filter>Math</Filter>
+    </ClCompile>
+    <ClCompile Include="guWorld\jePlaneArray.cpp">
+      <Filter>Math</Filter>
+    </ClCompile>
+    <ClCompile Include="guWorld\jePoly.cpp">
+      <Filter>World</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\jePolyMgr.cpp">
+      <Filter>World</Filter>
+    </ClCompile>
+    <ClCompile Include="Particle\jeParticle.cpp">
+      <Filter>World</Filter>
+    </ClCompile>
+    <ClCompile Include="guWorld\jePortal.cpp">
+      <Filter>World</Filter>
+    </ClCompile>
+    <ClCompile Include="Support\jePtrMgr.cpp">
+      <Filter>Support</Filter>
+    </ClCompile>
+    <ClCompile Include="guWorld\jeStaticMesh.cpp">
+      <Filter>World</Filter>
+    </ClCompile>
+    <ClCompile Include="Support\jeResource.cpp">
+      <Filter>Support</Filter>
+    </ClCompile>
+    <ClCompile Include="Support\jeProperty.cpp">
+      <Filter>Support</Filter>
+    </ClCompile>
+    <ClCompile Include="Math\jeRay.cpp">
+      <Filter>Math</Filter>
+    </ClCompile>
+    <ClCompile Include="guWorld\jeUserPoly.cpp">
+      <Filter>World</Filter>
+    </ClCompile>
+    <ClCompile Include="guWorld\jeVertArray.cpp">
+      <Filter>World</Filter>
+    </ClCompile>
+    <ClCompile Include="guWorld\jeWorld.cpp">
+      <Filter>World</Filter>
+    </ClCompile>
+    <ClCompile Include="Bitmap\Compression\Ladder.cpp">
+      <Filter>Bitmap\Compression</Filter>
+    </ClCompile>
+    <ClCompile Include="Bitmap\Compression\lbitio.cpp">
+      <Filter>Bitmap\Compression</Filter>
+    </ClCompile>
+    <ClCompile Include="Bitmap\Compression\lza.cpp">
+      <Filter>Bitmap\Compression</Filter>
+    </ClCompile>
+    <ClCompile Include="Bitmap\Compression\lzh.cpp">
+      <Filter>Bitmap\Compression</Filter>
+    </ClCompile>
+    <ClCompile Include="guWorld\jeTexVec.cpp">
+      <Filter>World</Filter>
+    </ClCompile>
+    <ClCompile Include="Actor\Motion.cpp">
+      <Filter>Actor</Filter>
+    </ClCompile>
+    <ClCompile Include="Bitmap\Compression\o0coder.cpp">
+      <Filter>Bitmap\Compression</Filter>
+    </ClCompile>
+    <ClCompile Include="Bitmap\Compression\o1coder.cpp">
+      <Filter>Bitmap\Compression</Filter>
+    </ClCompile>
+    <ClCompile Include="Support\Log.cpp">
+      <Filter>Support</Filter>
+    </ClCompile>
+    <ClCompile Include="guWorld\jeGArray.cpp">
+      <Filter>World</Filter>
+    </ClCompile>
+    <ClCompile Include="Support\MemPool.cpp">
+      <Filter>Support</Filter>
+    </ClCompile>
+    <ClCompile Include="Support\jeNameMgr.cpp">
+      <Filter>Support</Filter>
+    </ClCompile>
+    <ClCompile Include="Mp3Mgr\Mp3Mgr.cpp">
+      <Filter>Media</Filter>
+    </ClCompile>
+    <ClCompile Include="Object.cpp">
+      <Filter>World</Filter>
+    </ClCompile>
+    <ClCompile Include="OGGStream.cpp">
+      <Filter>Media</Filter>
+    </ClCompile>
+    <ClCompile Include="Bitmap\Compression\palcreate.cpp">
+      <Filter>Bitmap\Compression</Filter>
+    </ClCompile>
+    <ClCompile Include="Bitmap\Compression\palettize.cpp">
+      <Filter>Bitmap\Compression</Filter>
+    </ClCompile>
+    <ClCompile Include="Bitmap\Compression\paloptimize.cpp">
+      <Filter>Bitmap\Compression</Filter>
+    </ClCompile>
+    <ClCompile Include="Physics\Part.cpp">
+      <Filter>Actor</Filter>
+    </ClCompile>
+    <ClCompile Include="Actor\Path.cpp">
+      <Filter>Actor</Filter>
+    </ClCompile>
+    <ClCompile Include="Bitmap\PixelFormat.cpp">
+      <Filter>Bitmap</Filter>
+    </ClCompile>
+    <ClCompile Include="Actor\Pose.cpp">
+      <Filter>Actor</Filter>
+    </ClCompile>
+    <ClCompile Include="Actor\Puppet.cpp">
+      <Filter>Actor</Filter>
+    </ClCompile>
+    <ClCompile Include="Actor\QKFrame.cpp">
+      <Filter>Actor</Filter>
+    </ClCompile>
+    <ClCompile Include="Terrain\Quad.cpp">
+      <Filter>World</Filter>
+    </ClCompile>
+    <ClCompile Include="Math\Quatern.cpp">
+      <Filter>Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Support\Ram.cpp">
+      <Filter>Support</Filter>
+    </ClCompile>
+    <ClCompile Include="Report.cpp">
+      <Filter>Support</Filter>
+    </ClCompile>
+    <ClCompile Include="Bitmap\Compression\rungae.cpp">
+      <Filter>Bitmap\Compression</Filter>
+    </ClCompile>
+    <ClCompile Include="Bitmap\Compression\rungo1.cpp">
+      <Filter>Bitmap\Compression</Filter>
+    </ClCompile>
+    <ClCompile Include="Bitmap\Compression\runtrans.cpp">
+      <Filter>Bitmap\Compression</Filter>
+    </ClCompile>
+    <ClCompile Include="Bitmap\Compression\SortPal.cpp">
+      <Filter>Bitmap\Compression</Filter>
+    </ClCompile>
+    <ClCompile Include="Bitmap\Compression\SortPalx.cpp">
+      <Filter>Bitmap\Compression</Filter>
+    </ClCompile>
+    <ClCompile Include="Sound.cpp">
+      <Filter>Media</Filter>
+    </ClCompile>
+    <ClCompile Include="Sound3d.cpp">
+      <Filter>Media</Filter>
+    </ClCompile>
+    <ClCompile Include="Physics\Spring.cpp">
+      <Filter>Actor</Filter>
+    </ClCompile>
+    <ClCompile Include="Actor\StrBlock.cpp">
+      <Filter>Actor</Filter>
+    </ClCompile>
+    <ClCompile Include="Terrain\Terrain.cpp">
+      <Filter>World</Filter>
+    </ClCompile>
+    <ClCompile Include="Bitmap\Compression\StrUtil.cpp">
+      <Filter>Bitmap\Compression</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\splash_bmp.cpp">
+      <Filter>Support</Filter>
+    </ClCompile>
+    <ClCompile Include="Support\ThreadLog.cpp">
+      <Filter>Support</Filter>
+    </ClCompile>
+    <ClCompile Include="Support\ThreadQueue.cpp">
+      <Filter>Support</Filter>
+    </ClCompile>
+    <ClCompile Include="TClip.cpp">
+      <Filter>Support</Filter>
+    </ClCompile>
+    <ClCompile Include="Actor\TKArray.cpp">
+      <Filter>Actor</Filter>
+    </ClCompile>
+    <ClCompile Include="Actor\TKEvents.cpp">
+      <Filter>Actor</Filter>
+    </ClCompile>
+    <ClCompile Include="Support\Util.cpp">
+      <Filter>Support</Filter>
+    </ClCompile>
+    <ClCompile Include="Tsc.cpp">
+      <Filter>Support</Filter>
+    </ClCompile>
+    <ClCompile Include="UVMap.cpp">
+      <Filter>Support</Filter>
+    </ClCompile>
+    <ClCompile Include="Math\Vec3d.cpp">
+      <Filter>Math</Filter>
+    </ClCompile>
+    <ClCompile Include="VideoMgr\VideoMgr.cpp">
+      <Filter>Media</Filter>
+    </ClCompile>
+    <ClCompile Include="guWorld\VisObject.cpp">
+      <Filter>World</Filter>
+    </ClCompile>
+    <ClCompile Include="Actor\XFArray.cpp">
+      <Filter>Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Math\Xform3d.cpp">
+      <Filter>Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Bitmap\Compression\YUV.cpp">
+      <Filter>Bitmap\Compression</Filter>
+    </ClCompile>
+    <ClCompile Include="Actor\VKFrame.cpp">
+      <Filter>Actor</Filter>
+    </ClCompile>
+    <ClCompile Include="Math\jeVec3d.cpp">
+      <Filter>Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Bitmap\Compression\CodeUtil.cpp">
+      <Filter>Bitmap\Compression</Filter>
+    </ClCompile>
+    <ClCompile Include="Bitmap\Compression\Image.cpp">
+      <Filter>Bitmap\Compression</Filter>
+    </ClCompile>
+    <ClCompile Include="List.cpp">
+      <Filter>Support</Filter>
+    </ClCompile>
+    <ClCompile Include="VFile\DirTree.cpp">
+      <Filter>VFS</Filter>
+    </ClCompile>
+    <ClCompile Include="VFile\FSDOS.CPP">
+      <Filter>VFS</Filter>
+    </ClCompile>
+    <ClCompile Include="VFile\FSLZ.cpp">
+      <Filter>VFS</Filter>
+    </ClCompile>
+    <ClCompile Include="VFile\FSMemory.cpp">
+      <Filter>VFS</Filter>
+    </ClCompile>
+    <ClCompile Include="VFile\FSVFS.cpp">
+      <Filter>VFS</Filter>
+    </ClCompile>
+    <ClCompile Include="VFile\VFile.cpp">
+      <Filter>VFS</Filter>
+    </ClCompile>
+    <ClCompile Include="VFile\FSZip.cpp">
+      <Filter>VFS</Filter>
+    </ClCompile>
+    <ClCompile Include="Bitmap\Compression\Context.cpp">
+      <Filter>Bitmap\Compression</Filter>
+    </ClCompile>
+    <ClCompile Include="DLLMain.cpp">
+      <Filter>Support</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="..\..\..\include\ACTOR.H">
+      <Filter>Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="Actor\ActorObj.h">
+      <Filter>Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="Actor\ActorObjLists.h">
+      <Filter>Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="Actor\ActorPropertyList.h">
+      <Filter>Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="Actor\ActorUtil.h">
+      <Filter>Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="Bitmap\Compression\arithc.h">
+      <Filter>Bitmap\Compression</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ARRAY.H">
+      <Filter>Support</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Basetype.h">
+      <Filter>Support</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\BITMAP.H">
+      <Filter>Bitmap</Filter>
+    </ClInclude>
+    <ClInclude Include="Bitmap\bitmap_blitdata.h">
+      <Filter>Bitmap</Filter>
+    </ClInclude>
+    <ClInclude Include="Bitmap\bitmap_gamma.h">
+      <Filter>Bitmap</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\BitmapList.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\BODY.H">
+      <Filter>Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="Actor\bodyinst.h">
+      <Filter>Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="Math\Box.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Camera.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Bitmap\Compression\codepal.h">
+      <Filter>Bitmap\Compression</Filter>
+    </ClInclude>
+    <ClInclude Include="Bitmap\Compression\colorconv.h">
+      <Filter>Bitmap\Compression</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Drivers\D3DDrv\d3d_DDMemMgr.h">
+      <Filter>Engine\Drivers\D3D7Drv</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Drivers\D3DDrv\D3d_err.h">
+      <Filter>Engine\Drivers\D3D7Drv</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Drivers\D3DDrv\D3d_fx.h">
+      <Filter>Engine\Drivers\D3D7Drv</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Drivers\D3DDrv\d3d_GSPAN.H">
+      <Filter>Engine\Drivers\D3D7Drv</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Drivers\D3DDrv\D3d_main.h">
+      <Filter>Engine\Drivers\D3D7Drv</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Drivers\D3DDrv\d3d_Pcache.h">
+      <Filter>Engine\Drivers\D3D7Drv</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Drivers\D3DDrv\d3d_RENDER.H">
+      <Filter>Engine\Drivers\D3D7Drv</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Drivers\D3DDrv\d3d_Scene.h">
+      <Filter>Engine\Drivers\D3D7Drv</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Drivers\D3DDrv\d3d_THandle.h">
+      <Filter>Engine\Drivers\D3D7Drv</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Drivers\D3DDrv\d3d_TPage.h">
+      <Filter>Engine\Drivers\D3D7Drv</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Drivers\D3DDrv\D3dcache.h">
+      <Filter>Engine\Drivers\D3D7Drv</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Drivers\D3DDrv\D3ddrv.h">
+      <Filter>Engine\Drivers\D3D7Drv</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Drivers\Dcommon.h">
+      <Filter>Engine\Drivers\D3D7Drv</Filter>
+    </ClInclude>
+    <ClInclude Include="Support\cpu.h">
+      <Filter>Support</Filter>
+    </ClInclude>
+    <ClInclude Include="Math\crc32.h">
+      <Filter>Support</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ENGINE.H">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="VFile\dirtree.h">
+      <Filter>VFS</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Errorlog.h">
+      <Filter>Support</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\ExtBox.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="VFile\fsdos.h">
+      <Filter>VFS</Filter>
+    </ClInclude>
+    <ClInclude Include="VFile\fslz.H">
+      <Filter>VFS</Filter>
+    </ClInclude>
+    <ClInclude Include="VFile\Fsmemory.h">
+      <Filter>VFS</Filter>
+    </ClInclude>
+    <ClInclude Include="VFile\fsvfs.h">
+      <Filter>VFS</Filter>
+    </ClInclude>
+    <ClInclude Include="Bitmap\Compression\huffa.h">
+      <Filter>Bitmap\Compression</Filter>
+    </ClInclude>
+    <ClInclude Include="Bitmap\Compression\huffman2.h">
+      <Filter>Bitmap\Compression</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\jeBSP.h">
+      <Filter>BSP</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\jeBrush.h">
+      <Filter>World</Filter>
+    </ClInclude>
+    <ClInclude Include="Support\jeAssert.h">
+      <Filter>Support</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\jeCamera.h">
+      <Filter>Interface Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\jeChain.h">
+      <Filter>Support</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\jeEngine.h">
+      <Filter>Interface Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\jeFaceInfo.h">
+      <Filter>World</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\jeFileLogger.h">
+      <Filter>Interface Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\jeFrustum.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\jeImage.h">
+      <Filter>Interface Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\jeMaterial.h">
+      <Filter>World</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\JEMODEL.H">
+      <Filter>World</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\jeLight.h">
+      <Filter>World</Filter>
+    </ClInclude>
+    <ClInclude Include="guWorld\jeIndexPoly.h">
+      <Filter>World</Filter>
+    </ClInclude>
+    <ClInclude Include="guWorld\jePlaneArray.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\jePlane.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\jePoly.h">
+      <Filter>World</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\jePolyMgr.h">
+      <Filter>World</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\jeParticle.h">
+      <Filter>World</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\jePortal.h">
+      <Filter>World</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\jePtrMgr.h">
+      <Filter>Support</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\jeStaticMesh.h">
+      <Filter>World</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\jeResource.h">
+      <Filter>Support</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\jeProperty.h">
+      <Filter>Support</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\jeRay.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\jeUserPoly.h">
+      <Filter>World</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\jeVertArray.h">
+      <Filter>World</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\JEWORLD.H">
+      <Filter>World</Filter>
+    </ClInclude>
+    <ClInclude Include="Bitmap\Compression\lbitio.h">
+      <Filter>Bitmap\Compression</Filter>
+    </ClInclude>
+    <ClInclude Include="Bitmap\Compression\ladder.h">
+      <Filter>Bitmap\Compression</Filter>
+    </ClInclude>
+    <ClInclude Include="Bitmap\Compression\lza.h">
+      <Filter>Bitmap\Compression</Filter>
+    </ClInclude>
+    <ClInclude Include="Bitmap\Compression\lzh.h">
+      <Filter>Bitmap\Compression</Filter>
+    </ClInclude>
+    <ClInclude Include="guWorld\jeTexVec.h">
+      <Filter>World</Filter>
+    </ClInclude>
+    <ClInclude Include="list.h">
+      <Filter>Support</Filter>
+    </ClInclude>
+    <ClInclude Include="Actor\motion.h">
+      <Filter>Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="Bitmap\Compression\o0coder.h">
+      <Filter>Bitmap\Compression</Filter>
+    </ClInclude>
+    <ClInclude Include="Bitmap\Compression\o1coder.h">
+      <Filter>Bitmap\Compression</Filter>
+    </ClInclude>
+    <ClInclude Include="Support\log.h">
+      <Filter>Support</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\jeGArray.h">
+      <Filter>World</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\jeLogger.h">
+      <Filter>Interface Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Support\mempool.h">
+      <Filter>Support</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\jeVersion.h">
+      <Filter>Support</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\jeTypes.h">
+      <Filter>Support</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\jeNameMgr.h">
+      <Filter>Support</Filter>
+    </ClInclude>
+    <ClInclude Include="Mp3Mgr\Mp3Mgr_h.h">
+      <Filter>Media</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Mp3Mgr.h">
+      <Filter>Media</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\OBJECT.H">
+      <Filter>World</Filter>
+    </ClInclude>
+    <ClInclude Include="OGGStream.h">
+      <Filter>Media</Filter>
+    </ClInclude>
+    <ClInclude Include="Bitmap\Compression\palcreate.h">
+      <Filter>Bitmap\Compression</Filter>
+    </ClInclude>
+    <ClInclude Include="Bitmap\Compression\palettize.h">
+      <Filter>Bitmap\Compression</Filter>
+    </ClInclude>
+    <ClInclude Include="Bitmap\Compression\paloptimize.h">
+      <Filter>Bitmap\Compression</Filter>
+    </ClInclude>
+    <ClInclude Include="Physics\part.h">
+      <Filter>Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\PATH.H">
+      <Filter>Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\pixelformat.h">
+      <Filter>Bitmap</Filter>
+    </ClInclude>
+    <ClInclude Include="Actor\pose.h">
+      <Filter>Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="Actor\puppet.h">
+      <Filter>Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="Actor\QKFrame.h">
+      <Filter>Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="Terrain\quad.h">
+      <Filter>World</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\QUATERN.H">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Ram.h">
+      <Filter>Support</Filter>
+    </ClInclude>
+    <ClInclude Include="report.h">
+      <Filter>Support</Filter>
+    </ClInclude>
+    <ClInclude Include="Bitmap\Compression\rungae.h">
+      <Filter>Bitmap\Compression</Filter>
+    </ClInclude>
+    <ClInclude Include="Bitmap\Compression\rungo1.h">
+      <Filter>Bitmap\Compression</Filter>
+    </ClInclude>
+    <ClInclude Include="Bitmap\Compression\runtrans.h">
+      <Filter>Bitmap\Compression</Filter>
+    </ClInclude>
+    <ClInclude Include="Bitmap\Compression\sortpal.h">
+      <Filter>Bitmap\Compression</Filter>
+    </ClInclude>
+    <ClInclude Include="Bitmap\Compression\sortpalx.h">
+      <Filter>Bitmap\Compression</Filter>
+    </ClInclude>
+    <ClInclude Include="Ptrtypes.h">
+      <Filter>Support</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Sound.h">
+      <Filter>Media</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Sound3d.h">
+      <Filter>Media</Filter>
+    </ClInclude>
+    <ClInclude Include="Physics\spring.h">
+      <Filter>Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="Actor\strblock.h">
+      <Filter>Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\TERRAIN.H">
+      <Filter>World</Filter>
+    </ClInclude>
+    <ClInclude Include="Bitmap\Compression\strutil.h">
+      <Filter>Bitmap\Compression</Filter>
+    </ClInclude>
+    <ClInclude Include="Support\ThreadLog.h">
+      <Filter>Support</Filter>
+    </ClInclude>
+    <ClInclude Include="Support\ThreadQueue.h">
+      <Filter>Support</Filter>
+    </ClInclude>
+    <ClInclude Include="tclip.h">
+      <Filter>Support</Filter>
+    </ClInclude>
+    <ClInclude Include="Actor\tkarray.h">
+      <Filter>Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="Actor\tkevents.h">
+      <Filter>Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="Support\Util.h">
+      <Filter>Support</Filter>
+    </ClInclude>
+    <ClInclude Include="tsc.h">
+      <Filter>Support</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\UVMAP.H">
+      <Filter>Support</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Vec3d.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\VideoMgr.h">
+      <Filter>Media</Filter>
+    </ClInclude>
+    <ClInclude Include="VideoMgr\VideoMgr_h.h">
+      <Filter>Media</Filter>
+    </ClInclude>
+    <ClInclude Include="guWorld\visobject.h">
+      <Filter>World</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\VFILE.H">
+      <Filter>VFS</Filter>
+    </ClInclude>
+    <ClInclude Include="Actor\xfarray.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\Xform3d.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Bitmap\Compression\yuv.h">
+      <Filter>Bitmap\Compression</Filter>
+    </ClInclude>
+    <ClInclude Include="Actor\vkframe.h">
+      <Filter>Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\jeVec3d.h">
+      <Filter>Interface Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Bitmap\Compression\codeutil.h">
+      <Filter>Bitmap\Compression</Filter>
+    </ClInclude>
+    <ClInclude Include="Bitmap\Compression\image.h">
+      <Filter>Bitmap\Compression</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\jeImageImpl.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="VFile\FSZip.h">
+      <Filter>VFS</Filter>
+    </ClInclude>
+    <ClInclude Include="Bitmap\Compression\context.h">
+      <Filter>Bitmap\Compression</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\jeResourceManager.h">
+      <Filter>Interface Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\jeSingleton.h">
+      <Filter>Interface Headers</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="Bitmap\Compression\rungasm.asm">
+      <Filter>Bitmap\Compression</Filter>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="jet.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram.cd" />
+    <None Include="Actor\Actor._h">
+      <Filter>Actor</Filter>
+    </None>
+    <None Include="Bitmap\bitmap._h">
+      <Filter>Bitmap</Filter>
+    </None>
+    <None Include="Bitmap\bitmap.__h">
+      <Filter>Bitmap</Filter>
+    </None>
+    <None Include="Engine\engine._h">
+      <Filter>Engine</Filter>
+    </None>
+    <None Include="Bsp\jeBSP._h">
+      <Filter>BSP</Filter>
+    </None>
+    <None Include="guWorld\jeMaterial._h">
+      <Filter>World</Filter>
+    </None>
+    <None Include="guWorld\jeModel._h">
+      <Filter>World</Filter>
+    </None>
+    <None Include="Support\jePtrMgr._h">
+      <Filter>Support</Filter>
+    </None>
+    <None Include="Camera._h">
+      <Filter>Math</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Actor">
+      <UniqueIdentifier>{597653e9-f5b6-4d48-8d24-6b3bf02a85e3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Bitmap">
+      <UniqueIdentifier>{97e5d124-798d-4fd8-97d7-d7514e64e5a1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Bitmap\Compression">
+      <UniqueIdentifier>{55ee0d91-107b-41a5-a841-6311416a34c5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Math">
+      <UniqueIdentifier>{850f28df-cbdf-47a2-8c7e-d52a7479615e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Support">
+      <UniqueIdentifier>{de9737d1-5bda-46e2-bcb7-62e02e07dbd0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine">
+      <UniqueIdentifier>{8db0dee0-bce8-4a6c-9a6d-1ce7caff95a9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Drivers">
+      <UniqueIdentifier>{f920eeba-9277-415d-aad4-ef3afed7049f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Drivers\D3D7Drv">
+      <UniqueIdentifier>{da266713-2184-4798-8616-613600bd9481}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="VFS">
+      <UniqueIdentifier>{de2491e7-d8aa-4b97-b6b3-99215b34225a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="World">
+      <UniqueIdentifier>{6bb718df-b73c-4612-8252-5c574e29225b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="BSP">
+      <UniqueIdentifier>{8a7663ed-e9b4-4d10-b18d-ca1870beedd8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Interface Headers">
+      <UniqueIdentifier>{5a46b327-4495-4d81-bd1e-6d90f37674a2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Media">
+      <UniqueIdentifier>{b19fc885-d51e-4d71-ba84-d04516839be1}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
