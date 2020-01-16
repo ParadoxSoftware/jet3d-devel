@@ -752,7 +752,7 @@ void CJweDoc::DeleteContents()
 
 	if( m_pWorld != NULL)
 	{
-		jeWorld_Destroy(&m_pWorld);
+		jeWorld_Destroy(&m_pWorld, __FILE__, __LINE__);
 		m_pWorld = NULL;
 	}
 

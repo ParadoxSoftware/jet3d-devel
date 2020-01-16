@@ -31,6 +31,7 @@
 #include <assert.h>
 #include <map>
 #include "Ram.h"
+#include "Errorlog.h"
 
 using namespace std;
 

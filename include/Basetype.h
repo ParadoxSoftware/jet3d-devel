@@ -21,9 +21,7 @@
 #ifndef JE_BASETYPE_H
 #define JE_BASETYPE_H
  
-#ifdef JET64
 #include <cmath>
-#endif
 
 /*
 	Some basic types defined with clear names for
@@ -95,12 +93,12 @@ typedef unsigned char	uint8 ;
 // END - 32-bit color values - paradoxnj 8/3/2005
 
 // should probably be moved to trig module
-__inline jeFloat jeFloat_DegToRad(jeFloat d)
+__inline constexpr jeFloat jeFloat_DegToRad(jeFloat d) noexcept
 {
 	return d * JE_DEGS_PER_RAD;
 }
 
-__inline jeFloat jeFloat_RadToDeg(jeFloat r)
+__inline constexpr jeFloat jeFloat_RadToDeg(jeFloat r) noexcept
 {
 	return r * JE_RADS_PER_DEG;
 }
@@ -125,12 +123,12 @@ __inline jeFloat jeFloat_RadToDeg(jeFloat r)
 #define JE_ISINRANGE(x,lo,hi)							( (x) >= (lo) && (x) <= (hi) )
 
 // you're right... inline funcs are more useful :^)
-static __inline jeFloat jeFloat_Sqr(jeFloat a)
+static __inline constexpr jeFloat jeFloat_Sqr(jeFloat a) noexcept
 {
 	return a * a;
 }
 
-static __inline jeFloat jeFloat_Cube(jeFloat a)
+static __inline constexpr jeFloat jeFloat_Cube(jeFloat a) noexcept
 {
 	return a * a * a;
 }
@@ -140,79 +138,29 @@ static __inline jeFloat jeFloat_Cube(jeFloat a)
 // CB : what does the optimizer do with inline assembly in inline functions ?
 //		will it turn off all optimizations?
 
-static jeFloat __inline jeFloat_RoundToInt(jeFloat val) // rounds depending on how you set jeCPU_FloatControl
+static jeFloat __inline jeFloat_RoundToInt(jeFloat val) noexcept // rounds depending on how you set jeCPU_FloatControl
 {
-#ifndef JET64
-	__asm
-	{
-		FLD  val
-		FRNDINT
-		FSTP val
-	}
-return val;
-#else
 	return roundf(val);
-#endif
 }
 
-static jeFloat __inline jeFloat_Sqrt(jeFloat val)
+static jeFloat __inline jeFloat_Sqrt(jeFloat val) noexcept
 {
-#ifndef JET64
-	__asm 
-	{
-		FLD  val		// 1 clock
-		FSQRT			// 30-70 clocks
-		FSTP val		// 2 clocks
-	}
-return val;
-#else
 	return sqrtf(val);
-#endif
 }
 
-static jeFloat __inline jeFloat_Sin(jeFloat val)
+static jeFloat __inline jeFloat_Sin(jeFloat val) noexcept
 {
-#ifndef JET64
-	__asm
-	{
-		FLD  val		// 1 clock
-		FSIN			// ~ 200 clocks
-		FSTP val		// 2 clocks
-	}
-return val;
-#else
 	return sinf(val);
-#endif
 }
 
-static jeFloat __inline jeFloat_Cos(jeFloat val)
+static jeFloat __inline jeFloat_Cos(jeFloat val) noexcept
 {
-#ifndef JET64
-	__asm 
-	{
-		FLD  val		// 1 clock
-		FCOS			// ~ 200 clocks
-		FSTP val		// 2 clocks
-	}
-return val;
-#else
 	return cosf(val);
-#endif
 }
 
-static int32 __inline jeFloat_ToInt(jeFloat f)
+static int32 __inline constexpr jeFloat_ToInt(jeFloat f) noexcept
 {
-#ifndef JET64
-int32 i;
-	__asm
-	{
-		FLD   f
-		FISTP i
-	}
-return i;
-#else
-	return *((int32*)&f);
-#endif
+	return *((int32*)(&f));
 }
 
 #pragma warning (disable:4514)	// unreferenced inline function
@@ -222,9 +170,6 @@ return i;
 #ifdef __cplusplus
 class jeUnknown
 {
-protected:
-	virtual ~jeUnknown()						{}
-
 public:
 	virtual uint32					AddRef() = 0;
 	virtual uint32					Release() = 0;

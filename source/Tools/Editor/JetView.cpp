@@ -81,7 +81,7 @@ CJetView::~CJetView()
 	{
 		pWorld = Doc->GetWorld(); 
         if (pWorld != NULL) 
-			jeWorld_Destroy(&pWorld); 
+			jeWorld_Destroy(&pWorld, __FILE__, __LINE__); 
 	}
 	// END
 

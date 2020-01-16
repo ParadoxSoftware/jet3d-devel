@@ -66,7 +66,7 @@ JETAPI jeBoolean JETCC jeRam_IsValidPtr( void *pPtr );
     #define JE_RAM_ALLOCATE_STRUCT_CLEAR(type)      (type *)jeRam_AllocateClear(sizeof (type))
     #define JE_RAM_ALLOCATE_ARRAY(type,count)       (type *)jeRam_Allocate(sizeof (type) * (count))
     #define JE_RAM_ALLOCATE_ARRAY_CLEAR(type,count) (type *)jeRam_AllocateClear(sizeof (type) * (count))
-    #define JE_RAM_REALLOC_ARRAY(ptr,type,count)    (type *)jeRam_Realloc(ptr), sizeof(type) * (count))
+    #define JE_RAM_REALLOC_ARRAY(ptr,type,count)    (type *)jeRam_Realloc((ptr), sizeof(type) * (count))
     #define JE_RAM_FREE(pPtr)                              {jeRam_Free(pPtr); pPtr = NULL;}
 
 #endif
