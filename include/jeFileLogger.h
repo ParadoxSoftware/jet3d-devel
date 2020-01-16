@@ -31,14 +31,10 @@ namespace jet3d
 	class jeFileLogger : public jeLogger
 	{
 	private:
-		jeFileLogger();
-		jeFileLogger(const jeFileLogger& rhs);
-		jeFileLogger& operator=(const jeFileLogger& rhs) {}
-	private:
 		std::ofstream _outputFile;
 		std::string _directory;
 	protected:
-		virtual bool openLog()
+		bool openLog()
 		{
 			if (_logOpen)return(false);
 			std::ostringstream fName;
@@ -49,14 +45,14 @@ namespace jet3d
 			return(true);
 		}
 
-		virtual bool flushLog()
+		bool flushLog()
 		{
 			if (!_logOpen)return(false);
 			_outputFile.flush();
 			return(true);
 		}
 
-		virtual bool closeLog()
+		bool closeLog()
 		{
 			if (!_logOpen)return(false);
 			_outputFile.close();
@@ -64,7 +60,7 @@ namespace jet3d
 		}
 
 
-		virtual void _logMessage(const LogThreshold& level, const std::string& message)
+		void _logMessage(const LogThreshold& level, const std::string& message)
 		{
 			std::string logLevelName(getLogLevelName(level));
 			std::string curTimeStamp(getTimeStamp());
@@ -83,7 +79,7 @@ namespace jet3d
 			openLog();
 		}
 
-		virtual ~jeFileLogger()
+		~jeFileLogger()
 		{
 			flushLog();
 			closeLog();
