@@ -84,15 +84,19 @@ our YUV :
 #define G_YUV(Y,U,V) (( G_Y * (Y) + G_U * (U) + G_V * (V) + YUV_HALF_MORE ) >> YUV_SHIFT_MORE)
 #define B_YUV(Y,U,V) (( B_Y * (Y) + B_U * (U) + B_V * (V) + YUV_HALF_MORE ) >> YUV_SHIFT_MORE)
 
-void conv_RGB_to_YUV(int R,int G,int B,int *Y,int *U,int *V)
+void conv_RGB_to_YUV(int R,int G,int B,int *Y,int *U,int *V) noexcept
 {
+	assert(Y != nullptr && U != nullptr && V != nullptr);
+
 *Y = Y_RGB(R,G,B);
 *U = U_RGB(R,G,B) + 127;
 *V = V_RGB(R,G,B) + 127;
 	// U & V nearly identical
 }
-void conv_YUV_to_RGB(int Y,int U,int V,int *R,int *G,int *B)
+void conv_YUV_to_RGB(int Y,int U,int V,int *R,int *G,int *B) noexcept
 {
+	assert(R != nullptr && G != nullptr && B != nullptr);
+
 U -= 127; V -= 127;
 *R = R_YUV(Y,U,V);
 *G = G_YUV(Y,U,V);
@@ -117,7 +121,9 @@ U -= 127; V -= 127;
 
 void conv_RGB_to_HSV(int R,int G,int B,int *H,int *S,int *V)
 {
-int max,min,diff;
+	assert(H != nullptr && S != nullptr && V != nullptr);
+
+	int max = 0,min = 0,diff = 0;
 
 	max = max3(R,G,B);
 	min = min3(R,G,B);
@@ -149,12 +155,14 @@ int max,min,diff;
 
 void conv_HSV_to_RGB(int H,int S,int V,int *R,int *G,int *B)
 {
-double f;
-int p,q,t;
+	assert(R != nullptr && G != nullptr && B != nullptr);
+
+	double f = 0;
+	int p = 0, q = 0, t = 0;
 
 	while ( H < 0 ) H += H_RANGE; while( H >= H_RANGE ) H -= H_RANGE;
 	f = H * (1.0/H_SCALE);
-	H = (int)f;
+	H = jeFloat_ToInt(f);
 	f -= H;		// f now in [0,1]
 
 	t = (V*S)>>SAT_SHIFT;
@@ -172,6 +180,8 @@ int p,q,t;
 		case 4: *R=t; *G=p; *B=V; break;
 
 		case 5: *R=V; *G=p; *B=q; break;
+		default:
+			break;
 	}
 }
 

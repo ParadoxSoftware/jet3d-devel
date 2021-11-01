@@ -822,9 +822,11 @@ return NewQuad;
 
 static void Quads_ArrayToPool(QuadTree * QT,Quad * RootQuad,Quad * QuadArray,int NumQuads,QuadPoint *PointArray,int NumPoints)
 {
-int i;
-int * NewPointsRefCounts;
-QuadPoint ** NewPoints;
+	assert(PointArray != nullptr);
+
+int i = 0;
+int * NewPointsRefCounts = nullptr;
+QuadPoint ** NewPoints = nullptr;
 
 	NewPoints = (QuadPoint **)malloc(4*NumPoints); assert(NewPoints);
 	NewPointsRefCounts = (int *)malloc(4*NumPoints);assert(NewPointsRefCounts);
@@ -883,6 +885,8 @@ static void Quad_Simplify(Quad * pQuad,float ScaleZ,int MinDepth)
 
 static void Quad_ComputeErrors(Quad * pQuad,float * HMPtr,int size,int stride)
 {
+	assert(HMPtr != nullptr);
+
 float MaxErrZ2;
 int x,y;
 float invsize = 1.0f / (size-1);

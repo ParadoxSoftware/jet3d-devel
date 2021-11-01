@@ -84,45 +84,51 @@ static	void	D3DDrv_InitStaticsAndGlobals(void)
 
 #define MacroStr(n) MacroStr1(n)
 
-static	HRESULT __stdcall DirectDrawCreateFake( GUID FAR *lpGUID, LPDIRECTDRAW7 FAR *lplpDD, REFIID iid, IUnknown FAR *pUnkOuter )
+static	HRESULT __stdcall DirectDrawCreateFake( GUID FAR *lpGUID, LPDIRECTDRAW7 FAR *lplpDD, REFIID iid, IUnknown FAR *pUnkOuter ) noexcept
 {
-	return !DD_OK;
+	return DD_FALSE;
 }
 
-static	HRESULT __stdcall DirectDrawEnumerateFake( LPDDENUMCALLBACK lpCallback, LPVOID lpContext )
+static	HRESULT __stdcall DirectDrawEnumerateFake( LPDDENUMCALLBACK lpCallback, LPVOID lpContext ) noexcept
 {
-	return !DD_OK;
+	return DD_FALSE;
 }
 
-static	BOOL	LoadDirectDraw(void)
+static	BOOL	LoadDirectDraw(void) noexcept
 {
 	if	(DirectDrawInstance)
 		return TRUE;
 
 	DirectDrawInstance = LoadLibrary("ddraw.dll");
+	if (DirectDrawInstance != 0) {
+		void* tmpPtr = GetProcAddress(DirectDrawInstance, "DirectDrawCreateEx");
+		DirectDrawCreateFN = static_cast<LPDIRECTDRAWCREATE>(tmpPtr);
 
-	DirectDrawCreateFN	=(LPDIRECTDRAWCREATE)GetProcAddress(DirectDrawInstance, "DirectDrawCreateEx");
-	DirectDrawEnumerateFN	=(LPDIRECTDRAWENUMERATE)GetProcAddress(DirectDrawInstance, MacroStr(DirectDrawEnumerate));
-	if	(!DirectDrawCreateFN || !DirectDrawEnumerateFN)
-	{
-		FreeLibrary(DirectDrawInstance);
-		DirectDrawInstance = NULL;
-		DirectDrawCreateFN = DirectDrawCreateFake;
-		DirectDrawEnumerateFN = DirectDrawEnumerateFake;
-		return FALSE;
+		tmpPtr = GetProcAddress(DirectDrawInstance, MacroStr(DirectDrawEnumerate));
+		DirectDrawEnumerateFN = static_cast<LPDIRECTDRAWENUMERATE>(tmpPtr);
+		if (!DirectDrawCreateFN || !DirectDrawEnumerateFN)
+		{
+			FreeLibrary(DirectDrawInstance);
+			DirectDrawInstance = nullptr;
+			DirectDrawCreateFN = DirectDrawCreateFake;
+			DirectDrawEnumerateFN = DirectDrawEnumerateFake;
+			return FALSE;
+		}
 	}
+	else
+		return FALSE;
 
 	return TRUE;
 }
 
-LPDIRECTDRAWCREATE D3DDrv_DirectDrawCreate(void)
+LPDIRECTDRAWCREATE D3DDrv_DirectDrawCreate(void) noexcept
 {
 	LoadDirectDraw();
 	
 	return DirectDrawCreateFN;
 }
 
-LPDIRECTDRAWENUMERATE D3DDrv_DirectDrawEnumerate(void)
+LPDIRECTDRAWENUMERATE D3DDrv_DirectDrawEnumerate(void) noexcept
 {
 	LoadDirectDraw();
 
@@ -131,7 +137,7 @@ LPDIRECTDRAWENUMERATE D3DDrv_DirectDrawEnumerate(void)
 
 BOOL DRIVERCC DrvInit(DRV_DriverHook *Hook)
 {
-	RECT	WRect;
+	RECT	WRect = { 0 };
 
 	D3DDrv_InitStaticsAndGlobals();
 	D3DFx_InitStaticsAndGlobals();

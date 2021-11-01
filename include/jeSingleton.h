@@ -28,17 +28,17 @@ template <typename T> class jeSingleton
 protected:
 	static T* s_Singleton;
 
-private:
-	jeSingleton(const jeSingleton<T> &);
-	jeSingleton& operator=(const jeSingleton<T> &);
-
 public:
-	jeSingleton()
+	jeSingleton() noexcept
 	{
 //		assert(!s_Singleton);
-		s_Singleton = static_cast<T*>(this);
+		s_Singleton = dynamic_cast<T*>(this);
 	}
 
+	jeSingleton(const jeSingleton<T>&) = delete;
+	jeSingleton(jeSingleton<T>&&) = delete;
+	jeSingleton& operator=(const jeSingleton<T>&) = delete;
+	jeSingleton& operator=(jeSingleton<T>&&) = delete;
 	virtual ~jeSingleton()
 	{
 		assert(s_Singleton);
@@ -57,6 +57,6 @@ public:
 	}
 };
 
-template <typename T> T* jeSingleton<T>::s_Singleton = 0;
+template <typename T> T* jeSingleton<T>::s_Singleton = nullptr;
 
 } // namespace Jet3D

@@ -89,10 +89,10 @@ typedef enum
 
 } jeErrorLog_ErrorClassType;
 
-JETAPI void JETCC jeErrorLog_Clear(void);
+JETAPI void JETCC jeErrorLog_Clear(void) noexcept;
 	// clears error history
 
-JETAPI int  JETCC jeErrorLog_Count(void);
+JETAPI int  JETCC jeErrorLog_Count(void) noexcept;
 	// reports size of current error log
 
 JETAPI void JETCC jeErrorLog_AddExplicit(jeErrorLog_ErrorClassType,

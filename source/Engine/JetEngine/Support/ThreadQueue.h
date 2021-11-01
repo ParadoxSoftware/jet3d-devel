@@ -94,7 +94,7 @@ JETAPI void JETCC jeThreadQueue_Semaphore_UnLock(	jeThreadQueue_Semaphore * S);
 JETAPI void JETCC jeThreadQueue_Semaphore_Destroy(	jeThreadQueue_Semaphore ** pS);
 
 #ifndef NDEBUG
-JETAPI	void JETCC jeThreadQueue_DumpQueue(void);			// uses stdio !
+//JETAPI	void JETCC jeThreadQueue_DumpQueue(void);			// uses stdio !
 #else
 #define jeThreadQueue_DumpQueue()
 #endif

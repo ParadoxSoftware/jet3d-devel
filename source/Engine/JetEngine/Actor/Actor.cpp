@@ -342,7 +342,7 @@ JETAPI jeBoolean JETCC jeActor_Destroy(jeActor **pA)
 			// Icestorm: Added BoneExtBoxes
 			jeCollisionBone *Bone;
 							
-			Bone = (jeCollisionBone*)jeChain_LinkGetLinkData( Link );
+			Bone = static_cast<jeCollisionBone*>(jeChain_LinkGetLinkData( Link ));
 			if(Bone)
 			{
 				free(Bone->BoneName);
@@ -412,10 +412,18 @@ JETAPI void JETCC jeActor_SetActorDef(jeActor *A, jeActor_Def *Def)
 	jeXForm3d_SetIdentity(&A->Xf);
 
 	A->Pose = jePose_Create();
-	if (A->Pose == NULL)
+	if (A->Pose == nullptr)
 	{
 		jeErrorLog_Add(JE_ERR_MEMORY_RESOURCE , "jeActor_Create: Failed to allocate Pose");
-		goto ActorCreateFailure;
+		//goto ActorCreateFailure;
+		if (A != nullptr)
+		{
+			if (A->Pose != nullptr)
+				jePose_Destroy(&(A->Pose));
+			if (A->CueMotion != nullptr)
+				jeMotion_Destroy(&(A->CueMotion));
+			JE_RAM_FREE(A);
+		}
 	}
 	
 	A->CueMotion		 = jeMotion_Create(JE_TRUE);
@@ -429,7 +437,15 @@ JETAPI void JETCC jeActor_SetActorDef(jeActor *A, jeActor_Def *Def)
 	if (A->CueMotion == NULL)
 	{
 		jeErrorLog_Add(JE_ERR_MEMORY_RESOURCE , "jeActor_Create: Failed to allocate CueMotion");
-		goto ActorCreateFailure;
+		//goto ActorCreateFailure;
+		if (A != nullptr)
+		{
+			if (A->Pose != nullptr)
+				jePose_Destroy(&(A->Pose));
+			if (A->CueMotion != nullptr)
+				jeMotion_Destroy(&(A->CueMotion));
+			JE_RAM_FREE(A);
+		}
 	}
 
 
@@ -448,10 +464,10 @@ JETAPI void JETCC jeActor_SetActorDef(jeActor *A, jeActor_Def *Def)
 		BoneCount = jeBody_GetBoneCount(A->ActorDefinition->Body);
 		for (i=0; i<BoneCount; i++)
 		{
-			const char *Name;
-			jeXForm3d Attachment;
-			int ParentBone;
-			int Index;
+			const char* Name = nullptr;
+			jeXForm3d Attachment = { 0 };
+			int ParentBone = 0;
+			int Index = 0;
 			jeBody_GetBone( A->ActorDefinition->Body, i, &Name,&Attachment, &ParentBone );
 			if (jePose_AddJoint( A->Pose,
 								ParentBone,Name,&Attachment,&Index)==JE_FALSE)
@@ -470,7 +486,7 @@ JETAPI void JETCC jeActor_SetActorDef(jeActor *A, jeActor_Def *Def)
 
 	return;
 
-ActorCreateFailure:
+/*ActorCreateFailure:
 	if ( A!= NULL)
 	{
 		if (A->Pose != NULL)
@@ -478,7 +494,7 @@ ActorCreateFailure:
 		if (A->CueMotion != NULL)
 			jeMotion_Destroy(&(A->CueMotion));
 		JE_RAM_FREE( A );
-	}
+	}*/
 }
 
 JETAPI jeBoolean JETCC jeActor_SetBody( jeActor_Def *ActorDefinition, jeBody *BodyGeometry)
@@ -511,11 +527,11 @@ JETAPI void JETCC jeActor_SetBlendingType( jeActor *A, jeActor_BlendingType Blen
 
 	if (BlendingType == JE_ACTOR_BLEND_LINEAR)
 		{
-			A->BlendingType = (jeActor_BlendingType)JE_POSE_BLEND_LINEAR;
+			A->BlendingType = static_cast<jeActor_BlendingType>(JE_POSE_BLEND_LINEAR);
 		}
 	else
 		{
-			A->BlendingType = (jeActor_BlendingType)JE_POSE_BLEND_HERMITE;
+			A->BlendingType = static_cast<jeActor_BlendingType>(JE_POSE_BLEND_HERMITE);
 		}
 }
 
@@ -708,8 +724,8 @@ static jeActor_Def * JETCF jeActor_DefCreateHeader(jeVFile *pFile, jeBoolean *Ha
 
 static jeBoolean JETCF jeActor_DefWriteHeader(const jeActor_Def *Ad, jeVFile *pFile)
 {
-	uint32 u;
-	jeBoolean Flag;
+	uint32 u = 0;
+	jeBoolean Flag = JE_FALSE;
 	
 	assert( jeActor_DefIsValid(Ad) != JE_FALSE );
 	assert( pFile != NULL );
@@ -746,7 +762,7 @@ static jeBoolean JETCF jeActor_DefWriteHeader(const jeActor_Def *Ad, jeVFile *pF
 
 JETAPI jeActor_Def *JETCC jeActor_DefCreateFromFile(jeVFile *pFile)
 {
-	int i;
+	int i = 0;
 	jeActor_Def *Ad   = NULL;
 	jeVFile *VFile    = NULL;
 	jeVFile *SubFile  = NULL;
@@ -1871,7 +1887,7 @@ JETAPI jeBoolean JETCC jeActor_SetLightingOptions(jeActor *A,
 	}
 	if (!jeVec3d_IsNormalized(FillLightNormal)) 
 	{
-		jeVec3d_Normalize((jeVec3d*)FillLightNormal);
+		jeVec3d_Normalize(const_cast<jeVec3d*>(FillLightNormal));
 	}
 
 	jePuppet_SetLightingOptions(	A->Puppet,
@@ -2492,7 +2508,7 @@ JETAPI jeBoolean JETCC jeActor_HasCollisionBone(const jeActor *Actor, const char
 		// locals
 		jeCollisionBone		*LinkBone;
 			
-		LinkBone = (jeCollisionBone *)jeChain_LinkGetLinkData( Link );		
+		LinkBone = static_cast<jeCollisionBone *>(jeChain_LinkGetLinkData( Link ));		
 		if(LinkBone && _stricmp(BoneName,LinkBone->BoneName)==0)
 			return JE_TRUE;
 	}
@@ -2522,7 +2538,7 @@ JETAPI char* JETCC jeActor_GetNextCollisionBone(jeActor *Actor, char *BoneName)
 		{
 			// locals
 			
-			LinkBone = (jeCollisionBone *)jeChain_LinkGetLinkData( Link );		
+			LinkBone = static_cast<jeCollisionBone *>(jeChain_LinkGetLinkData( Link ));
 			if(LinkBone && _stricmp(BoneName,LinkBone->BoneName)==0)
 			{
 				Link = jeChain_LinkGetNext(Link);
@@ -2532,7 +2548,7 @@ JETAPI char* JETCC jeActor_GetNextCollisionBone(jeActor *Actor, char *BoneName)
 	
 	if (Link)
 	{
-		LinkBone=(jeCollisionBone*)jeChain_LinkGetLinkData(Link);
+		LinkBone=static_cast<jeCollisionBone*>(jeChain_LinkGetLinkData(Link));
 		Actor->LastUsedCollisionBone=Link;
 		Actor->LastUsedCollisionBoneName=LinkBone->BoneName;
 		return(LinkBone->BoneName);
@@ -2564,7 +2580,7 @@ JETAPI char* JETCC jeActor_GetNextCollisionBoneWithExtBoxes(	jeActor		*Actor,
 	else
 		for (Link = jeChain_GetFirstLink(Actor->BoneCollisionChain); Link; Link = jeChain_LinkGetNext(Link))
 		{
-			LinkBone = (jeCollisionBone *)jeChain_LinkGetLinkData( Link );		
+			LinkBone = static_cast<jeCollisionBone *>(jeChain_LinkGetLinkData( Link ));
 			if(LinkBone && _stricmp(BoneName,LinkBone->BoneName)==0)
 			{
 				Link = jeChain_LinkGetNext(Link);
@@ -2574,7 +2590,7 @@ JETAPI char* JETCC jeActor_GetNextCollisionBoneWithExtBoxes(	jeActor		*Actor,
 	
 	if (Link)
 	{
-		LinkBone=(jeCollisionBone*)jeChain_LinkGetLinkData(Link);
+		LinkBone=static_cast<jeCollisionBone*>(jeChain_LinkGetLinkData(Link));
 		Actor->LastUsedCollisionBone=Link;
 		Actor->LastUsedCollisionBoneName=LinkBone->BoneName;
 		if (PrevBox) *PrevBox=*(LinkBone->PrevExtBox);
@@ -2590,16 +2606,16 @@ JETAPI char* JETCC jeActor_GetNextCollisionBoneWithExtBoxes(	jeActor		*Actor,
 //========================================================================================
 JETAPI void JETCC jeActor_RecalcCollisionBones(jeActor *Actor)
 {
-	jeChain_Link		*Link;	
-	jeCollisionBone		*LinkBone=NULL;
-	jeExtBox			*BoneBox;
+	jeChain_Link		*Link = nullptr;	
+	jeCollisionBone		*LinkBone=nullptr;
+	jeExtBox			*BoneBox = nullptr;
 
 	assert(Actor != NULL);
 	assert(Actor->BoneCollisionChain != NULL);
 	
 	for (Link = jeChain_GetFirstLink(Actor->BoneCollisionChain); Link; Link = jeChain_LinkGetNext(Link))
 	{
-		LinkBone = (jeCollisionBone *)jeChain_LinkGetLinkData( Link );		
+		LinkBone = static_cast<jeCollisionBone *>(jeChain_LinkGetLinkData( Link ));
 		if (LinkBone)
 		{
 			BoneBox=LinkBone->PrevExtBox;

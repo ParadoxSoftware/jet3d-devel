@@ -41,7 +41,7 @@
 //#include "jeTexture.h"
 #include "jeFileLogger.h"
 
-extern jet3d::jeFileLogger *jetLog;
+extern jet3d::jeFileLoggerPtr jetLog;
 
 //========================================================================================
 //========================================================================================
@@ -104,7 +104,7 @@ JETAPI void JETCC jeMaterialSpec_Destroy(jeMaterialSpec **MaterialSpec)
 				//if (pMatSpec->pLayers[idx]->Kind == JE_RESOURCE_BITMAP) {
 					//jeBitmap_Destroy(&pMatSpec->pLayers[idx]->pBitmap);
 					//jeResource_Delete(jeResourceMgr_GetSingleton(), pMatSpec->pLayers[idx]->Name);
-					jetLog->logMessage(jet3d::jeLogger::LogInfo, std::string(pMatSpec->pLayers[idx]->Name));
+					jetLog->logMessage(jet3d::jeLogger::LogThreshold::LogInfo, std::string(pMatSpec->pLayers[idx]->Name));
 					jeResourceMgr_GetSingleton()->remove(pMatSpec->pLayers[idx]->Name);
 				//} else {
 					//jeResource_ReleaseResource(jeResourceMgr_GetSingleton(), pMatSpec->pLayers[idx]->Kind, pMatSpec->pLayers[idx]->Name);
@@ -255,7 +255,7 @@ JETAPI jeMaterialSpec* JETCC jeMaterialSpec_CreateFromFile(jeVFile *VFile, jeEng
 			goto ExitInError;
 		}
 
-		jetLog->logMessage(jet3d::jeLogger::LogInfo, pLayer->Name);
+		jetLog->logMessage(jet3d::jeLogger::LogThreshold::LogInfo, pLayer->Name);
 
 		// Create the texture from the resource manager
 		//pLayer->pTexture = (jeTexture*) jeResource_GetResource(jeResourceMgr_GetSingleton(), pLayer->Kind, pLayer->Name);

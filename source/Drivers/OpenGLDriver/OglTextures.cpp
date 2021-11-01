@@ -341,7 +341,7 @@ jeBoolean DRIVERCC OGLDrv_THandle_Unlock(jeTexture *THandle, int32 MipLevel)
 
 jeBoolean THandle_Update(jeTexture *THandle)
 {
-	int							baseLog2;
+	//int							baseLog2;
 	unsigned char				*ColorPal = NULL;
 
 	if (THandle->Format.Flags & RDRIVER_PF_2D)

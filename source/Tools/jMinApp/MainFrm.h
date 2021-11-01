@@ -28,6 +28,7 @@
 
 //#include "JetView.h"
 #include "Jet.h"
+#include "jeFileLogger.h"
 
 class CMainFrame : public CFrameWnd
 {
@@ -135,7 +136,7 @@ private:
 	LARGE_INTEGER	m_LIOldTick, m_LIFreq;	//	time-calc vars
 
 	jeImage		*m_pImage;
-
+	jet3d::jeFileLoggerPtr m_Log;
 
 // Generated message map functions
 protected:

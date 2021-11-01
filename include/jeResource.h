@@ -264,6 +264,7 @@
 
 #include <map>
 #include <string>
+#include <memory>
 #include "jeSingleton.h"
 #include "jeResourceManager.h"
 
@@ -284,19 +285,20 @@ protected:
 	jeEngine *m_pEngine;
 
 public:
-	uint32 AddRef();
-	uint32 Release();
+	uint32 AddRef() noexcept override;
+	uint32 Release() noexcept override;
 
-	const std::string &getName()		{ return m_strName; }
-	const uint32 getType()				{ return m_iType;   }
-	void *getData()						{ return m_pvData;  }
-	jeBoolean isOpenDirectory()			{ return m_bOpenDir; }
-	void setOpenDirectory()				{ m_bOpenDir = JE_TRUE; }
-	void setEngine(jeEngine *pEngine)	{ m_pEngine = pEngine; }
+	const std::string &getName() noexcept override		{ return m_strName; }
+	const uint32 getType() noexcept override				{ return m_iType;   }
+	void *getData()	noexcept override					{ return m_pvData;  }
+	jeBoolean isOpenDirectory()	noexcept override		{ return m_bOpenDir; }
+	void setOpenDirectory()	noexcept			{ m_bOpenDir = JE_TRUE; }
+	void setEngine(jeEngine *pEngine) noexcept	{ m_pEngine = pEngine; }
 };
 
 typedef std::map<std::string, jeResource_Impl*>				ResourceMap;
 typedef ResourceMap::iterator								ResourceMapItr;
+typedef std::unique_ptr<jeResource_Impl>					ResourcePtr;
 
 class jeResourceMgr_Impl : public jeResourceMgr, public jeSingleton<jeResourceMgr_Impl>
 {
@@ -314,10 +316,10 @@ public:
 	uint32 Release();
 
 	bool initialize(::jeEngine *pEngine);
-	bool initializeWithDefaults();
+	bool initializeWithDefaults() override;
 	void shutdown();
 
-	jeEngine *getEngine()			{ return m_pEngine; }
+	jeEngine *getEngine() noexcept override			{ return m_pEngine; }
 
 	bool add(const std::string &strName, uint32 iType, void *pvData);
 	void *get(const std::string &strName);
@@ -330,6 +332,8 @@ public:
 	void *createResource(const std::string &strName, uint32 iType);
 	bool openDirectory(const std::string &strDirName, const std::string &strResourceName);
 };
+
+typedef std::unique_ptr<jeResourceMgr_Impl>					ResourceMgrPtr;
 
 } // namespace jet3d
 

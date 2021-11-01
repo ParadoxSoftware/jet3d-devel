@@ -144,7 +144,7 @@ struct jeEngine
 
 	jeEngine			* MySelf1;
 
-	jet3d::jeFileLogger	*EngineLog;
+	jet3d::jeFileLoggerPtr	EngineLog;
 
 	//	System info
 	Engine_DriverInfo	DriverInfo;			// Info about current driver (this should be enumed)
@@ -191,7 +191,7 @@ struct jeEngine
 	// jeImage to replace jeBitmap
 	//ImageList			AttachedImages;
 
-	jet3d::jeResourceMgr_Impl *ResourceMgr;
+	jet3d::ResourceMgrPtr ResourceMgr;
 
 	jeEngine			* MySelf2;
 };

@@ -66,7 +66,7 @@ typedef unsigned char	uint8 ;
 //------------------------------
 
 #ifndef NULL
-#define NULL													(0)
+#define NULL													nullptr
 #endif
 
 #define	JE_PI													((jeFloat)3.14159265358979323846)
@@ -175,9 +175,9 @@ public:
 	virtual uint32					Release() = 0;
 };
 
-#define JE_SAFE_DELETE(x)			{ if (x) delete x; x = NULL; }
-#define JE_SAFE_DELETE_ARRAY(x)		{ if (x) delete []x; x = NULL; }
-#define JE_SAFE_RELEASE(x)			{ if (x) (x)->Release(); x = NULL; }
+#define JE_SAFE_DELETE(x)			{ if (x) delete x; x = nullptr; }
+#define JE_SAFE_DELETE_ARRAY(x)		{ if (x) delete []x; x = nullptr; }
+#define JE_SAFE_RELEASE(x)			{ if (x) (x)->Release(); x = nullptr; }
 
 #endif
 

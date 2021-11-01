@@ -57,7 +57,7 @@
 
 //#define FIRST_OBJECT_IN_HIERARCHY_IS_MODEL_HACK
 
-extern jet3d::jeFileLogger *jetLog;
+extern jet3d::jeFileLoggerPtr jetLog;
 
 #ifdef _DEBUG 
 	#define WORLD_DEBUG_OUTPUT_LEVEL	1
@@ -804,7 +804,7 @@ JETAPI jeBoolean JETCC jeWorld_CreateRef(jeWorld *World, char *filename, int lin
 
 	World->RefCount++;
 	sprintf(buff, "World - FILE:  %s, LINE:  %d, RefCountInc = %d", filename, line, (World)->RefCount);
-	jetLog->logMessage(jet3d::jeLogger::LogInfo, buff);
+	jetLog->logMessage(jet3d::jeLogger::LogThreshold::LogInfo, buff);
 
 	return JE_TRUE;
 }
@@ -831,7 +831,7 @@ JETAPI void JETCC jeWorld_Destroy(jeWorld **pWorld, char *filename, int line)
 
 	World->RefCount--;
 	sprintf(buff, "World - FILE:  %s, LINE:  %d, RefCountDec = %d", filename, line, (*pWorld)->RefCount);
-	jetLog->logMessage(jet3d::jeLogger::LogInfo, buff);
+	jetLog->logMessage(jet3d::jeLogger::LogThreshold::LogInfo, buff);
 
 	if (World->RefCount == 0)
 	{

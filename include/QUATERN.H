@@ -140,7 +140,7 @@ JETAPI void JETCC jeQuaternion_Slerp(
 	const jeQuaternion		*Q0, 
 	const jeQuaternion		*Q1, 
 	jeFloat					T,		
-	jeQuaternion			*QT);
+	jeQuaternion			*QT) noexcept;
 	// spherical interpolation between q0 and q1.   0<=t<=1 
 	// resulting quaternion is 'between' q0 and q1
 	// with t==0 being all q0, and t==1 being all q1.
@@ -151,7 +151,7 @@ JETAPI void JETCC jeQuaternion_SlerpNotShortest(
 	const jeQuaternion		*Q0, 
 	const jeQuaternion		*Q1, 
 	jeFloat					T,		
-	jeQuaternion			*QT);
+	jeQuaternion			*QT) noexcept;
 	// spherical interpolation between q0 and q1.   0<=t<=1 
 	// resulting quaternion is 'between' q0 and q1
 	// with t==0 being all q0, and t==1 being all q1.
@@ -170,7 +170,7 @@ JETAPI void JETCC jeQuaternion_Rotate(
 	jeVec3d				*VRotated);
 	// Rotates V by the quaternion Q, places the result in VRotated.
 
-JETAPI jeBoolean JETCC jeQuaternion_IsUnit(const jeQuaternion *Q);
+JETAPI jeBoolean JETCC jeQuaternion_IsUnit(const jeQuaternion *Q) noexcept;
 	// returns JE_TRUE if q is a unit quaternion.  JE_FALSE otherwise.
 
 JETAPI jeFloat JETCC jeQuaternion_Normalize(jeQuaternion *Q);
@@ -179,7 +179,7 @@ JETAPI jeFloat JETCC jeQuaternion_Normalize(jeQuaternion *Q);
 JETAPI void JETCC jeQuaternion_Copy(const jeQuaternion *QSrc, jeQuaternion *QDst);
 	// copies quaternion QSrc into QDst
 
-JETAPI void JETCC jeQuaternion_SetNoRotation(jeQuaternion *Q);
+JETAPI void JETCC jeQuaternion_SetNoRotation(jeQuaternion *Q) noexcept;
 	// sets Q to be a quaternion with no rotation (like an identity matrix)
 
 JETAPI void JETCC jeQuaternion_Ln(
@@ -216,12 +216,12 @@ JETAPI void JETCC jeQuaternion_Inverse(const jeQuaternion *Q, jeQuaternion *QInv
 JETAPI jeFloat JETCC jeQuaternion_Magnitude(const jeQuaternion *Q);
 	// returns Magnitude of Q.  
 
-JETAPI jeBoolean JETCC jeQuaternion_Compare( jeQuaternion *Q1, jeQuaternion *Q2, jeFloat Tolerance );
+JETAPI jeBoolean JETCC jeQuaternion_Compare( const jeQuaternion *Q1, const jeQuaternion *Q2, jeFloat Tolerance );
 	// return JE_TRUE if quaternions differ elementwise by less than Tolerance.
 
 
 #ifndef NDEBUG
-JETAPI void JETCC jeQuaternion_SetMaximalAssertionMode( jeBoolean Enable );
+JETAPI void JETCC jeQuaternion_SetMaximalAssertionMode( jeBoolean Enable ) noexcept;
 #endif
 
 #endif

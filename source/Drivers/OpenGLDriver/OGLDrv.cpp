@@ -1,6 +1,7 @@
+#include <memory>
 #include <windows.h>
-#include <gl/gl.h>
-#include <gl/glu.h>
+//#include <gl/gl.h>
+#include <gl/glew.h>
 #include <stdio.h>
 #include <math.h>
 #include <list>
@@ -10,19 +11,19 @@
 
 #include "jeFileLogger.h"
 
-HWND							hWnd = NULL;
-HDC								hDC = NULL;
-HGLRC							hglRC = NULL;
+HWND							hWnd = nullptr;
+HDC								hDC = nullptr;
+HGLRC							hglRC = nullptr;
 
 //FILE							*ogllog = NULL;
-jet3d::jeFileLogger				*ogllog = NULL;
+jet3d::jeFileLoggerPtr			ogllog;
 
 bool							Has_Stencil = false;
 bool							Has_MultiTexture = false;
 bool							fullscreen = false;
 
-PFNGLACTIVETEXTUREARBPROC		glActiveTextureARB = NULL;
-PFNGLMULTITEXCOORD4FARBPROC		glMultiTexCoord4fARB = NULL;
+//PFNGLACTIVETEXTUREARBPROC		glActiveTextureARB = nullptr;
+//PFNGLMULTITEXCOORD4FARBPROC		glMultiTexCoord4fARB = nullptr;
 
 DRV_Window						ClientWindow;
 
@@ -47,58 +48,75 @@ GLuint							StencilFunc = GL_LEQUAL;
 GLfloat							AlphaRef = 0.0f;
 GLfloat							StencilRef = 0.0f;
 
+
+/*BOOL WINAPI DllMain(_In_ HINSTANCE hInstDLL, _In_ DWORD fdwReason, _In_ LPVOID lpReserved)
+{
+	switch (fdwReason)
+	{
+	case DLL_PROCESS_ATTACH:
+		ogllog = std::make_unique<jet3d::jeFileLogger>("OGLDrv", ".\\", jet3d::jeLogger::LogInfo | jet3d::jeLogger::LogWarn | jet3d::jeLogger::LogError | jet3d::jeLogger::LogFatal
+//#ifdef _DEBUG
+			| jet3d::jeLogger::LogDebug
+//#endif
+		);
+
+		ogllog->logMessage(jet3d::jeLogger::LogInfo, "OpenGL Driver Log");
+
+		break;
+
+	case DLL_PROCESS_DETACH:
+		break;
+	}
+
+	return TRUE;
+}*/
+
 jeBoolean DRIVERCC OGLDrv_EnumSubDrivers(DRV_ENUM_DRV_CB *Cb, void *Context)
 {
 	ogllog->logMessage(jet3d::jeLogger::LogDebug, "EnumSubDrivers()");
-	Cb(0, "OpenGL Driver", Context);
+	Cb(1, "OpenGL Driver", Context);
 	return JE_TRUE;
 }
 
 jeBoolean DRIVERCC OGLDrv_EnumModes(S32 Driver, char *DriverName, DRV_ENUM_MODES_CB *Cb, void *Context)
 {
-	DEVMODE						mode;
+	DEVMODE						mode = {};
 	int							modecount = 0;
-	int							numModes = 0;
+	//int							numModes = 0;
 //	DISPLAY_DEVICE				device;
 	typedef std::list<DEVMODE>	ModeList;
 	ModeList					modes;
 
 	ogllog->logMessage(jet3d::jeLogger::LogDebug, "EnumModes()");
-	while (EnumDisplaySettings(NULL, modecount, &mode))
+	while (EnumDisplaySettings(nullptr, modecount, &mode))
 	{
-		ModeList::iterator i = modes.begin();
-		jeBoolean Found = JE_FALSE;
-
-		if (mode.dmPelsWidth <= 2048 && mode.dmPelsHeight <= 1024 && mode.dmDisplayFrequency == 60 && mode.dmBitsPerPel > 8)
-		{
-			while (i != modes.end())
-			{
-				if ((*i).dmBitsPerPel == mode.dmBitsPerPel && (*i).dmPelsWidth == mode.dmPelsWidth && (*i).dmPelsHeight == mode.dmPelsHeight)
-					Found = JE_TRUE;
-
-				i++;
-			}
-
-			if (!Found)
-			{
-				if (ChangeDisplaySettings(&mode, CDS_TEST) == DISP_CHANGE_SUCCESSFUL)
-				{
-					char			modename[32];
-
-					sprintf(modename, "%dx%dx%d", mode.dmPelsWidth, mode.dmPelsHeight, mode.dmBitsPerPel);
-					ogllog->logMessage(jet3d::jeLogger::LogInfo, modename);
-					Cb(numModes, modename, mode.dmPelsWidth, mode.dmPelsHeight, mode.dmBitsPerPel, Context);
-					modes.push_back(mode);
-
-					numModes++;
-				}
-			}
-		}
-
 		modecount++;
+		if (mode.dmBitsPerPel >= 16)
+		{
+			if (ChangeDisplaySettings(&mode, CDS_TEST))
+				modes.push_back(mode);
+		}
 	}
 
-	Cb(numModes + 1, "WindowMode", -1, -1, -1, Context);
+	ModeList::iterator i = modes.begin();
+	modecount = 0;
+	while (i != modes.end())
+	{
+		jeBoolean Found = JE_FALSE;
+		mode = (*i);
+		if (mode.dmPelsWidth <= 2048 && mode.dmPelsHeight <= 1024 && mode.dmDisplayFrequency == 60 && mode.dmBitsPerPel > 8 && modecount < 128)
+		{
+			char			modename[32];
+
+			sprintf(modename, "%dx%dx%d", mode.dmPelsWidth, mode.dmPelsHeight, mode.dmBitsPerPel);
+			ogllog->logMessage(jet3d::jeLogger::LogInfo, modename);
+			Cb(modecount, modename, mode.dmPelsWidth, mode.dmPelsHeight, mode.dmBitsPerPel, Context);
+			
+			modecount++;
+		}
+	}
+
+	Cb(modecount + 1, "WindowMode", -1, -1, -1, Context);
 	return JE_TRUE;
 }
 
@@ -208,7 +226,13 @@ jeBoolean DRIVERCC OGLDrv_Init(DRV_DriverHook *Hook)
 
 	wglMakeCurrent(hDC, hglRC);
 
-	const char *extensions = (const char*)glGetString(GL_EXTENSIONS);
+	if (glewInit() != GLEW_OK)
+	{
+		ogllog->logMessage(jet3d::jeLogger::LogError, "Could not initialize GLEW!!");
+		return JE_FALSE;
+	}
+
+	/*const char *extensions = (const char*)glGetString(GL_EXTENSIONS);
 
 	if (strstr(extensions, "GL_ARB_multitexture") != NULL)
 	{
@@ -217,7 +241,7 @@ jeBoolean DRIVERCC OGLDrv_Init(DRV_DriverHook *Hook)
 
 		if(glActiveTextureARB != NULL && glMultiTexCoord4fARB != NULL)
 			Has_MultiTexture = JE_TRUE;
-	}
+	}*/
 
 	glPixelStorei(GL_PACK_ALIGNMENT, 1);
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
@@ -233,12 +257,12 @@ jeBoolean DRIVERCC OGLDrv_Init(DRV_DriverHook *Hook)
 
 	if (Has_MultiTexture)
 	{
-		glActiveTextureARB(GL_TEXTURE1_ARB);
+		glActiveTexture(GL_TEXTURE1_ARB);
 
 		glDisable(GL_TEXTURE_1D);
 		glDisable(GL_TEXTURE_2D);		
 
-		glActiveTextureARB(GL_TEXTURE0_ARB);
+		glActiveTexture(GL_TEXTURE0_ARB);
 	}
 
 	glMatrixMode(GL_PROJECTION);
@@ -270,7 +294,7 @@ jeBoolean DRIVERCC OGLDrv_Shutdown()
 
 	ReleaseDC(ClientWindow.hWnd, hDC);
 
-	JE_SAFE_DELETE(ogllog);
+	//JE_SAFE_DELETE(ogllog);
 
 	return JE_TRUE;
 }
@@ -398,7 +422,7 @@ jeBoolean DRIVERCC OGLDrv_RenderWorldPoly(jeTLVertex *Pnts, int32 NumPoints, jeR
 
 	if(NumLayers > 1)
 	{
-		glActiveTextureARB(GL_TEXTURE1_ARB);
+		glActiveTexture(GL_TEXTURE1_ARB);
 		glEnable(GL_TEXTURE_2D);
 
 		if(boundTexture2 != Layers[1].THandle->TextureID)
@@ -426,14 +450,14 @@ jeBoolean DRIVERCC OGLDrv_RenderWorldPoly(jeTLVertex *Pnts, int32 NumPoints, jeR
 		tv = (pPnt->v * scaleV + shiftV);
 
 		glColor4ub((GLubyte)pPnt->r, (GLubyte)pPnt->g, (GLubyte)pPnt->b, alpha);
-		glMultiTexCoord4fARB(GL_TEXTURE0_ARB, tu * Layers->THandle->InvScale * zRecip, tv * Layers->THandle->InvScale * zRecip, 0.0f, zRecip);
+		glMultiTexCoord4f(GL_TEXTURE0_ARB, tu * Layers->THandle->InvScale * zRecip, tv * Layers->THandle->InvScale * zRecip, 0.0f, zRecip);
 
 		if(NumLayers > 1)
 		{
 			lu = pPnt->u - shiftU2;
 			lv = pPnt->v - shiftV2;
 
-			glMultiTexCoord4fARB(GL_TEXTURE1_ARB, lu * Layers[1].THandle->InvScale * zRecip, lv * Layers[1].THandle->InvScale * zRecip, 0.0f, zRecip);
+			glMultiTexCoord4f(GL_TEXTURE1_ARB, lu * Layers[1].THandle->InvScale * zRecip, lv * Layers[1].THandle->InvScale * zRecip, 0.0f, zRecip);
 		}
 
 		glVertex3f(pPnt->x, pPnt->y, -1.0f + zRecip);
@@ -445,7 +469,7 @@ jeBoolean DRIVERCC OGLDrv_RenderWorldPoly(jeTLVertex *Pnts, int32 NumPoints, jeR
 	if( NumLayers > 1)
 	{
 		glDisable(GL_TEXTURE_2D);
-		glActiveTextureARB(GL_TEXTURE0_ARB);
+		glActiveTexture(GL_TEXTURE0_ARB);
 	}
 
 	return JE_TRUE;
@@ -1063,7 +1087,7 @@ DRV_Driver OGLDRV =
 	DRV_VERSION_MINOR,
 
 	DRV_ERROR_NONE,
-	NULL,
+	nullptr,
 
 	OGLDrv_EnumSubDrivers,
 	OGLDrv_EnumModes,
@@ -1079,17 +1103,17 @@ DRV_Driver OGLDRV =
 	OGLDrv_SetActive,
 
 	OGLDrv_THandle_Create,
-	NULL,
+	nullptr,
 	OGLDrv_THandle_Destroy,
 
 	OGLDrv_THandle_Lock,
 	OGLDrv_THandle_Unlock,
 
-	NULL,
-	NULL,
+	nullptr,
+	nullptr,
 
-	NULL,
-	NULL,
+	nullptr,
+	nullptr,
 
 	OGLDrv_THandle_GetInfo,
 
@@ -1106,7 +1130,7 @@ DRV_Driver OGLDRV =
 
 	0, 0, 0,
 
-	NULL,
+	nullptr,
 
 	OGLDrv_Screenshot,
 
@@ -1117,31 +1141,54 @@ DRV_Driver OGLDRV =
 	//OGLDrv_GetMatrix,
 	//OGLDrv_SetCamera,
 
-	NULL,
-	NULL,
+	nullptr,
+	nullptr,
 
-	NULL,
-	NULL,
+	nullptr,
+	nullptr,
 
 	//NULL,
 	//NULL,
 	//NULL,
 
-	NULL,
-	NULL,
-	NULL,
+	nullptr,
+	nullptr,
+	nullptr,
 
 	OGLDrv_SetRenderState
 };
 
+namespace jet3d {
+	std::string OGLDriver::strName = std::string("OpenGL Driver v0.1");
+
+	DRIVERAPI const std::string& DRV_GetName()
+	{
+		return OGLDriver::strName;
+	}
+
+	DRIVERAPI S32 DRV_GetVersionMajor()
+	{
+		return DRV_VERSION_MAJOR;
+	}
+
+	DRIVERAPI S32 DRV_GetVersionMinor()
+	{
+		return DRV_VERSION_MINOR;
+	}
+
+	DRIVERAPI jeDriver* createDriver()
+	{
+		return new OGLDriver();
+	}
+}
+
 DRIVERAPI BOOL DriverHook(DRV_Driver **Driver)
 {
-	ogllog = new jet3d::jeFileLogger("OGLDrv", ".\\", jet3d::jeLogger::LogInfo | jet3d::jeLogger::LogWarn | jet3d::jeLogger::LogError | jet3d::jeLogger::LogFatal
-#ifdef _DEBUG
+	ogllog = std::make_unique<jet3d::jeFileLogger>("OGLDrv", ".\\", jet3d::jeLogger::LogInfo | jet3d::jeLogger::LogWarn | jet3d::jeLogger::LogError | jet3d::jeLogger::LogFatal
+		//#ifdef _DEBUG
 		| jet3d::jeLogger::LogDebug
-#endif
-	);
-
+		//#endif
+		);
 	ogllog->logMessage(jet3d::jeLogger::LogInfo, "OpenGL Driver Log");
 
 	EngineSettings.CanSupportFlags = (DRV_SUPPORT_ALPHA | DRV_SUPPORT_COLORKEY);

@@ -14,7 +14,7 @@
     <ProjectName>Jet3DClassic7</ProjectName>
     <ProjectGuid>{DA9C671F-1998-42EC-8D3C-F14AE13AD4AD}</ProjectGuid>
     <Keyword>AtlProj</Keyword>
-    <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
@@ -22,14 +22,14 @@
     <UseOfMfc>false</UseOfMfc>
     <UseOfAtl>false</UseOfAtl>
     <CharacterSet>MultiByte</CharacterSet>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseOfMfc>false</UseOfMfc>
     <UseOfAtl>false</UseOfAtl>
     <CharacterSet>MultiByte</CharacterSet>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -77,7 +77,7 @@
     </ClCompile>
     <Link>
       <AdditionalOptions>/MACHINE:I386 %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalDependencies>amstrmid.lib;oldnames.lib;urlmon.lib;winmm.lib;quartz.lib;dxguid.lib;ddraw.lib;vorbis_static_d.lib;vorbisfile_static_d.lib;ogg_static_d.lib;FreeImage.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>amstrmid.lib;oldnames.lib;urlmon.lib;winmm.lib;quartz.lib;dxguid.lib;ddraw.lib;vorbis_static_d.lib;vorbisfile_static_d.lib;ogg_static_d.lib;FreeImage.lib;zziplib-Debug.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>..\..\..\lib;..\External\VorbisSDK\lib;..\External\EAXSDK\lib;..\External\DXSDK_81\lib;..\External\FreeImage\lib;..\External\zzip\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
@@ -157,9 +157,36 @@
     <ClCompile Include="..\External\nvwa\debug_new.cpp" />
     <ClCompile Include="..\External\nvwa\mem_pool_base.cpp" />
     <ClCompile Include="..\External\nvwa\static_mem_pool.cpp" />
+    <ClCompile Include="Bitmap\Bitmap.cpp" />
+    <ClCompile Include="Bitmap\bitmap_blitdata.cpp" />
+    <ClCompile Include="Bitmap\bitmap_gamma.cpp" />
+    <ClCompile Include="Bitmap\Compression\arithc.cpp" />
+    <ClCompile Include="Bitmap\Compression\CodePal.cpp" />
+    <ClCompile Include="Bitmap\Compression\CodeUtil.cpp" />
+    <ClCompile Include="Bitmap\Compression\colorconv.cpp" />
+    <ClCompile Include="Bitmap\Compression\Context.cpp" />
+    <ClCompile Include="Bitmap\Compression\huffa.cpp" />
+    <ClCompile Include="Bitmap\Compression\huffman2.cpp" />
+    <ClCompile Include="Bitmap\Compression\Image.cpp" />
+    <ClCompile Include="Bitmap\Compression\Ladder.cpp" />
+    <ClCompile Include="Bitmap\Compression\lbitio.cpp" />
+    <ClCompile Include="Bitmap\Compression\lza.cpp" />
+    <ClCompile Include="Bitmap\Compression\o0coder.cpp" />
+    <ClCompile Include="Bitmap\Compression\o1coder.cpp" />
+    <ClCompile Include="Bitmap\Compression\palcreate.cpp" />
+    <ClCompile Include="Bitmap\Compression\palettize.cpp" />
+    <ClCompile Include="Bitmap\Compression\paloptimize.cpp" />
+    <ClCompile Include="Bitmap\Compression\rungae.cpp" />
+    <ClCompile Include="Bitmap\Compression\rungo1.cpp" />
+    <ClCompile Include="Bitmap\Compression\runtrans.cpp" />
+    <ClCompile Include="Bitmap\Compression\SortPal.cpp" />
+    <ClCompile Include="Bitmap\Compression\SortPalx.cpp" />
+    <ClCompile Include="Bitmap\Compression\StrUtil.cpp" />
+    <ClCompile Include="Bitmap\Compression\YUV.cpp" />
+    <ClCompile Include="Bitmap\PixelFormat.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Engine\jeImage.cpp" />
-    <ClCompile Include="List.c" />
+    <ClCompile Include="List.cpp" />
     <ClCompile Include="Object.cpp" />
     <ClCompile Include="OGGStream.cpp" />
     <ClCompile Include="Report.cpp" />
@@ -183,36 +210,6 @@
     <ClCompile Include="Actor\TKEvents.cpp" />
     <ClCompile Include="Actor\VKFrame.cpp" />
     <ClCompile Include="Actor\XFArray.cpp" />
-    <ClCompile Include="Bitmap\bitmap.c" />
-    <ClCompile Include="Bitmap\bitmap_blitdata.c" />
-    <ClCompile Include="Bitmap\bitmap_gamma.c" />
-    <ClCompile Include="Bitmap\pixelformat.c" />
-    <ClCompile Include="Bitmap\Compression\arithc.c" />
-    <ClCompile Include="Bitmap\Compression\codealphas.c" />
-    <ClCompile Include="Bitmap\Compression\codeimage.c" />
-    <ClCompile Include="Bitmap\Compression\codepal.c" />
-    <ClCompile Include="Bitmap\Compression\codeutil.c" />
-    <ClCompile Include="Bitmap\Compression\colorconv.c" />
-    <ClCompile Include="Bitmap\Compression\context.c" />
-    <ClCompile Include="Bitmap\Compression\huffa.c" />
-    <ClCompile Include="Bitmap\Compression\huffman2.c" />
-    <ClCompile Include="Bitmap\Compression\image.c" />
-    <ClCompile Include="Bitmap\Compression\ladder.c" />
-    <ClCompile Include="Bitmap\Compression\lbitio.c" />
-    <ClCompile Include="Bitmap\Compression\lza.c" />
-    <ClCompile Include="Bitmap\Compression\lzh.c" />
-    <ClCompile Include="Bitmap\Compression\o0coder.c" />
-    <ClCompile Include="Bitmap\Compression\o1coder.c" />
-    <ClCompile Include="Bitmap\Compression\palcreate.c" />
-    <ClCompile Include="Bitmap\Compression\palettize.c" />
-    <ClCompile Include="Bitmap\Compression\paloptimize.c" />
-    <ClCompile Include="Bitmap\Compression\rungae.c" />
-    <ClCompile Include="Bitmap\Compression\rungo1.c" />
-    <ClCompile Include="Bitmap\Compression\runtrans.c" />
-    <ClCompile Include="Bitmap\Compression\sortpal.c" />
-    <ClCompile Include="Bitmap\Compression\sortpalx.c" />
-    <ClCompile Include="Bitmap\Compression\strutil.c" />
-    <ClCompile Include="Bitmap\Compression\yuv.c" />
     <ClCompile Include="Bsp\jeBSP.cpp" />
     <ClCompile Include="Bsp\jeBSP_Brush.cpp" />
     <ClCompile Include="Bsp\jeBSP_TopBrush.cpp" />
@@ -288,17 +285,17 @@
     <ClCompile Include="Support\ThreadLog.cpp" />
     <ClCompile Include="Support\ThreadQueue.cpp" />
     <ClCompile Include="Support\Util.cpp" />
-    <ClCompile Include="VFile\dirtree.c" />
-    <ClCompile Include="VFile\fsdos.c" />
+    <ClCompile Include="VFile\DirTree.cpp" />
+    <ClCompile Include="VFile\FSDOS.CPP" />
     <ClCompile Include="VFile\FSLZ.cpp" />
-    <ClCompile Include="VFile\Fsmemory.c" />
-    <ClCompile Include="VFile\fsvfs.c" />
+    <ClCompile Include="VFile\FSMemory.cpp" />
+    <ClCompile Include="VFile\FSVFS.cpp" />
     <ClCompile Include="VFile\FSZip.cpp" />
-    <ClCompile Include="VFile\vfile.c" />
     <ClCompile Include="Terrain\Quad.cpp" />
     <ClCompile Include="Terrain\Terrain.cpp" />
     <ClCompile Include="Particle\jeParticle.cpp" />
     <ClCompile Include="Mp3Mgr\Mp3Mgr.cpp" />
+    <ClCompile Include="VFile\VFile.cpp" />
     <ClCompile Include="VideoMgr\VideoMgr.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -356,8 +353,6 @@
     <ClInclude Include="Bitmap\bitmap_blitdata.h" />
     <ClInclude Include="Bitmap\bitmap_gamma.h" />
     <ClInclude Include="..\..\..\include\pixelformat.h" />
-    <ClInclude Include="Bitmap\Compression\arithc.h" />
-    <ClInclude Include="Bitmap\Compression\codealphas.h" />
     <ClInclude Include="Bitmap\Compression\codepal.h" />
     <ClInclude Include="Bitmap\Compression\codeutil.h" />
     <ClInclude Include="Bitmap\Compression\colorconv.h" />
@@ -471,7 +466,7 @@
     <None Include="Bitmap\bitmap._h" />
     <CustomBuild Include="Bitmap\Compression\rungasm.asm">
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Performing Custom Build Step on %(FullPath) to $(IntDir)%(Filename)</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">"$(VCInstallDir)Tools\MSVC\14.15.26726\bin\Hostx86\x86\ml.exe" -Zi -c -coff  /Fo "$(IntDir)%(Filename).obj" "%(FullPath)"
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">"$(VCInstallDir)Tools\MSVC\14.27.29110\bin\Hostx86\x86\ml.exe" -Zi -c -coff  /Fo "$(IntDir)%(Filename).obj" "%(FullPath)"
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)%(Filename).obj;%(Outputs)</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Performing Custom Build Step on %(FullPath) to $(IntDir)%(Filename)</Message>

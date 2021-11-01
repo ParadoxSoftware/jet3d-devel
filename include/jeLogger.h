@@ -32,19 +32,24 @@ namespace jet3d
 	//Abstract base logging class
 	class jeLogger
 	{
-	private:
-		jeLogger();
-		jeLogger(const jeLogger& rhs);
-		jeLogger& operator=(const jeLogger& rhs) {}
+	protected:
+		jeLogger() {}
+		jeLogger(const jeLogger& rhs) = delete;
+		jeLogger(jeLogger&&) = delete;
+		jeLogger& operator=(const jeLogger& rhs) = delete;
+		jeLogger& operator=(jeLogger&&) = delete;
+
 	public:
-		typedef enum LogThreshold
+		enum class LogThreshold
 		{
 			LogFatal = 0x0001,
 			LogError = 0x0002,
 			LogWarn  = 0x0004,
 			LogInfo  = 0x0008,
 			LogDebug = 0x0010,
-		} LogThreshold;
+		};
+
+		
 	protected:
 		std::string _name;
 		unsigned short _logThreshold;
@@ -55,59 +60,57 @@ namespace jet3d
 		virtual bool flushLog()=0;
 		virtual bool closeLog()=0;
 		virtual void _logMessage(const LogThreshold& level, const std::string& message)=0;
-		bool isLogOpen() const
+		bool isLogOpen() const noexcept
 		{
 			return(_logOpen);
 		}
-		const char* getLogLevelName(const LogThreshold& level) const
+		const char* getLogLevelName(const LogThreshold& level) const noexcept
 		{
 			switch(level)
 			{
-			case LogFatal : return("FATAL");
-			case LogError : return("ERROR");
-			case LogWarn  : return("WARN");
-			case LogInfo  : return("INFO");
-			case LogDebug : return("DEBUG");
+			case LogThreshold::LogFatal : return("FATAL");
+			case LogThreshold::LogError : return("ERROR");
+			case LogThreshold::LogWarn  : return("WARN");
+			case LogThreshold::LogInfo  : return("INFO");
+			case LogThreshold::LogDebug : return("DEBUG");
 			default: return("????");
 			}
 		}
 
-		const char* getTimeStamp() const
+		const char* getTimeStamp() const noexcept
 		{
-			time_t curTime = time(NULL);
+			const time_t curTime = time(NULL);
 			return(ctime(&curTime));
 		}
 
 	public:
 		jeLogger(const std::string& name,
-			     const unsigned short& logThreshold) :
+			     unsigned short logThreshold) :
 			_name(name),
 			_logThreshold(logThreshold),
 			_logOpen(false)
 		{
 		}
 
-		virtual ~jeLogger()
-		{
-		}
-
-		void setLevelOn(const LogThreshold& level)
+		~jeLogger() {};
+		
+		void setLevelOn(const LogThreshold& level) noexcept
 		{
 			//Set the level on using the OR bitwise operator
-			_logThreshold |= level;
+			_logThreshold |= static_cast<unsigned short>(level);
 		}
 
-		void setLevelOff(const LogThreshold& level)
+		void setLevelOff(const LogThreshold& level) noexcept
 		{
 			//Turn the level off using the exclusive OR bitwise operator
 			//which sets to zero in the resultant operand any bit that was
 			//set to one in both operands of the operation
-			_logThreshold ^= level;
+			_logThreshold ^= static_cast<unsigned short>(level);
 		}
 
-		bool isLevelOn(const LogThreshold& level) const
+		bool isLevelOn(const LogThreshold& level) const noexcept
 		{
-			return( (level & _logThreshold) != 0 );
+			return( (static_cast<unsigned short>(level) & _logThreshold) != 0 );
 		}
 
 		void logMessage(const LogThreshold& level, const std::string& message)
@@ -126,7 +129,7 @@ namespace jet3d
 			}
 		}
 
-		void logMessage(const LogThreshold& level, std::ostringstream& oStr)
+		void logMessage(const LogThreshold& level, const std::ostringstream& oStr)
 		{
 			if (isLevelOn(level) && isLogOpen())
 			{

@@ -256,7 +256,7 @@ int Count;
 
 	Count = 0;
 	pNode = NULL;
-	while( (pNode = Hash_WalkNext(pList->HashPtr,pNode)) != NULL )
+	while( (pNode = Hash_WalkNext(pList->HashPtr,pNode)) != nullptr )
 	{
 	jeBitmap *Bmp;
 	uint32 TimesAdded;
@@ -305,7 +305,7 @@ uint32 TimesAdded;
 
 	pList->Adds ++;
 
-	if ( (pNode = Hash_Get(pList->HashPtr, (uint32)Bitmap, &TimesAdded)) != NULL )
+	if ( (pNode = Hash_Get(pList->HashPtr, (uint32)Bitmap, &TimesAdded)) != nullptr )
 	{
 		HashNode_SetData(pNode,TimesAdded+1);
 		return JE_FALSE;

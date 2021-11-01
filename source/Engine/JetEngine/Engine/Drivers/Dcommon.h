@@ -36,6 +36,10 @@
 #include "jeChain.h"
 #include "jeLight.h"
 
+namespace jet3d {
+	class jeDriver;
+}
+
 #pragma pack(push)
 #pragma pack(8)
 
@@ -719,6 +723,14 @@ public:
 	virtual jeBoolean					DrawText(char *Text, int x, int y, uint32 Color) = 0;
 };
 #endif
+
+namespace jet3d {
+	typedef const std::string& DRV_GetName();
+	typedef const S32 DRV_GetVersionMajor();
+	typedef const S32 DRV_GetversionMinor();
+
+	typedef jeDriver* createDriver();
+}
 
 typedef jeBoolean DRV_Hook(DRV_Driver **Hook);
 typedef jeBoolean DRV_Release(DRV_Driver **Hook);

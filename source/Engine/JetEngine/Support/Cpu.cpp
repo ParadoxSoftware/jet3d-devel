@@ -281,21 +281,21 @@ static uint32	GetMHZ(void)
 	} while( ElapTime < MHZ_MILLIS );
 
 	ElapClock = GetRDTSC() - StartClock;
-	MHZ	= (uint32)(ElapClock/(1000*ElapTime));
+	MHZ	= static_cast<uint32>(ElapClock/(1000*(long long)ElapTime));
 
 	// check for common errors
 	{
 	uint32 Z50,Z83;
 		Z50 = ((MHZ + 25)/50)*50; // round to the nearest fifty
-		Z83 = (int)((MHZ + 41)*12/1000)*1000/12; // round to the nearest 83.333 == 1000/12
+		Z83 = static_cast<int>((MHZ + 41)*12/1000)*1000/12; // round to the nearest 83.333 == 1000/12
 		//	by trilobite	Jan. 2011
 		//if ( abs(Z50 - MHZ) < 7 )
-		if ( abs((int)(Z50 - MHZ)) < 7 )
+		if ( abs(static_cast<int>(Z50 - MHZ)) < 7 )
 		//
 			MHZ = Z50;
 		//	by trilobite	Jan. 2011
 		//else if ( abs(Z83 - MHZ) < 7 )
-		else if ( abs((int)(Z83 - MHZ)) < 7 )
+		else if ( abs(static_cast<int>(Z83 - MHZ)) < 7 )
 			//
 			MHZ = Z83;
 		else
@@ -319,7 +319,7 @@ static jeBoolean GetPerformanceFreq(void)
 		return JE_FALSE;
 	}
 
-	jeCPU_PerformanceFreq = (float) Freq.LowPart;
+	jeCPU_PerformanceFreq = static_cast<float>( Freq.LowPart);
 
 	return JE_TRUE;
 }

@@ -196,9 +196,11 @@ bool_array::bool_array(const void* ptr, size_type size)
         throw std::bad_alloc();
 
     size_t byte_cnt = get_num_bytes_from_bits(_M_length);
-    memcpy(_M_byte_ptr, ptr, byte_cnt);
-    int valid_bits_in_last_byte = (_M_length - 1) % 8 + 1;
-    _M_byte_ptr[byte_cnt - 1] &= ~(~0 << valid_bits_in_last_byte);
+    if (_M_byte_ptr != nullptr) {
+        memcpy(_M_byte_ptr, ptr, byte_cnt);
+        int valid_bits_in_last_byte = (_M_length - 1) % 8 + 1;
+        _M_byte_ptr[byte_cnt - 1] &= ~(~0 << valid_bits_in_last_byte);
+    }
 }
 
 /**
@@ -211,7 +213,7 @@ bool_array::bool_array(const bool_array& rhs)
 {
     if (rhs.size() == 0)
     {
-        _M_byte_ptr = NULL;
+        _M_byte_ptr = nullptr;
         _M_length = 0;
         return;
     }

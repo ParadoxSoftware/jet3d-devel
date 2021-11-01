@@ -37,11 +37,11 @@
 #define MAX_CONTEXT_LEN		128		// How big should this be?  Must be big enough to allow full paths to files, etc...
 
 #ifdef USE_STDIO_LOG
-FILE						*errorlog = NULL;
+FILE						*errorlog = nullptr;
 #define FILENAME			"Jet3D.log"
 #endif
 
-jet3d::jeFileLogger			*jetLog = NULL;
+jet3d::jeFileLoggerPtr				jetLog;
 
 typedef struct
 {
@@ -61,28 +61,32 @@ jeErrorLogType jeErrorLog_Locals = {0,MAX_ERRORS};
 
 void jeErrorLog_Initialize(const char *logName, const char *logDir)
 {
-	jetLog = new jet3d::jeFileLogger(logName, logDir, jet3d::jeLogger::LogInfo | jet3d::jeLogger::LogWarn | jet3d::jeLogger::LogError | jet3d::jeLogger::LogFatal
+	jetLog = std::make_unique<jet3d::jeFileLogger>(logName, logDir, 
+		static_cast<unsigned short>(jet3d::jeLogger::LogThreshold::LogInfo) |
+		static_cast<unsigned short>(jet3d::jeLogger::LogThreshold::LogWarn) |
+		static_cast<unsigned short>(jet3d::jeLogger::LogThreshold::LogError) |
+		static_cast<unsigned short>(jet3d::jeLogger::LogThreshold::LogFatal) 
 #ifdef _DEBUG
-		| jet3d::jeLogger::LogDebug
+		| static_cast<unsigned short>(jet3d::jeLogger::LogThreshold::LogDebug)
 #endif
 	);
 
-	jetLog->logMessage(jet3d::jeLogger::LogInfo, "Jet3D Engine Logging Started");
+	jetLog->logMessage(jet3d::jeLogger::LogThreshold::LogInfo, "Jet3D Engine Logging Started");
 }
 
 void jeErrorLog_Shutdown()
 {
-	jetLog->logMessage(jet3d::jeLogger::LogInfo, "Jet3D Logging Stopped");
-	JE_SAFE_DELETE(jetLog);
+	jetLog->logMessage(jet3d::jeLogger::LogThreshold::LogInfo, "Jet3D Logging Stopped");
+	//JE_SAFE_DELETE(jetLog);
 }
 
-JETAPI void JETCC jeErrorLog_Clear(void)
+JETAPI void JETCC jeErrorLog_Clear(void) noexcept
 	// clears error history
 {
 	jeErrorLog_Locals.ErrorCount = 0;
 }
 	
-JETAPI int  JETCC jeErrorLog_Count(void)
+JETAPI int  JETCC jeErrorLog_Count(void) noexcept
 	// reports size of current error log
 {
 	return 	jeErrorLog_Locals.ErrorCount;
@@ -96,8 +100,8 @@ JETAPI void JETCC jeErrorLog_AddExplicit(jeErrorLog_ErrorClassType Error,
 	const char *UserString,
 	const char *Context)
 {
-	char	*SDst;
-	char	*CDst;
+	char	*SDst = nullptr;
+	char	*CDst = nullptr;
 	
 	assert( jeErrorLog_Locals.ErrorCount >= 0 );
 
@@ -204,7 +208,7 @@ JETAPI void JETCC jeErrorLog_AddExplicit(jeErrorLog_ErrorClassType Error,
 		OutputDebugString(SDst);
 		OutputDebugString("\r\n");
 
-		jetLog->logMessage(jet3d::jeLogger::LogError, SDst);
+		jetLog->logMessage(jet3d::jeLogger::LogThreshold::LogError, SDst);
 
 #ifdef USE_STDIO_LOG
 		/*errorlog = fopen(FILENAME, "at");

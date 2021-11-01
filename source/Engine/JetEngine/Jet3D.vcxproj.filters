@@ -63,9 +63,6 @@
     <ClCompile Include="Camera.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="List.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Object.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -134,96 +131,6 @@
     </ClCompile>
     <ClCompile Include="Actor\XFArray.cpp">
       <Filter>Source Files\Actor</Filter>
-    </ClCompile>
-    <ClCompile Include="Bitmap\bitmap.c">
-      <Filter>Source Files\Bitmap</Filter>
-    </ClCompile>
-    <ClCompile Include="Bitmap\bitmap_blitdata.c">
-      <Filter>Source Files\Bitmap</Filter>
-    </ClCompile>
-    <ClCompile Include="Bitmap\bitmap_gamma.c">
-      <Filter>Source Files\Bitmap</Filter>
-    </ClCompile>
-    <ClCompile Include="Bitmap\pixelformat.c">
-      <Filter>Source Files\Bitmap</Filter>
-    </ClCompile>
-    <ClCompile Include="Bitmap\Compression\arithc.c">
-      <Filter>Source Files\Bitmap\Compression</Filter>
-    </ClCompile>
-    <ClCompile Include="Bitmap\Compression\codealphas.c">
-      <Filter>Source Files\Bitmap\Compression</Filter>
-    </ClCompile>
-    <ClCompile Include="Bitmap\Compression\codeimage.c">
-      <Filter>Source Files\Bitmap\Compression</Filter>
-    </ClCompile>
-    <ClCompile Include="Bitmap\Compression\codepal.c">
-      <Filter>Source Files\Bitmap\Compression</Filter>
-    </ClCompile>
-    <ClCompile Include="Bitmap\Compression\codeutil.c">
-      <Filter>Source Files\Bitmap\Compression</Filter>
-    </ClCompile>
-    <ClCompile Include="Bitmap\Compression\colorconv.c">
-      <Filter>Source Files\Bitmap\Compression</Filter>
-    </ClCompile>
-    <ClCompile Include="Bitmap\Compression\context.c">
-      <Filter>Source Files\Bitmap\Compression</Filter>
-    </ClCompile>
-    <ClCompile Include="Bitmap\Compression\huffa.c">
-      <Filter>Source Files\Bitmap\Compression</Filter>
-    </ClCompile>
-    <ClCompile Include="Bitmap\Compression\huffman2.c">
-      <Filter>Source Files\Bitmap\Compression</Filter>
-    </ClCompile>
-    <ClCompile Include="Bitmap\Compression\image.c">
-      <Filter>Source Files\Bitmap\Compression</Filter>
-    </ClCompile>
-    <ClCompile Include="Bitmap\Compression\ladder.c">
-      <Filter>Source Files\Bitmap\Compression</Filter>
-    </ClCompile>
-    <ClCompile Include="Bitmap\Compression\lbitio.c">
-      <Filter>Source Files\Bitmap\Compression</Filter>
-    </ClCompile>
-    <ClCompile Include="Bitmap\Compression\lza.c">
-      <Filter>Source Files\Bitmap\Compression</Filter>
-    </ClCompile>
-    <ClCompile Include="Bitmap\Compression\lzh.c">
-      <Filter>Source Files\Bitmap\Compression</Filter>
-    </ClCompile>
-    <ClCompile Include="Bitmap\Compression\o0coder.c">
-      <Filter>Source Files\Bitmap\Compression</Filter>
-    </ClCompile>
-    <ClCompile Include="Bitmap\Compression\o1coder.c">
-      <Filter>Source Files\Bitmap\Compression</Filter>
-    </ClCompile>
-    <ClCompile Include="Bitmap\Compression\palcreate.c">
-      <Filter>Source Files\Bitmap\Compression</Filter>
-    </ClCompile>
-    <ClCompile Include="Bitmap\Compression\palettize.c">
-      <Filter>Source Files\Bitmap\Compression</Filter>
-    </ClCompile>
-    <ClCompile Include="Bitmap\Compression\paloptimize.c">
-      <Filter>Source Files\Bitmap\Compression</Filter>
-    </ClCompile>
-    <ClCompile Include="Bitmap\Compression\rungae.c">
-      <Filter>Source Files\Bitmap\Compression</Filter>
-    </ClCompile>
-    <ClCompile Include="Bitmap\Compression\rungo1.c">
-      <Filter>Source Files\Bitmap\Compression</Filter>
-    </ClCompile>
-    <ClCompile Include="Bitmap\Compression\runtrans.c">
-      <Filter>Source Files\Bitmap\Compression</Filter>
-    </ClCompile>
-    <ClCompile Include="Bitmap\Compression\sortpal.c">
-      <Filter>Source Files\Bitmap\Compression</Filter>
-    </ClCompile>
-    <ClCompile Include="Bitmap\Compression\sortpalx.c">
-      <Filter>Source Files\Bitmap\Compression</Filter>
-    </ClCompile>
-    <ClCompile Include="Bitmap\Compression\strutil.c">
-      <Filter>Source Files\Bitmap\Compression</Filter>
-    </ClCompile>
-    <ClCompile Include="Bitmap\Compression\yuv.c">
-      <Filter>Source Files\Bitmap\Compression</Filter>
     </ClCompile>
     <ClCompile Include="Bsp\jeBSP.cpp">
       <Filter>Source Files\BSP</Filter>
@@ -450,21 +357,6 @@
     <ClCompile Include="Support\Util.cpp">
       <Filter>Source Files\Support</Filter>
     </ClCompile>
-    <ClCompile Include="VFile\dirtree.c">
-      <Filter>Source Files\VFile</Filter>
-    </ClCompile>
-    <ClCompile Include="VFile\fsdos.c">
-      <Filter>Source Files\VFile</Filter>
-    </ClCompile>
-    <ClCompile Include="VFile\Fsmemory.c">
-      <Filter>Source Files\VFile</Filter>
-    </ClCompile>
-    <ClCompile Include="VFile\fsvfs.c">
-      <Filter>Source Files\VFile</Filter>
-    </ClCompile>
-    <ClCompile Include="VFile\vfile.c">
-      <Filter>Source Files\VFile</Filter>
-    </ClCompile>
     <ClCompile Include="Terrain\Quad.cpp">
       <Filter>Source Files\Terrain</Filter>
     </ClCompile>
@@ -500,6 +392,105 @@
     </ClCompile>
     <ClCompile Include="VFile\FSLZ.cpp">
       <Filter>Source Files\VFile</Filter>
+    </ClCompile>
+    <ClCompile Include="Bitmap\Bitmap.cpp">
+      <Filter>Source Files\Bitmap</Filter>
+    </ClCompile>
+    <ClCompile Include="Bitmap\bitmap_blitdata.cpp">
+      <Filter>Source Files\Bitmap</Filter>
+    </ClCompile>
+    <ClCompile Include="Bitmap\bitmap_gamma.cpp">
+      <Filter>Source Files\Bitmap</Filter>
+    </ClCompile>
+    <ClCompile Include="Bitmap\PixelFormat.cpp">
+      <Filter>Source Files\Bitmap</Filter>
+    </ClCompile>
+    <ClCompile Include="Bitmap\Compression\arithc.cpp">
+      <Filter>Source Files\Bitmap\Compression</Filter>
+    </ClCompile>
+    <ClCompile Include="Bitmap\Compression\CodePal.cpp">
+      <Filter>Source Files\Bitmap\Compression</Filter>
+    </ClCompile>
+    <ClCompile Include="Bitmap\Compression\CodeUtil.cpp">
+      <Filter>Source Files\Bitmap\Compression</Filter>
+    </ClCompile>
+    <ClCompile Include="Bitmap\Compression\colorconv.cpp">
+      <Filter>Source Files\Bitmap\Compression</Filter>
+    </ClCompile>
+    <ClCompile Include="Bitmap\Compression\Context.cpp">
+      <Filter>Source Files\Bitmap\Compression</Filter>
+    </ClCompile>
+    <ClCompile Include="Bitmap\Compression\huffa.cpp">
+      <Filter>Source Files\Bitmap\Compression</Filter>
+    </ClCompile>
+    <ClCompile Include="Bitmap\Compression\huffman2.cpp">
+      <Filter>Source Files\Bitmap\Compression</Filter>
+    </ClCompile>
+    <ClCompile Include="Bitmap\Compression\Image.cpp">
+      <Filter>Source Files\Bitmap\Compression</Filter>
+    </ClCompile>
+    <ClCompile Include="Bitmap\Compression\Ladder.cpp">
+      <Filter>Source Files\Bitmap\Compression</Filter>
+    </ClCompile>
+    <ClCompile Include="Bitmap\Compression\lbitio.cpp">
+      <Filter>Source Files\Bitmap\Compression</Filter>
+    </ClCompile>
+    <ClCompile Include="Bitmap\Compression\lza.cpp">
+      <Filter>Source Files\Bitmap\Compression</Filter>
+    </ClCompile>
+    <ClCompile Include="Bitmap\Compression\o0coder.cpp">
+      <Filter>Source Files\Bitmap\Compression</Filter>
+    </ClCompile>
+    <ClCompile Include="Bitmap\Compression\o1coder.cpp">
+      <Filter>Source Files\Bitmap\Compression</Filter>
+    </ClCompile>
+    <ClCompile Include="Bitmap\Compression\palcreate.cpp">
+      <Filter>Source Files\Bitmap\Compression</Filter>
+    </ClCompile>
+    <ClCompile Include="Bitmap\Compression\palettize.cpp">
+      <Filter>Source Files\Bitmap\Compression</Filter>
+    </ClCompile>
+    <ClCompile Include="Bitmap\Compression\paloptimize.cpp">
+      <Filter>Source Files\Bitmap\Compression</Filter>
+    </ClCompile>
+    <ClCompile Include="Bitmap\Compression\rungae.cpp">
+      <Filter>Source Files\Bitmap\Compression</Filter>
+    </ClCompile>
+    <ClCompile Include="Bitmap\Compression\rungo1.cpp">
+      <Filter>Source Files\Bitmap\Compression</Filter>
+    </ClCompile>
+    <ClCompile Include="Bitmap\Compression\runtrans.cpp">
+      <Filter>Source Files\Bitmap\Compression</Filter>
+    </ClCompile>
+    <ClCompile Include="Bitmap\Compression\SortPal.cpp">
+      <Filter>Source Files\Bitmap\Compression</Filter>
+    </ClCompile>
+    <ClCompile Include="Bitmap\Compression\SortPalx.cpp">
+      <Filter>Source Files\Bitmap\Compression</Filter>
+    </ClCompile>
+    <ClCompile Include="Bitmap\Compression\StrUtil.cpp">
+      <Filter>Source Files\Bitmap\Compression</Filter>
+    </ClCompile>
+    <ClCompile Include="Bitmap\Compression\YUV.cpp">
+      <Filter>Source Files\Bitmap\Compression</Filter>
+    </ClCompile>
+    <ClCompile Include="VFile\DirTree.cpp">
+      <Filter>Source Files\VFile</Filter>
+    </ClCompile>
+    <ClCompile Include="VFile\FSDOS.CPP">
+      <Filter>Source Files\VFile</Filter>
+    </ClCompile>
+    <ClCompile Include="VFile\FSMemory.cpp">
+      <Filter>Source Files\VFile</Filter>
+    </ClCompile>
+    <ClCompile Include="VFile\FSVFS.cpp">
+      <Filter>Source Files\VFile</Filter>
+    </ClCompile>
+    <ClCompile Include="VFile\VFile.cpp">
+      <Filter>Source Files\VFile</Filter>
+    </ClCompile>
+    <ClCompile Include="List.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -613,12 +604,6 @@
     </ClInclude>
     <ClInclude Include="..\..\..\include\pixelformat.h">
       <Filter>Source Files\Bitmap</Filter>
-    </ClInclude>
-    <ClInclude Include="Bitmap\Compression\arithc.h">
-      <Filter>Source Files\Bitmap\Compression</Filter>
-    </ClInclude>
-    <ClInclude Include="Bitmap\Compression\codealphas.h">
-      <Filter>Source Files\Bitmap\Compression</Filter>
     </ClInclude>
     <ClInclude Include="Bitmap\Compression\codepal.h">
       <Filter>Source Files\Bitmap\Compression</Filter>

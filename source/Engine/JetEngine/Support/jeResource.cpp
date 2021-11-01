@@ -35,7 +35,7 @@
 #include "jeMaterial.h"
 #include "Actor.h"
 
-extern jet3d::jeFileLogger *jetLog;
+extern jet3d::jeFileLoggerPtr jetLog;
 
 ////////////////////////////////////////////////////////////////////////////////////////
 //	jeResourceMgr struct
@@ -1140,7 +1140,7 @@ void jeResourceMgr_Impl::shutdown()
 bool jeResourceMgr_Impl::add(const std::string &strName, uint32 iType, void *pvData)
 {
 	std::string temp = "jeResourceMgr_add() - Adding resource " + strName;
-	jetLog->logMessage(jet3d::jeLogger::LogInfo, temp);
+	jetLog->logMessage(jet3d::jeLogger::LogThreshold::LogInfo, temp);
 
 	ResourceMapItr i = m_Resources.find(strName);
 	if (i == m_Resources.end())
@@ -1150,14 +1150,14 @@ bool jeResourceMgr_Impl::add(const std::string &strName, uint32 iType, void *pvD
 		return true;
 	}
 
-	jetLog->logMessage(jet3d::jeLogger::LogInfo, "jeResourceMgr_Add() - Resource already Exists!!");
+	jetLog->logMessage(jet3d::jeLogger::LogThreshold::LogInfo, "jeResourceMgr_Add() - Resource already Exists!!");
 	return false;
 }
 
 void *jeResourceMgr_Impl::get(const std::string &strName)
 {
 	std::string temp = "jeResourceMgr::get() - Getting resource " + strName;
-	jetLog->logMessage(jet3d::jeLogger::LogInfo, temp);
+	jetLog->logMessage(jet3d::jeLogger::LogThreshold::LogInfo, temp);
 
 	ResourceMapItr i = m_Resources.find(strName);
 	if (i != m_Resources.end())
@@ -1166,14 +1166,14 @@ void *jeResourceMgr_Impl::get(const std::string &strName)
 		return i->second->getData();
 	}
 
-	jetLog->logMessage(jet3d::jeLogger::LogInfo, "jeResourceMgr_Get() - Resource not found!!");
+	jetLog->logMessage(jet3d::jeLogger::LogThreshold::LogInfo, "jeResourceMgr_Get() - Resource not found!!");
 	return nullptr;
 }
 
 bool jeResourceMgr_Impl::remove(const std::string &strName)
 {
 	std::string temp = "jeResource_remove() - Removing resource " + strName;
-	jetLog->logMessage(jet3d::jeLogger::LogInfo, temp);
+	jetLog->logMessage(jet3d::jeLogger::LogThreshold::LogInfo, temp);
 
 	ResourceMapItr i = m_Resources.find(strName);
 	if (i != m_Resources.end())
@@ -1187,7 +1187,7 @@ bool jeResourceMgr_Impl::remove(const std::string &strName)
 		return true;
 	}
 
-	jetLog->logMessage(jet3d::jeLogger::LogInfo, "jeResourceMgr_Remove() - Resource not found!!");
+	jetLog->logMessage(jet3d::jeLogger::LogThreshold::LogInfo, "jeResourceMgr_Remove() - Resource not found!!");
 	return false;
 }
 
@@ -1211,13 +1211,13 @@ bool jeResourceMgr_Impl::openDirectory(const std::string &strDirName, const std:
 	jeVFile *pFile = jeVFile_OpenNewSystem(NULL, JE_VFILE_TYPE_DOS, strDirName.c_str(), NULL, JE_VFILE_OPEN_READONLY | JE_VFILE_OPEN_DIRECTORY);
 	if (!pFile)
 	{
-		jetLog->logMessage(jet3d::jeLogger::LogError, "jeResourceMgr_OpenDirectory() - Could not open directory!!");
+		jetLog->logMessage(jet3d::jeLogger::LogThreshold::LogError, "jeResourceMgr_OpenDirectory() - Could not open directory!!");
 		return false;
 	}
 
 	if (!addVFile(strResourceName, pFile))
 	{
-		jetLog->logMessage(jet3d::jeLogger::LogError, "jeResourceMgr_OpenDirectory() - Resource already exists!!");
+		jetLog->logMessage(jet3d::jeLogger::LogThreshold::LogError, "jeResourceMgr_OpenDirectory() - Resource already exists!!");
 		jeVFile_Close(pFile);
 		pFile = nullptr;
 		return false;
@@ -1226,7 +1226,7 @@ bool jeResourceMgr_Impl::openDirectory(const std::string &strDirName, const std:
 	ResourceMapItr i = m_Resources.find(strResourceName);
 	if (i == m_Resources.end())
 	{
-		jetLog->logMessage(jet3d::jeLogger::LogError, "jeResourceMgr_OpenDirectory() - Resource not added successfully!!");
+		jetLog->logMessage(jet3d::jeLogger::LogThreshold::LogError, "jeResourceMgr_OpenDirectory() - Resource not added successfully!!");
 		removeVFile(strResourceName);
 		jeVFile_Close(pFile);
 		return false;
@@ -1253,7 +1253,7 @@ void *jeResourceMgr_Impl::createResource(const std::string &strName, uint32 iTyp
 	{
 	case JE_RESOURCE_BITMAP:
 	{
-		jetLog->logMessage(jet3d::jeLogger::LogInfo, "jeResource_CreateResource() - Creating bitmap resource " + strName);
+		jetLog->logMessage(jet3d::jeLogger::LogThreshold::LogInfo, "jeResource_CreateResource() - Creating bitmap resource " + strName);
 
 		Directory = getVFile("GlobalMaterials");
 		if (!Directory)
@@ -1323,7 +1323,7 @@ void *jeResourceMgr_Impl::createResource(const std::string &strName, uint32 iTyp
 		jeTexture *Bmp = jeEngine_CreateTextureFromFile(m_pEngine, pFile);
 		if (!Bmp)
 		{
-			jetLog->logMessage(jet3d::jeLogger::LogError, "[Resource Manager] Could not load texture from file." + strFileName);
+			jetLog->logMessage(jet3d::jeLogger::LogThreshold::LogError, "[Resource Manager] Could not load texture from file." + strFileName);
 			jeVFile_Close(pFile);
 			pFile = nullptr;
 			return nullptr;
@@ -1347,25 +1347,25 @@ bool jeResourceMgr_Impl::initializeWithDefaults()
 
 	if (!openDirectory("GlobalMaterials", "GlobalMaterials"))
 	{
-		jetLog->logMessage(jet3d::jeLogger::LogError, "jeResourceMgr_CreateDefault() - Could not open GlobalMaterials!!");
+		jetLog->logMessage(jet3d::jeLogger::LogThreshold::LogError, "jeResourceMgr_CreateDefault() - Could not open GlobalMaterials!!");
 		clean = false;
 	}
 
 	if (!openDirectory("Actors", "Actors"))
 	{
-		jetLog->logMessage(jet3d::jeLogger::LogError, "jeResourceMgr_CreateDefault() - Could not open Actors!!");
+		jetLog->logMessage(jet3d::jeLogger::LogThreshold::LogError, "jeResourceMgr_CreateDefault() - Could not open Actors!!");
 		clean = false;
 	}
 
 	if (!openDirectory("Sounds", "Sounds"))
 	{
-		jetLog->logMessage(jet3d::jeLogger::LogError, "jeResourceMgr_CreateDefault() - Could not open Sounds!!");
+		jetLog->logMessage(jet3d::jeLogger::LogThreshold::LogError, "jeResourceMgr_CreateDefault() - Could not open Sounds!!");
 		clean = false;
 	}
 
 	if (!openDirectory("Shaders", "Shaders"))
 	{
-		jetLog->logMessage(jet3d::jeLogger::LogError, "jeResourceMgr_CreateDefault() - Could not open Shaders!!");
+		jetLog->logMessage(jet3d::jeLogger::LogThreshold::LogError, "jeResourceMgr_CreateDefault() - Could not open Shaders!!");
 		clean = false;
 	}
 
@@ -1417,13 +1417,13 @@ jeResource_Impl::~jeResource_Impl()
 	m_pvData = nullptr;
 }
 
-uint32 jeResource_Impl::AddRef()
+uint32 jeResource_Impl::AddRef() noexcept
 {
 	m_iRefCount++;
 	return m_iRefCount;
 }
 
-uint32 jeResource_Impl::Release()
+uint32 jeResource_Impl::Release() noexcept
 {
 	m_iRefCount--;
 	if (m_iRefCount == 0)

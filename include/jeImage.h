@@ -33,7 +33,13 @@ typedef struct jeTexture					jeTexture;
 class jeImage
 {
 protected:
-	virtual ~jeImage(){}
+	jeImage() = delete;
+	jeImage(const jeImage&) = delete;
+	jeImage(jeImage&&) = delete;
+	jeImage& operator=(const jeImage&) = delete;
+	jeImage& operator=(jeImage&&) = delete;
+
+	~jeImage() = delete;
 
 public:
 	virtual jeBoolean Create(int32 Width, int32 Height, int32 BPP) = 0;

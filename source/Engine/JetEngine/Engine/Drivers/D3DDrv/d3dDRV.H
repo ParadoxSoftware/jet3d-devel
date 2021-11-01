@@ -30,10 +30,10 @@ typedef HRESULT (WINAPI *LPDIRECTDRAWENUMERATE)(  LPDDENUMCALLBACKA lpCallback, 
 extern DRV_Window			D3DDrv_ClientWindow;
 extern DRV_Driver			D3DDRV;
 
-LPDIRECTDRAWCREATE		D3DDrv_DirectDrawCreate(void);
-LPDIRECTDRAWENUMERATE	D3DDrv_DirectDrawEnumerate(void);
+LPDIRECTDRAWCREATE		D3DDrv_DirectDrawCreate(void) noexcept;
+LPDIRECTDRAWENUMERATE	D3DDrv_DirectDrawEnumerate(void) noexcept;
 
-void DRIVERCC			ErrorBox(char *Str);
+//void DRIVERCC			ErrorBox(char *Str);
 BOOL DRIVERCC			DrvShutdown(void);
 void					SetLastDrvError(int32 Error, char *ErrorStr);
 

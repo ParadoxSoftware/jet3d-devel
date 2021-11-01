@@ -279,16 +279,19 @@ jeTexture *Create3DTHandle(jeTexture *THandle, int32 Width, int32 Height, int32 
 	assert(NumMipLevels < THANDLE_MAX_MIP_LEVELS);
 
 	// Store width/height info
-	THandle->Width = (uint16)Width;
-	THandle->Height = (uint16)Height;
-	THandle->NumMipLevels = (uint8)NumMipLevels;
-	THandle->Log = (uint8)GetLog(Width, Height);
+	THandle->Width = static_cast<uint16>(Width);
+	THandle->Height = static_cast<uint16>(Height);
+	THandle->NumMipLevels = static_cast<uint8>(NumMipLevels);
+	THandle->Log = static_cast<uint8>(GetLog(Width, Height));
 	THandle->Stride = (1<<THandle->Log);
 
 	// Create the surfaces to hold all the mips
-	THandle->MipData = (THandle_MipData*)malloc(sizeof(THandle_MipData)*NumMipLevels);
-	memset(THandle->MipData, 0, sizeof(THandle_MipData)*NumMipLevels);
-	
+	//THandle->MipData = static_cast<THandle_MipData*>(malloc(sizeof(THandle_MipData)*NumMipLevels));
+	THandle->MipData = new THandle_MipData[NumMipLevels];
+	if (THandle->MipData != nullptr) {
+		memset(THandle->MipData, 0, sizeof(THandle_MipData) * NumMipLevels);
+	}
+
 	if (!THandle->MipData)
 	{
 		THandle_Destroy(THandle);
@@ -300,7 +303,7 @@ jeTexture *Create3DTHandle(jeTexture *THandle, int32 Width, int32 Height, int32 
 	// Create all the surfaces for each mip level
 	for (i=0; i< NumMipLevels; i++)
 	{
-		int32	Stage;
+		int32	Stage = 0;
 
 		if (!THandle_CreateSurfaces(&THandle->MipData[i], Size, Size, &CurrentSurfDesc, JE_FALSE, 0 , true))
 		{
@@ -337,7 +340,7 @@ jeTexture *CreateLightmapTHandle(jeTexture *THandle, int32 Width, int32 Height, 
 {
 	int32				Size, Stage;
 
-	assert(NumMipLevels < THANDLE_MAX_MIP_LEVELS);
+	assert(NumMipLevels < THANDLE_MAX_MIP_LEVELS && THandle != nullptr);
 
 	if (NumMipLevels != 1)
 	{
@@ -356,16 +359,20 @@ jeTexture *CreateLightmapTHandle(jeTexture *THandle, int32 Width, int32 Height, 
 
 	Size = 1<<THandle->Log;
 
-	THandle->MipData = (THandle_MipData*)malloc(sizeof(THandle_MipData)*NumMipLevels);
-	memset(THandle->MipData, 0, sizeof(THandle_MipData)*NumMipLevels);
+	//THandle->MipData = (THandle_MipData*)malloc(sizeof(THandle_MipData)*NumMipLevels);
+	THandle->MipData =  new THandle_MipData[NumMipLevels];
+	if (THandle->MipData != nullptr) {
+		memset(THandle->MipData, 0, sizeof(THandle_MipData) * NumMipLevels);
 
-	// Force an update the first time used
-	THandle->MipData[0].Flags = THANDLE_UPDATE;
+
+		// Force an update the first time used
+		THandle->MipData[0].Flags = THANDLE_UPDATE;
+	}
 
 #ifdef D3D_MANAGE_TEXTURES
 	#ifndef USE_TPAGES
 	{
-		int32		Stage;
+		int32		Stage = 0;
 
 		if (D3DInfo.CanDoMultiTexture)
 			Stage = 1;
@@ -408,7 +415,7 @@ jeTexture *CreateLightmapTHandle(jeTexture *THandle, int32 Width, int32 Height, 
 //============================================================================================
 jeTexture *Create2DTHandle(jeTexture *THandle, int32 Width, int32 Height, int32 NumMipLevels, const jeRDriver_PixelFormat *PixelFormat)
 {
-	assert(NumMipLevels < THANDLE_MAX_MIP_LEVELS);
+	assert(NumMipLevels < THANDLE_MAX_MIP_LEVELS && THandle != nullptr);
 
 	if (NumMipLevels != 1)
 	{
@@ -425,9 +432,11 @@ jeTexture *Create2DTHandle(jeTexture *THandle, int32 Width, int32 Height, int32 
 	THandle->Stride = (uint16)( ( Width + 3 ) & (~3) ); // Fix by Stu, added by Incarnadine
 
 	// Create the surfaces to hold all the mips
-	THandle->MipData = (THandle_MipData*)malloc(sizeof(THandle_MipData)*NumMipLevels);
-	memset(THandle->MipData, 0, sizeof(THandle_MipData)*NumMipLevels);
-	
+	THandle->MipData = new THandle_MipData[NumMipLevels];
+	if (THandle->MipData != nullptr) {
+		memset(THandle->MipData, 0, sizeof(THandle_MipData) * NumMipLevels);
+	}
+
 	if (!THandle->MipData)
 	{
 		THandle_Destroy(THandle);

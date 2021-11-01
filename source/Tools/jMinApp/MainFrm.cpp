@@ -111,6 +111,8 @@ CMainFrame::CMainFrame()
 	// TODO: add member initialization code here
 	//	*** initialize member variables ***	//
 
+	m_Log = std::make_unique<jet3d::jeFileLogger>("jMiniApp", ".\\", jet3d::jeLogger::LogInfo | jet3d::jeLogger::LogWarn | jet3d::jeLogger::LogError | jet3d::jeLogger::LogFatal);
+
 	m_bJetInitializationDone = false;
 	m_bReadyToRender = false;
 	m_bShuttingDown = false;
@@ -128,20 +130,20 @@ m_strGameName = _T("Jet3D_MinApp");
 	m_strLevelDir = _T("Levels");				
 	m_strObjectDir = _T("objects");			
 
-	m_pEngine = NULL;
-	m_pvFileSys = NULL;
-	m_pResourceMgr = NULL;
-	m_pPtrMgr = NULL;
-	m_pCamera = NULL;
-	m_pvfMaterialFile = NULL;
-	m_pvfActorFile = NULL;
-	m_pvfSoundFile = NULL;
-	m_pvfLevelFile = NULL;
-	m_pDrvSys = NULL;
-	m_pDriver = NULL;
-	m_pMode = NULL;
-	m_pSoundSys = NULL;
-	m_pWorld = NULL;
+	m_pEngine = nullptr;
+	m_pvFileSys = nullptr;
+	m_pResourceMgr = nullptr;
+	m_pPtrMgr = nullptr;
+	m_pCamera = nullptr;
+	m_pvfMaterialFile = nullptr;
+	m_pvfActorFile = nullptr;
+	m_pvfSoundFile = nullptr;
+	m_pvfLevelFile = nullptr;
+	m_pDrvSys = nullptr;
+	m_pDriver = nullptr;
+	m_pMode = nullptr;
+	m_pSoundSys = nullptr;
+	m_pWorld = nullptr;
 
 	m_ptOldMousePoint.SetPoint(0,0);
 	m_vecCameraPos.X = m_vecCameraPos.Y = m_vecCameraPos.Z = 0.0f;
@@ -150,18 +152,18 @@ m_strGameName = _T("Jet3D_MinApp");
 	m_bBrowseLevel = false;
 	m_bJustMoved = true;
 
-	m_pImage = NULL;
+	m_pImage = nullptr;
 
 #ifdef NDEBUG
-	m_strDriverName = _T("D3D");
+//	m_strDriverName = _T("D3D");
 //	m_strDriverName = _T("Direct3D 9");
-//	m_strDriverName = _T("OpenGL");
+	m_strDriverName = _T("OpenGL");
 	m_strDesiredMode = _T("");
 #endif
 
 #ifdef _DEBUG
-	m_strDriverName = _T("D3D");
-	//m_strDriverName = _T("OpenGL");
+//	m_strDriverName = _T("D3D");
+	m_strDriverName = _T("OpenGL");
 //	m_strDriverName = _T("Direct3D 9");
 #endif
 
@@ -284,26 +286,26 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 	// create a JetView to occupy the client area of the frame
 #ifdef _DEBUG	//	windowed
-//	if (!m_wndView.CreateEx(WS_EX_TOPMOST, AfxRegisterWndClass(CS_DBLCLKS /*| CS_OWNDC*/ | CS_SAVEBITS, NULL, 
-//		(HBRUSH)GetStockObject(NULL_BRUSH)), NULL, WS_CHILD | WS_VISIBLE /*| WS_POPUP */ | WS_OVERLAPPEDWINDOW | WS_MINIMIZE,
-//		CRect(0,10,0,10), this, 1000, NULL))
+//	if (!m_wndView.CreateEx(WS_EX_TOPMOST, AfxRegisterWndClass(CS_DBLCLKS /*| CS_OWNDC*/ | CS_SAVEBITS, nullptr, 
+//		(HBRUSH)GetStockObject(nullptr_BRUSH)), nullptr, WS_CHILD | WS_VISIBLE /*| WS_POPUP */ | WS_OVERLAPPEDWINDOW | WS_MINIMIZE,
+//		CRect(0,10,0,10), this, 1000, nullptr))
 //	  CWnd* pWnd = new CJetView;
-//   if (!m_wndView.CreateEx( WS_EX_TRANSPARENT /*| WS_EX_TOPMOST */ /*| WS_EX_TOOLWINDOW*/, AfxRegisterWndClass(CS_DBLCLKS  | CS_OWNDC| CS_SAVEBITS, NULL, 
-//		(HBRUSH)GetStockObject(NULL_BRUSH)), NULL, WS_CHILD  |/*| WS_VISIBLE | /*WS_POPUP |*/ WS_OVERLAPPEDWINDOW | WS_MINIMIZE,
- //    CRect(0,800,0,600), this, 1, NULL))
+//   if (!m_wndView.CreateEx( WS_EX_TRANSPARENT /*| WS_EX_TOPMOST */ /*| WS_EX_TOOLWINDOW*/, AfxRegisterWndClass(CS_DBLCLKS  | CS_OWNDC| CS_SAVEBITS, nullptr, 
+//		(HBRUSH)GetStockObject(nullptr_BRUSH)), nullptr, WS_CHILD  |/*| WS_VISIBLE | /*WS_POPUP |*/ WS_OVERLAPPEDWINDOW | WS_MINIMIZE,
+ //    CRect(0,800,0,600), this, 1, nullptr))
 
 
 
 	
 #endif
 #ifdef NDEBUG	//	fullscreen
-//	if (!m_wndView.CreateEx(WS_EX_TOPMOST, AfxRegisterWndClass(CS_DBLCLKS | CS_OWNDC | CS_SAVEBITS, NULL, 
-//		(HBRUSH)GetStockObject(NULL_BRUSH)), NULL, WS_CHILD,
-//		rectMainView, this, 1000, NULL))
+//	if (!m_wndView.CreateEx(WS_EX_TOPMOST, AfxRegisterWndClass(CS_DBLCLKS | CS_OWNDC | CS_SAVEBITS, nullptr, 
+//		(HBRUSH)GetStockObject(nullptr_BRUSH)), nullptr, WS_CHILD,
+//		rectMainView, this, 1000, nullptr))
 
-//if (!m_wndView.CreateEx(WS_EX_TOPMOST, AfxRegisterWndClass(CS_DBLCLKS /*| CS_OWNDC*/ | CS_SAVEBITS, NULL, 
-//		(HBRUSH)GetStockObject(NULL_BRUSH)), NULL, WS_CHILD | WS_VISIBLE /*| WS_POPUP*/  |WS_OVERLAPPEDWINDOW  | WS_MINIMIZE,
-//		CRect(0,10,0,10), this, 1000, NULL))
+//if (!m_wndView.CreateEx(WS_EX_TOPMOST, AfxRegisterWndClass(CS_DBLCLKS /*| CS_OWNDC*/ | CS_SAVEBITS, nullptr, 
+//		(HBRUSH)GetStockObject(nullptr_BRUSH)), nullptr, WS_CHILD | WS_VISIBLE /*| WS_POPUP*/  |WS_OVERLAPPEDWINDOW  | WS_MINIMIZE,
+//		CRect(0,10,0,10), this, 1000, nullptr))
 
 
 #endif
@@ -311,8 +313,8 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 //		TRACE0("Failed to create view window\n");
 //		return -1;
 //	}
-//		HWND	hWndThis = NULL;
-//		HWND	hWndView = NULL;
+//		HWND	hWndThis = nullptr;
+//		HWND	hWndView = nullptr;
 
 //	hWndThis = GetSafeHwnd();
 //	hWndView = m_wndView.GetSafeHwnd();
@@ -346,7 +348,7 @@ BOOL CMainFrame::PreCreateWindow(CREATESTRUCT& cs)
 	//  the CREATESTRUCT cs
 
 	//	mods of this window's characteristics so we can't see it.
-//	cs.hMenu = NULL;
+//	cs.hMenu = nullptr;
 //	cs.x = 0;
 //	cs.y = 0;
 //	cs.cx = 800;
@@ -358,7 +360,7 @@ BOOL CMainFrame::PreCreateWindow(CREATESTRUCT& cs)
 	cs.dwExStyle&=~WS_EX_CLIENTEDGE;
 #endif
 	//cs.lpszClass = AfxRegisterWndClass(0);
-	cs.lpszClass = AfxRegisterWndClass(NULL, NULL, 
+	cs.lpszClass = AfxRegisterWndClass(0, nullptr, 
 		(HBRUSH)GetStockObject(NULL_BRUSH));
 	return TRUE;
 }
@@ -463,18 +465,18 @@ bool CMainFrame::ShowMainMenu(bool bShow)
 {
 	if (!bShow)
 	{
-		CMenu*	pOldMenu = NULL;
+		CMenu*	pOldMenu = nullptr;
 		pOldMenu = GetMenu();
 		if (pOldMenu)
 		{
 			m_menuMain.Attach(pOldMenu->Detach());
-			if (SetMenu((CMenu*)NULL))
+			if (SetMenu((CMenu*)nullptr))
 				return true;
 		}
 	}
 	else
 	{
-		if (m_menuMain.GetSafeHmenu()!= NULL)
+		if (m_menuMain.GetSafeHmenu()!= nullptr)
 		{
 			SetMenu(&m_menuMain);
 			m_menuMain.Detach();
@@ -491,7 +493,7 @@ bool CMainFrame::ShowMainMenu(bool bShow)
 bool	CMainFrame::InitializeJet3D()
 {
 
-//	CMainFrame	*pMainFrame = NULL;
+//	CMainFrame	*pMainFrame = nullptr;
 //	pMainFrame = (CMainFrame*)AfxGetMainWnd();
 	CRect	rectMainView;
 
@@ -569,7 +571,7 @@ bool	CMainFrame::InitializeJet3D()
 		m_ptOldMousePoint = point;
 
 //		m_pImage = jeEngine_CreateImage();
-		//jeVFile *File = jeVFile_OpenNewSystem(NULL, JE_VFILE_TYPE_DOS, "GlobalMaterials\\rhine.bmp", NULL, JE_VFILE_OPEN_READONLY);
+		//jeVFile *File = jeVFile_OpenNewSystem(nullptr, JE_VFILE_TYPE_DOS, "GlobalMaterials\\rhine.bmp", nullptr, JE_VFILE_OPEN_READONLY);
 		//if (!File)
 		//{
 		//	AfxMessageBox("Could not open image file!!");
@@ -579,7 +581,7 @@ bool	CMainFrame::InitializeJet3D()
 		{
 			AfxMessageBox("Could not load image!!");
 			m_pImage->Release();
-			m_pImage = NULL;
+			m_pImage = nullptr;
 		}
 */
 		//jeVFile_Close(File);
@@ -723,7 +725,7 @@ bool CMainFrame::ShutdownAll()
 		{
 			jeEngine_RemoveImage(m_pEngine, m_pImage);
 			m_pImage->Release();
-			m_pImage = NULL;
+			m_pImage = nullptr;
 		}*/
 
 		//	destroy world, engine, etc...
@@ -804,20 +806,20 @@ bool CMainFrame::ShutdownAll()
 		}
 
 		//	nullify all pointers at once -- just for style reasons
-		m_pWorld = NULL;
-		m_pEngine = NULL;
-		m_pSoundSys = NULL;
-		m_pDrvSys = NULL;
-		m_pCamera = NULL;
-		m_pDriver = NULL;
-		m_pMode = NULL;
-		m_pvfMaterialFile = NULL;
-		m_pvfActorFile = NULL;
-		m_pvfSoundFile = NULL;
-		m_pvfLevelFile = NULL;
-		m_pvFileSys = NULL;
-		m_pResourceMgr = NULL;
-		m_pPtrMgr = NULL;
+		m_pWorld = nullptr;
+		m_pEngine = nullptr;
+		m_pSoundSys = nullptr;
+		m_pDrvSys = nullptr;
+		m_pCamera = nullptr;
+		m_pDriver = nullptr;
+		m_pMode = nullptr;
+		m_pvfMaterialFile = nullptr;
+		m_pvfActorFile = nullptr;
+		m_pvfSoundFile = nullptr;
+		m_pvfLevelFile = nullptr;
+		m_pvFileSys = nullptr;
+		m_pResourceMgr = nullptr;
+		m_pPtrMgr = nullptr;
 
 		//	redisplay it (not really needed here, but good form)
 		ShowCursor(TRUE);
@@ -843,8 +845,8 @@ bool CMainFrame::InitFileSystem(jeEngine* pEngine)
 	//	So, we pass the BUFFER from the CString var. This IS a slight inconvenience. BUT overall,
 	//	CString is such a powerful and elegant class (when compared to the char type),
 	//	that the benefits far outweigh the difficulties.
-	m_pvFileSys = jeVFile_OpenNewSystem(NULL, JE_VFILE_TYPE_DOS,
-		m_strBaseDir.GetBuffer(m_strBaseDir.GetLength()), NULL, JE_VFILE_OPEN_DIRECTORY);
+	m_pvFileSys = jeVFile_OpenNewSystem(nullptr, JE_VFILE_TYPE_DOS,
+		m_strBaseDir.GetBuffer(m_strBaseDir.GetLength()), nullptr, JE_VFILE_OPEN_DIRECTORY);
 
 	if (!m_pvFileSys)
 		return false;
@@ -857,30 +859,30 @@ bool CMainFrame::InitFileSystem(jeEngine* pEngine)
 	{	
 		//	now, create specialized virtual file systems.
 
-		m_pvfMaterialFile = jeVFile_OpenNewSystem(NULL, JE_VFILE_TYPE_DOS,
+		m_pvfMaterialFile = jeVFile_OpenNewSystem(nullptr, JE_VFILE_TYPE_DOS,
 			m_strMaterialDir.GetBuffer(m_strMaterialDir.GetLength()),
-			NULL, JE_VFILE_OPEN_READONLY|JE_VFILE_OPEN_DIRECTORY);
+			nullptr, JE_VFILE_OPEN_READONLY|JE_VFILE_OPEN_DIRECTORY);
 
 		if (!m_pvfMaterialFile)
 			return false;
 
-		m_pvfSoundFile = jeVFile_OpenNewSystem(NULL, JE_VFILE_TYPE_DOS,
-			m_strSoundDir.GetBuffer(m_strSoundDir.GetLength()), NULL,
+		m_pvfSoundFile = jeVFile_OpenNewSystem(nullptr, JE_VFILE_TYPE_DOS,
+			m_strSoundDir.GetBuffer(m_strSoundDir.GetLength()), nullptr,
 			JE_VFILE_OPEN_READONLY|JE_VFILE_OPEN_DIRECTORY);
 
 		if (!m_pvfSoundFile)
 			return false;
 
-		m_pvfActorFile = jeVFile_OpenNewSystem(NULL, JE_VFILE_TYPE_DOS,
+		m_pvfActorFile = jeVFile_OpenNewSystem(nullptr, JE_VFILE_TYPE_DOS,
 			m_strActorDir.GetBuffer(m_strActorDir.GetLength()),
-			NULL, JE_VFILE_OPEN_READONLY|JE_VFILE_OPEN_DIRECTORY);
+			nullptr, JE_VFILE_OPEN_READONLY|JE_VFILE_OPEN_DIRECTORY);
 
 		if (!m_pvfActorFile)
 			return false;
 
-		m_pvfLevelFile = jeVFile_OpenNewSystem(NULL, JE_VFILE_TYPE_DOS,
+		m_pvfLevelFile = jeVFile_OpenNewSystem(nullptr, JE_VFILE_TYPE_DOS,
 			m_strLevelDir.GetBuffer(m_strLevelDir.GetLength()),
-			NULL, JE_VFILE_OPEN_READONLY|JE_VFILE_OPEN_DIRECTORY);
+			nullptr, JE_VFILE_OPEN_READONLY|JE_VFILE_OPEN_DIRECTORY);
 
 		if (!m_pvfLevelFile)
 			return false;
@@ -892,7 +894,7 @@ bool CMainFrame::InitFileSystem(jeEngine* pEngine)
 			m_pvfMaterialFile )) */
 		if (!m_pResourceMgr->addVFile(m_strMaterialDir.GetBuffer(m_strMaterialDir.GetLength()), m_pvfMaterialFile))
 		{
-			jeErrorLog_AddString(-1, "Could not add GlobalMaterials directory!!", NULL);
+			jeErrorLog_AddString(-1, "Could not add GlobalMaterials directory!!", nullptr);
 			return false;
 		}
 		/*if( !jeResource_AddVFile(m_pResourceMgr,
@@ -900,7 +902,7 @@ bool CMainFrame::InitFileSystem(jeEngine* pEngine)
 			m_pvfSoundFile ))*/
 		if (!m_pResourceMgr->addVFile(m_strSoundDir.GetBuffer(m_strSoundDir.GetLength()), m_pvfSoundFile))
 		{
-			jeErrorLog_AddString(-1, "Could not add Sounds directory!!", NULL);
+			jeErrorLog_AddString(-1, "Could not add Sounds directory!!", nullptr);
 			return false;
 		}
 		/*if (!jeResource_AddVFile(m_pResourceMgr,
@@ -908,7 +910,7 @@ bool CMainFrame::InitFileSystem(jeEngine* pEngine)
 			m_pvfActorFile))*/
 		if (!m_pResourceMgr->addVFile(m_strActorDir.GetBuffer(m_strActorDir.GetLength()), m_pvfActorFile))
 		{
-			jeErrorLog_AddString(-1, "Could not add Actors directory!!", NULL);
+			jeErrorLog_AddString(-1, "Could not add Actors directory!!", nullptr);
 			return false;
 		}
 
@@ -917,7 +919,7 @@ bool CMainFrame::InitFileSystem(jeEngine* pEngine)
 			m_pvfLevelFile))*/
 		if (!m_pResourceMgr->addVFile(m_strLevelDir.GetBuffer(m_strLevelDir.GetLength()), m_pvfLevelFile))
 		{
-			jeErrorLog_AddString(-1, "Could not add Levels directory!!", NULL);
+			jeErrorLog_AddString(-1, "Could not add Levels directory!!", nullptr);
 			return false;
 		}
 
@@ -1016,10 +1018,10 @@ bool CMainFrame::InitEngine(HWND hWnd)
 ///////////////////////////////////////////////////////////////////////////////
 bool	CMainFrame::LoadDriver()
 {
-	long	tempwidth;
-	long	tempheight;
-	const	char	*drvname = NULL;	
-	const	char	*ModeName = NULL;
+	long	tempwidth = 0;
+	long	tempheight = 0;
+	const	char	*drvname = nullptr;	
+	const	char	*ModeName = nullptr;
 	CString strModeName = _T("");
 
 	if (m_pEngine)
@@ -1041,18 +1043,20 @@ bool	CMainFrame::LoadDriver()
 
 		if (!m_pDriver)	
 		{
-			m_pDriver = jeDriver_SystemGetNextDriver(m_pDrvSys, NULL);
+			m_pDriver = jeDriver_SystemGetNextDriver(m_pDrvSys, nullptr);
 
 			if (!m_pDriver)
 				return false;
 		}// if(!m_pDriver...
 
-		while (m_pDriver != NULL)
+		while (m_pDriver != nullptr)
 		{
 			jeDriver_GetName(m_pDriver, &drvname);
 
+			m_Log->logMessage(jet3d::jeLogger::LogInfo, drvname);
+
 			//	if it's the driver name we want, then move to the next task...
-			if (strstr(drvname, m_strDriverName.GetBuffer(m_strDriverName.GetLength())) != NULL)
+			if (strstr(drvname, m_strDriverName.GetBuffer(m_strDriverName.GetLength())) != nullptr)
 			{
 				break;
 			}
@@ -1064,8 +1068,8 @@ bool	CMainFrame::LoadDriver()
 		{	
 			if (!m_pMode)
 			{	
-				m_pMode = jeDriver_GetNextMode(m_pDriver, NULL);
-				while (m_pMode != NULL)
+				m_pMode = jeDriver_GetNextMode(m_pDriver, nullptr);
+				while (m_pMode != nullptr)
 				{
 					jeDriver_ModeGetWidthHeight(m_pMode, &tempwidth, &tempheight);
 
@@ -1093,8 +1097,8 @@ bool	CMainFrame::LoadDriver()
 
 			if (m_pMode)
 			{
-				jeBoolean	result;
-				HWND		hWnd = NULL;
+				jeBoolean	result = JE_FALSE;
+				HWND		hWnd = nullptr;
 				
 				hWnd = GetSafeHwnd();
 				
@@ -1150,12 +1154,12 @@ CString CMainFrame::BrowseForWorld()
 	int				nItem = 0;
 	int				itemtext = 0;
 	LPCTSTR			strDialogTitle = _T("Browse for *.j3d world");
-	LPCTSTR			bsp = NULL;
+	LPCTSTR			bsp = nullptr;
 	CFileDialog		fdJ3D
 		(
 		TRUE,
 		bsp,
-		NULL,
+		nullptr,
 		OFN_EXTENSIONDIFFERENT	|
 		OFN_FILEMUSTEXIST		|
 		OFN_PATHMUSTEXIST,
@@ -1194,9 +1198,9 @@ CString CMainFrame::BrowseForWorld()
 bool CMainFrame::LoadWorld()
 {
 	bool			bNullWorld = false;
-	jeVFile			*pvfTemp = NULL;
-	jeVFile			*pvfJ3dFork = NULL;
-	CString			strNullPath = _T("NULL");
+	jeVFile			*pvfTemp = nullptr;
+	jeVFile			*pvfJ3dFork = nullptr;
+	CString			strNullPath = _T("nullptr");
 	CString			strBlankPath = _T("");
 
 	SetCurrentDirectory(m_strBaseDir);
@@ -1216,7 +1220,7 @@ bool CMainFrame::LoadWorld()
 			}
 			else  // Found File
 			{
-				char* levelpath = NULL;
+				char* levelpath = nullptr;
 				levelpath = m_strLevel.GetBuffer(m_strLevel.GetLength());
 
 				if (levelpath)
@@ -1269,13 +1273,13 @@ bool CMainFrame::LoadWorld()
 			}
 			else  // Found File
 			{
-				char* levelpath = NULL;
+				char* levelpath = nullptr;
 				levelpath = m_strLevel.GetBuffer(m_strLevel.GetLength());
 
 				if (levelpath)
 				{
-					pvfTemp = jeVFile_OpenNewSystem(NULL, JE_VFILE_TYPE_VIRTUAL, levelpath, 
-						NULL, JE_VFILE_OPEN_READONLY|JE_VFILE_OPEN_DIRECTORY);
+					pvfTemp = jeVFile_OpenNewSystem(nullptr, JE_VFILE_TYPE_VIRTUAL, levelpath, 
+						nullptr, JE_VFILE_OPEN_READONLY|JE_VFILE_OPEN_DIRECTORY);
 
 					if (pvfTemp)
 					{
@@ -1330,7 +1334,7 @@ bool CMainFrame::LoadWorld()
 						return false;
 					}
 				}	//	if (levelpath)...
-				else	//	create NULL world since we can't get levelpath
+				else	//	create nullptr world since we can't get levelpath
 				{
 					return false;
 				}	
@@ -1423,7 +1427,7 @@ bool CMainFrame::RenderView(jeFloat fElapsedTime)
 
 			//	now that all changes have been calculated, render the world
 			//	to reflect these changes
-			if (!jeWorld_Render(m_pWorld, m_pCamera, (jeFrustum*)NULL))
+			if (!jeWorld_Render(m_pWorld, m_pCamera, (jeFrustum*)nullptr))
 			{
 				ShutdownAll();
 			}
@@ -1435,7 +1439,7 @@ bool CMainFrame::RenderView(jeFloat fElapsedTime)
 			//jeEngine_Printf(m_pEngine, 0, 0, "jMinApp - Press ESC to close jMinApp.");
 			jeEngine_Printf(m_pEngine, 0, 10, 10, JE_COLOR_COLORVALUE(100,100,100,100), "jMinApp - Press ESC to close jMinApp.");
 
-			//jeEngine_DrawImage(m_pEngine, m_pImage, NULL, 1, 1);
+			//jeEngine_DrawImage(m_pEngine, m_pImage, nullptr, 1, 1);
 
 			//	flip the new rendered frame to the screen
 			if (!jeEngine_EndFrame(m_pEngine))
@@ -1563,7 +1567,7 @@ void CMainFrame::OnMouseMove(UINT nFlags, CPoint point)
 	// TODO: Add your message handler code here and/or call default
 	
 #ifdef _DEBUG		
-		SetCursor(LoadCursor(NULL, IDC_ARROW));
+		SetCursor(LoadCursor(nullptr, IDC_ARROW));
 #endif
 	CWnd::OnMouseMove(nFlags, point);
 }
@@ -1626,7 +1630,7 @@ void CMainFrame::GetMouseInput()
 #endif
 
 #ifdef NDEBUG
-	ControlCamera(NULL, RotateDelta, 0);
+	ControlCamera(0, RotateDelta, 0);
 	//	put the cursor back at screen center -- ready for the next cycle
 	SetCursorPos(rectClient.Width()/2, rectClient.Height()/2);
 	GetCursorPos(&point);
@@ -1719,7 +1723,7 @@ void CMainFrame::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 void CMainFrame::OnMoveForward()
 {
 	//	send this info to OnKeyDown -- which initializes all movement
-	OnKeyDown(ID_MOVE_FORWARD, NULL, NULL);
+	OnKeyDown(ID_MOVE_FORWARD, 0, 0);
 }
 
 
@@ -1730,7 +1734,7 @@ void CMainFrame::OnMoveForward()
 ////////////////////////////////////////////////////////////////////////////////
 void CMainFrame::OnMoveBack()
 {
-		OnKeyDown(ID_MOVE_BACK, NULL, NULL);
+		OnKeyDown(ID_MOVE_BACK, 0, 0);
 }
 
 
@@ -1741,7 +1745,7 @@ void CMainFrame::OnMoveBack()
 ////////////////////////////////////////////////////////////////////////////////
 void CMainFrame::OnMoveLeft()
 {
-	OnKeyDown(ID_MOVE_LEFT, NULL, NULL);
+	OnKeyDown(ID_MOVE_LEFT, 0, 0);
 }
 
 
@@ -1752,7 +1756,7 @@ void CMainFrame::OnMoveLeft()
 ////////////////////////////////////////////////////////////////////////////////
 void CMainFrame::OnMoveRight()
 {
-	OnKeyDown(ID_MOVE_RIGHT, NULL, NULL);
+	OnKeyDown(ID_MOVE_RIGHT, 0, 0);
 }
 
 
@@ -1785,7 +1789,7 @@ bool CMainFrame::StartTimer()
 			//	set rendering gatekeeper
 		m_bReadyToRender = true;
 
-	if (SetTimer(IDT_JETVIEW_TIMER, TIMER_SPEED, NULL) == 0)
+	if (SetTimer(IDT_JETVIEW_TIMER, TIMER_SPEED, nullptr) == 0)
 		return false;
 
 	return true;
@@ -1815,7 +1819,7 @@ bool CMainFrame::StopTimer()
 void CMainFrame::OnTimer(UINT_PTR nIDEvent)
 {
 
-	//	CMainFrame*	pMainFrame = NULL;
+	//	CMainFrame*	pMainFrame = nullptr;
 	//	pMainFrame = (CMainFrame*)AfxGetMainWnd();
 	//	if (pMainFrame)
 	{

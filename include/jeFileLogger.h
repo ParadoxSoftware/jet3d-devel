@@ -24,6 +24,7 @@
 */
 
 #include <fstream>
+#include <memory>
 #include "jeLogger.h"
 
 namespace jet3d
@@ -34,7 +35,7 @@ namespace jet3d
 		std::ofstream _outputFile;
 		std::string _directory;
 	protected:
-		bool openLog()
+		bool openLog() override
 		{
 			if (_logOpen)return(false);
 			std::ostringstream fName;
@@ -45,14 +46,14 @@ namespace jet3d
 			return(true);
 		}
 
-		bool flushLog()
+		bool flushLog() override
 		{
 			if (!_logOpen)return(false);
 			_outputFile.flush();
 			return(true);
 		}
 
-		bool closeLog()
+		bool closeLog() override
 		{
 			if (!_logOpen)return(false);
 			_outputFile.close();
@@ -60,7 +61,7 @@ namespace jet3d
 		}
 
 
-		void _logMessage(const LogThreshold& level, const std::string& message)
+		void _logMessage(const LogThreshold& level, const std::string& message) override
 		{
 			std::string logLevelName(getLogLevelName(level));
 			std::string curTimeStamp(getTimeStamp());
@@ -69,24 +70,33 @@ namespace jet3d
 			flushLog();
 		}
 
+		jeFileLogger() {};
+		jeFileLogger(const jeFileLogger&) = delete;
+		jeFileLogger(jeFileLogger&&) = delete;
+		jeFileLogger& operator=(const jeFileLogger&) = delete;
+		jeFileLogger& operator=(jeFileLogger&&) = delete;
+
 	public:
 		jeFileLogger(const std::string& name, 
 			const std::string& directory, 
-			const unsigned short& threshold) : jeLogger(name, threshold),
-			_outputFile(),
+			unsigned short threshold) : jeLogger(name, threshold),
+			_outputFile(name),
 			_directory(directory)
 		{
 			openLog();
+			_logMessage(jeLogger::LogThreshold::LogInfo, "Logging started");
 		}
 
 		~jeFileLogger()
 		{
+			_logMessage(jeLogger::LogThreshold::LogInfo, "Logging ended");
 			flushLog();
 			closeLog();
 		}
 
 	};
 
+	typedef std::unique_ptr<jeFileLogger>			jeFileLoggerPtr;
 }
 
 #endif //JE_FILE_LOGGER_H

@@ -505,9 +505,6 @@
     <ClInclude Include="Engine\Drivers\D3DDrv\D3ddrv.h">
       <Filter>Engine\Drivers\D3D7Drv</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Drivers\Dcommon.h">
-      <Filter>Engine\Drivers\D3D7Drv</Filter>
-    </ClInclude>
     <ClInclude Include="Support\cpu.h">
       <Filter>Support</Filter>
     </ClInclude>
@@ -836,6 +833,12 @@
       <Filter>Interface Headers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\jeSingleton.h">
+      <Filter>Interface Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Drivers\Dcommon.h">
+      <Filter>Engine\Drivers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\jeDriver.h">
       <Filter>Interface Headers</Filter>
     </ClInclude>
   </ItemGroup>

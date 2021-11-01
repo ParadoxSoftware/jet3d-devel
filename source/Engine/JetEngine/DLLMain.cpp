@@ -8,7 +8,7 @@ BOOL WINAPI DllMain(_In_ HINSTANCE hInstDLL, _In_ DWORD fdwReason, _In_ LPVOID l
 	switch (fdwReason)
 	{
 	case DLL_PROCESS_ATTACH:
-		jeErrorLog_Initialize("jet3d", ".");
+		jeErrorLog_Initialize("jet3d", ".\\");
 		break;
 
 	case DLL_PROCESS_DETACH:

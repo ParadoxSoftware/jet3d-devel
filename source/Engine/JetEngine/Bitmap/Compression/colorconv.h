@@ -22,8 +22,8 @@
 #define BRANDO_COLORCONV_H
 
 	// YUV here is actually Y-Cb-Cr
-extern void conv_RGB_to_YUV(int R,int G,int B,int *Y,int *U,int *V);
-extern void conv_YUV_to_RGB(int Y,int U,int V,int *R,int *G,int *B);
+extern void conv_RGB_to_YUV(int R,int G,int B,int *Y,int *U,int *V) noexcept;
+extern void conv_YUV_to_RGB(int Y,int U,int V,int *R,int *G,int *B) noexcept;
 
 extern void conv_RGB_to_HSV(int R,int G,int B,int *H,int *S,int *V);
 extern void conv_HSV_to_RGB(int H,int S,int V,int *R,int *G,int *B);

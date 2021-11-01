@@ -662,9 +662,9 @@ JETAPI	int JETCC jeThreadQueue_GetThreadLimit(void)
 }
 
 #ifndef NDEBUG
-JETAPI	void JETCC jeThreadQueue_DumpQueue(void)
+/*JETAPI	void JETCC jeThreadQueue_DumpQueue(void) noexcept
 {
-	jeThreadQueue_Job *	Jobs;
+	jeThreadQueue_Job *	Jobs = nullptr;
 
 	printf("ThreadQueue: Dump of threads\n");
 	printf("------------------------------\n");
@@ -680,7 +680,7 @@ JETAPI	void JETCC jeThreadQueue_DumpQueue(void)
 			printf("<%08x> Completed\n", Jobs);
 		Jobs = Jobs->Next;
 	}
-}
+}*/
 #endif
 
 JETAPI jeBoolean JETCC jeThreadQueue_WaitOnJob(jeThreadQueue_Job * Job,

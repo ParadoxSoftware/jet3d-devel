@@ -74,7 +74,12 @@ namespace jet3d {
 class jeResourceNew : virtual public jeUnknown
 {
 protected:
-	virtual ~jeResourceNew(){}
+	jeResourceNew() {}
+	jeResourceNew(const jeResourceNew&) = delete;
+	jeResourceNew(jeResourceNew&&) = delete;
+	jeResourceNew& operator=(const jeResourceNew&) = delete;
+	jeResourceNew& operator=(jeResourceNew&&) = delete;
+	~jeResourceNew() {}
 
 public:
 	virtual const std::string &getType() = 0;
@@ -87,7 +92,12 @@ public:
 class jeResourceFactory : virtual public jeUnknown
 {
 protected:
-	virtual ~jeResourceFactory(){}
+	jeResourceFactory() {}
+	jeResourceFactory(const jeResourceFactory&) = delete;
+	jeResourceFactory(jeResourceFactory&&) = delete;
+	jeResourceFactory& operator=(const jeResourceFactory&) = delete;
+	jeResourceFactory& operator=(jeResourceFactory&&) = delete;
+	~jeResourceFactory() {}
 
 public:
 	virtual jeResourceNew *load(jeVFile *pFile) = 0;
@@ -102,7 +112,12 @@ typedef jeResourceList::iterator				jeResourceListItr;
 class jeResourceManager : virtual public jeUnknown
 {
 protected:
-	virtual ~jeResourceManager(){}
+	jeResourceManager() {}
+	jeResourceManager(const jeResourceManager&) = delete;
+	jeResourceManager(jeResourceManager&&) = delete;
+	jeResourceManager& operator=(const jeResourceManager&) = delete;
+	jeResourceManager& operator=(jeResourceManager&&) = delete;
+	~jeResourceManager() {}
 
 public:
 	virtual bool initialize() = 0;
@@ -114,7 +129,12 @@ public:
 class jeResource : virtual public jeUnknown
 {
 protected:
-	virtual ~jeResource(){}
+	jeResource() {}
+	jeResource(const jeResource&) = delete;
+	jeResource(jeResource&&) = delete;
+	jeResource& operator=(const jeResource&) = delete;
+	jeResource& operator=(jeResource&&) = delete;
+	~jeResource() {}
 
 public:
 	virtual const std::string &getName() = 0;
@@ -126,7 +146,12 @@ public:
 class jeResourceMgr : virtual public jeUnknown
 {
 protected:
-	virtual ~jeResourceMgr(){}
+	jeResourceMgr() {};
+	jeResourceMgr(const jeResourceMgr&) = delete;
+	jeResourceMgr(jeResourceMgr&&) = delete;
+	jeResourceMgr& operator=(const jeResourceMgr&) = delete;
+	jeResourceMgr& operator=(jeResourceMgr&&) = delete;
+	~jeResourceMgr(){}
 
 public:
 	virtual bool initializeWithDefaults() = 0;

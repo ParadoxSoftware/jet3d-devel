@@ -30,9 +30,11 @@
 
 /*}{******* RGB <-> YUV in C ***********/
 
-void RGBb_to_YUVb(const uint8 *RGB,uint8 *YUV)
+void RGBb_to_YUVb(const uint8 *RGB,uint8 *YUV) noexcept
 {
-int R = RGB[0], G = RGB[1], B = RGB[2];
+	assert(RGB != nullptr && YUV != nullptr);
+
+	int R = RGB[0], G = RGB[1], B = RGB[2];
 
 	YUV[0] = Y_RGB(R,G,B);
 	YUV[1] = U_RGB(R,G,B) + 127;
@@ -41,7 +43,9 @@ int R = RGB[0], G = RGB[1], B = RGB[2];
 
 void YUVb_to_RGBb(const uint8 *YUV,uint8 *RGB)
 {
-int y,u,v,r,g,b;
+	assert(RGB != nullptr && YUV != nullptr);
+	
+	int y = 0,u = 0,v = 0,r = 0,g = 0,b = 0;
 
 	y = YUV[0];
 	u = YUV[1] - 127;

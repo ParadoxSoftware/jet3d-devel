@@ -21,16 +21,16 @@ static char				*NoSelection = "< none >";
 // takes that into account and returns where the box should be positioned.
 void GetBoxTranslation(const jeExtBox *Box, const jeActor *Actor, jeVec3d *Translation)
 {
-	jeVec3d BoxCenterToActor;
-	jeVec3d BoxCenter;	
-	jeVec3d TranslationMod;
-	jeVec3d ActorPos, Zero;
-	ActorObj *Object;
+	jeVec3d BoxCenterToActor = { 0 };
+	jeVec3d BoxCenter = { 0 };
+	jeVec3d TranslationMod = { 0 };
+	jeVec3d ActorPos = { 0 }, Zero = { 0 };
+	ActorObj *Object = nullptr;
 
-	assert(Box != NULL);
-	assert(Translation != NULL);
-	assert(Actor != NULL);
-	assert(Actor->Object != NULL);	
+	assert(Box != nullptr);
+	assert(Translation != nullptr);
+	assert(Actor != nullptr);
+	assert(Actor->Object != nullptr);	
 	
 	Object = Actor->Object;
 	jeVec3d_Set(&Zero,0,0,0);
@@ -54,20 +54,20 @@ static char * Util_StrDup(
 {
 
 	// locals
-	char	*NewString;
+	char	*NewString = nullptr;
 
 	// ensure valid data
-	assert( String != NULL );
+	assert( String != nullptr );
 
 	// copy string
-	NewString = (char *)JE_RAM_ALLOCATE( strlen( String ) + 1 );
+	NewString = static_cast<char*>(JE_RAM_ALLOCATE( strlen( String ) + 1 ));
 	if ( NewString ) 
 	{
 		strcpy( NewString, String );
 	}
 	else
 	{
-		jeErrorLog_Add( JE_ERR_MEMORY_RESOURCE, NULL );
+		jeErrorLog_Add( JE_ERR_MEMORY_RESOURCE, nullptr );
 	}
 
 	// return string
@@ -86,26 +86,26 @@ static char * Util_StrDup(
 ////////////////////////////////////////////////////////////////////////////////////////
 static jeBoolean Util_ResetActorMaterialToDefault(
 	jeActor		*Actor,				// actor to reset
-	jeActor_Def	*ActorDef,			// actor def from which to get default info from
+	const jeActor_Def	*ActorDef,			// actor def from which to get default info from
 	int			MaterialIndex )		// material index
 {
 
 	// locals
-	jeBody		*Body;
-	jeBoolean	Result;
-	const char	*MaterialName;
-	jeMaterialSpec	*Bitmap;
-	jeFloat		Red, Green, Blue;
-	jeUVMapper	Mapper;
+	jeBody		*Body = nullptr;
+	jeBoolean	Result = JE_FALSE;
+	const char	*MaterialName = nullptr;
+	jeMaterialSpec	*Bitmap = nullptr;
+	jeFloat		Red = 0, Green = 0, Blue = 0;
+	jeUVMapper	Mapper = { 0 };
 
 	// ensure valid data
-	assert( Actor != NULL );
-	assert( ActorDef != NULL );
+	assert( Actor != nullptr );
+	assert( ActorDef != nullptr );
 	assert( MaterialIndex >= 0 );
 
 	// get actor def body
 	Body = jeActor_GetBody( ActorDef );
-	assert ( Body != NULL );
+	assert ( Body != nullptr );
 
 	// get default material
 	Result = jeBody_GetMaterial(	Body, MaterialIndex, &MaterialName,
@@ -139,27 +139,28 @@ static jeMaterialSpec * Util_CreateBitmapFromFileName(
 {
 
 	// locals
-	jeVFile		*BmpFile;
-	jeBitmap	*Bmp;
-	jeMaterialSpec *MatSpec;
-	jeBoolean	Result;
+	jeVFile		*BmpFile = nullptr;
+	jeBitmap	*Bmp = nullptr;
+	jeMaterialSpec *MatSpec = nullptr;
+	jeBoolean	Result = JE_FALSE;
 
 	// ensure valid data
-	assert( Name != NULL );
+	assert( Name != nullptr );
+	assert(ResourceMgr != nullptr);
 
 	// open the bitmap
-	if ( File == NULL )
+	if ( File == nullptr )
 	{
-		BmpFile = jeVFile_OpenNewSystem( NULL, JE_VFILE_TYPE_DOS, Name, NULL, JE_VFILE_OPEN_READONLY );
+		BmpFile = jeVFile_OpenNewSystem( nullptr, JE_VFILE_TYPE_DOS, Name, nullptr, JE_VFILE_OPEN_READONLY );
 	}
 	else
 	{
 		BmpFile = jeVFile_Open( File, Name, JE_VFILE_OPEN_READONLY );
 	}
-	if ( BmpFile == NULL )
+	if ( BmpFile == nullptr )
 	{
-		jeErrorLog_Add( JE_ERR_FILEIO_OPEN, NULL );
-		return NULL;
+		jeErrorLog_Add( JE_ERR_FILEIO_OPEN, nullptr );
+		return nullptr;
 	}
 
 	// create the bitmap
@@ -168,64 +169,64 @@ static jeMaterialSpec * Util_CreateBitmapFromFileName(
 	//MatSpec = jeMaterialSpec_Create(jeResourceMgr_GetEngine(ResourceMgr), ResourceMgr);
 	MatSpec = jeMaterialSpec_Create(ResourceMgr->getEngine());
 	jeVFile_Close( BmpFile );
-	if ( Bmp == NULL )
+	if ( Bmp == nullptr )
 	{
-		jeErrorLog_Add( JE_ERR_SUBSYSTEM_FAILURE, NULL );
-		return NULL;
+		jeErrorLog_Add( JE_ERR_SUBSYSTEM_FAILURE, nullptr );
+		return nullptr;
 	}
 
 	// add alpha if required...
-	if ( AlphaName != NULL )
+	if ( AlphaName != nullptr )
 	{
 
 		// locals
-		jeBitmap	*AlphaBmp;
-		jeVFile		*AlphaFile;
+		jeBitmap	*AlphaBmp = nullptr;
+		jeVFile		*AlphaFile = nullptr;
 
 		// open alpha file
-		if ( File == NULL )
+		if ( File == nullptr )
 		{
-			AlphaFile = jeVFile_OpenNewSystem( NULL, JE_VFILE_TYPE_DOS, AlphaName, NULL, JE_VFILE_OPEN_READONLY );
+			AlphaFile = jeVFile_OpenNewSystem( nullptr, JE_VFILE_TYPE_DOS, AlphaName, nullptr, JE_VFILE_OPEN_READONLY );
 		}
 		else
 		{
 			AlphaFile = jeVFile_Open( File, AlphaName, JE_VFILE_OPEN_READONLY );
 		}
-		if( AlphaFile == NULL )
+		if( AlphaFile == nullptr )
 		{
-			jeErrorLog_Add( JE_ERR_FILEIO_OPEN, NULL );
+			jeErrorLog_Add( JE_ERR_FILEIO_OPEN, nullptr );
 			jeBitmap_Destroy( &Bmp );
-			return NULL;
+			return nullptr;
 		}
 
 		// create alpha bitmap
 		AlphaBmp = jeBitmap_CreateFromFile( AlphaFile );
 		jeVFile_Close( AlphaFile );
-		if ( AlphaBmp == NULL )
+		if ( AlphaBmp == nullptr )
 		{
-			jeErrorLog_Add( JE_ERR_SUBSYSTEM_FAILURE, NULL );
+			jeErrorLog_Add( JE_ERR_SUBSYSTEM_FAILURE, nullptr );
 			jeBitmap_Destroy( &Bmp );
-			return NULL;
+			return nullptr;
 		}
 
 		// fail if alpha isn't same size as main bitmap
 		if (	( jeBitmap_Width( Bmp ) != jeBitmap_Width( AlphaBmp ) ) ||
 				( jeBitmap_Height( Bmp ) != jeBitmap_Height( AlphaBmp ) ) )
 		{
-			jeErrorLog_Add( JE_ERR_BAD_PARAMETER, NULL );
+			jeErrorLog_Add( JE_ERR_BAD_PARAMETER, nullptr );
 			jeBitmap_Destroy( &AlphaBmp );
 			jeBitmap_Destroy( &Bmp );
-			return NULL;
+			return nullptr;
 		}
 
 		// set its alpha
 		Result = jeBitmap_SetAlpha( Bmp, AlphaBmp );
 		if ( Result == JE_FALSE )
 		{
-			jeErrorLog_Add( JE_ERR_SUBSYSTEM_FAILURE, NULL );
+			jeErrorLog_Add( JE_ERR_SUBSYSTEM_FAILURE, nullptr );
 			jeBitmap_Destroy( &AlphaBmp );
 			jeBitmap_Destroy( &Bmp );
-			return NULL;
+			return nullptr;
 		}
 
 		// don't need the alpha anymore
@@ -238,8 +239,8 @@ static jeMaterialSpec * Util_CreateBitmapFromFileName(
 		assert( Result );
 	}
 
-#pragma message ("Krouer: change NULL to something better next time")
-	jeMaterialSpec_AddLayerFromBitmap(MatSpec, 0, Bmp, NULL);
+#pragma message ("Krouer: change nullptr to something better next time")
+	jeMaterialSpec_AddLayerFromBitmap(MatSpec, 0, Bmp, nullptr);
 
 	// all done
 	return MatSpec;
@@ -258,23 +259,23 @@ static void Util_DestroyBitmapList(
 {
 
 	// locals
-	BitmapList	*List;
-	int			i;
+	BitmapList	*List = nullptr;
+	int			i = 0;
 
 	// ensure valid data
-	assert( DeadList != NULL );
-	assert( *DeadList != NULL );
+	assert( DeadList != nullptr );
+	assert( *DeadList != nullptr );
 
 	// get list pointer
 	List = *DeadList;
 
 	// destroy file list
-	if ( List->Name != NULL )
+	if ( List->Name != nullptr )
 	{
 		assert( List->Total > 0 );
 		for ( i = 0; i < List->Total; i++ )
 		{
-			if ( List->Name[i] != NULL )
+			if ( List->Name[i] != nullptr )
 			{
 				JE_RAM_FREE( List->Name[i] );
 			}
@@ -283,27 +284,27 @@ static void Util_DestroyBitmapList(
 	}
 
 	// destroy width and height lists
-	if ( List->Width != NULL )
+	if ( List->Width != nullptr )
 	{
 		JE_RAM_FREE( List->Width );
 	}
-	if ( List->Height != NULL )
+	if ( List->Height != nullptr )
 	{
 		JE_RAM_FREE( List->Height );
 	}
 
 	// destroy numeric sizes list
-	if ( List->NumericSizes != NULL )
+	if ( List->NumericSizes != nullptr )
 	{
 		JE_RAM_FREE( List->NumericSizes );
 	}
 
 	// destroy string sizes list
-	if ( List->StringSizes != NULL )
+	if ( List->StringSizes != nullptr )
 	{
 		for ( i = 0; i < List->SizesListSize; i++ )
 		{
-			assert( List->StringSizes[i] != NULL );
+			assert( List->StringSizes[i] != nullptr );
 			JE_RAM_FREE( List->StringSizes[i] );
 		}
 	}
@@ -312,7 +313,7 @@ static void Util_DestroyBitmapList(
 	JE_RAM_FREE( List );
 
 	// zap pointer
-	*DeadList = NULL;
+	*DeadList = nullptr;
 
 } // Util_DestroyBitmapList()
 
@@ -325,43 +326,43 @@ static void Util_DestroyBitmapList(
 ////////////////////////////////////////////////////////////////////////////////////////
 static BitmapList * Util_CreateBitmapList(
 	jet3d::jeResourceMgr	*ResourceMgr,	// resource manager to use
-	char			*ResourceName,	// name of resource
-	char			*FileFilter )	// file filter
+	const std::string		&ResourceName,	// name of resource
+	const std::string		&FileFilter )	// file filter
 {
 
 	// locals
-	BitmapList		*Bmps;
-	jeVFile			*FileDir = NULL;
-	jeVFile_Finder	*Finder = NULL;
-	int				CurFile;
+	BitmapList		*Bmps = nullptr;
+	jeVFile			*FileDir = nullptr;
+	jeVFile_Finder	*Finder = nullptr;
+	int				CurFile = 0;
 
 	// ensure valid data
-	assert( ResourceMgr != NULL );
-	assert( ResourceName != NULL );
-	assert( FileFilter != NULL );
+	assert( ResourceMgr != nullptr );
+	assert( !ResourceName.empty());
+	assert( !FileFilter.empty() );
 
 	// allocate bitmaplist struct
-	Bmps = (BitmapList *)JE_RAM_ALLOCATE_CLEAR( sizeof( *Bmps ) );
-	if ( Bmps == NULL )
+	Bmps = static_cast<BitmapList*>(JE_RAM_ALLOCATE_CLEAR( sizeof( *Bmps ) ));
+	if ( Bmps == nullptr )
 	{
-		jeErrorLog_Add( JE_ERR_MEMORY_RESOURCE, NULL );
-		return NULL;
+		jeErrorLog_Add( JE_ERR_MEMORY_RESOURCE, nullptr );
+		return nullptr;
 	}
 
 	// get vfile dir
 	//FileDir = jeResource_GetVFile( ResourceMgr, ResourceName );
 	FileDir = ResourceMgr->getVFile(ResourceName);
-	if ( FileDir == NULL )
+	if ( FileDir == nullptr )
 	{
-		jeErrorLog_Add( JE_ERR_SUBSYSTEM_FAILURE, NULL );
+		jeErrorLog_Add( JE_ERR_SUBSYSTEM_FAILURE, nullptr );
 		goto ERROR_Util_BuildBitmapList;
 	}
 
 	// create directory finder
-	Finder = jeVFile_CreateFinder( FileDir, FileFilter );
-	if ( Finder == NULL )
+	Finder = jeVFile_CreateFinder( FileDir, FileFilter.c_str() );
+	if ( Finder == nullptr )
 	{
-		jeErrorLog_Add( JE_ERR_SUBSYSTEM_FAILURE, NULL );
+		jeErrorLog_Add( JE_ERR_SUBSYSTEM_FAILURE, nullptr );
 		goto ERROR_Util_BuildBitmapList;
 	}
 
@@ -374,53 +375,53 @@ static BitmapList * Util_CreateBitmapList(
 
 	// destroy finder
 	jeVFile_DestroyFinder( Finder );
-	Finder = NULL;
+	Finder = nullptr;
 
 	// allocate name list
-	Bmps->Name = (char **)JE_RAM_ALLOCATE_CLEAR( sizeof( char * ) * Bmps->Total );
-	if ( Bmps->Name == NULL )
+	Bmps->Name = static_cast<char **>(JE_RAM_ALLOCATE_CLEAR( sizeof( char * ) * Bmps->Total ));
+	if ( Bmps->Name == nullptr )
 	{
-		jeErrorLog_Add( JE_ERR_MEMORY_RESOURCE, NULL );
+		jeErrorLog_Add( JE_ERR_MEMORY_RESOURCE, nullptr );
 		goto ERROR_Util_BuildBitmapList;
 	}
 
 	// allocate width list
-	Bmps->Width = (int *)JE_RAM_ALLOCATE_CLEAR( sizeof( int * ) * Bmps->Total );
-	if ( Bmps->Width == NULL )
+	Bmps->Width = static_cast<int *>(JE_RAM_ALLOCATE_CLEAR( sizeof( int * ) * Bmps->Total ));
+	if ( Bmps->Width == nullptr )
 	{
-		jeErrorLog_Add( JE_ERR_MEMORY_RESOURCE, NULL );
+		jeErrorLog_Add( JE_ERR_MEMORY_RESOURCE, nullptr );
 		goto ERROR_Util_BuildBitmapList;
 	}
 
 	// allocate height list
-	Bmps->Height = (int *)JE_RAM_ALLOCATE_CLEAR( sizeof( int * ) * Bmps->Total );
-	if ( Bmps->Height == NULL )
+	Bmps->Height = static_cast<int *>(JE_RAM_ALLOCATE_CLEAR( sizeof( int * ) * Bmps->Total ));
+	if ( Bmps->Height == nullptr )
 	{
-		jeErrorLog_Add( JE_ERR_MEMORY_RESOURCE, NULL );
+		jeErrorLog_Add( JE_ERR_MEMORY_RESOURCE, nullptr );
 		goto ERROR_Util_BuildBitmapList;
 	}
 
 	// allocate numeric sizes list
-	Bmps->NumericSizes = (int *)JE_RAM_ALLOCATE_CLEAR( sizeof( int * ) * Bmps->Total );
-	if ( Bmps->NumericSizes == NULL )
+	Bmps->NumericSizes = static_cast<int *>(JE_RAM_ALLOCATE_CLEAR( sizeof( int * ) * Bmps->Total ));
+	if ( Bmps->NumericSizes == nullptr )
 	{
-		jeErrorLog_Add( JE_ERR_MEMORY_RESOURCE, NULL );
+		jeErrorLog_Add( JE_ERR_MEMORY_RESOURCE, nullptr );
 		goto ERROR_Util_BuildBitmapList;
 	}
 
 	// allocate string sizes list
-	Bmps->StringSizes = (char **)JE_RAM_ALLOCATE_CLEAR( sizeof( char * ) * Bmps->Total );
-	if ( Bmps->StringSizes == NULL )
+	Bmps->StringSizes = static_cast<char **>(JE_RAM_ALLOCATE_CLEAR( sizeof( char * ) * Bmps->Total ));
+	if ( Bmps->StringSizes == nullptr )
 	{
-		jeErrorLog_Add( JE_ERR_MEMORY_RESOURCE, NULL );
+		jeErrorLog_Add( JE_ERR_MEMORY_RESOURCE, nullptr );
 		goto ERROR_Util_BuildBitmapList;
 	}
 
 	// create directory finder
-	Finder = jeVFile_CreateFinder( FileDir, FileFilter );
-	if ( Finder == NULL )
+	Finder = jeVFile_CreateFinder( FileDir, FileFilter.c_str() );
+	if ( Finder == nullptr )
 	{
-		jeErrorLog_Add( JE_ERR_SUBSYSTEM_FAILURE, NULL );
+		jeErrorLog_Add( JE_ERR_SUBSYSTEM_FAILURE, nullptr );
 		goto ERROR_Util_BuildBitmapList;
 	}
 
@@ -435,29 +436,29 @@ static BitmapList * Util_CreateBitmapList(
 		// locals
 		jeVFile_Properties	Properties;
 		//jeBitmap			*Bitmap;
-		jeMaterialSpec		*MatSpec;
+		jeMaterialSpec		*MatSpec = nullptr;
 
 		// get properties of current file
 		if( jeVFile_FinderGetProperties( Finder, &Properties ) == JE_FALSE )
 		{
-			jeErrorLog_Add( JE_ERR_SUBSYSTEM_FAILURE, NULL );
+			jeErrorLog_Add( JE_ERR_SUBSYSTEM_FAILURE, nullptr );
 			goto ERROR_Util_BuildBitmapList;
 		}
 
 		// save file name
 		assert( CurFile < Bmps->Total );
 		Bmps->Name[CurFile] = Util_StrDup( Properties.Name );
-		if ( Bmps->Name[CurFile] == NULL )
+		if ( Bmps->Name[CurFile] == nullptr )
 		{
-			jeErrorLog_Add( JE_ERR_SUBSYSTEM_FAILURE, NULL );
+			jeErrorLog_Add( JE_ERR_SUBSYSTEM_FAILURE, nullptr );
 			goto ERROR_Util_BuildBitmapList;
 		}
 
 		// save width and height
-		MatSpec = Util_CreateBitmapFromFileName( FileDir, Bmps->Name[CurFile], NULL, ResourceMgr );
-		if ( MatSpec == NULL )
+		MatSpec = Util_CreateBitmapFromFileName( FileDir, Bmps->Name[CurFile], nullptr, ResourceMgr );
+		if ( MatSpec == nullptr )
 		{
-			jeErrorLog_Add( JE_ERR_SUBSYSTEM_FAILURE, NULL );
+			jeErrorLog_Add( JE_ERR_SUBSYSTEM_FAILURE, nullptr );
 			goto ERROR_Util_BuildBitmapList;
 		}
 		Bmps->Width[CurFile] = jeMaterialSpec_Width( MatSpec );
@@ -548,17 +549,17 @@ static BitmapList * Util_CreateBitmapList(
 	ERROR_Util_BuildBitmapList:
 
 	// destroy bitmap list
-	assert( Bmps != NULL );
+	assert( Bmps != nullptr );
 	Util_DestroyBitmapList( &Bmps );
 
 	// destroy finder
-	if ( Finder != NULL )
+	if ( Finder != nullptr )
 	{
 		jeVFile_DestroyFinder( Finder );
 	}
 
 	// close vfile dir
-	if ( FileDir != NULL )
+	if ( FileDir != nullptr )
 	{
 		//if ( jeResource_DeleteVFile( ResourceMgr, ResourceName ) == 0 )
 		if (!ResourceMgr->removeVFile(ResourceName))
@@ -568,7 +569,7 @@ static BitmapList * Util_CreateBitmapList(
 	}
 
 	// return failure
-	return NULL;
+	return nullptr;
 
 } // Util_CreateBitmapList()
 
@@ -581,24 +582,24 @@ static BitmapList * Util_CreateBitmapList(
 ///////////////////////////////////////////////////////////////////////////////////////
 static void Util_DrawPoly(
 	jeWorld		*World,	// world in which to draw poly
-	jeLVertex	*V1,	// top left
-	jeLVertex	*V2,	// top right
-	jeLVertex	*V3,	// bottom right
-	jeLVertex	*V4 )	// bottom left
+	const jeLVertex	*V1,	// top left
+	const jeLVertex	*V2,	// top right
+	const jeLVertex	*V3,	// bottom right
+	const jeLVertex	*V4 )	// bottom left
 {
 
 	// locals
 	jeUserPoly	*Poly;
 
 	// ensure valid data
-	assert( World != NULL );
-	assert( V1 != NULL );
-	assert( V2 != NULL );
-	assert( V3 != NULL );
-	assert( V4 != NULL );
+	assert( World != nullptr );
+	assert( V1 != nullptr );
+	assert( V2 != nullptr );
+	assert( V3 != nullptr );
+	assert( V4 != nullptr );
 
 	// draw poly
-	Poly = jeUserPoly_CreateQuad( V1, V2, V3, V4, NULL, JE_RENDER_FLAG_ALPHA );
+	Poly = jeUserPoly_CreateQuad( V1, V2, V3, V4, nullptr, JE_RENDER_FLAG_ALPHA );
 	jeWorld_AddUserPoly( World, Poly, JE_TRUE );
 	jeUserPoly_Destroy( &Poly );
 
@@ -613,18 +614,18 @@ static void Util_DrawPoly(
 ///////////////////////////////////////////////////////////////////////////////////////
 static void Util_DrawExtBox(
 	jeWorld		*World,		// world to draw it in
-	JE_RGBA		*Color,		// color to draw it in
-	jeExtBox	*ExtBox )	// extent box to draw
+	const JE_RGBA		*Color,		// color to draw it in
+	const jeExtBox	*ExtBox )	// extent box to draw
 {
 
 	// locals
 	jeLVertex	Vertex[4];
-	int			i;
+	int			i = 0;
 
 	// ensure valid data
-	assert( World != NULL );
-	assert( Color != NULL );
-	assert( ExtBox != NULL );
+	assert( World != nullptr );
+	assert( Color != nullptr );
+	assert( ExtBox != nullptr );
 
 	// init vert struct
 	for ( i = 0; i < 4; i++ )
@@ -748,21 +749,21 @@ static jeBoolean Util_CreateEmptyList(
 {
 
 	// locals
-	char	**NewList;
+	char	**NewList = nullptr;
 
 	// ensure valid data
-	assert( List != NULL );
-	assert( ListSize != NULL );
+	assert( List != nullptr );
+	assert( ListSize != nullptr );
 
 	// reset passed in data
-	*List = NULL;
+	*List = nullptr;
 	*ListSize = 0;
 
 	// allocate list
-	NewList = (char **)JE_RAM_ALLOCATE( sizeof( char * ) );
-	if ( NewList == NULL )
+	NewList = static_cast<char**>(JE_RAM_ALLOCATE( sizeof( char * ) ));
+	if ( NewList == nullptr )
 	{
-		jeErrorLog_Add( JE_ERR_MEMORY_RESOURCE, NULL );
+		jeErrorLog_Add( JE_ERR_MEMORY_RESOURCE, nullptr );
 		return JE_FALSE;
 	}
 
@@ -785,27 +786,27 @@ static jeBoolean Util_CreateEmptyList(
 ////////////////////////////////////////////////////////////////////////////////////////
 static jeBoolean Util_WriteString(
 	jeVFile	*File,		// file to write to
-	char	*String )	// string to write out
+	const std::string	&String )	// string to write out
 {
 
 	// locals
-	int			Size;
+	int			Size = 0;
 	jeBoolean	Result = JE_TRUE;
 
 	// ensure valid data
-	assert( File != NULL );
-	assert( String != NULL );
+	assert( File != nullptr );
+	assert( !String.empty() );
 
 	// write out complete
-	Size = strlen( String ) + 1;
+	Size = String.length() + 1;
 	assert( Size > 0 );
 	Result &= jeVFile_Write( File, &Size, sizeof( Size ) );
-	Result &= jeVFile_Write( File, String, Size );
+	Result &= jeVFile_Write( File, String.c_str(), Size );
 
 	// log errors
 	if ( Result != JE_TRUE )
 	{
-		jeErrorLog_Add( JE_ERR_FILEIO_WRITE, NULL );
+		jeErrorLog_Add( JE_ERR_FILEIO_WRITE, nullptr );
 	}
 
 	// all done
@@ -822,29 +823,29 @@ static jeBoolean Util_WriteString(
 ////////////////////////////////////////////////////////////////////////////////////////
 static void Util_DestroyFileList(
 	char	***DeadList,		// list to destroy
-	int		*DeadListSize )		// size of list
+	const int		*DeadListSize )		// size of list
 {
 
 	// locals
-	char	**List;
-	int		ListSize;
-	int		i;
+	char	**List = nullptr;
+	int		ListSize = 0;
+	int		i = 0;
 
 	// save pointers
-	assert( DeadList != NULL );
+	assert( DeadList != nullptr );
 	List = *DeadList;
-	assert( List != NULL );
-	assert( DeadListSize != NULL );
+	assert( List != nullptr );
+	assert( DeadListSize != nullptr );
 	ListSize = *DeadListSize;
 	assert( ListSize > 0 );
 
 	// free all strings
 	for ( i = 0; i < ListSize; i++ )
 	{
-		if ( List[i] != NULL )
+		if ( List[i] != nullptr )
 		{
 			JE_RAM_FREE( List[i] );
-			List[i] = NULL;
+			List[i] = nullptr;
 		}
 	}
 
@@ -852,7 +853,7 @@ static void Util_DestroyFileList(
 	JE_RAM_FREE( List );
 
 	// zap final data
-	List = NULL;
+	List = nullptr;
 	ListSize = 0;
 
 } // Util_DestroyFileList()
@@ -866,36 +867,36 @@ static void Util_DestroyFileList(
 ////////////////////////////////////////////////////////////////////////////////////////
 static char ** Util_BuildFileList(
 	jet3d::jeResourceMgr	*ResourceMgr,
-	char			*ResourceName,
-	char			*FileFilter,
+	const std::string		&ResourceName,
+	const std::string		&FileFilter,
 	int				*FileListSize )
 {
 
 	// locals
-	jeVFile			*FileDir = NULL;
-	jeVFile_Finder	*Finder = NULL;
+	jeVFile			*FileDir = nullptr;
+	jeVFile_Finder	*Finder = nullptr;
 	int				TotalFiles = 0;
-	int				CurFile;
-	char			**FileList = NULL;
+	int				CurFile = 0;
+	char			**FileList = nullptr;
 
 	// ensure valid data
-	assert( ResourceMgr != NULL );
-	assert( ResourceName != NULL );
-	assert( FileFilter != NULL );
+	assert( ResourceMgr != nullptr );
+	assert( ResourceName != nullptr );
+	assert( FileFilter != nullptr );
 	assert( FileListSize );
 
 	// get vfile dir
 	//FileDir = jeResource_GetVFile( ResourceMgr, ResourceName );
 	FileDir = ResourceMgr->getVFile(ResourceName);
-	if ( FileDir == NULL )
+	if ( FileDir == nullptr )
 	{
-		jeErrorLog_Add( JE_ERR_SUBSYSTEM_FAILURE, NULL );
-		return NULL;
+		jeErrorLog_Add( JE_ERR_SUBSYSTEM_FAILURE, nullptr );
+		return nullptr;
 	}
 
 	// create directory finder
-	Finder = jeVFile_CreateFinder( FileDir, FileFilter );
-	if ( Finder == NULL )
+	Finder = jeVFile_CreateFinder( FileDir, FileFilter.c_str() );
+	if ( Finder == nullptr )
 	{
 		goto ERROR_Util_BuildFileList;
 	}
@@ -909,21 +910,21 @@ static char ** Util_BuildFileList(
 
 	// destroy finder
 	jeVFile_DestroyFinder( Finder );
-	Finder = NULL;
+	Finder = nullptr;
 
 	// allocate file list
-	FileList = (char **)JE_RAM_ALLOCATE_CLEAR( sizeof( char * ) * TotalFiles );
-	if ( FileList == NULL )
+	FileList = static_cast<char**>(JE_RAM_ALLOCATE_CLEAR( sizeof( char * ) * TotalFiles ));
+	if ( FileList == nullptr )
 	{
-		jeErrorLog_Add( JE_ERR_MEMORY_RESOURCE, NULL );
+		jeErrorLog_Add( JE_ERR_MEMORY_RESOURCE, nullptr );
 		goto ERROR_Util_BuildFileList;
 	}
 
 	// create directory finder
-	Finder = jeVFile_CreateFinder( FileDir, FileFilter );
-	if ( Finder == NULL )
+	Finder = jeVFile_CreateFinder( FileDir, FileFilter.c_str() );
+	if ( Finder == nullptr )
 	{
-		jeErrorLog_Add( JE_ERR_SUBSYSTEM_FAILURE, NULL );
+		jeErrorLog_Add( JE_ERR_SUBSYSTEM_FAILURE, nullptr );
 		goto ERROR_Util_BuildFileList;
 	}
 
@@ -941,14 +942,14 @@ static char ** Util_BuildFileList(
 		// get properties of current file
 		if( jeVFile_FinderGetProperties( Finder, &Properties ) == JE_FALSE )
 		{
-			jeErrorLog_Add( JE_ERR_SUBSYSTEM_FAILURE, NULL );
+			jeErrorLog_Add( JE_ERR_SUBSYSTEM_FAILURE, nullptr );
 			continue;
 		}
 
 		// save file name
 		assert( CurFile < TotalFiles );
 		FileList[CurFile] = Util_StrDup( Properties.Name );
-		if ( FileList[CurFile] != NULL )
+		if ( FileList[CurFile] != nullptr )
 		{
 			CurFile++;
 		}
@@ -972,12 +973,12 @@ static char ** Util_BuildFileList(
 	ERROR_Util_BuildFileList:
 
 	// destroy file list
-	if ( FileList != NULL )
+	if ( FileList != nullptr )
 	{
 		CurFile = 0;
 		while ( CurFile < TotalFiles )
 		{
-			if ( FileList[CurFile] != NULL )
+			if ( FileList[CurFile] != nullptr )
 			{
 				JE_RAM_FREE( FileList[CurFile] );
 			}
@@ -987,13 +988,13 @@ static char ** Util_BuildFileList(
 	}
 
 	// destroy finder
-	if ( Finder != NULL )
+	if ( Finder != nullptr )
 	{
 		jeVFile_DestroyFinder( Finder );
 	}
 
 	// close vfile dir
-	if ( FileDir != NULL )
+	if ( FileDir != nullptr )
 	{
 		//if ( jeResource_DeleteVFile( ResourceMgr, ResourceName ) == 0 )
 		if (!ResourceMgr->removeVFile(ResourceName))
@@ -1006,7 +1007,7 @@ static char ** Util_BuildFileList(
 	*FileListSize = 0;
 
 	// return failure
-	return NULL;
+	return nullptr;
 
 } // Util_BuildFileList()
 
@@ -1025,27 +1026,27 @@ static char * Util_LoadLibraryString(
 	// locals
 	#define		MAX_STRING_SIZE	255
 	static char	StringBuf[MAX_STRING_SIZE];
-	char		*NewString;
-	int			Size;
+	char		*NewString = nullptr;
+	int			Size = 0;
 
 	// ensure valid data
-	assert( hInstance != NULL );
+	assert( hInstance != nullptr );
 	assert( ID >= 0 );
 
 	// get resource string
 	Size = LoadString( hInstance, ID, StringBuf, MAX_STRING_SIZE );
 	if ( Size <= 0 )
 	{
-		jeErrorLog_Add( JE_ERR_WINDOWS_API_FAILURE, NULL );
-		return NULL;
+		jeErrorLog_Add( JE_ERR_WINDOWS_API_FAILURE, nullptr );
+		return nullptr;
 	}
 
 	// copy resource string
-	NewString = (char *)JE_RAM_ALLOCATE( Size + 1 );
-	if ( NewString == NULL )
+	NewString = static_cast<char *>(JE_RAM_ALLOCATE( Size + 1 ));
+	if ( NewString == nullptr )
 	{
-		jeErrorLog_Add( JE_ERR_MEMORY_RESOURCE, NULL );
-		return NULL;
+		jeErrorLog_Add( JE_ERR_MEMORY_RESOURCE, nullptr );
+		return nullptr;
 	}
 	strcpy( NewString, StringBuf );
 

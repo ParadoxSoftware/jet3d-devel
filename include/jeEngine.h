@@ -30,6 +30,8 @@
 #include "BaseType.h"
 #include "jeTypes.h"
 
+namespace jet3d {
+
 // Forward Declarations
 class jeEngine;
 class jeDriver_System;
@@ -62,6 +64,15 @@ enum jeEngine_FrameState
 */
 JETAPI jeBoolean JETCC jeEngine_Initialize(HWND hWnd, std::string AppName, std::string DriverDirectory);
 
+class jeDriver_System : virtual public jeUnknown
+{
+protected:
+	~jeDriver_System() {}
+
+public:
+	virtual const std::string& getName() const = 0;
+
+};
 /*!
 	@class jeEngine jeEngine.h "include\jeEngine.h"
 	@brief The engine core class
@@ -114,5 +125,7 @@ public:
 
 	virtual jeShader					*CreateShaderFromFile(jeVFile *File) = 0;
 };
+
+} // namespace jet3d
 
 #endif
