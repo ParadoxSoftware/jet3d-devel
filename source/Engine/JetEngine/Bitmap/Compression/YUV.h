@@ -23,7 +23,7 @@
 
 #include "BaseType.h"
 
-extern void RGBb_to_YUVb(const uint8 *RGB,uint8 *YUV);
+extern void RGBb_to_YUVb(const uint8 *RGB,uint8 *YUV) noexcept;
 extern void YUVb_to_RGBb(const uint8 *YUV,uint8 *RGB);
 extern void RGBb_to_YUVb_line(const uint8 *RGB,uint8 *YUV,int array);
 extern void YUVb_to_RGBb_line(const uint8 *YUV,uint8 *RGB,int array);

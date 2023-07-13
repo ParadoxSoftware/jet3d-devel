@@ -881,8 +881,8 @@ static char ** Util_BuildFileList(
 
 	// ensure valid data
 	assert( ResourceMgr != nullptr );
-	assert( ResourceName != nullptr );
-	assert( FileFilter != nullptr );
+	assert( ResourceName != "");
+	assert( FileFilter != "");
 	assert( FileListSize );
 
 	// get vfile dir
