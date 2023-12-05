@@ -60,7 +60,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>.\;..\..\..\include;..\..\Tools\Editor;World;Engine;Particle;Engine\Drivers;Actor;Pool;BSP;Math;Entities;Support;Physics;VFile;Bitmap;Bitmap\Compression;guWorld;Mp3Mgr;..\External\VorbisSDK\include;..\External\EAXSDK\include;..\External\DXSDK_81\include;..\External\nvwa;..\External\FreeImage\include;..\External\zzip\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.\;..\..\..\include;..\..\Tools\Editor;World;Engine;Particle;Engine\Drivers;Actor;Pool;BSP;Math;Entities;Support;Physics;VFile;Bitmap;Bitmap\Compression;guWorld;Mp3Mgr;..\..\Dependencies\VorbisSDK\include;..\..\Dependencies\EAXSDK\include;..\..\Dependencies\DXSDK_81\include;..\..\Dependencies\nvwa;..\..\Dependencies\FreeImage\include;..\..\Dependencies\zzip\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_CRT_SECURE_NO_DEPRECATE;_CRT_SECURE_NO_WARNINGS;_DEBUG;WIN32;_WINDOWS;_USRDLL;JETENGINE_EXPORTS;JET_VERSION_2;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -79,7 +79,7 @@
       <AdditionalOptions>/MACHINE:I386 %(AdditionalOptions)</AdditionalOptions>
       <AdditionalDependencies>amstrmid.lib;oldnames.lib;urlmon.lib;winmm.lib;quartz.lib;dxguid.lib;ddraw.lib;vorbis_static_d.lib;vorbisfile_static_d.lib;ogg_static_d.lib;FreeImage.lib;zziplib-Debug.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SuppressStartupBanner>true</SuppressStartupBanner>
-      <AdditionalLibraryDirectories>..\..\..\lib;..\External\VorbisSDK\lib;..\External\EAXSDK\lib;..\External\DXSDK_81\lib;..\External\FreeImage\lib;..\External\zzip\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\..\..\lib;..\..\Dependencies\VorbisSDK\lib;..\..\Dependencies\EAXSDK\lib;..\..\Dependencies\DXSDK_81\lib;..\..\Dependencies\FreeImage\lib;..\..\Dependencies\zzip\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <GenerateMapFile>true</GenerateMapFile>
@@ -154,10 +154,6 @@
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\External\nvwa\bool_array.cpp" />
-    <ClCompile Include="..\External\nvwa\debug_new.cpp" />
-    <ClCompile Include="..\External\nvwa\mem_pool_base.cpp" />
-    <ClCompile Include="..\External\nvwa\static_mem_pool.cpp" />
     <ClCompile Include="Bitmap\Bitmap.cpp" />
     <ClCompile Include="Bitmap\bitmap_blitdata.cpp" />
     <ClCompile Include="Bitmap\bitmap_gamma.cpp" />
@@ -304,19 +300,6 @@
     <ClInclude Include="..\..\..\include\jeImage.h" />
     <ClInclude Include="..\..\..\include\jeResourceManager.h" />
     <ClInclude Include="..\..\..\include\jeVFile.h" />
-    <ClInclude Include="..\External\nvwa\bool_array.h" />
-    <ClInclude Include="..\External\nvwa\class_level_lock.h" />
-    <ClInclude Include="..\External\nvwa\cont_ptr_utils.h" />
-    <ClInclude Include="..\External\nvwa\debug_new.h" />
-    <ClInclude Include="..\External\nvwa\fast_mutex.h" />
-    <ClInclude Include="..\External\nvwa\fc_queue.h" />
-    <ClInclude Include="..\External\nvwa\fixed_mem_pool.h" />
-    <ClInclude Include="..\External\nvwa\mem_pool_base.h" />
-    <ClInclude Include="..\External\nvwa\object_level_lock.h" />
-    <ClInclude Include="..\External\nvwa\pctimer.h" />
-    <ClInclude Include="..\External\nvwa\set_assign.h" />
-    <ClInclude Include="..\External\nvwa\static_assert.h" />
-    <ClInclude Include="..\External\nvwa\static_mem_pool.h" />
     <ClInclude Include="CSNetMgr.h" />
     <ClInclude Include="..\..\..\include\jeTypes.h" />
     <ClInclude Include="..\..\..\include\jeVersion.h" />
