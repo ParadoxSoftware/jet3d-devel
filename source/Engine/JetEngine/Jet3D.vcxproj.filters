@@ -482,9 +482,6 @@
     <ClInclude Include="..\..\..\include\Camera.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="CSNetMgr.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\include\jeTypes.h">
       <Filter>Source Files</Filter>
     </ClInclude>
@@ -942,7 +939,9 @@
     <None Include="Support\jeMemAllocInfo._h">
       <Filter>Source Files\Support</Filter>
     </None>
-    <None Include="Camera._h" />
+    <None Include="Camera._h">
+      <Filter>Source Files</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <CustomBuildStep Include="Terrain\terrain._h">

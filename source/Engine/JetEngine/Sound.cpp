@@ -85,12 +85,12 @@ static BOOL		jeSound_StartSoundChannel( SoundManager *sm, unsigned int Handle, j
 static BOOL		jeSound_StopSoundChannel(Channel *channel);
 static BOOL		jeSound_FreeAllChannels(SoundManager *sm);
 static BOOL		jeSound_FreeChannel(SoundManager *sm, Channel *channel);
-static BOOL		jeSound_ModifyChannel( Channel *channel, jeSound_Cfg *cfg );
-static int		jeSound_ChannelPlaying( Channel *channel );
+static BOOL		jeSound_ModifyChannel( Channel *channel, const jeSound_Cfg *cfg );
+static int		jeSound_ChannelPlaying( Channel *channel ) noexcept;
 //	added by tom morris May 2005
-static	DWORD	jeSound_ChannelGetBufferStatus( Channel *channel);
+static	DWORD	jeSound_ChannelGetBufferStatus( Channel *channel) noexcept;
 //	end add
-static Channel*	jeSound_GetChannel( SoundManager *sm, unsigned int ID );
+static Channel*	jeSound_GetChannel( SoundManager *sm, unsigned int ID ) noexcept;
 
 jeBoolean		OpenMediaFile(LPSTR szFile );
 void			DeleteContentsMp3();
@@ -159,7 +159,7 @@ typedef struct	SoundManager
 // BEGIN - OGG Streamer - paradoxnj 4/17/2005
 static DWORD WINAPI StreamUpdateFunction(LPVOID Context);
 static jeBoolean UpdateSoundBuffer(StreamChannel *stream);
-static uint8 GetSilenceData(jeOGGStream *OGG);
+static uint8 GetSilenceData(const jeOGGStream *OGG) noexcept;
 static void FillBuffer(StreamChannel *sc);
 // END - OGG Streamer - paradoxnj 4/17/2005
 
@@ -702,10 +702,10 @@ static	SoundManager *	CreateSoundManager(HWND hWnd )
 
 static	BOOL CreateChannel(DSBUFFERDESC *dsBD, Channel** chanelPtr)
 {
-	Channel* channel;
-	LPDIRECTSOUNDBUFFER				lpBuff;
+	Channel* channel = nullptr;
+	LPDIRECTSOUNDBUFFER				lpBuff = nullptr;
 
-	channel = (Channel*)JE_RAM_ALLOCATE( sizeof( Channel ) );
+	channel = static_cast<Channel*>(JE_RAM_ALLOCATE( sizeof( Channel ) ));
 	if	( channel == NULL )
 	{
 		jeErrorLog_Add(JE_ERR_MEMORY_RESOURCE, "CreateChannel.");
@@ -748,9 +748,12 @@ static	BOOL CreateChannel(DSBUFFERDESC *dsBD, Channel** chanelPtr)
 static	BOOL GetSoundData( jeVFile *File, unsigned char** dataPtr)
 {
 //	FILE * f;
-	int32 Size;
-	uint8 *data;
+	int32 Size = 0;
+	uint8 *data = nullptr;
 //	int32		CurPos;
+	
+	assert(File != nullptr);
+	assert(dataPtr != nullptr);
 
 #if 0
 	f = fopen(Name, "rb");
@@ -775,7 +778,7 @@ static	BOOL GetSoundData( jeVFile *File, unsigned char** dataPtr)
 			return FALSE;
 		}
 
-	data = (uint8*)JE_RAM_ALLOCATE(Size);
+	data = static_cast<uint8*>(JE_RAM_ALLOCATE(Size));
 
 	if (!data) 
 	{
@@ -793,7 +796,9 @@ static	BOOL GetSoundData( jeVFile *File, unsigned char** dataPtr)
 //	fread(data, Size, 1, f);
 
 //	fclose(f);
-	*dataPtr = data;
+	if (dataPtr)
+		*dataPtr = data;
+
 	return( TRUE );
 }
 
@@ -818,10 +823,10 @@ static	BOOL ParseData( const uint8* data, DSBUFFERDESC* dsBD, BYTE ** pbWaveData
 
 static	BOOL jeSound_FillSoundChannel(SoundManager *sm, jeVFile *File, unsigned int* Handle )
 {
-	DSBUFFERDESC	dsBD;
-	INT NumBytes;
-	uint8		*data = NULL;
-	BYTE *			pbWaveData;
+	DSBUFFERDESC dsBD;
+	INT NumBytes = 0;
+	uint8 *data = nullptr;
+	BYTE* pbWaveData = nullptr;
 	Channel* channel;
 
 	assert( Handle );
@@ -870,9 +875,9 @@ static	BOOL jeSound_FillSoundChannel(SoundManager *sm, jeVFile *File, unsigned i
 }
 
 
-static	void StopDupBuffers( Channel* channel )
+static	void StopDupBuffers( Channel* channel ) noexcept
 {
-	Channel* dupChannel, *prevChannel;
+	Channel* dupChannel = nullptr, *prevChannel = nullptr;
 
 	assert( channel );
 
@@ -887,7 +892,7 @@ static	void StopDupBuffers( Channel* channel )
 
 static	void ClearDupBuffers( Channel* channel )
 {
-	Channel* dupChannel, *prevChannel;
+	Channel* dupChannel = nullptr, *prevChannel = nullptr;
 	assert( channel );
 
 	dupChannel = channel->nextDup;
@@ -912,11 +917,11 @@ static	void ClearDupBuffers( Channel* channel )
 
 static	BOOL jeSound_FreeAllChannels(SoundManager *sm)
 {
-	int Error;
+	int Error = 0;
 	
 	//	by trilobite	Jan. 2011
 	//Channel* channel, *nextChannel;
-	Channel* channel = NULL, *nextChannel = NULL;
+	Channel* channel = nullptr, *nextChannel = nullptr;
 	//
 
 	channel = sm->smChannels;
@@ -945,7 +950,7 @@ static	BOOL jeSound_FreeAllChannels(SoundManager *sm)
 		JE_RAM_FREE(channel);
 		channel = nextChannel;
 	}
-	sm->smChannels = NULL;
+	sm->smChannels = nullptr;
 	sm->smChannelCount = 0;
 
 	return TRUE;
@@ -954,8 +959,8 @@ static	BOOL jeSound_FreeAllChannels(SoundManager *sm)
 
 static	BOOL jeSound_FreeChannel(SoundManager *sm, Channel* channel)
 {
-	int Error;
-	Channel*prevChannel = NULL, *curChannel;
+	int Error = 0;
+	Channel*prevChannel = nullptr, *curChannel = nullptr;
 	assert( channel );
 	assert( sm );
 
@@ -1007,11 +1012,11 @@ static	BOOL jeSound_FreeChannel(SoundManager *sm, Channel* channel)
 static	Channel* ReloadData(void *Data)
 {
 	DSBUFFERDESC	dsBD;
-	BYTE *			pbWaveData;
-	INT NumBytes;
-	Channel* channel;
+	BYTE *			pbWaveData = nullptr;
+	INT NumBytes = 0;
+	Channel* channel = nullptr;
 
-	if( !ParseData( (const uint8*)Data, &dsBD, &pbWaveData ) )
+	if( !ParseData( static_cast<const uint8*>(Data), &dsBD, &pbWaveData ) )
 		{
 			jeErrorLog_Add(JE_ERR_SUBSYSTEM_FAILURE,"ReloadData");
 			return( NULL );
@@ -1037,16 +1042,16 @@ static	Channel* ReloadData(void *Data)
 
 static	BOOL DupChannel( SoundManager *sm, Channel* channel, Channel** dupChannelPtr )
 {
-	Channel* dupChannel;
-	IDirectSoundBuffer			*pBuffer;
-	HRESULT Error;
+	Channel* dupChannel = nullptr;
+	IDirectSoundBuffer *pBuffer = nullptr;
+	HRESULT Error = S_OK;
 
 	assert( sm );
 	assert( channel );
 	assert( dupChannelPtr );
 
 	*dupChannelPtr = NULL;
-	dupChannel =  (Channel*)JE_RAM_ALLOCATE( sizeof(Channel ) );
+	dupChannel =  static_cast<Channel*>(JE_RAM_ALLOCATE( sizeof(Channel ) ));
 	if( dupChannel == NULL )
 	{
 		jeErrorLog_Add(JE_ERR_MEMORY_RESOURCE, "DupChannel" );
@@ -1081,8 +1086,8 @@ static	BOOL DupChannel( SoundManager *sm, Channel* channel, Channel** dupChannel
 
 static	BOOL	jeSound_StartSoundChannel( SoundManager *sm, unsigned int Handle, jeSound_Cfg *cfg, int loop, unsigned int* sfx)
 {
-	HRESULT	hres;
-	Channel* channel, *dupChannel;
+	HRESULT	hres = S_OK;
+	Channel* channel = nullptr, *dupChannel = nullptr;
 	
 	assert( sm );
 	assert( cfg );
@@ -1138,7 +1143,7 @@ static	BOOL	jeSound_StartSoundChannel( SoundManager *sm, unsigned int Handle, je
 
 static	BOOL jeSound_StopSoundChannel(Channel* channel)
 {
-	HRESULT	hres;
+	HRESULT	hres = S_OK;
 
 	assert(channel);
 
@@ -1157,7 +1162,7 @@ static	void DestroySoundManager(SoundManager *sm)
 	//	by trilobite	Jan. 2011
 	sm->IsInitialized = false;	//	a switch to stop StreamUpdateFunction from processing streams while sm is shutting down
 	//StreamChannel *snd;
-	StreamChannel *snd = NULL;
+	StreamChannel *snd = nullptr;
 	//
 	assert( sm );
 
@@ -1167,9 +1172,9 @@ static	void DestroySoundManager(SoundManager *sm)
 	if (sm->Stream_Update_Thread)
 		CloseHandle(sm->Stream_Update_Thread);
 
-	for (snd = (StreamChannel*)jeChain_GetNextLinkData(sm->StreamPlayList, NULL); snd != NULL; snd = (StreamChannel*)jeChain_GetNextLinkData(sm->StreamPlayList, snd))
+	for (snd = static_cast<StreamChannel*>(jeChain_GetNextLinkData(sm->StreamPlayList, NULL)); snd != nullptr; snd = static_cast<StreamChannel*>(jeChain_GetNextLinkData(sm->StreamPlayList, snd)))
 	{
-		DWORD				status;
+		DWORD				status = 0;
 
 		IDirectSoundBuffer8_GetStatus(snd->buffer, &status);
 		if (status & DSBSTATUS_PLAYING)
@@ -1179,10 +1184,10 @@ static	void DestroySoundManager(SoundManager *sm)
 		snd->buffer = NULL;
 	}
 
-	for (snd = (StreamChannel*)jeChain_GetNextLinkData(sm->StreamList, NULL); snd != NULL; snd = (StreamChannel*)jeChain_GetNextLinkData(sm->StreamList, snd))
+	for (snd = static_cast<StreamChannel*>(jeChain_GetNextLinkData(sm->StreamList, NULL)); snd != nullptr; snd = static_cast<StreamChannel*>(jeChain_GetNextLinkData(sm->StreamList, snd)))
 	{
 		IDirectSoundBuffer8_Release(snd->buffer);
-		snd->buffer = NULL;
+		snd->buffer = nullptr;
 
 		JE_RAM_FREE(snd->OGG);
 		JE_RAM_FREE(snd);
@@ -1203,11 +1208,11 @@ static	void DestroySoundManager(SoundManager *sm)
 	JE_RAM_FREE(sm);
 
 	//	by trilobite	Jan. 2011
-//	ZeroMemory(sm, sizeof(SoundManager));	//	don't do this...
-	(SoundManager*)JE_RAM_ALLOCATE_CLEAR(sizeof(*sm));
+	//	ZeroMemory(sm, sizeof(SoundManager));	//	don't do this...
+	//(SoundManager*)JE_RAM_ALLOCATE_CLEAR(sizeof(*sm));
 }
 
-static	BOOL	jeSound_ModifyChannel( Channel *channel, jeSound_Cfg *cfg )
+static	BOOL jeSound_ModifyChannel(Channel *channel, const jeSound_Cfg *cfg)
 {
 	int Error, Vol, Pan, Freq;
 	assert( channel );
@@ -1261,7 +1266,7 @@ static	BOOL	jeSound_ModifyChannel( Channel *channel, jeSound_Cfg *cfg )
 	return TRUE;
 }
 
-static	int	jeSound_ChannelPlaying( Channel *channel )
+static	int	jeSound_ChannelPlaying( Channel *channel ) noexcept
 {
 	DWORD	dwStatus = 0;
 	DWORD	dwError = 0;
@@ -1285,7 +1290,7 @@ static	int	jeSound_ChannelPlaying( Channel *channel )
 //	added by tom morris May 2005
 //	returns full DirectSound status flags
 ///////////////////////////////////////////////////////////////////////////////////////
-static	DWORD	jeSound_ChannelGetBufferStatus( Channel *channel)
+static	DWORD	jeSound_ChannelGetBufferStatus( Channel *channel) noexcept
 {
 	DWORD	dwStatus = 0;
 	DWORD	dwError = 0;
@@ -1312,7 +1317,7 @@ static	DWORD	jeSound_ChannelGetBufferStatus( Channel *channel)
 
 
 
-static	Channel* jeSound_GetChannel( SoundManager *sm, unsigned int ID )
+static	Channel* jeSound_GetChannel( SoundManager *sm, unsigned int ID ) noexcept
 {
 	Channel* dupChannel;
 	Channel* channel = sm->smChannels;
@@ -1340,8 +1345,8 @@ static	Channel* jeSound_GetChannel( SoundManager *sm, unsigned int ID )
 // BEGIN - OGG Streamer - paradoxnj 4/17/2005
 static StreamChannel *CreateStreamChannel(jeVFile *FS, const char *filename)
 {
-	StreamChannel				*sc = NULL;
-	IDirectSoundBuffer			*buf = NULL;
+	StreamChannel				*sc = nullptr;
+	//IDirectSoundBuffer			*buf = NULL;
 	DSBUFFERDESC				desc;
 //	HRESULT						hres;
 
@@ -1372,6 +1377,8 @@ static jeBoolean UpdateSoundBuffer(StreamChannel *stream)
 	LPVOID						data1, data2;
 	DWORD						size1, size2;
 	HRESULT						hres;
+	
+	assert(stream != nullptr);
 
 	hres = IDirectSoundBuffer8_GetCurrentPosition(stream->OGG->pBuffer, &read_cursor, &write_cursor);
 	if (FAILED(hres))
@@ -1449,9 +1456,7 @@ static DWORD WINAPI StreamUpdateFunction(LPVOID Context)
 {
 	//	by trilobite	Jan. 2011
 	//SoundManager				*sm = (SoundManager*)Context;
-	SoundManager				*sm = NULL;
-	sm = (SoundManager*)Context;
-	//
+	SoundManager				*sm = static_cast<SoundManager*>(Context);
 	static int					ServiceStreams = 0;
 
 	//	by trilobite	Jan. 2011
@@ -1471,11 +1476,11 @@ static DWORD WINAPI StreamUpdateFunction(LPVOID Context)
 
 				if ((ServiceStreams++) % 4 == 1)
 				{
-					jeChain_Link				*Link = NULL;
+					jeChain_Link *Link = nullptr;
 
 					for (Link = jeChain_GetFirstLink(sm->StreamList); Link != NULL; Link = jeChain_LinkGetNext(Link))
 					{
-						StreamChannel			*stream = (StreamChannel*)jeChain_LinkGetLinkData(Link);
+						StreamChannel *stream = static_cast<StreamChannel*>(jeChain_LinkGetLinkData(Link));
 						if (!UpdateSoundBuffer(stream))
 							continue;
 					}
@@ -1488,7 +1493,7 @@ static DWORD WINAPI StreamUpdateFunction(LPVOID Context)
 	return 0;
 }
 
-static uint8 GetSilenceData(jeOGGStream *OGG)
+static uint8 GetSilenceData(const jeOGGStream *OGG) noexcept
 {
 	if (OGG->Format.wBitsPerSample == 8)
 		return 0x80;
@@ -1500,16 +1505,19 @@ static uint8 GetSilenceData(jeOGGStream *OGG)
 
 static void FillBuffer(StreamChannel *sc)
 {
-	void					*data1;
-	DWORD					size1;
-	uint32					bytes_read;
-	HRESULT					hres;
+	char					*data1 = nullptr;
+	DWORD					size1 = 0;
+	uint32					bytes_read = 0;
+	HRESULT					hres = S_OK;
 
-	hres = IDirectSoundBuffer8_Lock(sc->buffer, 0, 0, &data1, &size1, NULL, NULL, DSBLOCK_ENTIREBUFFER);
+	if (!sc)
+		return;
+
+	hres = IDirectSoundBuffer8_Lock(sc->buffer, 0, 0, (void**)&data1, &size1, NULL, NULL, DSBLOCK_ENTIREBUFFER);
 	if (FAILED(hres))
 		return;
 
-	bytes_read = jeOGGStream_Read(sc->OGG, (char*)data1, size1);
+	bytes_read = jeOGGStream_Read(sc->OGG, data1, size1);
 	if (bytes_read == 0)
 		return;
 
@@ -1517,7 +1525,7 @@ static void FillBuffer(StreamChannel *sc)
 	sc->DataCursor %= size1;
 
 	if (bytes_read < size1)
-		memset((uint8*)data1 + bytes_read, GetSilenceData(sc->OGG), size1 - bytes_read);
+		memset(data1 + bytes_read, GetSilenceData(sc->OGG), size1 - bytes_read);
 
 	hres = IDirectSoundBuffer8_Unlock(sc->buffer, data1, size1, NULL, 0);
 	if (FAILED(hres))

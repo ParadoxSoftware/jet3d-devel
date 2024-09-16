@@ -300,7 +300,6 @@
     <ClInclude Include="..\..\..\include\jeImage.h" />
     <ClInclude Include="..\..\..\include\jeResourceManager.h" />
     <ClInclude Include="..\..\..\include\jeVFile.h" />
-    <ClInclude Include="CSNetMgr.h" />
     <ClInclude Include="..\..\..\include\jeTypes.h" />
     <ClInclude Include="..\..\..\include\jeVersion.h" />
     <ClInclude Include="Engine\jeImageImpl.h" />
