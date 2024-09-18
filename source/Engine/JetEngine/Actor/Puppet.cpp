@@ -546,8 +546,8 @@ static int JETCC jePuppet_PrepDynamicLights(const jePuppet *P,
 	const jeVec3d *ReferencePoint)
 {
 	int				i,j,cnt;
-	jeChain			*DLightChain;
-	jeChain_Link	*Link;
+	jeChain			*DLightChain = nullptr;
+	jeChain_Link	*Link = nullptr;
 
 
 	assert( P );
@@ -559,15 +559,15 @@ static int JETCC jePuppet_PrepDynamicLights(const jePuppet *P,
 
 	for (Link = jeChain_GetFirstLink(DLightChain); Link; Link = jeChain_LinkGetNext(Link))
 	{
-		jeLight		*L;
+		jeLight		*L = nullptr;
 		jeVec3d		Position; 
 		jeVec3d		Color;
 		jeVec3d		Normal;
 		jeFloat		Radius; 
 		jeFloat		Brightness;
-		uint32		Flags;
+		uint32		Flags = 0;
 
-		L = (jeLight*)jeChain_LinkGetLinkData(Link);
+		L = static_cast<jeLight*>(jeChain_LinkGetLinkData(Link));
 
 		if (!jeLight_GetAttributes(	L, &Position,&Color,&Radius,&Brightness, &Flags))
 		{
@@ -613,7 +613,7 @@ static int JETCC jePuppet_PrepDynamicLights(const jePuppet *P,
 	// go back and finish setting up closest lights
 	for (i=0; i<cnt; i++)
 		{
-			jeFloat Distance = (jeFloat)sqrt(LP[i].Distance);
+			jeFloat Distance = sqrtf(LP[i].Distance);
 			jeFloat OneOverDistance;
 			jeFloat Scale;
 			if (Distance < 1.0f)
@@ -649,8 +649,8 @@ static int JETCC jePuppet_PrepStaticLights(const jePuppet *P,
 	const jeVec3d *ReferencePoint)
 {
 	int				i,j, cnt;
-	jeChain			*SLightChain;
-	jeChain_Link	*Link;
+	jeChain			*SLightChain = nullptr;
+	jeChain_Link	*Link = nullptr;
 
 
 	assert( P );
@@ -678,7 +678,7 @@ static int JETCC jePuppet_PrepStaticLights(const jePuppet *P,
 		jeFloat		Brightness;
 		uint32		Flags;
 
-		L = (jeLight*)jeChain_LinkGetLinkData(Link);
+		L = static_cast<jeLight*>(jeChain_LinkGetLinkData(Link));
 
 		if (!jeLight_GetAttributes(	L, &Position,&Color,&Radius,&Brightness, &Flags))
 		{
@@ -728,7 +728,7 @@ static int JETCC jePuppet_PrepStaticLights(const jePuppet *P,
 	// go back and finish setting up closest static lights
 	for (i = 0; i < cnt; i ++)
 		{
-			jeFloat Distance = (jeFloat)sqrt(LP[i].Distance);
+			jeFloat Distance = sqrtf(LP[i].Distance);
 			jeFloat OneOverDistance;
 			jeFloat Scale;
 

@@ -165,7 +165,7 @@ static void FillBuffer(StreamChannel *sc);
 
 #pragma message ("move these globals into the sound system struct")
 // BEGIN - Upgrade to DirectSound 8 - paradoxnj 4/14/2005
-static	LPDIRECTSOUND8			lpDirectSound;
+static	LPDIRECTSOUND8			lpDirectSound = nullptr;
 
 //static  HMODULE					hmodDirectSound = NULL;
 // END - Upgrade to DirectSound 8 - paradoxnj 4/14/2005
