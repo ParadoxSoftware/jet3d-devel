@@ -33,8 +33,8 @@ extern void ARITHCC rungModelInit(rung_t * rung);
 extern void ARITHCC rungModelEncBit(arithInfo * ari,jeBoolean bit,rung_t * rung);
 extern jeBoolean ARITHCC rungModelDecBit(arithInfo * ari,rung_t * rung);
 
-extern void asmSetLadder(uint32 ladder);
-extern uint32 asmRungModelDecBit(uint32 ari,uint32 rung,uint32 ladder);
+//extern void asmSetLadder(uint32 ladder);
+//extern uint32 asmRungModelDecBit(uint32 ari,uint32 rung,uint32 ladder);
 
 //#define rungModelDecBit(a,r) (jeBoolean)asmRungModelDecBit((uint32)(a),(uint32)(r),asmladder)
 
