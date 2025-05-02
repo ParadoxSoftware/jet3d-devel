@@ -20,6 +20,9 @@
 /****************************************************************************************/
 #include <stdio.h>	//sprintf
 #include <assert.h>
+#ifdef JET64
+#include <intrin.h>
+#endif
 
 #include "BaseType.h"
 #include "Log.h"

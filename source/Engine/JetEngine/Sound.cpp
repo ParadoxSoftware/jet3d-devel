@@ -199,14 +199,14 @@ JETAPI	jeSound_System * JETCC jeSound_CreateSoundSystem(HWND hWnd)
 	}
 	
 	//Mp3Mgr integration (CyRiuS)
-	SoundSystem->Mp3M = jeMp3_CreateManager(hWnd);
+	/*SoundSystem->Mp3M = jeMp3_CreateManager(hWnd);
 
 	if (!SoundSystem->Mp3M)
 	{
 		JE_RAM_FREE(SoundSystem);
 		jeErrorLog_Add(JE_ERR_SUBSYSTEM_FAILURE, "jeSound_CreateSoundSystem:  Failed to create mp3 manager.");
 		return NULL;
-	}
+	}*/
 
 	SoundSystem->GlobalVolume = 1.0f;
 
@@ -241,7 +241,7 @@ JETAPI	void JETCC jeSound_DestroySoundSystem(jeSound_System *Sound)
 	assert(Sound != NULL);
 
 	// Shutdown the sound system
-	jeMp3_DestroyManager(&Sound->Mp3M); //cyrius
+	//jeMp3_DestroyManager(&Sound->Mp3M); //cyrius
 	DestroySoundManager(Sound->SoundM);
 
 	Sound->SoundM = NULL;
@@ -275,9 +275,9 @@ JETAPI int JETCC jeMp3_LoadSound(jeSound_System *SoundS, char * filename, int re
 {
 	assert(SoundS != NULL);
 
-	SoundS->Mp3M->num_mp3s++;
+	/*SoundS->Mp3M->num_mp3s++;
 	SoundS->Mp3M->cur_mp3 = ref;
-	SoundS->Mp3M->files[ref].szFileName = filename;
+	SoundS->Mp3M->files[ref].szFileName = filename;*/
 	
 	return MP3_LOAD_SUCCESS;
 }
@@ -353,13 +353,13 @@ JETAPI	int JETCC jeMp3_PlaySound(jeSound_System *SoundS, int song_number, long V
 {
 	assert(SoundS != NULL);
 	
-	if(!OpenMediaFile(SoundS->Mp3M->files[song_number].szFileName))
+	/*if(!OpenMediaFile(SoundS->Mp3M->files[song_number].szFileName))
 	{
 		jeErrorLog_Add(JE_ERR_SUBSYSTEM_FAILURE, "jeMp3_PlaySound: cant load sound from disk");
 		return MP3_LOAD_FAIL;
 	}
 
-	PlayMp3(Volume, Loop);
+	PlayMp3(Volume, Loop);*/
 
 	return MP3_LOAD_SUCCESS;
 }
