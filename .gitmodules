@@ -16,3 +16,9 @@
 [submodule "dependencies/FreeImage"]
 	path = dependencies/FreeImage
 	url = https://github.com/mlomb/FreeImage.git
+[submodule "dependencies/ogg"]
+	path = dependencies/ogg
+	url = https://github.com/xiph/ogg.git
+[submodule "dependencies/zlib"]
+	path = dependencies/zlib
+	url = https://github.com/madler/zlib.git
