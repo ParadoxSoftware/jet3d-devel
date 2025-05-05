@@ -1,0 +1,7 @@
+add_subdirectory(ogg)
+add_subdirectory(vorbis)
+add_subdirectory(zlib)
+add_subdirectory(zziplib)
+add_subdirectory(wxWidgets)
+add_subdirectory(ode)
+add_subdirectory(FreeImage EXCLUDE_FROM_ALL)
