@@ -16,8 +16,8 @@ set(ZZIP_LIBTOOL OFF CACHE BOOL "" FORCE)
 set(ZZIP_PKGCONFIG OFF CACHE BOOL "" FORCE)
 endif()
 set(LARGEFILEDETECT OFF CACHE BOOL "" FORCE)
-
 add_subdirectory(zziplib)
+
 add_subdirectory(wxWidgets)
 add_subdirectory(ode)
 add_subdirectory(FreeImage EXCLUDE_FROM_ALL)

@@ -11,7 +11,6 @@
         "displayName": "Default Config",
         "description": "Default build using VIsual Studio generator",
         "generator": "Visual Studio 17 2022",
-        "binaryDir": "${sourceDir}/bin",
         "vendor": {
           "example.com/ExampleIDE/1.0": {
             "autoFormat": true
