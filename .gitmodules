@@ -4,18 +4,12 @@
 [submodule "dependencies/zziplib"]
 	path = dependencies/zziplib
 	url = https://github.com/paradoxnj/zziplib.git
-[submodule "dependencies/ode"]
-	path = dependencies/ode
-	url = https://bitbucket.org/odedevs/ode.git
 [submodule "dependencies/nvwa"]
 	path = dependencies/nvwa
 	url = https://github.com/adah1972/nvwa.git
 [submodule "dependencies/wxWidgets"]
 	path = dependencies/wxWidgets
 	url = https://github.com/wxWidgets/wxWidgets.git
-[submodule "dependencies/FreeImage"]
-	path = dependencies/FreeImage
-	url = https://github.com/mlomb/FreeImage.git
 [submodule "dependencies/ogg"]
 	path = dependencies/ogg
 	url = https://github.com/xiph/ogg.git
