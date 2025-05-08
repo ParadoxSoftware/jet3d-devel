@@ -1,0 +1,27 @@
+{
+    "version": 10,
+    "cmakeMinimumRequired": {
+      "major": 3,
+      "minor": 31,
+      "patch": 0
+    },
+    "configurePresets": [
+      {
+        "name": "default",
+        "displayName": "Default Config",
+        "description": "Default build using VIsual Studio generator",
+        "generator": "Visual Studio 17 2022",
+        "binaryDir": "${sourceDir}/bin",
+        "vendor": {
+          "example.com/ExampleIDE/1.0": {
+            "autoFormat": true
+          }
+        }
+      }
+    ],
+    "vendor": {
+      "example.com/ExampleIDE/1.0": {
+        "autoFormat": false
+      }
+    }
+  }

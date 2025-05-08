@@ -3,7 +3,7 @@
 	url = https://gitlab.xiph.org/xiph/vorbis.git
 [submodule "dependencies/zziplib"]
 	path = dependencies/zziplib
-	url = https://github.com/gdraheim/zziplib.git
+	url = https://github.com/paradoxnj/zziplib.git
 [submodule "dependencies/ode"]
 	path = dependencies/ode
 	url = https://bitbucket.org/odedevs/ode.git
