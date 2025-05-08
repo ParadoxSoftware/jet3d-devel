@@ -1,23 +1,18 @@
+# OGG Build
+set(INSTALL_DOCS OFF)
+set(INSTALL_PKG_CONFIG_MODULE OFF)
+set(INSTALL_CMAKE_PACKAGE_MODULE OFF)
 add_subdirectory(ogg)
+
+# Vorbis Build
 add_subdirectory(vorbis)
+
+# ZLib build
+set(ZLIB_BUILD_TESTING OFF)
 add_subdirectory(zlib)
 
-# options ###########################################################
-set(ZZIPMMAPPED OFF CACHE BOOL "" FORCE)
-set(ZZIPFSEEKO  OFF CACHE BOOL "" FORCE)
-
-if(UNIX OR MINGW)
-set(ZZIP_COMPAT OFF CACHE BOOL "" FORCE)
-set(ZZIP_LIBTOOL OFF CACHE BOOL "" FORCE)
-set(ZZIP_PKGCONFIG OFF CACHE BOOL "" FORCE)
-else()
-set(ZZIP_COMPAT OFF CACHE BOOL "" FORCE)
-set(ZZIP_LIBTOOL OFF CACHE BOOL "" FORCE)
-set(ZZIP_PKGCONFIG OFF CACHE BOOL "" FORCE)
-endif()
-set(LARGEFILEDETECT OFF CACHE BOOL "" FORCE)
+# ZZip Build
 add_subdirectory(zziplib)
 
+# wxWidgets Build
 add_subdirectory(wxWidgets)
-add_subdirectory(ode)
-add_subdirectory(FreeImage EXCLUDE_FROM_ALL)
