@@ -21,10 +21,10 @@ static char				*NoSelection = "< none >";
 // takes that into account and returns where the box should be positioned.
 void GetBoxTranslation(const jeExtBox *Box, const jeActor *Actor, jeVec3d *Translation)
 {
-	jeVec3d BoxCenterToActor = { 0 };
-	jeVec3d BoxCenter = { 0 };
-	jeVec3d TranslationMod = { 0 };
-	jeVec3d ActorPos = { 0 }, Zero = { 0 };
+	jeVec3d BoxCenterToActor;// = { 0 };
+	jeVec3d BoxCenter; // = { 0 };
+	jeVec3d TranslationMod; // = { 0 };
+	jeVec3d ActorPos, Zero;// = { 0 }, Zero = { 0 };
 	ActorObj *Object = nullptr;
 
 	assert(Box != nullptr);

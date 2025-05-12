@@ -21,7 +21,7 @@
 /*
   AProject.cpp -- Actor Studio Project file API
 
-  Copyright © 1998, Eclipse Entertainment
+  Copyright ï¿½ 1998, Eclipse Entertainment
 */
 #include "AProject.h"
 #include "array.h"
@@ -43,64 +43,86 @@
 static const char AProject_VersionString[] = "APJ Version %d.%d";
 
 
-typedef struct tag_ApjOutput
-{
-	char *Filename;
-	ApjOutputFormat Fmt;
-} ApjOutput;
+// typedef struct tag_ApjOutput
+// {
+// 	char *Filename;
+// 	ApjOutputFormat Fmt;
+// } ApjOutput;
 
-typedef struct tag_ApjPaths
-{
-	jeBoolean ForceRelative;
-	char *Materials;
-	char *TempFiles;
-} ApjSearchPaths;
+// typedef struct tag_ApjPaths
+// {
+// 	jeBoolean ForceRelative;
+// 	char *Materials;
+// 	char *TempFiles;
+// } ApjSearchPaths;
 
-typedef struct tag_ApjBody
-{
-	char *Filename;
-	ApjBodyFormat Fmt;
-} ApjBody;
+// typedef struct tag_ApjBody
+// {
+// 	char *Filename;
+// 	ApjBodyFormat Fmt;
+// } ApjBody;
 
-// Entry in Materials section
-typedef struct
-{
-	char *Name;			// Material name
-	ApjMaterialFormat Fmt;  // type
-	char *Filename;		// texture filename (may be NULL)
-	JE_RGBA Color;		//
-} ApjMaterialEntry;
+// // Entry in Materials section
+// typedef struct
+// {
+// 	char *Name;			// Material name
+// 	ApjMaterialFormat Fmt;  // type
+// 	char *Filename;		// texture filename (may be NULL)
+// 	JE_RGBA Color;		//
+// } ApjMaterialEntry;
 
-// materials section
-typedef struct tag_ApjMaterials
-{
-	int Count;
-	Array *Items;	// array of ApjMaterialEntry structures
-} ApjMaterials;
+// // materials section
+// typedef struct tag_ApjMaterials
+// {
+// 	int Count;
+// 	Array *Items;	// array of ApjMaterialEntry structures
+// } ApjMaterials;
 
 
-// Entry in motions section
-typedef struct
-{
-	char *Name;				// motion name
-	ApjMotionFormat Fmt;	// motion file format
-	char *Filename;			// file that contains the motion
-	jeBoolean OptFlag;		// optimization flag
-	int OptLevel;			// motion optimization level
-	char *Bone;				// name of root bone to grab
-} ApjMotionEntry;
+// // Entry in motions section
+// typedef struct
+// {
+// 	char *Name;				// motion name
+// 	ApjMotionFormat Fmt;	// motion file format
+// 	char *Filename;			// file that contains the motion
+// 	jeBoolean OptFlag;		// optimization flag
+// 	int OptLevel;			// motion optimization level
+// 	char *Bone;				// name of root bone to grab
+// } ApjMotionEntry;
 
-// motions section
-typedef struct tag_ApjMotions
-{
-	int Count;
-	Array *Items;	// Array of ApjMotionEntry structures
-} ApjMotions;
+// // motions section
+// typedef struct tag_ApjMotions
+// {
+// 	int Count;
+// 	Array *Items;	// Array of ApjMotionEntry structures
+// } ApjMotions;
 
 
 
 struct tag_AProject
 {
+	~tag_AProject() {
+		while (Materials.Count > 0)
+		{
+			AProject_RemoveMaterial(pProject, pProject->Materials.Count-1);
+		}
+
+		while (pProject->Motions.Count > 0)
+		{
+			AProject_RemoveMotion (pProject, pProject->Motions.Count-1);
+		}
+
+		if (pProject->Output.Filename != NULL)	JE_RAM_FREE (pProject->Output.Filename);
+		if (pProject->Paths.Materials != NULL)	JE_RAM_FREE (pProject->Paths.Materials);
+		if (pProject->Paths.TempFiles != NULL)	JE_RAM_FREE (pProject->Paths.TempFiles);
+		if (pProject->Body.Filename != NULL)	JE_RAM_FREE (pProject->Body.Filename);
+
+		if (pProject->Materials.Items != NULL)	Array_Destroy (&pProject->Materials.Items);
+		if (pProject->Motions.Items != NULL)	Array_Destroy (&pProject->Motions.Items);
+
+		JE_RAM_FREE (*ppProject);
+	}
+
 	ApjOutput		Output;
 	ApjSearchPaths	Paths;
 	ApjBody			Body;
@@ -112,23 +134,23 @@ struct tag_AProject
 // extensions for body types.
 // these must match the ApjBodyFormat enumeration
 static const char *BodyExtensions[] = {".max", ".nfo", ".bdy", ".act"};
-
+static ApjBodyFormat bodyFormats[] = { 	ApjBody_Invalid, ApjBody_Max, ApjBody_Nfo, ApjBody_Bdy, ApjBody_Act };
 
 
 // Determine body format from file extension.
 // Returns ApjBody_Invalid if unknown extension
-ApjBodyFormat AProject_GetBodyFormatFromFilename (const char *Name)
+ApjBodyFormat AProject_GetBodyFormatFromFilename (const std::string& Name)
 {
 	char Ext[MAX_PATH];
 	int x;
 
-	if (FilePath_GetExt (Name, Ext) != JE_FALSE)
+	if (FilePath_GetExt (Name.c_str(), Ext) != JE_FALSE)
 	{
 		for (x = 0; x <= ApjBody_Act; ++x)
 		{
 			if (_stricmp (BodyExtensions[x], Ext) == 0)
 			{
-				return x+1;
+				return bodyFormats[x+1];
 			}
 		}
 	}
@@ -136,19 +158,20 @@ ApjBodyFormat AProject_GetBodyFormatFromFilename (const char *Name)
 }
 
 static const char *MotionExtensions[] = {".max", ".key", ".mot", ".act"};
+static ApjMotionFormat motionFormats[] = { ApjMotion_Invalid, ApjMotion_Max, ApjMotion_Key, ApjMotion_Mot };
 
-ApjMotionFormat AProject_GetMotionFormatFromFilename (const char *Filename)
+ApjMotionFormat AProject_GetMotionFormatFromFilename (const std::string& Filename)
 {
 	char Ext[MAX_PATH];
 	int x;
 
-	if (FilePath_GetExt (Filename, Ext) != JE_FALSE)
+	if (FilePath_GetExt (Filename.c_str(), Ext) != JE_FALSE)
 	{
 		for (x = 0; x < ApjMotion_TypeCount; ++x)
 		{
 			if (_stricmp (MotionExtensions[x], Ext) == 0)
 			{
-				return x+1;
+				return motionFormats[x+1];
 			}
 		}
 	}
@@ -157,24 +180,25 @@ ApjMotionFormat AProject_GetMotionFormatFromFilename (const char *Filename)
 
 
 // Create empty project
-AProject *AProject_Create (const char *OutputName)
+AProjectPtr AProject_Create (const std::string& OutputName)
 {
-	AProject *pProject;
+	//AProject *pProject;
 	jeBoolean NoErrors;
-	char OutputNameAndExt[MAX_PATH];
+	//char OutputNameAndExt[MAX_PATH];
+	
+	assert ((!OutputName.empty()) && (OutputName != ""));
 
-	assert (OutputName != NULL);
-
-	pProject = JE_RAM_ALLOCATE_STRUCT (AProject);
-	if (pProject == NULL)
+	//pProject = JE_RAM_ALLOCATE_STRUCT (AProject);
+	AProjectPtr pProject = std::make_shared<AProject>();
+	if (pProject == nullptr)
 	{
 		jeErrorLog_AddString (JE_ERR_MEMORY_RESOURCE, "Allocating project structure",NULL);
-		return NULL;
+		return AProjectPtr(nullptr);
 	}
 
 	// Initialize defaults
 	// Output
-	pProject->Output.Filename = NULL;
+	pProject->Output.Filename = nullptr;
 	pProject->Output.Fmt = ApjOutput_Binary;
 
 	// Paths
@@ -193,11 +217,12 @@ AProject *AProject_Create (const char *OutputName)
 	pProject->Motions.Count = 0;
 	pProject->Motions.Items = NULL;
 
-	FilePath_SetExt (OutputName, ".act", OutputNameAndExt);
+	//FilePath_SetExt (OutputName, ".act", OutputNameAndExt);
+	std::string OutputNameAndExt = OutputName + ".act";
 
 	// Allocate required memory
 	NoErrors = 
-		((pProject->Output.Filename = Util_Strdup (OutputNameAndExt)) != NULL) &&
+		((pProject->Output.Filename = Util_Strdup (OutputNameAndExt.c_str())) != NULL) &&
 		((pProject->Paths.Materials = Util_Strdup ("")) != NULL) &&
 		((pProject->Paths.TempFiles = Util_Strdup (".\\BldTemp")) != NULL) &&
 		((pProject->Body.Filename	= Util_Strdup ("")) != NULL);
@@ -215,7 +240,8 @@ AProject *AProject_Create (const char *OutputName)
 		jeErrorLog_AddString (JE_ERR_MEMORY_RESOURCE, "Initializing project structure",NULL);
 		if (pProject != NULL)
 		{
-			AProject_Destroy (&pProject);
+			//AProject_Destroy (&pProject);
+			pProject.reset();
 		}
 	}
 
@@ -704,7 +730,7 @@ static jeBoolean AProject_WriteMaterialsInfo (const AProject *pProject, jeVFile 
 		ApjMaterialEntry *pEntry;
 		char Buffer[1024];
 
-		pEntry = Array_ItemPtr (pProject->Materials.Items, i);
+		pEntry = static_cast<ApjMaterialEntry*>(Array_ItemPtr (pProject->Materials.Items, i));
 		assert (pEntry->Filename != NULL);
 
 		sprintf (Buffer, "\"%s\",%d,\"%s\",%f,%f,%f,%f", 
@@ -871,7 +897,7 @@ static jeBoolean AProject_WriteMotionsInfo (const AProject *pProject, jeVFile *F
 		ApjMotionEntry *pEntry;
 		char Buffer[1024];
 
-		pEntry = Array_ItemPtr (pProject->Motions.Items, i);
+		pEntry = static_cast<ApjMotionEntry*>(Array_ItemPtr (pProject->Motions.Items, i));
 		sprintf (Buffer, "\"%s\",%c,\"%s\",%c,%d,\"%s\"", 
 			pEntry->Name, AProject_MotionFormatToChar (pEntry->Fmt), 
 			pEntry->Filename, (pEntry->OptFlag ? '1' : '0'), pEntry->OptLevel, pEntry->Bone);
@@ -1195,7 +1221,7 @@ jeBoolean AProject_AddMaterial
 			return JE_FALSE;
 		}
 	}
-	pEntry = Array_ItemPtr (pProject->Materials.Items, pProject->Materials.Count);
+	pEntry = static_cast<ApjMaterialEntry*>(Array_ItemPtr (pProject->Materials.Items, pProject->Materials.Count));
 	pEntry->Name = NULL;
 	pEntry->Filename = NULL;
 
@@ -1222,7 +1248,7 @@ jeBoolean AProject_RemoveMaterial (AProject *pProject, const int Index)
 
 	assert (Index < pProject->Materials.Count);
 
-	pEntry = Array_ItemPtr (pProject->Materials.Items, Index);
+	pEntry = static_cast<ApjMaterialEntry*>(Array_ItemPtr (pProject->Materials.Items, Index));
 	AProject_FreeMaterialInfo (pEntry);
 
 	Array_DeleteAt (pProject->Materials.Items, Index);
@@ -1238,7 +1264,7 @@ int AProject_GetMaterialIndex (const AProject *pProject, const char *MaterialNam
 
 	for (Item = 0; Item < pProject->Materials.Count; ++Item)
 	{
-		ApjMaterialEntry *pEntry = Array_ItemPtr (pProject->Materials.Items, Item);
+		ApjMaterialEntry *pEntry = static_cast<ApjMaterialEntry*>(Array_ItemPtr (pProject->Materials.Items, Item));
 		if (_stricmp (pEntry->Name, MaterialName) == 0)
 		{
 			return Item;
@@ -1251,22 +1277,22 @@ int AProject_GetMaterialIndex (const AProject *pProject, const char *MaterialNam
 
 ApjMaterialFormat AProject_GetMaterialFormat (const AProject *pProject, const int Index)
 {
-	ApjMaterialEntry *pEntry;
+	//ApjMaterialEntry *pEntry;
 
 	assert (Index < pProject->Materials.Count);
 
-	pEntry = Array_ItemPtr (pProject->Materials.Items, Index);
+	ApjMaterialEntry* pEntry = static_cast<ApjMaterialEntry*>(Array_ItemPtr (pProject->Materials.Items, Index));
 	return pEntry->Fmt;
 }
 
 jeBoolean AProject_SetMaterialFormat (AProject *pProject, const int Index, const ApjMaterialFormat Fmt)
 {
-	ApjMaterialEntry *pEntry;
+	//ApjMaterialEntry *pEntry;
 
 	assert (Index < pProject->Materials.Count);
 	assert ((Fmt == ApjMaterial_Color) || (Fmt == ApjMaterial_Texture));
 
-	pEntry = Array_ItemPtr (pProject->Materials.Items, Index);
+	ApjMaterialEntry* pEntry = static_cast<ApjMaterialEntry*>(Array_ItemPtr (pProject->Materials.Items, Index));
 	pEntry->Fmt = Fmt;
 
 	return JE_TRUE;
@@ -1274,21 +1300,21 @@ jeBoolean AProject_SetMaterialFormat (AProject *pProject, const int Index, const
 
 const char *AProject_GetMaterialName (const AProject *pProject, const int Index)
 {
-	ApjMaterialEntry *pEntry;
+	//ApjMaterialEntry *pEntry;
 
 	assert (Index < pProject->Materials.Count);
 
-	pEntry = Array_ItemPtr (pProject->Materials.Items, Index);
+	ApjMaterialEntry* pEntry = static_cast<ApjMaterialEntry*>(Array_ItemPtr (pProject->Materials.Items, Index));
 	return pEntry->Name;
 }
 
 jeBoolean AProject_SetMaterialName (AProject *pProject, const int Index, const char *MaterialName)
 {
-	ApjMaterialEntry *pEntry;
+	//ApjMaterialEntry *pEntry;
 
 	assert (Index < pProject->Materials.Count);
 
-	pEntry = Array_ItemPtr (pProject->Materials.Items, Index);
+	ApjMaterialEntry* pEntry = static_cast<ApjMaterialEntry*>(Array_ItemPtr (pProject->Materials.Items, Index));
 	if (AProject_SetString (&pEntry->Name, MaterialName) == JE_FALSE)
 	{
 		jeErrorLog_AddString (JE_ERR_MEMORY_RESOURCE, "Setting material name",NULL);
@@ -1300,22 +1326,22 @@ jeBoolean AProject_SetMaterialName (AProject *pProject, const int Index, const c
 
 const char *AProject_GetMaterialTextureFilename (const AProject *pProject, const int Index)
 {
-	ApjMaterialEntry *pEntry;
+	//ApjMaterialEntry *pEntry;
 
 	assert (Index < pProject->Materials.Count);
 
-	pEntry = Array_ItemPtr (pProject->Materials.Items, Index);
+	ApjMaterialEntry* pEntry = static_cast<ApjMaterialEntry*>(Array_ItemPtr (pProject->Materials.Items, Index));
 	return pEntry->Filename;
 }
 
 jeBoolean AProject_SetMaterialTextureFilename (AProject *pProject, const int Index, const char *TextureFilename)
 {
-	ApjMaterialEntry *pEntry;
+	//ApjMaterialEntry *pEntry;
 
 	assert (Index < pProject->Materials.Count);
 	assert (TextureFilename != NULL);
 
-	pEntry = Array_ItemPtr (pProject->Materials.Items, Index);
+	ApjMaterialEntry* pEntry = static_cast<ApjMaterialEntry*>(Array_ItemPtr (pProject->Materials.Items, Index));
 	if (AProject_SetString (&pEntry->Filename, TextureFilename) == JE_FALSE)
 	{
 		jeErrorLog_AddString (JE_ERR_MEMORY_RESOURCE, "Setting material filename",NULL);
@@ -1328,22 +1354,22 @@ jeBoolean AProject_SetMaterialTextureFilename (AProject *pProject, const int Ind
 
 JE_RGBA AProject_GetMaterialTextureColor (const AProject *pProject, const int Index)
 {
-	ApjMaterialEntry *pEntry;
+	//ApjMaterialEntry *pEntry;
 
 	assert (Index < pProject->Materials.Count);
 
-	pEntry = Array_ItemPtr (pProject->Materials.Items, Index);
+	ApjMaterialEntry* pEntry = static_cast<ApjMaterialEntry*>(Array_ItemPtr (pProject->Materials.Items, Index));
 	return pEntry->Color;
 }
 
 jeBoolean AProject_SetMaterialTextureColor (AProject *pProject, const int Index, 
 	const float Red, const float Green, const float Blue, const float Alpha)
 {
-	ApjMaterialEntry *pEntry;
+	//ApjMaterialEntry *pEntry;
 
 	assert (Index < pProject->Materials.Count);
 
-	pEntry = Array_ItemPtr (pProject->Materials.Items, Index);
+	ApjMaterialEntry* pEntry = static_cast<ApjMaterialEntry*>(Array_ItemPtr (pProject->Materials.Items, Index));
 	pEntry->Color.r = Red;
 	pEntry->Color.g = Green;
 	pEntry->Color.b = Blue;
@@ -1378,13 +1404,13 @@ jeBoolean AProject_AddMotion
 	  int *pIndex	// returned index
 	)
 {
-	ApjMotionEntry *pEntry;
-	int ArraySize;
+	//ApjMotionEntry *pEntry;
+	//int ArraySize;
 
 	assert ((OptLevel >= 0) && (OptLevel <= 9));
 	assert ((Fmt > ApjMotion_Invalid) && (Fmt < ApjMotion_TypeCount));
 
-	ArraySize = Array_GetSize (pProject->Motions.Items);
+	int ArraySize = Array_GetSize (pProject->Motions.Items);
 	if (pProject->Motions.Count == ArraySize)
 	{
 		// array is full, have to extend it
@@ -1398,7 +1424,7 @@ jeBoolean AProject_AddMotion
 			return JE_FALSE;
 		}
 	}
-	pEntry = Array_ItemPtr (pProject->Motions.Items, pProject->Motions.Count);
+	ApjMotionEntry* pEntry = static_cast<ApjMotionEntry*>(Array_ItemPtr (pProject->Motions.Items, pProject->Motions.Count));
 	pEntry->Name = NULL;
 	pEntry->Filename = NULL;
 	pEntry->Bone = NULL;
@@ -1421,11 +1447,11 @@ jeBoolean AProject_AddMotion
 
 jeBoolean AProject_RemoveMotion (AProject *pProject, const int Index)
 {
-	ApjMotionEntry *pEntry;
+	//ApjMotionEntry *pEntry;
 
 	assert (Index < pProject->Motions.Count);
 
-	pEntry = Array_ItemPtr (pProject->Motions.Items, Index);
+	ApjMotionEntry* pEntry = static_cast<ApjMotionEntry*>(Array_ItemPtr (pProject->Motions.Items, Index));
 	AProject_FreeMotionInfo (pEntry);
 
 	Array_DeleteAt (pProject->Motions.Items, Index);
@@ -1440,7 +1466,7 @@ int AProject_GetMotionIndex (const AProject *pProject, const char *MotionName)
 
 	for (Item = 0; Item < pProject->Motions.Count; ++Item)
 	{
-		ApjMotionEntry *pEntry = Array_ItemPtr (pProject->Motions.Items, Item);
+		ApjMotionEntry *pEntry = static_cast<ApjMotionEntry*>(Array_ItemPtr (pProject->Motions.Items, Item));
 		if (strcmp (pEntry->Name, MotionName) == 0)
 		{
 			return Item;
@@ -1453,22 +1479,22 @@ int AProject_GetMotionIndex (const AProject *pProject, const char *MotionName)
 
 ApjMotionFormat AProject_GetMotionFormat (const AProject *pProject, const int Index)
 {
-	ApjMotionEntry *pEntry;
+	//ApjMotionEntry *pEntry;
 
 	assert (Index < pProject->Motions.Count);
 
-	pEntry = Array_ItemPtr (pProject->Motions.Items, Index);
+	ApjMotionEntry* pEntry = static_cast<ApjMotionEntry*>(Array_ItemPtr (pProject->Motions.Items, Index));
 	return pEntry->Fmt;
 }
 
 jeBoolean AProject_SetMotionFormat (AProject *pProject, const int Index, const ApjMotionFormat Fmt)
 {
-	ApjMotionEntry *pEntry;
+	//ApjMotionEntry *pEntry;
 
 	assert (Index < pProject->Motions.Count);
 	assert ((Fmt > ApjMotion_Invalid) && (Fmt < ApjMotion_TypeCount));
 
-	pEntry = Array_ItemPtr (pProject->Motions.Items, Index);
+	ApjMotionEntry* pEntry = static_cast<ApjMotionEntry*>(Array_ItemPtr (pProject->Motions.Items, Index));
 	pEntry->Fmt = Fmt;
 
 	return JE_TRUE;
@@ -1476,21 +1502,21 @@ jeBoolean AProject_SetMotionFormat (AProject *pProject, const int Index, const A
 
 const char *AProject_GetMotionName (const AProject *pProject, const int Index)
 {
-	ApjMotionEntry *pEntry;
+	//ApjMotionEntry *pEntry;
 
 	assert (Index < pProject->Motions.Count);
 
-	pEntry = Array_ItemPtr (pProject->Motions.Items, Index);
+	ApjMotionEntry* pEntry = static_cast<ApjMotionEntry*>(Array_ItemPtr (pProject->Motions.Items, Index));
 	return pEntry->Name;
 }
 
 jeBoolean AProject_SetMotionName (AProject *pProject, const int Index, const char *MotionName)
 {
-	ApjMotionEntry *pEntry;
+	//ApjMotionEntry *pEntry;
 
 	assert (Index < pProject->Motions.Count);
 
-	pEntry = Array_ItemPtr (pProject->Motions.Items, Index);
+	ApjMotionEntry* pEntry = static_cast<ApjMotionEntry*>(Array_ItemPtr (pProject->Motions.Items, Index));
 	if (AProject_SetString (&pEntry->Name, MotionName) == JE_FALSE)
 	{
 		jeErrorLog_AddString (JE_ERR_MEMORY_RESOURCE, "Setting Motion name",NULL);
@@ -1502,21 +1528,21 @@ jeBoolean AProject_SetMotionName (AProject *pProject, const int Index, const cha
 
 const char *AProject_GetMotionFilename (const AProject *pProject, const int Index)
 {
-	ApjMotionEntry *pEntry;
+	//ApjMotionEntry *pEntry;
 
 	assert (Index < pProject->Motions.Count);
 
-	pEntry = Array_ItemPtr (pProject->Motions.Items, Index);
+	ApjMotionEntry* pEntry = static_cast<ApjMotionEntry*>(Array_ItemPtr (pProject->Motions.Items, Index));
 	return pEntry->Filename;
 }
 
 jeBoolean AProject_SetMotionFilename (AProject *pProject, const int Index, const char *Filename)
 {
-	ApjMotionEntry *pEntry;
+	//ApjMotionEntry *pEntry;
 
 	assert (Index < pProject->Motions.Count);
 
-	pEntry = Array_ItemPtr (pProject->Motions.Items, Index);
+	ApjMotionEntry* pEntry = static_cast<ApjMotionEntry*>(Array_ItemPtr (pProject->Motions.Items, Index));
 	if (AProject_SetString (&pEntry->Filename, Filename) == JE_FALSE)
 	{
 		jeErrorLog_AddString (JE_ERR_MEMORY_RESOURCE, "Setting Motion filename",NULL);
@@ -1528,21 +1554,21 @@ jeBoolean AProject_SetMotionFilename (AProject *pProject, const int Index, const
 
 jeBoolean AProject_GetMotionOptimizationFlag (const AProject *pProject, const int Index)
 {
-	ApjMotionEntry *pEntry;
+	//ApjMotionEntry *pEntry;
 
 	assert (Index < pProject->Motions.Count);
 
-	pEntry = Array_ItemPtr (pProject->Motions.Items, Index);
+	ApjMotionEntry* pEntry = static_cast<ApjMotionEntry*>(Array_ItemPtr (pProject->Motions.Items, Index));
 	return pEntry->OptFlag;
 }
 
 jeBoolean AProject_SetMotionOptimizationFlag (AProject *pProject, const int Index, const jeBoolean Flag)
 {
-	ApjMotionEntry *pEntry;
+	//ApjMotionEntry *pEntry;
 
 	assert (Index < pProject->Motions.Count);
 
-	pEntry = Array_ItemPtr (pProject->Motions.Items, Index);
+	ApjMotionEntry* pEntry = static_cast<ApjMotionEntry*>(Array_ItemPtr (pProject->Motions.Items, Index));
 
 	pEntry->OptFlag = Flag;
 	return JE_TRUE;
@@ -1550,22 +1576,22 @@ jeBoolean AProject_SetMotionOptimizationFlag (AProject *pProject, const int Inde
 
 int AProject_GetMotionOptimizationLevel (const AProject *pProject, const int Index)
 {
-	ApjMotionEntry *pEntry;
+	//ApjMotionEntry *pEntry;
 
 	assert (Index < pProject->Motions.Count);
 
-	pEntry = Array_ItemPtr (pProject->Motions.Items, Index);
+	ApjMotionEntry* pEntry = static_cast<ApjMotionEntry*>(Array_ItemPtr (pProject->Motions.Items, Index));
 	return pEntry->OptLevel;
 }
 
 jeBoolean AProject_SetMotionOptimizationLevel (AProject *pProject, const int Index, const int OptLevel)
 {
-	ApjMotionEntry *pEntry;
+	//ApjMotionEntry *pEntry;
 
 	assert (Index < pProject->Motions.Count);
 	assert ((OptLevel >= 0) && (OptLevel <= 9));
 
-	pEntry = Array_ItemPtr (pProject->Motions.Items, Index);
+	ApjMotionEntry* pEntry = static_cast<ApjMotionEntry*>(Array_ItemPtr (pProject->Motions.Items, Index));
 	pEntry->OptLevel = OptLevel;
 
 	return JE_TRUE;
@@ -1573,21 +1599,21 @@ jeBoolean AProject_SetMotionOptimizationLevel (AProject *pProject, const int Ind
 
 const char *AProject_GetMotionBone (const AProject *pProject, const int Index)
 {
-	ApjMotionEntry *pEntry;
+	//ApjMotionEntry *pEntry;
 
 	assert (Index < pProject->Motions.Count);
 
-	pEntry = Array_ItemPtr (pProject->Motions.Items, Index);
+	ApjMotionEntry* pEntry = static_cast<ApjMotionEntry*>(Array_ItemPtr (pProject->Motions.Items, Index));
 	return pEntry->Bone;
 }
 
 jeBoolean AProject_SetMotionBone (AProject *pProject, const int Index, const char *BoneName)
 {
-	ApjMotionEntry *pEntry;
+	//ApjMotionEntry *pEntry;
 
 	assert (Index < pProject->Motions.Count);
 
-	pEntry = Array_ItemPtr (pProject->Motions.Items, Index);
+	ApjMotionEntry* pEntry = static_cast<ApjMotionEntry*>(Array_ItemPtr (pProject->Motions.Items, Index));
 	if (AProject_SetString (&pEntry->Bone, BoneName) == JE_FALSE)
 	{
 		jeErrorLog_AddString (JE_ERR_MEMORY_RESOURCE, "Setting Motion bone",NULL);

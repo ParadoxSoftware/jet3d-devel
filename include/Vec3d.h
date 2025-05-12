@@ -25,7 +25,113 @@
 
 typedef struct jeVec3d
 {
-	jeFloat X, Y, Z, Pad;
+	float X, Y, Z, Pad;
+
+	static jeVec3d UP;
+	static jeVec3d DOWN;
+	static jeVec3d LEFT;
+	static jeVec3d RIGHT;
+	static jeVec3d ZERO;
+
+	static jeVec3d X_AXIS;
+	static jeVec3d Y_AXIS;
+	static jeVec3d Z_AXIS;
+
+	jeVec3d() { X = Y = Z = Pad = 0.0f; }
+	jeVec3d(float x, float y, float z) { X = x; Y = y; Z = z; Pad = 0.0f; }
+	jeVec3d(float x, float y, float z, float pad) { X = x; Y = y; Z = z; Pad = pad; }	
+
+	// inline jeVec3d operator =(const jeVec3d& other) {
+	// 	return jeVec3d(other.X, other.Y, other.Z);
+	// }
+
+	inline bool operator ==(const jeVec3d& other) {
+		return ((X == other.X) && (Y == other.Y) && (Z == other.Z));
+	}
+
+	inline bool operator !=(const jeVec3d& other) {
+		return ((X != other.X) && (Y != other.Y) && (Z != other.Z));
+	}
+
+	inline jeVec3d operator +(const jeVec3d& other) { 
+		return add(other);
+	}
+
+	inline jeVec3d operator -(const jeVec3d& other) {
+		return subtract(other);
+	}
+
+	inline float operator *(const jeVec3d& other) {
+		return dot(other);
+	}
+
+	inline jeVec3d operator *(float s) {
+		return scale(s);
+	}
+
+	inline jeVec3d operator ^(const jeVec3d& other) {
+		return cross(other);
+	}
+
+	inline jeVec3d operator ~() {
+		return inverse();
+	}
+
+	jeVec3d add(const jeVec3d &other)
+	{
+		return jeVec3d(X + other.X, Y + other.Y, Z + other.Z);
+	}
+
+	jeVec3d subtract(const jeVec3d &other) {
+		return jeVec3d(X - other.X, Y - other.Y, Z - other.Z);
+	}
+
+	jeVec3d scale(float scale) {
+		return jeVec3d(X * scale, Y * scale, Z * scale);
+	}
+
+	jeVec3d addScaled(const jeVec3d& other, const float scale) {
+		jeVec3d result = add(other);
+		return result.scale(scale);
+	}
+
+	jeVec3d cross(const jeVec3d &other) {
+		return jeVec3d(
+			Y * other.Z - Z * other.Y,
+			Z * other.X - X * other.Z,
+			X * other.Y - Y * other.X
+		);
+	}
+	
+	float dot(const jeVec3d &other) {
+		return ((X * other.X) + (Y * other.Y) + (Z * other.Z));
+	}
+
+	jeVec3d inverse() {
+		return jeVec3d(-X, -Y, -Z);
+	}
+
+	jeFloat magnitude() {
+		return sqrtf(dot(*this));
+	}
+
+	float normalize() {
+		float dist = magnitude();
+		if (dist == 0.0f)
+			return 0.0f;
+
+		float oneOverDist = 1.0f / dist;
+		X *= oneOverDist;
+		Y *= oneOverDist;
+		Z *= oneOverDist;
+
+		return dist;
+	}
+
+	float distance(const jeVec3d &other) {
+		jeVec3d diff = subtract(other);
+		return diff.dot(diff);
+	}
 } jeVec3d;
 
 #ifndef NDEBUG

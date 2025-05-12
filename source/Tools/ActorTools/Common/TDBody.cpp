@@ -66,8 +66,8 @@ static jeBoolean TopDownBody_AddChildren(TopDownBody* pTDNode, int ThisBone, jeB
 			}
 #endif
 
-			pNewNode = JE_RAM_REALLOC(	pTDNode->pChildren, 
-										sizeof(TopDownBody) * (pTDNode->NumChildren + 1) );
+			pNewNode = static_cast<TopDownBody*>(JE_RAM_REALLOC(	pTDNode->pChildren, 
+										sizeof(TopDownBody) * (pTDNode->NumChildren + 1) ));
 			if(pNewNode == NULL)
 			{
 				return(JE_FALSE);

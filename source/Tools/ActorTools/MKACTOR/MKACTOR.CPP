@@ -125,7 +125,7 @@ ReturnCode MkActor_DoMake(MkActor_Options* options,MkUtil_Printf Printf)
 	// Read the motions
 	if(jeStrBlock_GetCount(options->pMotionFileBlock) > 0)
 		{
-			int i, Count, Index;
+			int32 i, Count, Index;
 			const char* filename;
 			jeMotion* pMotion;
 

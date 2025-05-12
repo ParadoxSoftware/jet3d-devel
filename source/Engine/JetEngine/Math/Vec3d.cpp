@@ -25,6 +25,15 @@
 #include "Vec3d.h"
 #include "CPU.h"
 
+jeVec3d jeVec3d::UP = jeVec3d(0.0f, 1.0f, 0.0f);
+jeVec3d jeVec3d::DOWN = jeVec3d(0.0f, -1.0f, 0.0f);
+jeVec3d jeVec3d::LEFT = jeVec3d(-1.0f, 0.0f, 0.0f);
+jeVec3d jeVec3d::RIGHT = jeVec3d(1.0f, 0.0f, 0.0f);
+jeVec3d jeVec3d::ZERO = jeVec3d(0.0f, 0.0f, 0.0f);
+jeVec3d jeVec3d::X_AXIS = jeVec3d(1.0f, 0.0f, 0.0f);
+jeVec3d jeVec3d::Y_AXIS = jeVec3d(0.0f, 1.0f, 0.0f);
+jeVec3d jeVec3d::Z_AXIS = jeVec3d(0.0f, 0.0f, 1.0f);
+
 #ifndef NDEBUG
 JETAPI jeFloat JETCC   jeVec3d_GetElement(const jeVec3d *V, int32 Index)
 {

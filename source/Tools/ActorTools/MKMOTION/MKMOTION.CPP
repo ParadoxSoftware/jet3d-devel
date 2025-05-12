@@ -145,7 +145,7 @@ CreateBoneKeyArray_Failure:
 	return(NULL);
 }
 
-void StripNewLine(char* pString)
+static void StripNewLine(char* pString)
 {
 	assert(pString != NULL);
 
@@ -484,7 +484,7 @@ ReturnCode MkMotion_DoMake(MkMotion_Options* options,MkUtil_Printf Printf)
 
 		if(ParentIndex != JE_BODY_NO_PARENT_BONE)
 		{
-			jeBody_GetBone(pBody, ParentIndex, &pdot, &InvAttach, &Index);
+			jeBody_GetBone(pBody, ParentIndex, (const char**)&pdot, &InvAttach, &Index);
 			pParentInfo = NULL;
 			for(j=0;j<k;j++)
 			{
@@ -554,7 +554,7 @@ ReturnCode MkMotion_DoMake(MkMotion_Options* options,MkUtil_Printf Printf)
 
 		if(ParentIndex != JE_BODY_NO_PARENT_BONE)
 		{
-			jeBody_GetBone(pBody, ParentIndex, &pdot, &InvAttach, &Index);
+			jeBody_GetBone(pBody, ParentIndex, (const char**)&pdot, &InvAttach, &Index);
 			pParentInfo = NULL;
 			for(j=0;j<k;j++)
 			{

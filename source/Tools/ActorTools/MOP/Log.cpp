@@ -57,7 +57,7 @@ static void Log_FileReset(LogType *log)
  
 static void Log_FileWrite(LogType *log,char *buf)
 {
-	static InUse=FALSE;
+	static BOOL InUse=FALSE;
 	FILE *f;
  
    while( InUse )
@@ -147,8 +147,8 @@ void Log_Close(LogType **log)
  
 LogType *Log_Open(Log_DestinationType dest,char *filename,Log_OpenType mode)
 {
-	LogType *log;
-	log = JE_RAM_ALLOCATE(sizeof(LogType));
+	LogType *log = nullptr;
+	log = static_cast<LogType*>(JE_RAM_ALLOCATE(sizeof(LogType)));
 	assert(log);
 	assert(filename!=NULL);
 	assert(strlen(filename)<LOG_MAX_FILENAME_LENGTH);

@@ -29,12 +29,14 @@
 #define PROPERTY_LOCAL_DATATYPE_START 1000
 #define PROPERTY_DATA_INVALID			0
 typedef union jeProperty_Data {
+	~jeProperty_Data() {}
+	
 	char * String;
 	int   Bool;
 	float Float;
 	int	  Int;
 	void * Ptr;
-	jeVec3d Vector;
+	jeVec3d Vector = {};
 } jeProperty_Data;
 
 typedef enum {
@@ -76,10 +78,12 @@ typedef union jeProperty_TypeInfo {
 } jeProperty_TypeInfo;
 
 typedef struct jeProperty {
+	~jeProperty() {}
+
 	char * FieldName;
 	PROPERTY_FIELD_TYPE Type;
 	int	DataSize;
-	jeProperty_Data Data;
+	jeProperty_Data Data = {};
 	int		  DataId;
 	jeBoolean bDisabled;
 	jeProperty_TypeInfo TypeInfo;

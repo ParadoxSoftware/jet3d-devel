@@ -22,8 +22,7 @@
 #define MAXMATH_H
 
 #ifdef __cplusplus
-extern "C"
-{
+//extern "C" {
 #endif
 
 void MaxMath_Transform(const jeXForm3d* M, const jeVec3d* v, jeVec3d* r);
@@ -32,7 +31,7 @@ void MaxMath_InverseMultiply(const jeXForm3d* A, const jeXForm3d* B, jeXForm3d* 
 void MaxMath_Multiply(const jeXForm3d* M1, const jeXForm3d* M2, jeXForm3d* MProduct);
 
 #ifdef __cplusplus
-}
+//}
 #endif
 
 #endif // MAXMATH_H

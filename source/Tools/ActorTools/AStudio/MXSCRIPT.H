@@ -24,7 +24,7 @@
 #include "mkutil.h"
 
 #ifdef __cplusplus
-extern "C" {
+//extern "C" {
 #endif
 
 typedef struct MXScript MXScript;
@@ -43,7 +43,7 @@ jeBoolean MXScript_RunScript(MXScript *Script, const char *MaxExeName, MkUtil_Pr
 
 
 #ifdef __cplusplus
-}
+//}
 #endif
 
 

@@ -22,6 +22,11 @@
 #define JE_BASETYPE_H
  
 #include <cmath>
+#include <memory>
+#include <vector>
+#include <list>
+#include <map>
+#include <string>
 
 /*
 	Some basic types defined with clear names for
@@ -113,7 +118,7 @@ __inline constexpr jeFloat jeFloat_RadToDeg(jeFloat r) noexcept
 #define JE_CLAMP16(x)									JE_CLAMP(x,0,65536)
 #define JE_BOOLSAME(x,y)								( ( (x) && (y) ) || ( !(x) && !(y) ) )
 
-#define JE_EPSILON										((jeFloat)0.000797f)
+#define JE_EPSILON										((float)0.000797f)
 #define JE_FLOATS_EQUAL(x,y)							( JE_ABS((x) - (y)) < JE_EPSILON )
 #define JE_FLOAT_ISZERO(x)								JE_FLOATS_EQUAL(x,0.0f)
 

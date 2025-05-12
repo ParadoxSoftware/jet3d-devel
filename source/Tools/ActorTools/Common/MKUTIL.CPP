@@ -205,7 +205,7 @@ int main(int argc, char* argv[])
 
 	TOOL_DESTROY_OPTIONS(&pOptions);
 
-	jeRam_ReportAllocations();
+	//jeRam_ReportAllocations();
 
 	return (int)retValue;
 }

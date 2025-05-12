@@ -56,7 +56,7 @@ static void log_file_reset(log_type *log)
 log_type *log_open(const char *filename)
 {
 	log_type *log;
-	log = JE_RAM_ALLOCATE(sizeof(log_type));
+	log = static_cast<log_type*>(JE_RAM_ALLOCATE(sizeof(log_type)));
 	assert(log);
 	strcpy(log->filename, filename);
 	

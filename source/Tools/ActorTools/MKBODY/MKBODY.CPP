@@ -112,7 +112,7 @@ typedef struct
 typedef struct
 {
 	float tu, tv;
-	int NAN;
+	int NaN;
 } V2TVertexDetail;
 
 typedef struct
@@ -175,7 +175,7 @@ MK_Boolean FileStringSeek(char* pDest, const char* pSearchStr, FILE* fp)
 	return (p == pDest) ? MK_TRUE : MK_FALSE;
 }
 
-void StripNewLine(char* pString)
+static void StripNewLine(char* pString)
 {
 	while(*pString != 0)
 	{
@@ -1052,13 +1052,13 @@ ReturnCode V2ReadTextureVertices(MkBody_Options* options, FILE* fp, char* name, 
 
 		i = sscanf(line, "%f %f",	&pTVerts[k].tu,
 									&pTVerts[k].tv);
-		pTVerts[k].NAN = JE_FALSE;
+		pTVerts[k].NaN = JE_FALSE;
 		if(i != 2)
 		{
 			if (strstr(line,"NAN") != NULL)
 				{
 					pTVerts[k].tu = pTVerts[k].tv = 0.0f;
-					pTVerts[k].NAN = JE_TRUE;
+					pTVerts[k].NaN = JE_TRUE;
 				}
 			else
 				{
@@ -1355,7 +1355,7 @@ if(fgets(line, LINE_LENGTH, fp) == NULL)									\
 
 			tvertices[j] = &pTVerts[pFaces[i].tv[j]];
 
-			if (tvertices[j]->NAN == JE_TRUE)
+			if (tvertices[j]->NaN == JE_TRUE)
 				{	
 					jeVec3d v;
 					v = pVerts[ pVertGroups[ pFaces[i].v[j] ].FirstVertex ].v;
@@ -2549,7 +2549,11 @@ ReturnCode MkBody_DoMake(MkBody_Options* options,MkUtil_Printf PrintfCallback)
 			jeXForm3d_GetTranspose(&parentmatrix, &parentmatrix);
 
 			// transform the points
-			jeXForm3d_TransformVecArray(&parentmatrix, points, points, NUM_CUBE_POINTS);
+			//jeXForm3d_TransformVecArray(&parentmatrix, points, points, NUM_CUBE_POINTS);
+			for (int x = 0; x < NUM_CUBE_POINTS; x++)
+			{
+				jeXForm3d_Transform(&parentmatrix, &points[x], &points[x]);
+			}
 
 			// find the min's and max's
 			min = points[0];

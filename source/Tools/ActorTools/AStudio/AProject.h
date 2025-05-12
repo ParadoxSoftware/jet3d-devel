@@ -21,7 +21,7 @@
 /*
   AProject.h -- Actor Studio Project file API
 
-  Copyright © 1999, Eclipse Entertainment
+  Copyright ï¿½ 1999, Eclipse Entertainment
 
   The Actor Studio project file is separated into several sections:
 	Version info
@@ -38,35 +38,117 @@
 #define AProject_H
 
 #ifdef __cplusplus
-	extern "C" {
+//	extern "C" {
 #endif
 
 
 #include "jet.h"
 
-typedef struct tag_AProject	AProject;
+//typedef struct tag_AProject	AProject;
+class AProject;
+typedef std::shared_ptr<AProject>				AProjectPtr;
+
+typedef struct _ApjOutput
+{
+	std::string Filename;
+	ApjOutputFormat Fmt;
+} ApjOutput;
+
+typedef struct _ApjPaths
+{
+	jeBoolean ForceRelative;
+	std::string Materials;
+	std::string TempFiles;
+} ApjSearchPaths;
+
+typedef struct _ApjBody
+{
+	std::string Filename;
+	ApjBodyFormat Fmt;
+} ApjBody;
+
+// Entry in Materials section
+typedef struct
+{
+	std::string Name;			// Material name
+	ApjMaterialFormat Fmt;  // type
+	std::string Filename;		// texture filename (may be NULL)
+	JE_RGBA Color;		//
+} ApjMaterialEntry;
+
+typedef std::vector<ApjMaterialEntry>					ApjMaterials;
+
+// Entry in motions section
+typedef struct
+{
+	std::string Name;				// motion name
+	ApjMotionFormat Fmt;	// motion file format
+	std::string Filename;			// file that contains the motion
+	jeBoolean OptFlag;		// optimization flag
+	int OptLevel;			// motion optimization level
+	std::string Bone;				// name of root bone to grab
+} ApjMotionEntry;
+
+typedef std::vector<ApjMotionEntry>						ApjMotions;
+
+class AProject
+{
+public:
+	AProject();
+	AProject(const std::string& OutputName);
+	AProject(jeVFile *FS);
+	virtual ~AProject();
+
+private:
+	ApjOutput		Output;
+	ApjSearchPaths	Paths;
+	ApjBody			Body;
+	ApjMaterials	Materials;
+	ApjMotions		Motions;
+
+public:
+	bool Create (const std::string& OutputName);
+
+	// file i/o
+	bool CreateFromFile (jeVFile *FS);
+	bool CreateFromFilename (const std::string& Filename);
+
+	bool WriteToFile (jeVFile *FS);
+	bool WriteToFilename (const std::string& Filename);
+
+	// Paths section
+	bool GetForceRelativePaths ();
+	bool SetForceRelativePaths (const jeBoolean Flag);
+
+	std::string GetMaterialsPath ();
+	bool SetMaterialsPath (const std::string& Path);
+
+	//Need a directory for 'temporary' or 'obj' files:
+	std::string GetObjPath ();
+	bool SetObjPath (const std::string& Path);
+};
 
 // Create and destroy
-AProject *AProject_Create (const char *OutputName);
-void AProject_Destroy (AProject **ppProject);
+AProjectPtr AProject_Create (const std::string& OutputName);
+//void AProject_Destroy (AProject **ppProject);
 
 // file i/o
-AProject *AProject_CreateFromFile (jeVFile *FS);
-AProject *AProject_CreateFromFilename (const char *Filename);
+AProjectPtr AProject_CreateFromFile (jeVFile *FS);
+AProjectPtr AProject_CreateFromFilename (const std::string& Filename);
 
-jeBoolean AProject_WriteToFile (const AProject *pProject, jeVFile *FS);
-jeBoolean AProject_WriteToFilename (const AProject *pProject, const char *Filename);
+jeBoolean AProject_WriteToFile (AProjectPtr pProject, jeVFile *FS);
+jeBoolean AProject_WriteToFilename (AProjectPtr pProject, const std::string& Filename);
 
 // Paths section
-jeBoolean AProject_GetForceRelativePaths (const AProject *pProject);
-jeBoolean AProject_SetForceRelativePaths (AProject *pProject, const jeBoolean Flag);
+jeBoolean AProject_GetForceRelativePaths (AProjectPtr pProject);
+jeBoolean AProject_SetForceRelativePaths (AProjectPtr pProject, const jeBoolean Flag);
 
-const char *AProject_GetMaterialsPath (const AProject *pProject);
-jeBoolean AProject_SetMaterialsPath (AProject *pProject, const char *Path);
+std::string AProject_GetMaterialsPath (AProjectPtr pProject);
+jeBoolean AProject_SetMaterialsPath (AProjectPtr pProject, const std::string& Path);
 
 //Need a directory for 'temporary' or 'obj' files:
-const char *AProject_GetObjPath (const AProject *pProject);
-jeBoolean AProject_SetObjPath (AProject *pProject, const char *Path);
+std::string AProject_GetObjPath (AProjectPtr pProject);
+jeBoolean AProject_SetObjPath (AProjectPtr pProject, const std::string& Path);
 		
 // Output file section
 typedef enum
@@ -75,11 +157,11 @@ typedef enum
 	ApjOutput_Binary = 1
 } ApjOutputFormat;
 
-const char *AProject_GetOutputFilename (const AProject *pProject);
-jeBoolean AProject_SetOutputFilename (AProject *pProject, const char *Filename);
+std::string AProject_GetOutputFilename (AProjectPtr pProject);
+jeBoolean AProject_SetOutputFilename (AProjectPtr pProject, const std::string& Filename);
 
-ApjOutputFormat AProject_GetOutputFormat (const AProject *pProject);
-jeBoolean AProject_SetOutputFormat (AProject *pProject, const ApjOutputFormat Fmt);
+ApjOutputFormat AProject_GetOutputFormat (AProjectPtr pProject);
+jeBoolean AProject_SetOutputFormat (AProjectPtr pProject, const ApjOutputFormat Fmt);
 
 
 // Body section
@@ -92,13 +174,13 @@ typedef enum
 	ApjBody_Act = 4
 } ApjBodyFormat;
 
-ApjBodyFormat AProject_GetBodyFormatFromFilename (const char *Name);
+ApjBodyFormat AProject_GetBodyFormatFromFilename (const std::string& Name);
 
-const char *AProject_GetBodyFilename (const AProject *pProject);
-jeBoolean AProject_SetBodyFilename (AProject *pProject, const char *Filename);
+std::string AProject_GetBodyFilename (AProjectPtr pProject);
+jeBoolean AProject_SetBodyFilename (AProjectPtr pProject, const std::string& Filename);
 
-ApjBodyFormat AProject_GetBodyFormat (const AProject *pProject);
-jeBoolean AProject_SetBodyFormat (AProject *pProject, ApjBodyFormat Fmt);
+ApjBodyFormat AProject_GetBodyFormat (AProjectPtr pProject);
+jeBoolean AProject_SetBodyFormat (AProjectPtr pProject, ApjBodyFormat Fmt);
 
 
 // Materials section
@@ -108,33 +190,33 @@ typedef enum
 	ApjMaterial_Texture = 1
 } ApjMaterialFormat;
 
-int AProject_GetMaterialsCount (const AProject *pProject);
+int AProject_GetMaterialsCount (AProjectPtr pProject);
 
 jeBoolean AProject_AddMaterial
 	(
-	  AProject *pProject,
-	  const char *MaterialName,
+	  AProjectPtr pProject,
+	  const std::string& MaterialName,
 	  const ApjMaterialFormat Fmt,
-	  const char *TextureFilename,
+	  const std::string& TextureFilename,
 	  const float Red, const float Green, const float Blue, const float Alpha,
 	  int *pIndex		// returned index
 	);
 
-jeBoolean AProject_RemoveMaterial (AProject *pProject, const int Index);
+jeBoolean AProject_RemoveMaterial (AProjectPtr pProject, const int Index);
 
-int AProject_GetMaterialIndex (const AProject *pProject, const char *MaterialName);
+int AProject_GetMaterialIndex (AProjectPtr pProject, const std::string& MaterialName);
 
-ApjMaterialFormat AProject_GetMaterialFormat (const AProject *pProject, const int Index);
-jeBoolean AProject_SetMaterialFormat (AProject *pProject, const int Index, const ApjMaterialFormat Fmt);
+ApjMaterialFormat AProject_GetMaterialFormat (AProjectPtr pProject, const int Index);
+jeBoolean AProject_SetMaterialFormat (AProjectPtr pProject, const int Index, const ApjMaterialFormat Fmt);
 
-const char *AProject_GetMaterialName (const AProject *pProject, const int Index);
-jeBoolean AProject_SetMaterialName (AProject *pProject, const int Index, const char *MaterialName);
+std::string AProject_GetMaterialName (AProjectPtr pProject, const int Index);
+jeBoolean AProject_SetMaterialName (AProjectPtr pProject, const int Index, const std::string& MaterialName);
 
-const char *AProject_GetMaterialTextureFilename (const AProject *pProject, const int Index);
-jeBoolean AProject_SetMaterialTextureFilename (AProject *pProject, const int Index, const char *TextureFilename);
+std::string AProject_GetMaterialTextureFilename (AProjectPtr pProject, const int Index);
+jeBoolean AProject_SetMaterialTextureFilename (AProjectPtr pProject, const int Index, const std::string& TextureFilename);
 
-JE_RGBA AProject_GetMaterialTextureColor (const AProject *pProject, const int Index);
-jeBoolean AProject_SetMaterialTextureColor (AProject *pProject, const int Index, 
+JE_RGBA AProject_GetMaterialTextureColor (AProjectPtr pProject, const int Index);
+jeBoolean AProject_SetMaterialTextureColor (AProjectPtr pProject, const int Index, 
 	const float Red, const float Green, const float Blue, const float Alpha);
 
 
@@ -151,46 +233,46 @@ typedef enum
 	ApjMotion_TypeCount
 } ApjMotionFormat;
 
-ApjMotionFormat AProject_GetMotionFormatFromFilename (const char *Filename);
+ApjMotionFormat AProject_GetMotionFormatFromFilename (const std::string& Filename);
 
-int AProject_GetMotionsCount (const AProject *pProject);
+int AProject_GetMotionsCount (AProjectPtr pProject);
 
 jeBoolean AProject_AddMotion
 	(
-	  AProject *pProject,
-	  const char *MotionName,
-	  const char *Filename,
+	  AProjectPtr pProject,
+	  const std::string& MotionName,
+	  const std::string& Filename,
 	  const ApjMotionFormat Fmt,
 	  const jeBoolean OptFlag,
 	  const int OptLevel,
-	  const char *BoneName,
+	  const std::string& BoneName,
 	  int *pIndex	// returned index
 	);
 
-jeBoolean AProject_RemoveMotion (AProject *pProject, const int Index);
+jeBoolean AProject_RemoveMotion (AProjectPtr pProject, const int Index);
 
-int AProject_GetMotionIndex (const AProject *pProject, const char *MotionName);
+int AProject_GetMotionIndex (AProjectPtr pProject, const std::string& MotionName);
 
-ApjMotionFormat AProject_GetMotionFormat (const AProject *pProject, const int Index);
-jeBoolean AProject_SetMotionFormat (AProject *pProject, const int Index, const ApjMotionFormat Fmt);
+ApjMotionFormat AProject_GetMotionFormat (AProjectPtr pProject, const int Index);
+jeBoolean AProject_SetMotionFormat (AProjectPtr *pProject, const int Index, const ApjMotionFormat Fmt);
 
-const char *AProject_GetMotionName (const AProject *pProject, const int Index);
-jeBoolean AProject_SetMotionName (AProject *pProject, const int Index, const char *MotionName);
+std::string AProject_GetMotionName (AProjectPtr pProject, const int Index);
+jeBoolean AProject_SetMotionName (AProjectPtr pProject, const int Index, const std::string& MotionName);
 
-const char *AProject_GetMotionFilename (const AProject *pProject, const int Index);
-jeBoolean AProject_SetMotionFilename (AProject *pProject, const int Index, const char *Filename);
+std::string AProject_GetMotionFilename (AProjectPtr pProject, const int Index);
+jeBoolean AProject_SetMotionFilename (AProjectPtr pProject, const int Index, const std::string& Filename);
 
-jeBoolean AProject_GetMotionOptimizationFlag (const AProject *pProject, const int Index);
-jeBoolean AProject_SetMotionOptimizationFlag (AProject *pProject, const int Index, const jeBoolean Flag);
+jeBoolean AProject_GetMotionOptimizationFlag (AProjectPtr pProject, const int Index);
+jeBoolean AProject_SetMotionOptimizationFlag (AProjectPtr pProject, const int Index, const jeBoolean Flag);
 
-int AProject_GetMotionOptimizationLevel (const AProject *pProject, const int Index);
-jeBoolean AProject_SetMotionOptimizationLevel (AProject *pProject, const int Index, const int OptLevel);
+int AProject_GetMotionOptimizationLevel (AProjectPtr pProject, const int Index);
+jeBoolean AProject_SetMotionOptimizationLevel (AProjectPtr pProject, const int Index, const int OptLevel);
 
-const char *AProject_GetMotionBone (const AProject *pProject, const int Index);
-jeBoolean AProject_SetMotionBone (AProject *pProject, const int Index, const char *BoneName);
+std::string AProject_GetMotionBone (AProjectPtr pProject, const int Index);
+jeBoolean AProject_SetMotionBone (AProjectPtr pProject, const int Index, const std::string& BoneName);
 
 #ifdef __cplusplus
-	}
+//	}
 #endif
 
 

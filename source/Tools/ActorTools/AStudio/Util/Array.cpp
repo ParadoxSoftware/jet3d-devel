@@ -70,7 +70,7 @@ Array *Array_Create (int InitialSize, int ItemSize)
 	assert (InitialSize >= 0);
 	assert (ItemSize > 0);
 
-	pArray = JE_RAM_ALLOCATE (sizeof (Array));
+	pArray = static_cast<Array*>(JE_RAM_ALLOCATE (sizeof (Array)));
 	if (pArray != NULL)
 	{
 		if (Array_Init (pArray, InitialSize, ItemSize) == JE_FALSE)

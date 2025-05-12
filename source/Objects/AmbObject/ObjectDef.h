@@ -20,7 +20,7 @@
 /****************************************************************************************/
 #include "jet.h"
 
-#ifdef AmbOBJECT_EXPORTS
+#ifdef AMBIENTOBJ_EXPORTS
 	#define DLLExport __declspec(dllexport)
 #else
 	#define DLLExport __declspec(dllimport)
