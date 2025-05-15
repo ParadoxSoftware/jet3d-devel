@@ -22,13 +22,13 @@
 #define VPH_H
 
 #ifdef __cplusplus
-//extern "C" {
+extern "C" {
 #endif
 
 int vphmain( const char* vphfile, const char* outfile );
 
 #ifdef __cplusplus
-//}
+}
 #endif
 
 #endif // VPH_H

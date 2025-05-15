@@ -22,7 +22,7 @@
 #define ACTBUILD_H
 
 #ifdef __cplusplus
-//extern "C" {
+extern "C" {
 #endif
 
 #include "Mkutil.h"			//ReturnCode
@@ -38,7 +38,7 @@ ReturnCode			ActBuild_DoMake		      (ActBuild_Options* options,MkUtil_Printf Pri
 
 
 #ifdef __cplusplus
-//}
+}
 #endif
 
 #endif

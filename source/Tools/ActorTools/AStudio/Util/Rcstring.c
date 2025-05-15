@@ -1,8 +1,8 @@
 /****************************************************************************************/
-/*  MXSCRIPT.H																			*/
+/*  RCSTRING.C																			*/
 /*                                                                                      */
-/*  Author: Mike Sandige	                                                            */
-/*  Description: 3DS MAX script maintenance and execution for actor make process.		*/
+/*  Author: Jim Mischel		                                                            */
+/*  Description: Resource string loading API.											*/
 /*                                                                                      */
 /*  The contents of this file are subject to the Jet3D Public License                   */
 /*  Version 1.02 (the "License"); you may not use this file except in                   */
@@ -18,36 +18,40 @@
 /*  Copyright (C) 1996-1999 Eclipse Entertainment, L.L.C. All Rights Reserved           */
 /*                                                                                      */
 /****************************************************************************************/
-#ifndef MXSCRIPT_H
-#define MXSCRIPT_H
+#include "rcstring.h"
 
-#include "mkutil.h"
+#pragma warning (disable:4514)		// unreferenced local function
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+/*
+  Gets a resource string and returns a pointer to it.
+  This function maintains a static array of strings into which the resource strings
+  are placed.  This function returns pointers to items in that static array.
+  The array is maintained as a circular queue, so if you want to keep the contents 
+  of a resource string around, you should make a copy of it yourself after loading 
+  it from GetResourceString.
+*/
+const char *rcstring_Load
+	(
+	  HINSTANCE hinst,
+	  int StringID
+	)
+{
+	#define NUMSTRINGS 10
+	#define STRINGSIZE 100
+	static char Strings[NUMSTRINGS][STRINGSIZE];
+	static int CurrentString = 0;
+	const char *TheString;
 
-typedef struct MXScript MXScript;
+	// load the string into the current spot in the array
+	LoadString (hinst, StringID, Strings[CurrentString], STRINGSIZE);
+	TheString = Strings[CurrentString];
 
-jeBoolean MXScript_ArePluginsInstalled( const char *MaxExeName, MkUtil_Printf Printf );
+	// Update current string pointer
+	++CurrentString;
+	if (CurrentString >= NUMSTRINGS)
+	{
+		CurrentString = 0;
+	}
 
-MXScript *MXScript_StartScript(const char *TempDir, MkUtil_Printf Printf);
-
-jeBoolean MXScript_AddExport(MXScript *Script,const char *LoadFilename, 
-								const char *ExportFilename,MkUtil_Printf Printf);
-
-jeBoolean MXScript_EndScript(MXScript *Script,MkUtil_Printf Printf);
-
-void MXScript_Destroy(MXScript *Script);
-jeBoolean MXScript_RunScript(MXScript *Script, const char *MaxExeName, MkUtil_Printf Printf);
-
-
-#ifdef __cplusplus
+	return TheString;
 }
-#endif
-
-
-#endif
-
-
-
